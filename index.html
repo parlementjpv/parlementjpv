@@ -1,423 +1,197 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Parlement JPV — Lycée Jean-Pierre Vernant</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parlement JPV — Lycée Jean-Pierre Vernant</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+--bleu:#0b2545;--accent:#1e5aa8;--or:#d4af37;--fond:#f6f7fb;--texte:#1c1c1c
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,sans-serif;background:var(--fond);color:var(--texte);line-height:1.7;scroll-behavior:smooth}
 
-  <style>
-    :root {
-      --bleu-nuit: #0b2545;
-      --bleu-accent: #1e5aa8;
-      --or: #d4af37;
-      --fond: #f6f7fb;
-      --texte: #1c1c1c;
-      /* 📱 OPTIMISATION MOBILE */
-@media (max-width: 768px) {
+header{min-height:100vh;background:linear-gradient(120deg,rgba(11,37,69,.95),rgba(11,37,69,.85)),url('https://images.unsplash.com/photo-1529107386315-e1a2ed48a620');background-size:cover;background-position:center;color:white;display:flex;align-items:center;justify-content:center;text-align:center;padding:40px}
+header h1{font-family:'Playfair Display',serif;font-size:4rem}
+header p{margin-top:20px;font-size:1.3rem;max-width:800px}
 
-  header {
-    min-height: 80vh;
-    padding: 30px 20px;
-  }
+nav{position:sticky;top:0;background:white;display:flex;justify-content:center;gap:28px;padding:16px;z-index:50;box-shadow:0 6px 20px rgba(0,0,0,.1);flex-wrap:wrap}
+nav a{text-decoration:none;color:var(--bleu);font-weight:600;position:relative}
+nav a::after{content:'';position:absolute;bottom:-5px;left:0;width:0;height:2px;background:var(--or);transition:.3s}
+nav a:hover::after{width:100%}
 
-  header h1 {
-    font-size: 2.4rem;
-    letter-spacing: 1px;
-  }
+section{max-width:1200px;margin:110px auto;padding:0 8%}
+section h2{font-family:'Playfair Display',serif;font-size:2.6rem;margin-bottom:35px;color:var(--bleu)}
 
-  header p {
-    font-size: 1.05rem;
-  }
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:32px}
+.card{background:white;padding:35px 28px;border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.08);transition:.35s}
+.card:hover{transform:translateY(-8px);box-shadow:0 25px 55px rgba(0,0,0,.15)}
+.card h3{color:var(--accent);margin-bottom:12px}
 
-  nav {
-    flex-wrap: wrap;
-    gap: 15px;
-    padding: 12px;
-  }
+.texte{font-size:1.15rem;max-width:900px}
 
-  nav a {
-    font-size: 0.95rem;
-  }
+.cta{text-align:center;margin-top:45px}
+.cta a{display:inline-block;padding:18px 42px;background:linear-gradient(135deg,var(--accent),var(--bleu));color:white;border-radius:50px;text-decoration:none;font-weight:700;box-shadow:0 12px 28px rgba(0,0,0,.3);transition:.3s}
+.cta a:hover{transform:translateY(-3px)}
 
-  section {
-    margin: 80px auto;
-    padding: 0 6%;
-  }
+footer{background:var(--bleu);color:white;text-align:center;padding:45px 20px}
 
-  section h2 {
-    font-size: 2rem;
-  }
+/* MENU MOBILE */
+.menu-btn{display:none;font-size:1.7rem;cursor:pointer}
+@media(max-width:900px){
+.menu-btn{display:block}
+nav{justify-content:space-between}
+.nav-links{display:none;width:100%;flex-direction:column;gap:18px;text-align:center;padding-top:15px}
+.nav-links.show{display:flex}
+}
 
-  .grid {
-    grid-template-columns: 1fr;
-  }
+/* ANIMATIONS */
+.reveal{opacity:0;transform:translateY(30px);transition:1s}
+.reveal.active{opacity:1;transform:none}
 
-  .card {
-    padding: 30px 22px;
-  }
+/* DARK MODE */
+.dark{--fond:#0d1117;--texte:#e6edf3;--bleu:#020c1b;--accent:#3b82f6}
+.dark nav,.dark .card{background:#161b22}
+.dark footer{background:#020c1b}
 
-  .cta a {
-    width: 100%;
-    text-align: center;
-  }
+.toggle{position:fixed;bottom:20px;right:20px;background:var(--accent);color:white;border:none;border-radius:50%;padding:14px;font-size:1.2rem;cursor:pointer}
 
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--fond);
-      color: var(--texte);
-      line-height: 1.7;
-    }
-
-    /* HERO */
-    header {
-      min-height: 100vh;
-      background: linear-gradient(120deg, rgba(11,37,69,0.95), rgba(11,37,69,0.85)),
-                  url('https://images.unsplash.com/photo-1529107386315-e1a2ed48a620');
-      background-size: cover;
-      background-position: center;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 40px;
-    }
-
-    header h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 4rem;
-      letter-spacing: 2px;
-    }
-
-    header p {
-      margin-top: 25px;
-      font-size: 1.3rem;
-      opacity: 0.95;
-      max-width: 800px;
-    }
-
-    /* NAV */
-    nav {
-      position: sticky;
-      top: 0;
-      background: white;
-      display: flex;
-      justify-content: center;
-      gap: 35px;
-      padding: 18px;
-      z-index: 20;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-    }
-
-    nav a {
-      text-decoration: none;
-      color: var(--bleu-nuit);
-      font-weight: 600;
-      position: relative;
-    }
-
-    nav a::after {
-      content: '';
-      position: absolute;
-      bottom: -6px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--or);
-      transition: 0.3s;
-    }
-
-    nav a:hover::after { width: 100%; }
-
-    /* SECTIONS */
-    section {
-      max-width: 1200px;
-      margin: 120px auto;
-      padding: 0 8%;
-    }
-
-    section h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.8rem;
-      margin-bottom: 40px;
-      color: var(--bleu-nuit);
-      position: relative;
-    }
-
-    section h2::after {
-      content: '';
-      width: 80px;
-      height: 4px;
-      background: var(--or);
-      position: absolute;
-      bottom: -15px;
-      left: 0;
-    }
-
-    .texte {
-      font-size: 1.15rem;
-      max-width: 900px;
-    }
-
-    /* CARTES */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 35px;
-    }
-
-    .card {
-      background: white;
-      padding: 40px 30px;
-      border-radius: 18px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-      transition: 0.4s;
-    }
-
-    .card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 30px 60px rgba(0,0,0,0.12);
-    }
-
-    .card h3 {
-      color: var(--bleu-accent);
-      margin-bottom: 15px;
-      font-size: 1.3rem;
-    }
-
-    /* CTA */
-    .cta {
-      margin-top: 60px;
-      text-align: center;
-    }
-
-    .cta a {
-      display: inline-block;
-      padding: 18px 42px;
-      background: linear-gradient(135deg, var(--bleu-accent), var(--bleu-nuit));
-      color: white;
-      border-radius: 50px;
-      font-weight: 700;
-      text-decoration: none;
-      letter-spacing: 1px;
-      box-shadow: 0 15px 30px rgba(0,0,0,0.25);
-      transition: 0.4s;
-    }
-
-    .cta a:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.35);
-    }
-
-    /* FOOTER */
-    footer {
-      background: var(--bleu-nuit);
-      color: white;
-      text-align: center;
-      padding: 50px 20px;
-      margin-top: 120px;
-    }
-
-    footer p { opacity: 0.85; }
-
-    @media (max-width: 768px) {
-      header h1 { font-size: 2.6rem; }
-      section h2 { font-size: 2.2rem; }
-    }
-  </style>
+</style>
 </head>
 <body>
 
 <header>
-  <div>
-    <h1>Parlement JPV</h1>
-    <p>Un espace d’éloquence, de débat et d’engagement citoyen au sein du lycée Jean‑Pierre Vernant</p>
-  </div>
+<div>
+<h1>Parlement JPV</h1>
+<p>Un espace d’éloquence, de débat et d’engagement citoyen au lycée Jean‑Pierre Vernant</p>
+</div>
 </header>
 
+<nav>
+<span class="menu-btn" onclick="toggleMenu()">☰</span>
+<div class="nav-links" id="menu">
 <a href="#presentation">Présentation</a>
 <a href="#valeurs">Valeurs</a>
 <a href="#activites">Activités</a>
-<a href="#evenements">Événements</a>
-<a href="#actions">Nos actions</a>
+<a href="#agenda">Agenda</a>
+<a href="#galerie">Galerie</a>
 <a href="#bureau">Bureau</a>
 <a href="#contact">Contact</a>
+</div>
 </nav>
 
-<section id="presentation">
-  <h2>Présentation</h2>
-  <p class="texte">
-    Le <strong>Parlement JPV</strong> est une initiative lycéenne portée par le Conseil de la Vie Lycéenne.
-    Il offre aux élèves un cadre structuré et exigeant pour débattre, développer leur esprit critique
-    et s’engager dans la vie démocratique.
-  </p>
+<section id="presentation" class="reveal">
+<h2>Présentation</h2>
+<p class="texte">Le <strong>Parlement JPV</strong> est une initiative du CVL visant à promouvoir l'éloquence, le débat démocratique et l'engagement citoyen.</p>
 </section>
 
-<section id="valeurs">
-  <h2>Nos valeurs</h2>
-  <div class="grid">
-    <div class="card"><h3>Respect</h3><p>Un débat exigeant fondé sur l’écoute et la considération des opinions.</p></div>
-    <div class="card"><h3>Neutralité</h3><p>Aucune prise de position politique, religieuse ou idéologique.</p></div>
-    <div class="card"><h3>Ouverture</h3><p>Ouvert à tous les élèves, quelles que soient leurs filières.</p></div>
-    <div class="card"><h3>Engagement</h3><p>Participation active et investissement personnel.</p></div>
-  </div>
+<section id="valeurs" class="reveal">
+<h2>Nos valeurs</h2>
+<div class="grid">
+<div class="card"><h3>Respect</h3><p>Écoute, tolérance et bienveillance.</p></div>
+<div class="card"><h3>Neutralité</h3><p>Apolitique et laïque.</p></div>
+<div class="card"><h3>Ouverture</h3><p>Accessible à tous.</p></div>
+<div class="card"><h3>Engagement</h3><p>Participation active.</p></div>
+</div>
 </section>
 
-<section id="activites">
-  <h2>Nos activités</h2>
-  <div class="grid">
-    <div class="card"><h3>Débats citoyens</h3><p>Sujets d’actualité, enjeux démocratiques et vie lycéenne.</p></div>
-    <div class="card"><h3>Conférences</h3><p>Rencontres avec journalistes, élus et experts.</p></div>
-    <div class="card"><h3>Concours d’éloquence</h3><p>Individuels ou collectifs, internes ou inter-lycées.</p></div>
-    <div class="card"><h3>Visites institutionnelles</h3><p>Découverte des lieux de la citoyenneté.</p></div>
-  </div>
-</section>
-
-<section id="activites">
+<section id="activites" class="reveal">
 <h2>Nos activités</h2>
 <div class="grid">
-<div class="card"><h3>Débats citoyens</h3><p>Sujets d’actualité, enjeux démocratiques et vie lycéenne.</p></div>
-<div class="card"><h3>Conférences</h3><p>Rencontres avec journalistes, élus et experts.</p></div>
-<div class="card"><h3>Concours d’éloquence</h3><p>Individuels ou collectifs, internes ou inter-lycées.</p></div>
-<div class="card"><h3>Visites institutionnelles</h3><p>Découverte des lieux de la citoyenneté.</p></div>
+<div class="card"><h3>Débats citoyens</h3><p>Sujets d’actualité.</p></div>
+<div class="card"><h3>Conférences</h3><p>Intervenants extérieurs.</p></div>
+<div class="card"><h3>Éloquence</h3><p>Concours & ateliers.</p></div>
+<div class="card"><h3>Visites</h3><p>Institutions publiques.</p></div>
 </div>
 </section>
 
-
-<section id="organisation">
-<h2>Organisation</h2>
-<p class="texte">
-Le Parlement JPV est placé sous la responsabilité du CVL et encadré par une professeure référente.
-Il est structuré autour d’un président, d’un vice-président, d’un secrétaire général,
-de porte-paroles et de responsables thématiques.
-</p>
-</section>
-
-
-<section id="bureau">
-<h2>Bureau 2025 – 2026</h2>
-
-
+<section id="agenda" class="reveal">
+<h2>Agenda</h2>
 <div class="grid">
-
-
-<div class="card">
-<h3>Président</h3>
-<p><strong>Gustave Jeannin</strong></p>
-<p>Coordination générale du Parlement JPV, animation des séances et représentation officielle du projet.</p>
+<div class="card"><h3>12 Mars</h3><p>Grand débat citoyen</p></div>
+<div class="card"><h3>4 Avril</h3><p>Conférence journaliste</p></div>
+<div class="card"><h3>20 Mai</h3><p>Finale éloquence</p></div>
 </div>
+</section>
 
-
-<div class="card">
-<h3>Vice-président</h3>
-<p><strong>Emma Duda</strong></p>
-<p>Assiste le président et assure l’intérim en cas d’absence.</p>
-</div>
-
-
-<div class="card">
-<h3>Secrétaire général</h3>
-<p><strong>Lara Guraud-Sauveur</strong></p>
-<p>Rédaction des comptes rendus, gestion des inscriptions et suivi administratif.</p>
-</div>
-
-
-<div class="card">
-<h3>Référent Débats</h3>
-<p><strong>Théo</strong></p>
-<p>Organise les débats.</p>
-</div>
-
-  <div class="card">
-<h3>Référent Visites</h3>
-<p><strong>Théo</strong></p>
-<p>Organise les Visites</p>
-</div>
-
-    <div class="card">
-<h3>Référent Conference</h3>
-<p><strong>Lara</strong></p>
-<p>Organise les Visites</p>
-</div>
-
-     <div class="card">
-<h3>Référent Eloquence</h3>
-<p><strong>Luca et Alexandre</strong></p>
-<p>Organisent les ateliers d´eloquence</p>
-</div>
-
-
-  <section id="actions">
-<h2>Nos actions & rapports</h2>
-
-
+<section id="galerie" class="reveal">
+<h2>Galerie</h2>
 <div class="grid">
+<img src="https://images.unsplash.com/photo-1581091012184-7a5b4c50b10b" style="width:100%;border-radius:14px">
+<img src="https://images.unsplash.com/photo-1544717305-2782549b5136" style="width:100%;border-radius:14px">
+<img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644" style="width:100%;border-radius:14px">
+</div>
+</section>
 
+<section id="bureau" class="reveal">
+<h2>Bureau 2025–2026</h2>
+<div class="grid">
+<div class="card"><h3>Président</h3><p>Gustave Jeannin</p></div>
+<div class="card"><h3>Vice-présidente</h3><p>Emma Duda</p></div>
+<div class="card"><h3>Secrétaire générale</h3><p>Lara Guraud-Sauveur</p></div>
+<div class="card"><h3>Éloquence</h3><p>Luca & Alexandre</p></div>
+<div class="card"><h3>Débats & Visites</h3><p>Théo</p></div>
+</div>
+</section>
 
+<section id="articles" class="reveal">
+<h2>Actualités & Articles</h2>
+<div class="grid">
 <div class="card">
-<h3>Rapport — Débat Europe</h3>
-<p>Compte rendu et synthèse du débat organisé autour des enjeux géopolitiques européens.</p>
-<a href="rapports/debat-europe.pdf" target="_blank">📄 Consulter le rapport</a>
+<h3>Naissance du Parlement JPV</h3>
+<p>Retour sur la création du projet, ses objectifs et ses premières actions.</p>
+<a href="#" style="color:var(--accent);font-weight:600;text-decoration:none">Lire l’article →</a>
 </div>
-
-
 <div class="card">
-<h3>Rapport annuel 2025–2026</h3>
-<p>Bilan des actions, débats et conférences menés par le Parlement JPV.</p>
-<a href="rapports/rapport-annuel.pdf" target="_blank">📄 Consulter le rapport</a>
+<h3>Débat sur l’Europe</h3>
+<p>Synthèse du grand débat citoyen organisé au lycée.</p>
+<a href="#" style="color:var(--accent);font-weight:600;text-decoration:none">Lire l’article →</a>
 </div>
-
-
+<div class="card">
+<h3>Concours d’éloquence</h3>
+<p>Retour sur la finale et les prestations marquantes.</p>
+<a href="#" style="color:var(--accent);font-weight:600;text-decoration:none">Lire l’article →</a>
 </div>
-</section>
-
-
-<section id="contact">
-<h2>Nous contacter</h2>
-
-
-<p class="texte">
-Pour toute question, proposition de débat, demande de partenariat ou d’intervention,
-vous pouvez nous contacter directement par e-mail.
-</p>
-
-
-<div class="cta">
-<a href="mailto:parlementjpv@gmail.com">📧 parlementjpv@gmail.com</a>
-</div>
-
-
-<p style="margin-top:40px; text-align:center; font-weight:600;">
-Suivez-nous sur Instagram :
-<br>
-<a href="https://instagram.com/parlementjpv" target="_blank" style="color:var(--bleu-accent); text-decoration:none;">
-@parlementjpv
-</a>
-</p>
-</section>
-
-
 </div>
 </section>
-  
-<section id="inscription">
-  <h2>Rejoindre le Parlement JPV</h2>
-  <p class="texte">L’adhésion est ouverte à tous les élèves volontaires du lycée.</p>
-  <div class="cta">
-    <a href="https://forms.gle/Rkm6GwJb6KDjzYUEA" target="_blank">S’inscrire en ligne</a>
-  </div>
+
+<section id="contact" class="reveal">
+<h2>Contact</h2>
+<p class="texte">Une question, une proposition, un partenariat ? Écrivez-nous directement via ce formulaire.</p>
+
+<form class="card" style="max-width:600px;margin:auto" action="mailto:parlementjpv@gmail.com" method="post" enctype="text/plain">
+<label>Nom</label><br>
+<input type="text" name="nom" required style="width:100%;padding:12px;margin:8px 0 20px;border-radius:8px;border:1px solid #ccc">
+
+<label>Email</label><br>
+<input type="email" name="email" required style="width:100%;padding:12px;margin:8px 0 20px;border-radius:8px;border:1px solid #ccc">
+
+<label>Message</label><br>
+<textarea name="message" rows="6" required style="width:100%;padding:12px;margin:8px 0 25px;border-radius:8px;border:1px solid #ccc"></textarea>
+
+<div class="cta"><button type="submit" style="border:none">Envoyer</button></div>
+</form>
+
+<p style="text-align:center;margin-top:30px">📸 Instagram : <a href="https://instagram.com/parlementjpv" target="_blank">@parlementjpv</a></p>
 </section>
 
 <footer>
-  <p>Parlement JPV — Lycée Jean‑Pierre Vernant — Initiative du Conseil de la Vie Lycéenne</p>
+<p>Parlement JPV — Lycée Jean-Pierre Vernant</p>
 </footer>
+
+<button class="toggle" onclick="toggleDark()">🌙</button>
+
+<script>
+const reveals=document.querySelectorAll('.reveal');
+window.addEventListener('scroll',()=>{
+reveals.forEach(el=>{const top=el.getBoundingClientRect().top; if(top<window.innerHeight-80)el.classList.add('active');});
+});
+
+function toggleMenu(){document.getElementById('menu').classList.toggle('show')}
+function toggleDark(){document.body.classList.toggle('dark')}
+</script>
 
 </body>
 </html>
