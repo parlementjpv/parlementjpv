@@ -10,6 +10,18 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
+  <script>
+const reveals = document.querySelectorAll('.reveal');
+
+window.addEventListener('scroll', () => {
+  reveals.forEach(el => {
+    if (el.getBoundingClientRect().top < window.innerHeight - 100) {
+      el.classList.add('visible');
+    }
+  });
+});
+</script>
+
   <style>
     :root {
       --bleu-nuit: #0b2545;
@@ -172,7 +184,18 @@
       .menu.open { display: flex; }
       .burger { display: block; }
     }
-  </style>
+  <style>
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: 0.8s;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
 </head>
 
 <body>
