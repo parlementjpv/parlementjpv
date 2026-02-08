@@ -8,7 +8,6 @@
   <meta name="description" content="Site officiel du Parlement JPV, initiative lycéenne de débat et d’engagement citoyen au lycée Jean-Pierre Vernant.">
   <meta name="keywords" content="Parlement JPV, parlement lycéen, débat citoyen, lycée Jean-Pierre Vernant">
 
-  <!-- Optionnel -->
   <link rel="icon" href="assets/favicon.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -119,14 +118,15 @@
       padding:6px;
     }
 
-    .menu{
+    /* Desktop menu */
+    .menu-desktop{
       display:flex;
       align-items:center;
       gap:10px;
       flex-wrap:wrap;
       justify-content:flex-end;
     }
-    .menu a{
+    .menu-desktop a{
       text-decoration:none;
       color:var(--text);
       font-weight:700;
@@ -136,7 +136,7 @@
       transition:.2s;
       white-space:nowrap;
     }
-    .menu a:hover{
+    .menu-desktop a:hover{
       background: color-mix(in srgb, var(--card) 80%, transparent);
       opacity:1;
     }
@@ -170,45 +170,61 @@
 
     .burger{display:none}
 
-@media (max-width: 920px){
-  .burger{display:grid}
+    /* Mobile overlay + menu */
+    .menu-overlay{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.35);
+      display:none;
+      z-index: 9998;
+    }
 
-  .menu{
-    position:fixed;
-    top:70px;
-    left:12px;
-    right:12px;
-    bottom:12px;
+    .menu-mobile{
+      position:fixed;
+      top:70px;
+      left:12px;
+      right:12px;
+      bottom:12px;
 
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:18px;
-    padding:18px;
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:18px;
 
-    display:none;
-    flex-direction:column;
-    align-items:stretch;
-    gap:12px;
+      display:none;
+      flex-direction:column;
+      align-items:stretch;
+      gap:12px;
 
-    box-shadow: var(--shadow);
+      overflow-y:auto;
+      -webkit-overflow-scrolling:touch;
 
-    overflow-y:auto;
-    -webkit-overflow-scrolling:touch;
+      box-shadow: var(--shadow);
+      z-index: 9999;
+    }
 
-    z-index: 9999; /* ✅ IMPORTANT */
-    max-height: calc(100vh - 82px);
-  }
+    .menu-mobile a{
+      text-decoration:none;
+      color:var(--text);
+      font-weight:800;
+      padding:14px;
+      border-radius:14px;
+    }
+    .menu-mobile a:hover{
+      background: color-mix(in srgb, var(--card) 80%, transparent);
+    }
+    .menu-mobile .cta{
+      display:block;
+      text-align:center;
+      margin-top:6px;
+    }
 
-  .menu.open{display:flex}
+    body.menu-open{ overflow:hidden; }
 
-  .menu a{padding:14px}
-  .menu .cta{
-    display:block;
-    text-align:center;
-    margin-top:6px;
-  }
-}
-
+    @media (max-width: 920px){
+      .burger{display:grid}
+      .menu-desktop{display:none}
+    }
 
     /* HERO */
     header{
@@ -459,7 +475,8 @@
         <span>Parlement JPV</span>
       </a>
 
-      <div class="menu" id="menu" aria-label="Navigation principale">
+      <!-- Desktop menu -->
+      <div class="menu-desktop" aria-label="Navigation principale">
         <a href="#presentation">Présentation</a>
         <a href="#valeurs">Valeurs</a>
         <a href="#activites">Activités</a>
@@ -477,9 +494,29 @@
         <button class="icon-btn" id="darkBtn" aria-label="Activer/Désactiver le mode sombre" title="Mode sombre">🌙</button>
       </div>
 
+      <!-- Burger -->
       <button class="icon-btn burger" id="burger" aria-label="Ouvrir le menu" title="Menu">☰</button>
     </div>
   </nav>
+
+  <!-- Mobile overlay + menu -->
+  <div class="menu-overlay" id="menuOverlay" aria-hidden="true"></div>
+
+  <div class="menu-mobile" id="menuMobile" aria-label="Menu mobile">
+    <a href="#presentation">Présentation</a>
+    <a href="#valeurs">Valeurs</a>
+    <a href="#activites">Activités</a>
+    <a href="#actions">Actions</a>
+    <a href="#agenda">Agenda</a>
+    <a href="#bureau">Bureau</a>
+    <a href="#contact">Contact</a>
+    <a href="photos.html">Galerie</a>
+    <a href="rapports.html">Rapports</a>
+
+    <a class="cta" href="https://docs.google.com/forms/d/e/1FAIpQLSdQ86QZ8sMoY7YgOhT6DBMy5KG85yfm65O6BWMmFp7bzuorqg/viewform?usp=header" target="_blank" rel="noopener">
+      S’inscrire
+    </a>
+  </div>
 
   <header>
     <div class="hero">
@@ -613,34 +650,33 @@
     <a class="btn" href="rapports.html">Voir tous les rapports →</a>
   </section>
 
- <!-- ================= AGENDA ================= -->
-<section id="agenda" class="reveal">
-  <div class="section-title">
-    <h2>Agenda</h2>
-  </div>
+  <section id="agenda" class="reveal">
+    <div class="section-title">
+      <h2>Agenda</h2>
+    </div>
 
-  <p class="lead" style="margin-bottom:16px;">
-    Retrouvez ici les prochains débats, conférences et ateliers du Parlement JPV.
-  </p>
+    <p class="lead" style="margin-bottom:16px;">
+      Retrouvez ici les prochains débats, conférences et ateliers du Parlement JPV.
+    </p>
 
-  <div class="card iframe-card">
-    <iframe
-      src="https://calendar.google.com/calendar/embed?src=parlementjpv%40gmail.com&ctz=Europe%2FParis"
-      loading="lazy"
-      referrerpolicy="no-referrer-when-downgrade"
-      title="Agenda Parlement JPV">
-    </iframe>
-  </div>
+    <div class="card iframe-card">
+      <iframe
+        src="https://calendar.google.com/calendar/embed?src=parlementjpv%40gmail.com&ctz=Europe%2FParis"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Agenda Parlement JPV">
+      </iframe>
+    </div>
 
-  <div style="height:14px"></div>
+    <div style="height:14px"></div>
 
-  <a class="btn primary"
-     href="https://calendar.google.com/calendar/embed?src=parlementjpv%40gmail.com&ctz=Europe%2FParis"
-     target="_blank" rel="noopener">
-    📅 Ouvrir l’agenda
-  </a>
-</section>
-  
+    <a class="btn primary"
+      href="https://calendar.google.com/calendar/embed?src=parlementjpv%40gmail.com&ctz=Europe%2FParis"
+      target="_blank" rel="noopener">
+      📅 Ouvrir l’agenda
+    </a>
+  </section>
+
   <section id="bureau" class="reveal">
     <div class="section-title">
       <h2>Bureau 2025–2026</h2>
@@ -684,22 +720,31 @@
   </div>
 
   <script>
-    // MENU
-    const menu = document.getElementById('menu');
+    // MENU MOBILE (overlay)
     const burger = document.getElementById('burger');
+    const menuMobile = document.getElementById('menuMobile');
+    const menuOverlay = document.getElementById('menuOverlay');
 
-    function closeMenu(){ menu.classList.remove('open'); }
+    function openMenu(){
+      menuMobile.style.display = 'flex';
+      menuOverlay.style.display = 'block';
+      document.body.classList.add('menu-open');
+    }
+    function closeMenu(){
+      menuMobile.style.display = 'none';
+      menuOverlay.style.display = 'none';
+      document.body.classList.remove('menu-open');
+    }
 
     burger.addEventListener('click', () => {
-      menu.classList.toggle('open');
+      const isOpen = menuMobile.style.display === 'flex';
+      isOpen ? closeMenu() : openMenu();
     });
 
-    // Fermer menu quand on clique un lien (mobile)
-    menu.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', closeMenu);
-    });
+    menuOverlay.addEventListener('click', closeMenu);
+    menuMobile.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
 
-    // DARK MODE (saved)
+    // DARK MODE (saved) — bouton desktop
     const darkBtn = document.getElementById('darkBtn');
     const storedTheme = localStorage.getItem('theme');
     if(storedTheme === 'dark') document.body.classList.add('dark');
@@ -735,6 +780,3 @@
   </script>
 </body>
 </html>
-
-
-
