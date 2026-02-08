@@ -8,6 +8,9 @@
   <meta name="description" content="Site officiel du Parlement JPV, initiative lycéenne de débat et d’engagement citoyen au lycée Jean-Pierre Vernant.">
   <meta name="keywords" content="Parlement JPV, parlement lycéen, débat citoyen, lycée Jean-Pierre Vernant">
 
+  <!-- Optionnel -->
+  <link rel="icon" href="assets/favicon.png" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -53,15 +56,14 @@
       overflow-x:hidden;
     }
 
-    /* Background subtle pattern */
+    /* Background subtle */
     .bg-grid{
       position:fixed;
       inset:0;
       pointer-events:none;
       background:
         radial-gradient(900px 500px at 10% 10%, rgba(30,90,168,.12), transparent 60%),
-        radial-gradient(800px 450px at 90% 20%, rgba(212,175,55,.10), transparent 60%),
-        linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0));
+        radial-gradient(800px 450px at 90% 20%, rgba(212,175,55,.10), transparent 60%);
       z-index:-1;
     }
     body.dark .bg-grid{
@@ -95,34 +97,44 @@
       gap:12px;
       text-decoration:none;
       color:var(--text);
-      font-weight:800;
+      font-weight:900;
       letter-spacing:.3px;
     }
-    .brand-badge{
-      width:38px;height:38px;
-      border-radius:12px;
-      background:linear-gradient(135deg,var(--bleu-nuit),var(--bleu-accent));
-      box-shadow: var(--shadow-soft);
+
+    /* LOGO */
+    .logo-wrap{
+      width:42px;height:42px;
+      border-radius:14px;
+      background: color-mix(in srgb, var(--card) 92%, transparent);
+      border:1px solid var(--border);
       display:grid;
       place-items:center;
-      color:white;
-      font-weight:900;
+      overflow:hidden;
+      box-shadow: var(--shadow-soft);
     }
-    .brand span{font-weight:800}
+    .logo-wrap img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      padding:6px;
+    }
 
     .menu{
       display:flex;
       align-items:center;
-      gap:18px;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
     }
     .menu a{
       text-decoration:none;
       color:var(--text);
-      font-weight:600;
-      opacity:.9;
+      font-weight:700;
+      opacity:.92;
       padding:8px 10px;
       border-radius:12px;
       transition:.2s;
+      white-space:nowrap;
     }
     .menu a:hover{
       background: color-mix(in srgb, var(--card) 80%, transparent);
@@ -132,12 +144,13 @@
     .cta{
       padding:10px 16px;
       border-radius:999px;
-      font-weight:800;
+      font-weight:900;
       color:#0b2545;
       background:linear-gradient(135deg,var(--or),#b8962e);
       text-decoration:none;
       box-shadow: var(--shadow-soft);
       white-space:nowrap;
+      border:none;
     }
     .cta:hover{transform:translateY(-1px);}
 
@@ -157,7 +170,6 @@
 
     .burger{display:none}
 
-    /* MOBILE menu */
     @media (max-width: 920px){
       .burger{display:grid}
       .menu{
@@ -178,35 +190,6 @@
       .menu .cta{display:block;text-align:center}
     }
 
-<section id="agenda">
-  <h2>Agenda</h2>
-
-  <div class="card">
-    <p class="texte" style="margin-bottom: 18px;">
-      Retrouvez ici les prochains débats, conférences et ateliers du Parlement JPV.
-    </p>
-
-    <div style="border-radius: 18px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.08);">
-      <iframe
-        src="COLLE_ICI_TON_LIEN_GOOGLE_AGENDA"
-        style="border:0"
-        width="100%"
-        height="650"
-        frameborder="0"
-        scrolling="no">
-      </iframe>
-    </div>
-
-    <p style="margin-top: 14px;">
-      <a class="btn-inscription" href="COLLE_ICI_LE_LIEN_PUBLIC_DE_L_AGENDA" target="_blank">
-        📅 Ouvrir l’agenda
-      </a>
-    </p>
-  </div>
-</section>
-
-
-    
     /* HERO */
     header{
       min-height:88vh;
@@ -265,7 +248,7 @@
       padding:12px 16px;
       border-radius:14px;
       text-decoration:none;
-      font-weight:800;
+      font-weight:900;
       border:1px solid var(--border);
       background:var(--card);
       color:var(--text);
@@ -280,19 +263,14 @@
     }
 
     .hero-card{
-      background:
-        linear-gradient(180deg, color-mix(in srgb, var(--card) 92%, transparent), var(--card));
+      background: linear-gradient(180deg, color-mix(in srgb, var(--card) 92%, transparent), var(--card));
       border:1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       padding:22px;
-      position:relative;
     }
-    .hero-card small{color:var(--muted); font-weight:700; letter-spacing:.12em}
-    .hero-card h3{
-      font-size:1.2rem;
-      margin:12px 0 6px;
-    }
+    .hero-card small{color:var(--muted); font-weight:900; letter-spacing:.12em}
+    .hero-card h3{font-size:1.2rem; margin:12px 0 6px;}
     .hero-card p{color:var(--muted); font-size:.98rem}
 
     .pill{
@@ -303,7 +281,7 @@
       border-radius:999px;
       border:1px solid var(--border);
       background: color-mix(in srgb, var(--card) 88%, transparent);
-      font-weight:800;
+      font-weight:900;
       color:var(--text);
       margin-bottom:12px;
     }
@@ -367,11 +345,7 @@
       justify-content:space-between;
       gap:14px;
     }
-    .report-meta{
-      color:var(--muted);
-      font-size:.95rem;
-      margin-top:4px;
-    }
+    .report-meta{color:var(--muted); font-size:.95rem; margin-top:4px;}
     .report-actions{
       display:flex;
       gap:10px;
@@ -381,7 +355,7 @@
     .mini{
       padding:10px 12px;
       border-radius:12px;
-      font-weight:800;
+      font-weight:900;
       text-decoration:none;
       border:1px solid var(--border);
       background: color-mix(in srgb, var(--card) 92%, transparent);
@@ -395,14 +369,19 @@
     }
 
     /* Reveal */
-    .reveal{
-      opacity:0;
-      transform: translateY(18px);
-      transition: .7s ease;
+    .reveal{opacity:0; transform: translateY(18px); transition: .7s ease;}
+    .reveal.visible{opacity:1; transform: translateY(0);}
+
+    /* Agenda iframe container */
+    .iframe-card{
+      padding:0;
+      overflow:hidden;
     }
-    .reveal.visible{
-      opacity:1;
-      transform: translateY(0);
+    .iframe-card iframe{
+      width:100%;
+      height:650px;
+      border:0;
+      display:block;
     }
 
     footer{
@@ -413,6 +392,24 @@
       text-align:center;
     }
     footer p{opacity:.85; margin-top:10px}
+
+    .footer-logo{
+      width:54px;
+      height:54px;
+      margin:0 auto 10px;
+      border-radius:18px;
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+    }
+    .footer-logo img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      padding:8px;
+    }
 
     /* Floating CTA */
     .float-cta{
@@ -436,7 +433,9 @@
   <nav class="nav">
     <div class="nav-inner">
       <a class="brand" href="#">
-        <div class="brand-badge">JPV</div>
+        <div class="logo-wrap" aria-hidden="true">
+          <img src="assets/logo-jpv.png" alt="Logo Parlement JPV">
+        </div>
         <span>Parlement JPV</span>
       </a>
 
@@ -444,10 +443,11 @@
         <a href="#presentation">Présentation</a>
         <a href="#valeurs">Valeurs</a>
         <a href="#activites">Activités</a>
-        <a href="photos.html">Galerie</a>
         <a href="#actions">Actions</a>
+        <a href="#agenda">Agenda</a>
         <a href="#bureau">Bureau</a>
         <a href="#contact">Contact</a>
+        <a href="photos.html">Galerie</a>
         <a href="rapports.html">Rapports</a>
 
         <a class="cta" href="https://docs.google.com/forms/d/e/1FAIpQLSdQ86QZ8sMoY7YgOhT6DBMy5KG85yfm65O6BWMmFp7bzuorqg/viewform?usp=header" target="_blank" rel="noopener">
@@ -474,6 +474,7 @@
         <div class="hero-actions">
           <a class="btn primary" href="#activites">Découvrir nos activités</a>
           <a class="btn" href="rapports.html">Voir les rapports</a>
+          <a class="btn" href="#agenda">Voir l’agenda</a>
         </div>
       </div>
 
@@ -481,7 +482,7 @@
         <small>PROCHAINS RENDEZ-VOUS</small>
         <h3>Un format sérieux, accessible à tous</h3>
         <p>
-          3 groupes, un public, des règles de débat claires et des comptes rendus.
+          3 groupes, un public, des règles claires et des comptes rendus.
           Objectif : élever le niveau, pas “faire du bruit”.
         </p>
         <div style="height:12px"></div>
@@ -593,6 +594,31 @@
     <a class="btn" href="rapports.html">Voir tous les rapports →</a>
   </section>
 
+  <!-- ✅ AGENDA (AU BON ENDROIT) -->
+  <section id="agenda" class="reveal">
+    <div class="section-title">
+      <h2>Agenda</h2>
+    </div>
+    <p class="lead" style="margin-bottom:16px;">
+      Retrouvez ici les prochains débats, conférences et ateliers du Parlement JPV.
+    </p>
+
+    <div class="card iframe-card">
+      <iframe
+        src="COLLE_ICI_TON_LIEN_GOOGLE_AGENDA"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Agenda Parlement JPV">
+      </iframe>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <a class="btn primary" href="COLLE_ICI_LE_LIEN_PUBLIC_DE_L_AGENDA" target="_blank" rel="noopener">
+      📅 Ouvrir l’agenda
+    </a>
+  </section>
+
   <section id="bureau" class="reveal">
     <div class="section-title">
       <h2>Bureau 2025–2026</h2>
@@ -620,13 +646,18 @@
   </section>
 
   <footer>
+    <div class="footer-logo" aria-hidden="true">
+      <img src="assets/logo-jpv-blanc.png" alt="Logo Parlement JPV">
+    </div>
     <strong>Parlement JPV — Lycée Jean-Pierre Vernant</strong>
     <p>Sèvres • Débat • Éloquence • Engagement</p>
   </footer>
 
   <!-- Floating CTA -->
   <div class="float-cta">
-    <a class="cta" href="https://docs.google.com/forms/d/e/1FAIpQLSdQ86QZ8sMoY7YgOhT6DBMy5KG85yfm65O6BWMmFp7bzuorqg/viewform?usp=header" target="_blank" rel="noopener">S’inscrire</a>
+    <a class="cta" href="https://docs.google.com/forms/d/e/1FAIpQLSdQ86QZ8sMoY7YgOhT6DBMy5KG85yfm65O6BWMmFp7bzuorqg/viewform?usp=header" target="_blank" rel="noopener">
+      S’inscrire
+    </a>
     <button class="icon-btn" id="topBtn" aria-label="Revenir en haut" title="Haut">↑</button>
   </div>
 
@@ -667,7 +698,7 @@
       window.scrollTo({top:0, behavior:'smooth'});
     });
 
-    // REVEAL (IntersectionObserver)
+    // REVEAL
     const reveals = document.querySelectorAll('.reveal');
     const obs = new IntersectionObserver((entries) => {
       entries.forEach(e => {
@@ -682,5 +713,6 @@
   </script>
 </body>
 </html>
+
 
 
