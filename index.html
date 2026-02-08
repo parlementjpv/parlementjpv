@@ -1,312 +1,657 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Parlement JPV – Lycée Jean-Pierre Vernant</title>
   <meta name="description" content="Site officiel du Parlement JPV, initiative lycéenne de débat et d’engagement citoyen au lycée Jean-Pierre Vernant.">
   <meta name="keywords" content="Parlement JPV, parlement lycéen, débat citoyen, lycée Jean-Pierre Vernant">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <script>
-const reveals = document.querySelectorAll('.reveal');
-
-window.addEventListener('scroll', () => {
-  reveals.forEach(el => {
-    if (el.getBoundingClientRect().top < window.innerHeight - 100) {
-      el.classList.add('visible');
-    }
-  });
-});
-</script>
-
   <style>
-    :root {
-      --bleu-nuit: #0b2545;
-      --bleu-accent: #1e5aa8;
-      --or: #d4af37;
-      --fond: #f6f7fb;
-      --texte: #1c1c1c;
-      --carte: white;
+    :root{
+      --bleu-nuit:#0b2545;
+      --bleu-accent:#1e5aa8;
+      --or:#d4af37;
+
+      --bg:#f6f7fb;
+      --text:#121826;
+      --muted:#5b6472;
+
+      --card:#ffffff;
+      --border:rgba(15,23,42,.10);
+
+      --shadow: 0 20px 50px rgba(2, 8, 23, .10);
+      --shadow-soft: 0 12px 30px rgba(2, 8, 23, .08);
+
+      --radius: 18px;
     }
 
-    body.dark {
-      --fond: #0f172a;
-      --texte: #e5e7eb;
-      --carte: #1e293b;
+    body.dark{
+      --bg:#0b1220;
+      --text:#e7eaf0;
+      --muted:#b6bfcc;
+
+      --card:#111b2d;
+      --border:rgba(255,255,255,.10);
+
+      --shadow: 0 20px 50px rgba(0,0,0,.35);
+      --shadow-soft: 0 12px 30px rgba(0,0,0,.28);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--fond);
-      color: var(--texte);
-      line-height: 1.7;
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.7;
+      overflow-x:hidden;
     }
 
-    /* HERO */
-    header {
-      min-height: 100vh;
-      background: linear-gradient(120deg, rgba(11,37,69,0.95), rgba(11,37,69,0.85)),
-      url('https://images.unsplash.com/photo-1529107386315-e1a2ed48a620');
-      background-size: cover;
-      background-position: center;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 40px;
+    /* Background subtle pattern */
+    .bg-grid{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(900px 500px at 10% 10%, rgba(30,90,168,.12), transparent 60%),
+        radial-gradient(800px 450px at 90% 20%, rgba(212,175,55,.10), transparent 60%),
+        linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0));
+      z-index:-1;
     }
-
-    header h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 4rem;
-      letter-spacing: 2px;
-    }
-
-    header p {
-      margin-top: 25px;
-      font-size: 1.3rem;
-      max-width: 900px;
+    body.dark .bg-grid{
+      background:
+        radial-gradient(900px 500px at 10% 10%, rgba(30,90,168,.18), transparent 60%),
+        radial-gradient(800px 450px at 90% 20%, rgba(212,175,55,.10), transparent 60%);
     }
 
     /* NAV */
-    .nav {
-      position: sticky;
-      top: 0;
-      background: var(--carte);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 15px 25px;
-      z-index: 50;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    .nav{
+      position:sticky;
+      top:0;
+      z-index:100;
+      backdrop-filter:saturate(140%) blur(12px);
+      background: color-mix(in srgb, var(--card) 92%, transparent);
+      border-bottom:1px solid var(--border);
+    }
+    .nav-inner{
+      max-width:1200px;
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
     }
 
-    .logo {
-      font-weight: 800;
-      color: var(--bleu-nuit);
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      text-decoration:none;
+      color:var(--text);
+      font-weight:800;
+      letter-spacing:.3px;
+    }
+    .brand-badge{
+      width:38px;height:38px;
+      border-radius:12px;
+      background:linear-gradient(135deg,var(--bleu-nuit),var(--bleu-accent));
+      box-shadow: var(--shadow-soft);
+      display:grid;
+      place-items:center;
+      color:white;
+      font-weight:900;
+    }
+    .brand span{font-weight:800}
+
+    .menu{
+      display:flex;
+      align-items:center;
+      gap:18px;
+    }
+    .menu a{
+      text-decoration:none;
+      color:var(--text);
+      font-weight:600;
+      opacity:.9;
+      padding:8px 10px;
+      border-radius:12px;
+      transition:.2s;
+    }
+    .menu a:hover{
+      background: color-mix(in srgb, var(--card) 80%, transparent);
+      opacity:1;
     }
 
-    .menu {
-      display: flex;
-      align-items: center;
-      gap: 25px;
+    .cta{
+      padding:10px 16px;
+      border-radius:999px;
+      font-weight:800;
+      color:#0b2545;
+      background:linear-gradient(135deg,var(--or),#b8962e);
+      text-decoration:none;
+      box-shadow: var(--shadow-soft);
+      white-space:nowrap;
+    }
+    .cta:hover{transform:translateY(-1px);}
+
+    .icon-btn{
+      width:42px;height:42px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:var(--card);
+      cursor:pointer;
+      display:grid;
+      place-items:center;
+      font-size:1.15rem;
+      color:var(--text);
+      transition:.2s;
+    }
+    .icon-btn:hover{transform:translateY(-1px); box-shadow:var(--shadow-soft);}
+
+    .burger{display:none}
+
+    /* MOBILE menu */
+    @media (max-width: 920px){
+      .burger{display:grid}
+      .menu{
+        position:fixed;
+        inset:70px 14px auto 14px;
+        background:var(--card);
+        border:1px solid var(--border);
+        border-radius:18px;
+        padding:14px;
+        display:none;
+        flex-direction:column;
+        align-items:stretch;
+        gap:10px;
+        box-shadow: var(--shadow);
+      }
+      .menu.open{display:flex}
+      .menu a{padding:12px 12px}
+      .menu .cta{display:block;text-align:center}
     }
 
-    .menu a {
-      text-decoration: none;
-      color: var(--bleu-nuit);
-      font-weight: 600;
+    /* HERO */
+    header{
+      min-height:88vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:56px 18px 20px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero{
+      max-width:1100px;
+      width:100%;
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:34px;
+      align-items:center;
+    }
+    @media (max-width: 920px){
+      .hero{grid-template-columns:1fr; text-align:center}
     }
 
-    .btn-inscription {
-      padding: 10px 22px;
-      background: linear-gradient(135deg, var(--or), #b8962e);
-      color: #0b2545;
-      border-radius: 30px;
-      font-weight: 700;
-      text-decoration: none;
+    .hero h1{
+      font-family:"Playfair Display",serif;
+      font-size: clamp(2.3rem, 4.6vw, 4.1rem);
+      letter-spacing:.8px;
+      line-height:1.05;
+      margin-bottom:16px;
+      color:var(--text);
+    }
+    .hero p{
+      color:var(--muted);
+      font-size:1.12rem;
+      max-width:60ch;
+    }
+    @media (max-width: 920px){
+      .hero p{margin:0 auto}
     }
 
-    .dark-btn {
-      background: none;
-      border: none;
-      font-size: 1.3rem;
-      cursor: pointer;
+    .hero-actions{
+      margin-top:22px;
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    @media (max-width: 920px){
+      .hero-actions{justify-content:center}
     }
 
-    .burger {
-      display: none;
-      font-size: 1.8rem;
-      cursor: pointer;
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:12px 16px;
+      border-radius:14px;
+      text-decoration:none;
+      font-weight:800;
+      border:1px solid var(--border);
+      background:var(--card);
+      color:var(--text);
+      box-shadow: var(--shadow-soft);
+      transition:.2s;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn.primary{
+      background:linear-gradient(135deg,var(--bleu-nuit),var(--bleu-accent));
+      color:white;
+      border:none;
+    }
+
+    .hero-card{
+      background:
+        linear-gradient(180deg, color-mix(in srgb, var(--card) 92%, transparent), var(--card));
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:22px;
+      position:relative;
+    }
+    .hero-card small{color:var(--muted); font-weight:700; letter-spacing:.12em}
+    .hero-card h3{
+      font-size:1.2rem;
+      margin:12px 0 6px;
+    }
+    .hero-card p{color:var(--muted); font-size:.98rem}
+
+    .pill{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--card) 88%, transparent);
+      font-weight:800;
+      color:var(--text);
+      margin-bottom:12px;
     }
 
     /* SECTIONS */
-    section {
-      max-width: 1200px;
-      margin: 120px auto;
-      padding: 0 8%;
+    section{
+      max-width:1200px;
+      margin: 88px auto;
+      padding: 0 18px;
+    }
+    .section-title{
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:22px;
+    }
+    section h2{
+      font-family:"Playfair Display",serif;
+      font-size: clamp(1.7rem, 3vw, 2.5rem);
+      color:var(--text);
+    }
+    .lead{
+      max-width:85ch;
+      color:var(--muted);
+      font-size:1.06rem;
     }
 
-    section h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.6rem;
-      margin-bottom: 40px;
-      color: var(--bleu-nuit);
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap:16px;
     }
 
-    .texte {
-      max-width: 900px;
-      font-size: 1.15rem;
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      padding:18px;
+      box-shadow: var(--shadow-soft);
+      transition:.2s;
+    }
+    .card:hover{transform:translateY(-2px); box-shadow:var(--shadow)}
+    .card h3{margin-bottom:6px}
+    .card p{color:var(--muted); font-size:.98rem}
+
+    .tag{
+      display:inline-block;
+      font-weight:900;
+      font-size:.8rem;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color: color-mix(in srgb, var(--bleu-accent) 65%, var(--text));
+      margin-bottom:10px;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 35px;
+    /* Reports */
+    .report-item{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:14px;
+    }
+    .report-meta{
+      color:var(--muted);
+      font-size:.95rem;
+      margin-top:4px;
+    }
+    .report-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .mini{
+      padding:10px 12px;
+      border-radius:12px;
+      font-weight:800;
+      text-decoration:none;
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--card) 92%, transparent);
+      color:var(--text);
+      white-space:nowrap;
+    }
+    .mini.primary{
+      background:linear-gradient(135deg,var(--or),#b8962e);
+      border:none;
+      color:#0b2545;
     }
 
-    .card {
-      background: var(--carte);
-      padding: 35px;
-      border-radius: 18px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    /* Reveal */
+    .reveal{
+      opacity:0;
+      transform: translateY(18px);
+      transition: .7s ease;
+    }
+    .reveal.visible{
+      opacity:1;
+      transform: translateY(0);
     }
 
-    footer {
-      background: var(--bleu-nuit);
-      color: white;
-      text-align: center;
-      padding: 50px 20px;
+    footer{
+      margin-top:90px;
+      background: linear-gradient(135deg, var(--bleu-nuit), #06162b);
+      color:white;
+      padding:44px 18px;
+      text-align:center;
     }
+    footer p{opacity:.85; margin-top:10px}
 
-    /* MOBILE */
-    @media (max-width: 900px) {
-      header h1 { font-size: 2.5rem; }
-
-      .menu {
-        position: absolute;
-        top: 70px;
-        left: 0;
-        width: 100%;
-        background: var(--carte);
-        flex-direction: column;
-        gap: 20px;
-        padding: 30px 0;
-        display: none;
-      }
-
-      .menu.open { display: flex; }
-      .burger { display: block; }
+    /* Floating CTA */
+    .float-cta{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      z-index:120;
     }
-  <style>
-.reveal {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: 0.8s;
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-</style>
+    @media (max-width: 920px){
+      .float-cta{left:18px; right:18px; justify-content:space-between}
+    }
+  </style>
 </head>
 
 <body>
+  <div class="bg-grid"></div>
 
-<header>
-  <div>
-    <h1>Parlement JPV</h1>
-    <p>Débattre, comprendre et s’engager pour faire vivre la citoyenneté au lycée Jean-Pierre Vernant</p>
-  </div>
-</header>
-
-<nav class="nav">
-  <div class="logo">Parlement JPV</div>
-
-  <div class="menu" id="menu">
-    <a href="#presentation">Présentation</a>
-    <a href="#valeurs">Valeurs</a>
-    <a href="#activites">Activités</a>
-    <a href="photos.html">Galerie</a>
-    <a href="#actions">Nos actions</a>
-    <a href="#bureau">Bureau</a>
-    <a href="#contact">Contact</a>
-    <a href="rapports.html">Rapports</a>
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdQ86QZ8sMoY7YgOhT6DBMy5KG85yfm65O6BWMmFp7bzuorqg/viewform?usp=header" target="_blank" class="btn-inscription">S’inscrire</a>
-    <button onclick="toggleDark()" class="dark-btn">🌙</button>
-  </div>
-
-  <div class="burger" onclick="toggleMenu()">☰</div>
-</nav>
-
-<section id="presentation">
-  <h2>Présentation</h2>
-  <p class="texte">
-    Le Parlement JPV est une initiative lycéenne du Conseil de la Vie Lycéenne visant à promouvoir
-    le débat citoyen, l’esprit critique et l’engagement démocratique.
-  </p>
-</section>
-
-<section id="valeurs">
-  <h2>Nos valeurs</h2>
-  <div class="grid">
-    <div class="card">Respect et écoute</div>
-    <div class="card">Neutralité politique</div>
-    <div class="card">Ouverture à tous</div>
-    <div class="card">Engagement</div>
-  </div>
-</section>
-
-<section id="activites">
-  <h2>Nos activités</h2>
-  <div class="grid">
-    <div class="card">Débats citoyens</div>
-    <div class="card">Conférences</div>
-    <div class="card">Concours d’éloquence</div>
-    <div class="card">Visites institutionnelles</div>
-  </div>
-</section>
-
-<section id="actions">
-  <h2>Nos actions & rapports</h2>
-  <div class="grid">
-
-    <div class="card">
-      <strong>Rapport – Débat Liberté d'expression</strong><br><br>
-      <a href="rapports/rapport-liberte-expression.pdf" target="_blank">
-        📄 Consulter le rapport
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="#">
+        <div class="brand-badge">JPV</div>
+        <span>Parlement JPV</span>
       </a>
+
+      <div class="menu" id="menu" aria-label="Navigation principale">
+        <a href="#presentation">Présentation</a>
+        <a href="#valeurs">Valeurs</a>
+        <a href="#activites">Activités</a>
+        <a href="photos.html">Galerie</a>
+        <a href="#actions">Actions</a>
+        <a href="#bureau">Bureau</a>
+        <a href="#contact">Contact</a>
+        <a href="rapports.html">Rapports</a>
+
+        <a class="cta" href="https://docs.google.com/forms/d/e/1FAIpQLSdQ86QZ8sMoY7YgOhT6DBMy5KG85yfm65O6BWMmFp7bzuorqg/viewform?usp=header" target="_blank" rel="noopener">
+          S’inscrire
+        </a>
+
+        <button class="icon-btn" id="darkBtn" aria-label="Activer/Désactiver le mode sombre" title="Mode sombre">🌙</button>
+      </div>
+
+      <button class="icon-btn burger" id="burger" aria-label="Ouvrir le menu" title="Menu">☰</button>
+    </div>
+  </nav>
+
+  <header>
+    <div class="hero">
+      <div class="reveal">
+        <div class="pill">Instance créée par le CVL • Lycée Jean-Pierre Vernant</div>
+        <h1>Débattre. Comprendre. Agir.</h1>
+        <p>
+          Le Parlement JPV est une initiative lycéenne qui fait vivre la citoyenneté au lycée :
+          débats structurés, conférences, éloquence, visites institutionnelles et rapports publics.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn primary" href="#activites">Découvrir nos activités</a>
+          <a class="btn" href="rapports.html">Voir les rapports</a>
+        </div>
+      </div>
+
+      <div class="hero-card reveal">
+        <small>PROCHAINS RENDEZ-VOUS</small>
+        <h3>Un format sérieux, accessible à tous</h3>
+        <p>
+          3 groupes, un public, des règles de débat claires et des comptes rendus.
+          Objectif : élever le niveau, pas “faire du bruit”.
+        </p>
+        <div style="height:12px"></div>
+        <a class="btn primary" href="https://instagram.com/parlementjpv" target="_blank" rel="noopener">Suivre sur Instagram</a>
+      </div>
+    </div>
+  </header>
+
+  <section id="presentation" class="reveal">
+    <div class="section-title">
+      <h2>Présentation</h2>
+    </div>
+    <p class="lead">
+      Le Parlement JPV est une initiative du Conseil de la Vie Lycéenne visant à promouvoir le débat citoyen,
+      l’esprit critique et l’engagement démocratique au lycée Jean-Pierre Vernant.
+    </p>
+  </section>
+
+  <section id="valeurs" class="reveal">
+    <div class="section-title">
+      <h2>Nos valeurs</h2>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <div class="tag">Cadre</div>
+        <h3>Respect & écoute</h3>
+        <p>On discute des idées, jamais des personnes. Le but : progresser, pas dominer.</p>
+      </div>
+      <div class="card">
+        <div class="tag">Crédibilité</div>
+        <h3>Neutralité politique</h3>
+        <p>Aucun parti. Des arguments, des faits, des règles. Tout le monde est bienvenu.</p>
+      </div>
+      <div class="card">
+        <div class="tag">Ouverture</div>
+        <h3>Accessible à tous</h3>
+        <p>Débutants comme confirmés : on structure, on aide, on apprend ensemble.</p>
+      </div>
+      <div class="card">
+        <div class="tag">Exigence</div>
+        <h3>Engagement</h3>
+        <p>Préparation, participation, publication de rapports : on va au bout.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="activites" class="reveal">
+    <div class="section-title">
+      <h2>Nos activités</h2>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <div class="tag">Débat</div>
+        <h3>Débats citoyens</h3>
+        <p>Formats structurés, rôles, timing, modération et public.</p>
+      </div>
+      <div class="card">
+        <div class="tag">Conférence</div>
+        <h3>Intervenants</h3>
+        <p>Invités institutionnels, experts, échanges et questions-réponses.</p>
+      </div>
+      <div class="card">
+        <div class="tag">Éloquence</div>
+        <h3>Concours & exercices</h3>
+        <p>Plaidoiries, avocat du diable, préparation à l’oral.</p>
+      </div>
+      <div class="card">
+        <div class="tag">Terrain</div>
+        <h3>Visites</h3>
+        <p>Institutions, collectivités, rencontres : le concret.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="actions" class="reveal">
+    <div class="section-title">
+      <h2>Nos actions & rapports</h2>
     </div>
 
-    <div class="card">
-      <strong>Rapport – Avocat du Diable</strong><br><br>
-      <a href="rapports/rapport-avocat-du-diable.pdf" target="_blank">
-        📄 Consulter le rapport
-      </a>
+    <div class="grid">
+      <div class="card">
+        <div class="report-item">
+          <div>
+            <h3>Rapport — Débat Liberté d'expression</h3>
+            <div class="report-meta">PDF • Parlement JPV</div>
+          </div>
+          <div class="report-actions">
+            <a class="mini" href="rapports/rapport-liberte-expression.pdf" target="_blank" rel="noopener">Ouvrir</a>
+            <a class="mini primary" href="rapports/rapport-liberte-expression.pdf" download>Télécharger</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="report-item">
+          <div>
+            <h3>Rapport — Avocat du Diable</h3>
+            <div class="report-meta">PDF • Parlement JPV</div>
+          </div>
+          <div class="report-actions">
+            <a class="mini" href="rapports/rapport-avocat-du-diable.pdf" target="_blank" rel="noopener">Ouvrir</a>
+            <a class="mini primary" href="rapports/rapport-avocat-du-diable.pdf" download>Télécharger</a>
+          </div>
+        </div>
+      </div>
     </div>
 
+    <div style="height:14px"></div>
+    <a class="btn" href="rapports.html">Voir tous les rapports →</a>
+  </section>
+
+  <section id="bureau" class="reveal">
+    <div class="section-title">
+      <h2>Bureau 2025–2026</h2>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="tag">Présidence</div><h3>Président</h3><p>Gustave Jeannin</p></div>
+      <div class="card"><div class="tag">Présidence</div><h3>Vice-présidente</h3><p>Emma Duda</p></div>
+      <div class="card"><div class="tag">Organisation</div><h3>Secrétaire générale</h3><p>Lara Guiraud-Sauveur</p></div>
+      <div class="card"><div class="tag">Pôle</div><h3>Éloquence</h3><p>Luca & Alexandre</p></div>
+      <div class="card"><div class="tag">Pôle</div><h3>Débats</h3><p>Théo</p></div>
+      <div class="card"><div class="tag">Pôle</div><h3>Visites</h3><p>Lara</p></div>
+    </div>
+  </section>
+
+  <section id="contact" class="reveal">
+    <div class="section-title">
+      <h2>Nous contacter</h2>
+    </div>
+    <p class="lead">Contact rapide et officiel.</p>
+    <div style="height:12px"></div>
+    <div class="hero-actions">
+      <a class="btn primary" href="mailto:parlementjpv@gmail.com">📧 parlementjpv@gmail.com</a>
+      <a class="btn" href="https://instagram.com/parlementjpv" target="_blank" rel="noopener">Instagram @parlementjpv</a>
+    </div>
+  </section>
+
+  <footer>
+    <strong>Parlement JPV — Lycée Jean-Pierre Vernant</strong>
+    <p>Sèvres • Débat • Éloquence • Engagement</p>
+  </footer>
+
+  <!-- Floating CTA -->
+  <div class="float-cta">
+    <a class="cta" href="https://docs.google.com/forms/d/e/1FAIpQLSdQ86QZ8sMoY7YgOhT6DBMy5KG85yfm65O6BWMmFp7bzuorqg/viewform?usp=header" target="_blank" rel="noopener">S’inscrire</a>
+    <button class="icon-btn" id="topBtn" aria-label="Revenir en haut" title="Haut">↑</button>
   </div>
-</section>
-<section id="bureau" class="reveal">
-<h2>Bureau 2025–2026</h2>
-<div class="grid">
-<div class="card"><h3>Président</h3><p>Gustave Jeannin</p></div>
-<div class="card"><h3>Vice-présidente</h3><p>Emma Duda</p></div>
-<div class="card"><h3>Secrétaire générale</h3><p>Lara Guiraud-Sauveur</p></div>
-<div class="card"><h3>Éloquence</h3><p>Luca & Alexandre</p></div>
-<div class="card"><h3>Débats</h3><p>Théo</p></div>
-<div class="card"><h3>Visites</h3><p>Lara</p></div>
-</div>
-</section>
 
+  <script>
+    // MENU
+    const menu = document.getElementById('menu');
+    const burger = document.getElementById('burger');
 
-<section id="contact">
-  <h2>Nous contacter</h2>
-  <a href="mailto:parlementjpv@gmail.com" class="btn-inscription">📧 parlementjpv@gmail.com</a><br><br>
-  Instagram : <a href="https://instagram.com/parlementjpv" target="_blank">@parlementjpv</a>
-</section>
+    function closeMenu(){ menu.classList.remove('open'); }
 
-<footer>
-  Parlement JPV — Lycée Jean-Pierre Vernant - Sèvres
-</footer>
+    burger.addEventListener('click', () => {
+      menu.classList.toggle('open');
+    });
 
-<script>
-  function toggleMenu() {
-    document.getElementById('menu').classList.toggle('open');
-  }
+    // Fermer menu quand on clique un lien (mobile)
+    menu.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', closeMenu);
+    });
 
-  function toggleDark() {
-    document.body.classList.toggle('dark');
-  }
-</script>
+    // DARK MODE (saved)
+    const darkBtn = document.getElementById('darkBtn');
+    const storedTheme = localStorage.getItem('theme');
+    if(storedTheme === 'dark') document.body.classList.add('dark');
 
+    function updateDarkIcon(){
+      darkBtn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+    }
+    updateDarkIcon();
+
+    darkBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+      updateDarkIcon();
+    });
+
+    // SCROLL TOP
+    document.getElementById('topBtn').addEventListener('click', () => {
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+
+    // REVEAL (IntersectionObserver)
+    const reveals = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if(e.isIntersecting){
+          e.target.classList.add('visible');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    reveals.forEach(el => obs.observe(el));
+  </script>
 </body>
 </html>
+
 
