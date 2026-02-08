@@ -1,90 +1,291 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Galerie — Parlement JPV</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #f6f7fb;
-      margin: 0;
-      color: #1c1c1c;
+    :root{
+      --bleu-nuit:#0b2545;
+      --bleu-accent:#1e5aa8;
+      --or:#d4af37;
+
+      --bg:#f6f7fb;
+      --text:#121826;
+      --muted:#5b6472;
+
+      --card:#ffffff;
+      --border:rgba(15,23,42,.10);
+
+      --shadow: 0 20px 50px rgba(2, 8, 23, .10);
+      --shadow-soft: 0 12px 30px rgba(2, 8, 23, .08);
+
+      --radius: 18px;
     }
 
-    header {
-      background: #0b2545;
-      color: white;
-      padding: 70px 20px;
-      text-align: center;
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.7;
     }
 
-    header h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 3rem;
+    /* Background léger */
+    .bg{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(900px 500px at 10% 10%, rgba(30,90,168,.12), transparent 60%),
+        radial-gradient(800px 450px at 90% 20%, rgba(212,175,55,.10), transparent 60%);
+      z-index:-1;
     }
 
-    nav {
-      text-align: center;
-      padding: 20px;
-      background: white;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    /* Header */
+    header{
+      padding:70px 18px 24px;
+      text-align:center;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 14px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.7);
+      font-weight:900;
+      color:var(--bleu-nuit);
+      margin-bottom:14px;
+    }
+    h1{
+      font-family:"Playfair Display",serif;
+      font-size:clamp(2rem, 4.5vw, 3.2rem);
+      line-height:1.1;
+    }
+    header p{
+      margin:10px auto 0;
+      max-width:65ch;
+      color:var(--muted);
+      font-size:1.05rem;
     }
 
-    nav a {
-      text-decoration: none;
-      font-weight: 600;
-      color: #0b2545;
+    /* Top bar */
+    .top{
+      max-width:1100px;
+      margin:18px auto 0;
+      padding:0 18px;
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:12px 16px;
+      border-radius:14px;
+      text-decoration:none;
+      font-weight:900;
+      border:1px solid var(--border);
+      background:var(--card);
+      color:var(--text);
+      box-shadow: var(--shadow-soft);
+      transition:.2s;
+      white-space:nowrap;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn.primary{
+      background:linear-gradient(135deg,var(--bleu-nuit),var(--bleu-accent));
+      color:#fff;
+      border:none;
+    }
+    .btn.gold{
+      background:linear-gradient(135deg,var(--or),#b8962e);
+      color:#0b2545;
+      border:none;
     }
 
-    section {
-      max-width: 1200px;
-      margin: 80px auto;
-      padding: 0 6%;
+    /* Layout */
+    main{
+      max-width:1100px;
+      margin:34px auto 80px;
+      padding:0 18px;
     }
 
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 25px;
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:16px;
+      align-items:stretch;
+    }
+    .col-6{grid-column: span 6;}
+    @media (max-width: 900px){
+      .col-6{grid-column: span 12;}
     }
 
-    .gallery img {
-      width: 100%;
-      height: 220px;
-      object-fit: cover;
-      border-radius: 16px;
-      box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-      transition: 0.3s;
+    /* Cards */
+    .card{
+      background:rgba(255,255,255,.86);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card-head{
+      padding:16px 16px 12px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .card-head h2{
+      font-size:1.1rem;
+      margin:0;
+    }
+    .meta{
+      color:var(--muted);
+      font-size:.95rem;
+      margin-top:4px;
     }
 
-    .gallery img:hover {
-      transform: scale(1.05);
+    /* Video wrapper = format Shorts (9:16) */
+    .video-wrap{
+      padding:0 16px 16px;
+    }
+    .ratio-9-16{
+      width:100%;
+      aspect-ratio: 9 / 16;
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid var(--border);
+      background:#000;
+      box-shadow: var(--shadow-soft);
+    }
+    iframe{
+      width:100%;
+      height:100%;
+      border:0;
+      display:block;
+    }
+
+    .card-actions{
+      padding:0 16px 16px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    /* Footer */
+    footer{
+      text-align:center;
+      padding:40px 18px;
+      color:var(--muted);
     }
   </style>
 </head>
 
 <body>
+  <div class="bg"></div>
 
-<header>
-  <h1>Galerie du Parlement JPV</h1>
-  <p>Nos débats, conférences et actions en images</p>
-</header>
+  <!-- ===============================
+       ✅ TU NE CHANGES QUE CES 2 LIGNES
+       Mets juste l’ID du Short (pas l’URL entière)
+  ================================== -->
+  <script>
+    const SHORT_1 = "AAAAAAAAAAA"; // ex: "AbCdEfGhIJK"
+    const SHORT_2 = "BBBBBBBBBBB"; // ex: "LmNoPqRsTuV"
+  </script>
 
-<nav>
-  <a href="index.html">← Retour au site</a>
-</nav>
+  <header>
+    <div class="pill">Galerie • Parlement JPV</div>
+    <h1>Nos moments forts en vidéo</h1>
+    <p>Débats, conférences et actions — une page simple, claire et consultable sur téléphone.</p>
 
-<section>
-  <div class="gallery">
-    <img src="assets/IMG_0238.pg" alt="Débat Europe">
-    <img src="images/conference-maire.jpg" alt="Conférence">
-    <img src="images/eloquence.jpg" alt="Concours d’éloquence">
-  </div>
-</section>
+    <div class="top">
+      <a class="btn" href="index.html">← Retour au site</a>
+      <a class="btn gold" id="ytChannelBtn" href="https://www.youtube.com/" target="_blank" rel="noopener">YouTube</a>
+    </div>
+  </header>
 
+  <main>
+    <div class="grid">
+
+      <!-- VIDEO 1 -->
+      <article class="card col-6">
+        <div class="card-head">
+          <div>
+            <h2>Short #1</h2>
+            <div class="meta">Parlement JPV — format YouTube Shorts</div>
+          </div>
+        </div>
+
+        <div class="video-wrap">
+          <div class="ratio-9-16">
+            <iframe id="short1" title="Short 1" loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen></iframe>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <a class="btn primary" id="open1" target="_blank" rel="noopener">▶ Ouvrir sur YouTube</a>
+        </div>
+      </article>
+
+      <!-- VIDEO 2 -->
+      <article class="card col-6">
+        <div class="card-head">
+          <div>
+            <h2>Short #2</h2>
+            <div class="meta">Parlement JPV — format YouTube Shorts</div>
+          </div>
+        </div>
+
+        <div class="video-wrap">
+          <div class="ratio-9-16">
+            <iframe id="short2" title="Short 2" loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen></iframe>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <a class="btn primary" id="open2" target="_blank" rel="noopener">▶ Ouvrir sur YouTube</a>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <footer>
+    Parlement JPV — Lycée Jean-Pierre Vernant • Sèvres
+  </footer>
+
+  <script>
+    // Génère automatiquement les bons liens embed + ouverture
+    const embed = (id) => `https://www.youtube.com/embed/${id}?playsinline=1&rel=0&modestbranding=1`;
+    const watch = (id) => `https://www.youtube.com/shorts/${id}`;
+
+    document.getElementById("short1").src = embed(SHORT_1);
+    document.getElementById("short2").src = embed(SHORT_2);
+
+    document.getElementById("open1").href = watch(SHORT_1);
+    document.getElementById("open2").href = watch(SHORT_2);
+
+    // Optionnel: si tu veux mettre ton lien chaîne YouTube, remplace juste ici
+    // document.getElementById("ytChannelBtn").href = "https://www.youtube.com/@TONNOM";
+  </script>
 </body>
 </html>
+
