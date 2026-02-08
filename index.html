@@ -170,7 +170,7 @@
 
     .burger{display:none}
 
-   @media (max-width: 920px){
+@media (max-width: 920px){
   .burger{display:grid}
 
   .menu{
@@ -178,8 +178,8 @@
     top:70px;
     left:12px;
     right:12px;
-    bottom:12px; /* ⭐ prend toute la hauteur */
-    
+    bottom:12px;
+
     background:var(--card);
     border:1px solid var(--border);
     border-radius:18px;
@@ -192,8 +192,11 @@
 
     box-shadow: var(--shadow);
 
-    overflow-y:auto;              /* ⭐ SCROLL */
+    overflow-y:auto;
     -webkit-overflow-scrolling:touch;
+
+    z-index: 9999; /* ✅ IMPORTANT */
+    max-height: calc(100vh - 82px);
   }
 
   .menu.open{display:flex}
@@ -205,6 +208,7 @@
     margin-top:6px;
   }
 }
+
 
     /* HERO */
     header{
