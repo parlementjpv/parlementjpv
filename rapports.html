@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Rapports – Parlement JPV</title>
+  <meta name="description" content="Rapports officiels des débats, conférences et actions du Parlement JPV.">
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bleu-nuit: #0b2545;
+      --or: #d4af37;
+      --fond: #f6f7fb;
+      --texte: #1c1c1c;
+      --carte: white;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--fond);
+      color: var(--texte);
+      margin: 0;
+    }
+
+    header {
+      background: linear-gradient(120deg, rgba(11,37,69,0.95), rgba(11,37,69,0.85));
+      color: white;
+      padding: 80px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+
+    section {
+      max-width: 1200px;
+      margin: 80px auto;
+      padding: 0 8%;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      margin-bottom: 40px;
+      color: var(--bleu-nuit);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 35px;
+    }
+
+    .card {
+      background: var(--carte);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+    }
+
+    .card strong {
+      display: block;
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+
+    .card span {
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    .card a {
+      display: inline-block;
+      margin-top: 15px;
+      text-decoration: none;
+      font-weight: 700;
+      color: var(--bleu-nuit);
+    }
+
+    footer {
+      background: var(--bleu-nuit);
+      color: white;
+      text-align: center;
+      padding: 40px 20px;
+      margin-top: 80px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>Rapports officiels</h1>
+  <p>Comptes rendus des débats, conférences et actions du Parlement JPV</p>
+</header>
+
+<section>
+  <h2>Année 2025 – 2026</h2>
+
+  <div class="grid">
+
+    <div class="card">
+      <strong>Débat – Liberté d’expression</strong>
+      <span>Débat citoyen · Janvier 2026</span>
+      <a href="rapports/rapport-liberte-expression.pdf" target="_blank">
+        📄 Consulter le rapport
+      </a>
+    </div>
+
+    <div class="card">
+      <strong>Exercice – Avocat du Diable</strong>
+      <span>Atelier d’éloquence · Février 2026</span>
+      <a href="rapports/rapport-avocat-du-diable.pdf" target="_blank">
+        📄 Consulter le rapport
+      </a>
+    </div>
+
+    <div class="card">
+      <strong>Débat géopolitique – Europe et puissances mondiales</strong>
+      <span>Débat · 2025</span>
+      <a href="rapports/rapport-debat-europe.pdf" target="_blank">
+        📄 Consulter le rapport
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  Parlement JPV — Lycée Jean-Pierre Vernant · Sèvres
+</footer>
+
+</body>
+</html>
