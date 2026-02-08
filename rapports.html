@@ -10,89 +10,103 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
-    :root {
-      --bleu-nuit: #0b2545;
-      --or: #d4af37;
-      --fond: #f6f7fb;
-      --texte: #1c1c1c;
-      --carte: white;
+    :root{
+      --bleu-nuit:#0b2545;
+      --or:#d4af37;
+      --fond:#f6f7fb;
+      --texte:#1c1c1c;
+      --carte:#fff;
     }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--fond);
-      color: var(--texte);
-      margin: 0;
+    body{
+      font-family:'Inter',sans-serif;
+      background:var(--fond);
+      color:var(--texte);
+      margin:0;
     }
 
-    header {
-      background: linear-gradient(120deg, rgba(11,37,69,0.95), rgba(11,37,69,0.85));
-      color: white;
-      padding: 80px 20px;
-      text-align: center;
+    header{
+      background:linear-gradient(120deg,rgba(11,37,69,0.95),rgba(11,37,69,0.85));
+      color:#fff;
+      padding:70px 20px 55px;
+      text-align:center;
     }
 
-    header h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 3rem;
-      margin-bottom: 15px;
+    header h1{
+      font-family:'Playfair Display',serif;
+      font-size:3rem;
+      margin:0 0 10px;
     }
 
-    section {
-      max-width: 1200px;
-      margin: 80px auto;
-      padding: 0 8%;
+    header p{ margin:0; opacity:0.95; }
+
+    nav{
+      max-width:1200px;
+      margin:18px auto 0;
+      padding:0 8%;
     }
 
-    h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.2rem;
-      margin-bottom: 40px;
-      color: var(--bleu-nuit);
+    nav a{
+      display:inline-block;
+      text-decoration:none;
+      font-weight:700;
+      color:var(--bleu-nuit);
+      background:#fff;
+      padding:10px 14px;
+      border-radius:12px;
+      box-shadow:0 8px 20px rgba(0,0,0,0.06);
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 35px;
+    section{
+      max-width:1200px;
+      margin:55px auto 80px;
+      padding:0 8%;
     }
 
-    .card {
-      background: var(--carte);
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+    h2{
+      font-family:'Playfair Display',serif;
+      font-size:2.2rem;
+      margin:0 0 35px;
+      color:var(--bleu-nuit);
     }
 
-    .card strong {
-      display: block;
-      font-size: 1.1rem;
-      margin-bottom: 10px;
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:35px;
     }
 
-    <nav>
-  <a href="index.html">← Retour au site</a>
-</nav>
-
-    .card span {
-      font-size: 0.95rem;
-      color: #555;
+    .card{
+      background:var(--carte);
+      padding:30px;
+      border-radius:16px;
+      box-shadow:0 15px 35px rgba(0,0,0,0.08);
     }
 
-    .card a {
-      display: inline-block;
-      margin-top: 15px;
-      text-decoration: none;
-      font-weight: 700;
-      color: var(--bleu-nuit);
+    .card strong{
+      display:block;
+      font-size:1.1rem;
+      margin-bottom:10px;
     }
 
-    footer {
-      background: var(--bleu-nuit);
-      color: white;
-      text-align: center;
-      padding: 40px 20px;
-      margin-top: 80px;
+    .card span{
+      font-size:0.95rem;
+      color:#555;
+    }
+
+    .card a{
+      display:inline-block;
+      margin-top:15px;
+      text-decoration:none;
+      font-weight:700;
+      color:var(--bleu-nuit);
+    }
+
+    footer{
+      background:var(--bleu-nuit);
+      color:#fff;
+      text-align:center;
+      padding:40px 20px;
     }
   </style>
 </head>
@@ -104,6 +118,10 @@
   <p>Comptes rendus des débats, conférences et actions du Parlement JPV</p>
 </header>
 
+<nav>
+  <a href="index.html">← Retour au site</a>
+</nav>
+
 <section>
   <h2>Année 2025 – 2026</h2>
 
@@ -112,7 +130,7 @@
     <div class="card">
       <strong>Débat – Liberté d’expression</strong>
       <span>Débat citoyen · Janvier 2026</span>
-      <a href="CompteRenduDébat26_01_26.pdf" target="_blank">
+      <a href="rapports/compte-rendu-debat-liberte-expression-2026-01-26.pdf" target="_blank" rel="noopener">
         📄 Consulter le rapport
       </a>
     </div>
@@ -120,18 +138,18 @@
     <div class="card">
       <strong>Exercice – Avocat du Diable</strong>
       <span>Atelier d’éloquence · Février 2026</span>
-      <a href="rapports/rapport-avocat-du-diable.pdf" target="_blank">
+      <a href="rapports/rapport-avocat-du-diable-2026-02.pdf" target="_blank" rel="noopener">
         📄 Consulter le rapport
       </a>
     </div>
 
-<div class="card">
-  <strong>Débat – Écologie</strong>
-  <span>Débat · Mars 2026</span>
-  <a href="rapports/rapport-debat-ecologie.pdf.pdf" target="_blank">
-    📄 Consulter le rapport
-  </a>
-</div>
+    <div class="card">
+      <strong>Débat – Écologie</strong>
+      <span>Débat · Mars 2026</span>
+      <a href="rapports/rapport-debat-ecologie-2026-03.pdf" target="_blank" rel="noopener">
+        📄 Consulter le rapport
+      </a>
+    </div>
 
   </div>
 </section>
