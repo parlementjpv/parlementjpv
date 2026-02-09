@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rejoindre — Parlement JPV</title>
+  <meta name="description" content="Candidater au Parlement JPV : exigences, rôles, engagement, formulaire." />
+  <link rel="icon" href="assets/img/favicon.png" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="nav">
+        <a class="brand" href="index.html">
+          <img src="assets/img/logo.png" alt="Logo Parlement JPV">
+          <div><div class="title">Parlement JPV</div><div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div></div>
+        </a>
+        <nav class="nav-links">
+          <a href="institution.html">L’institution</a>
+          <a href="rapports.html">Rapports</a>
+          <a href="galerie.html">Galerie</a>
+          <a href="media.html">Médias</a>
+          <a href="rejoindre.html">Rejoindre</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <div class="nav-actions">
+          <button class="icon-btn" onclick="toggleTheme()" aria-label="Basculer mode sombre">☾</button>
+          <button class="icon-btn burger" onclick="toggleMobile()" aria-label="Ouvrir le menu">☰</button>
+        </div>
+      </div>
+      <div id="mobileNav" class="mobile">
+        <a href="institution.html">L’institution</a>
+        <a href="rapports.html">Rapports</a>
+        <a href="galerie.html">Galerie</a>
+        <a href="media.html">Médias</a>
+        <a href="rejoindre.html">Rejoindre</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <span class="badge">Candidature — engagement et niveau</span>
+      <div class="kicker" style="margin-top:12px">Rejoindre</div>
+      <h1>Candidater au Parlement JPV</h1>
+      <p>
+        Ici, on ne cherche pas des “spectateurs”. On cherche des élèves capables de travailler, d’argumenter,
+        et de tenir un rôle. Si tu veux progresser vite : c’est le bon endroit.
+      </p>
+
+      <div class="grid grid-2" style="margin-top:14px">
+        <div class="card">
+          <h2>Ce que tu gagnes</h2>
+          <p>• Un vrai niveau d’éloquence (feedback exigeant)</p>
+          <p>• Une méthode d’argumentation (sources, logique, réfutation)</p>
+          <p>• Des responsabilités réelles (organisation, communication, conférences)</p>
+          <p>• Une trace officielle (rapports, projets, impact)</p>
+        </div>
+
+        <div class="card">
+          <h2>Ce qu’on attend</h2>
+          <p>• Ponctualité + fiabilité</p>
+          <p>• Travail personnel (préparation, lectures, sources)</p>
+          <p>• Respect strict du cadre (débat ≠ clash)</p>
+          <p>• Esprit d’équipe (on construit, on ne brille pas seul)</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:18px">
+        <h2>Formulaire de candidature</h2>
+        <p>Tu peux intégrer ton Google Forms ici, ou juste mettre un bouton.</p>
+        <div class="btns">
+          <a class="btn btn-gold" href="https://forms.gle/TON_FORM" target="_blank" rel="noopener">📝 Ouvrir le formulaire</a>
+          <a class="btn btn-ghost" href="institution.html">🏛 Voir l’institution</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="small">© <span id="year"></span> Parlement JPV</div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>
