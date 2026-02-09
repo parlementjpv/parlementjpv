@@ -1,0 +1,16 @@
+{
+  "albums": [
+    {
+      "date": "2026-02-02",
+      "title": "Rencontre institutionnelle",
+      "summary": "Moments clés, échanges et photos officielles.",
+      "items": [
+        { "type": "image", "src": "assets/img/hero.jpg", "alt": "Photo officielle" },
+        { "type": "video", "src": "https://www.youtube.com/embed/SHORT_ID_1" },
+        { "type": "video", "src": "https://www.youtube.com/embed/SHORT_ID_2" },
+        { "type": "image", "src": "assets/img/hero.jpg", "alt": "Photo débat" }
+      ],
+      "moreLink": "https://instagram.com/TONCOMPTE"
+    }
+  ]
+}
