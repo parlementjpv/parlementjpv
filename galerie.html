@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Galerie — Parlement JPV</title>
+  <meta name="description" content="Galerie des événements du Parlement JPV." />
+  <link rel="icon" href="assets/img/favicon.png" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="nav">
+        <a class="brand" href="index.html">
+          <img src="assets/img/logo.png" alt="Logo Parlement JPV">
+          <div><div class="title">Parlement JPV</div><div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div></div>
+        </a>
+        <nav class="nav-links">
+          <a href="institution.html">L’institution</a>
+          <a href="rapports.html">Rapports</a>
+          <a href="galerie.html">Galerie</a>
+          <a href="media.html">Médias</a>
+          <a href="rejoindre.html">Rejoindre</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <div class="nav-actions">
+          <button class="icon-btn" onclick="toggleTheme()" aria-label="Basculer mode sombre">☾</button>
+          <button class="icon-btn burger" onclick="toggleMobile()" aria-label="Ouvrir le menu">☰</button>
+        </div>
+      </div>
+      <div id="mobileNav" class="mobile">
+        <a href="institution.html">L’institution</a>
+        <a href="rapports.html">Rapports</a>
+        <a href="galerie.html">Galerie</a>
+        <a href="media.html">Médias</a>
+        <a href="rejoindre.html">Rejoindre</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <span class="badge">Crédibilité — preuves visuelles</span>
+      <div class="kicker" style="margin-top:12px">Galerie</div>
+      <h1>Événements</h1>
+      <p>Albums chargés depuis <strong>/data/gallery.json</strong> (images + vidéos).</p>
+
+      <div id="galleryBlocks" class="grid" style="margin-top:14px"></div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container"><div class="small">© <span id="year"></span> Parlement JPV</div></div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>
