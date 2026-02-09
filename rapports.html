@@ -1,153 +1,70 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Rapports – Parlement JPV</title>
-  <meta name="description" content="Rapports officiels des débats, conférences et actions du Parlement JPV.">
-
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
-  <style>
-    :root{
-      --bleu-nuit:#0b2545;
-      --or:#d4af37;
-      --fond:#f6f7fb;
-      --texte:#1c1c1c;
-      --carte:#fff;
-    }
-
-    body{
-      font-family:'Inter',sans-serif;
-      background:var(--fond);
-      color:var(--texte);
-      margin:0;
-    }
-
-    header{
-      background:linear-gradient(120deg,rgba(11,37,69,0.95),rgba(11,37,69,0.85));
-      color:#fff;
-      padding:70px 20px 55px;
-      text-align:center;
-    }
-
-    header h1{
-      font-family:'Playfair Display',serif;
-      font-size:3rem;
-      margin:0 0 10px;
-    }
-
-    header p{ margin:0; opacity:0.95; }
-
-    nav{
-      max-width:1200px;
-      margin:18px auto 0;
-      padding:0 8%;
-    }
-
-    nav a{
-      display:inline-block;
-      text-decoration:none;
-      font-weight:700;
-      color:var(--bleu-nuit);
-      background:#fff;
-      padding:10px 14px;
-      border-radius:12px;
-      box-shadow:0 8px 20px rgba(0,0,0,0.06);
-    }
-
-    section{
-      max-width:1200px;
-      margin:55px auto 80px;
-      padding:0 8%;
-    }
-
-    h2{
-      font-family:'Playfair Display',serif;
-      font-size:2.2rem;
-      margin:0 0 35px;
-      color:var(--bleu-nuit);
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-      gap:35px;
-    }
-
-    .card{
-      background:var(--carte);
-      padding:30px;
-      border-radius:16px;
-      box-shadow:0 15px 35px rgba(0,0,0,0.08);
-    }
-
-    .card strong{
-      display:block;
-      font-size:1.1rem;
-      margin-bottom:10px;
-    }
-
-    .card span{
-      font-size:0.95rem;
-      color:#555;
-    }
-
-    .card a{
-      display:inline-block;
-      margin-top:15px;
-      text-decoration:none;
-      font-weight:700;
-      color:var(--bleu-nuit);
-    }
-
-    footer{
-      background:var(--bleu-nuit);
-      color:#fff;
-      text-align:center;
-      padding:40px 20px;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rapports — Parlement JPV</title>
+  <meta name="description" content="Rapports officiels et comptes rendus du Parlement JPV." />
+  <link rel="icon" href="assets/img/favicon.png" />
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
-
 <body>
-
-<header>
-  <h1>Rapports officiels</h1>
-  <p>Comptes rendus des débats, conférences et actions du Parlement JPV</p>
-</header>
-
-<nav>
-  <a href="index.html">← Retour au site</a>
-</nav>
-
-<section>
-  <h2>Année 2025 – 2026</h2>
-
-  <div class="grid">
-
-    <div class="card">
-      <strong>Débat – Liberté d’expression</strong>
-      <span>Débat citoyen · Janvier 2026</span>
-      <a href="rapports/rapport-liberte-expression.pdf" target="_blank" rel="noopener">
-        📄 Consulter le rapport
-      </a>
+  <header class="header">
+    <div class="container">
+      <div class="nav">
+        <a class="brand" href="index.html">
+          <img src="assets/img/logo.png" alt="Logo Parlement JPV">
+          <div><div class="title">Parlement JPV</div><div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div></div>
+        </a>
+        <nav class="nav-links">
+          <a href="institution.html">L’institution</a>
+          <a href="rapports.html">Rapports</a>
+          <a href="galerie.html">Galerie</a>
+          <a href="media.html">Médias</a>
+          <a href="rejoindre.html">Rejoindre</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <div class="nav-actions">
+          <button class="icon-btn" onclick="toggleTheme()" aria-label="Basculer mode sombre">☾</button>
+          <button class="icon-btn burger" onclick="toggleMobile()" aria-label="Ouvrir le menu">☰</button>
+        </div>
+      </div>
+      <div id="mobileNav" class="mobile">
+        <a href="institution.html">L’institution</a>
+        <a href="rapports.html">Rapports</a>
+        <a href="galerie.html">Galerie</a>
+        <a href="media.html">Médias</a>
+        <a href="rejoindre.html">Rejoindre</a>
+        <a href="contact.html">Contact</a>
+      </div>
     </div>
+  </header>
 
-    <div class="card">
-      <strong>Exercice – Avocat du Diable</strong>
-      <span>Atelier d’éloquence · Février 2026</span>
-      <a href="rapports/rapport-avocat-du-diable.pdf" target="_blank" rel="noopener">
-        📄 Consulter le rapport
-      </a>
+  <main class="section">
+    <div class="container">
+      <span class="badge">Transparence — traçabilité</span>
+      <div class="kicker" style="margin-top:12px">Rapports</div>
+      <h1>Rapports officiels</h1>
+      <p>Cette page se met à jour automatiquement depuis <strong>/data/reports.json</strong>.</p>
+
+      <div id="reportsList" class="card" style="margin-top:14px"></div>
+
+      <div class="card" style="margin-top:16px">
+        <h2>Publier un rapport (ultra simple)</h2>
+        <p class="small">
+          1) Ajoute ton PDF dans <strong>/assets/docs/</strong><br>
+          2) Ajoute une entrée dans <strong>/data/reports.json</strong><br>
+          3) Push sur GitHub → publié.
+        </p>
+      </div>
     </div>
+  </main>
 
-</section>
+  <footer class="footer">
+    <div class="container"><div class="small">© <span id="year"></span> Parlement JPV</div></div>
+  </footer>
 
-<footer>
-  Parlement JPV — Lycée Jean-Pierre Vernant · Sèvres
-</footer>
-
+  <script src="js/main.js"></script>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 </body>
 </html>
