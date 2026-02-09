@@ -243,3 +243,45 @@ iframe.calendar{
   overflow:hidden;
   box-shadow:var(--shadow);
 }
+
+/* ===== FIX RAPPORTS IPHONE STACK ===== */
+@media (max-width: 600px){
+
+#reportsList { 
+  padding:0 !important; 
+  border:0 !important; 
+  background:transparent !important; 
+  box-shadow:none !important; 
+}
+
+#reportsList .table { 
+  border-spacing:0 14px; 
+  width:100%; 
+}
+
+#reportsList .table tr { 
+  display:block; 
+  margin-bottom:14px; 
+}
+
+#reportsList .table td{
+  display:block;
+  width:100% !important;
+  margin:0;
+  border-radius:16px !important;
+}
+
+#reportsList .table td + td { 
+  margin-top:8px; 
+}
+
+#reportsList .table td:last-child { 
+  text-align:left !important; 
+}
+
+#reportsList .table .btn{
+  width:100%;
+  justify-content:center;
+}
+
+}
