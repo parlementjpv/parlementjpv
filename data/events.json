@@ -1,0 +1,26 @@
+{
+  "stats": {
+    "participants": 120,
+    "debates": 6,
+    "conferences": 3,
+    "actions": 1
+  },
+  "events": [
+    {
+      "title": "Débat — Trump, Xi ou Poutine : l’Europe est-elle condamnée à choisir ?",
+      "type": "Débat",
+      "tag": "Événement public",
+      "start": "2026-02-16T12:00:00+01:00",
+      "end": "2026-02-16T13:00:00+01:00",
+      "location": "Lycée Jean-Pierre Vernant — Sèvres"
+    },
+    {
+      "title": "Atelier éloquence — Avocat du diable",
+      "type": "Atelier",
+      "tag": "Formation",
+      "start": "2026-02-18T12:00:00+01:00",
+      "end": "2026-02-18T13:00:00+01:00",
+      "location": "Salle à confirmer"
+    }
+  ]
+}
