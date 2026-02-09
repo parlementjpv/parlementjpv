@@ -1,10 +1,16 @@
 {
   "reports": [
     {
+      "date": "2026-01-26",
+      "title": "Rapport — la liberté d´expréssion doit t elle avoir des limites plus strictes?",
+      "summary": "Synthèse du déat.",
+      "file": "assets/docs/rapport-liberte-expression.pdf"
+    }
+     {
       "date": "2026-02-02",
-      "title": "Rapport — Rencontre institutionnelle (Mairie)",
-      "summary": "Synthèse, décisions, actions et suivi.",
-      "file": "assets/docs/rapport-exemple.pdf"
+      "title": "Rapport — Avocat du diable",
+      "summary": "Synthèse individuelle des 28 plaidoiries.",
+      "file": "assets/docs/rapport-avocat-du-diable.pdf"
     }
   ]
 }
