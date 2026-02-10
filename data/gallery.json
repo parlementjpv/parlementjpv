@@ -10,7 +10,7 @@
         { "type": "video", "src": "https://www.youtube.com/embed/SHORT_ID_2" },
         { "type": "image", "src": "assets/img/theo.png", "alt": "Photo débat" },
         { "type": "image", "src": "assets/img/braulio.png", "alt": "Photo débat" },
-        { "type": "image", "src": "assets/img/pauly.png", "alt": "Photo débat" },
+        { "type": "image", "src": "assets/img/pauly.png", "alt": "Photo débat" }
       ],
       "moreLink": "https://instagram.com/parlementjpv"
     }
