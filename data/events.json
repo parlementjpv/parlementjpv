@@ -1,10 +1,7 @@
 {
-  "stats": {
-    "participants": "+ 100",
-    "debates": 6,
-    "conferences": 3,
-    "actions": 1
-  },
+  "stats": { "participants": 120, "debates": 6, "conferences": 3, "actions": 1 },
+  "events": []
+},
   "events": [
     {
       "title": "Débat — Trump, Xi ou Poutine : l’Europe est-elle condamnée à choisir ?",
