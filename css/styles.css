@@ -244,3 +244,19 @@ iframe.calendar{
   box-shadow:var(--shadow);
 }
 
+/* Galerie : évite les images trop grandes */
+#galleryBlocks img{
+  width:100%;
+  height:260px;
+  object-fit:cover;
+  display:block;
+}
+
+/* Mobile : 2 colonnes au lieu de 3 */
+@media (max-width: 860px){
+  #galleryBlocks .grid-3{ grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 520px){
+  #galleryBlocks .grid-3{ grid-template-columns: 1fr; }
+  #galleryBlocks img{ height:220px; }
+}
