@@ -8,9 +8,9 @@
         { "type": "image", "src": "assets/img/hero.jpg", "alt": "Photo officielle" },
         { "type": "video", "src": "https://www.youtube.com/embed/SHORT_ID_1" },
         { "type": "video", "src": "https://www.youtube.com/embed/SHORT_ID_2" },
-        { "type": "image", "src": "assets/img/hero.jpg", "alt": "Photo débat" }
+        { "type": "image", "src": "assets/IMG_0239.png", "alt": "Photo débat" }
       ],
-      "moreLink": "https://instagram.com/TONCOMPTE"
+      "moreLink": "https://instagram.com/parlementjpv"
     }
   ]
 }
