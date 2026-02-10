@@ -116,52 +116,116 @@ async function loadReports(){
   }
 }
 
-/* ========= LOAD GALLERY ========= */
+/* ========= THEME ========= */
+const root = document.documentElement;
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme) root.setAttribute("data-theme", savedTheme);
+
+function toggleTheme(){
+  const current = root.getAttribute("data-theme");
+  const next = current === "dark" ? "light" : "dark";
+  root.setAttribute("data-theme", next);
+  localStorage.setItem("theme", next);
+}
+
+/* ========= MOBILE NAV ========= */
+function toggleMobile(){
+  const m = document.getElementById("mobileNav");
+  if (!m) return;
+  m.classList.toggle("open");
+}
+
+/* ========= HELPERS ========= */
+function fmtDateFR(iso){
+  const d = new Date(iso);
+  return new Intl.DateTimeFormat("fr-FR", { dateStyle:"long" }).format(d);
+}
+
+function safeText(s){
+  return (s || "").toString();
+}
+
+/* ========= GALLERY ========= */
 async function loadGallery(){
   const el = document.getElementById("galleryBlocks");
   if(!el) return;
 
   try{
     const res = await fetch("data/gallery.json", { cache:"no-store" });
-    if(!res.ok) throw new Error("gallery.json not found");
+    if(!res.ok) throw new Error("gallery.json introuvable");
     const data = await res.json();
 
-    const items = (data.albums || [])
-      .sort((a,b)=> new Date(b.date)-new Date(a.date));
+    const albums = (data.albums || [])
+      .sort((a,b)=> new Date(b.date) - new Date(a.date));
 
-    if(items.length === 0){
+    if(albums.length === 0){
       el.innerHTML = `<div class="notice">Aucun album publié pour le moment.</div>`;
       return;
     }
 
-    el.innerHTML = items.map(a => `
-      <div class="card">
-        <div class="kicker">${new Intl.DateTimeFormat("fr-FR",{dateStyle:"long"}).format(new Date(a.date))}</div>
-        <h3>${a.title}</h3>
-        <p>${a.summary || ""}</p>
+    // IMPORTANT : ici on affiche TOUT, aucun slice()
+    el.innerHTML = albums.map(a => {
+      const items = (a.items || []);
 
-        <div class="grid grid-2" style="margin-top:12px">
-          ${(a.items || []).slice(0,4).map(it => `
+      const itemsHTML = items.map(it => {
+        if(it.type === "video"){
+          return `
             <div class="card" style="padding:0;overflow:hidden">
-              ${it.type === "image"
-                ? `<img src="${it.src}" alt="${it.alt || a.title}">`
-                : `<iframe class="calendar" style="height:260px" src="${it.src}" title="${it.alt || a.title}" allowfullscreen></iframe>`
-              }
+              <iframe
+                class="calendar"
+                style="height:260px"
+                src="${it.src}"
+                title="${safeText(it.alt || a.title)}"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen>
+              </iframe>
             </div>
-          `).join("")}
-        </div>
+          `;
+        }
 
-        ${a.moreLink ? `
-          <div class="btns">
-            <a class="btn btn-ghost" href="${a.moreLink}" target="_blank" rel="noopener">Voir plus</a>
+        // image par défaut
+        return `
+          <div class="card" style="padding:0;overflow:hidden">
+            <img src="${it.src}" alt="${safeText(it.alt || a.title)}" loading="lazy">
           </div>
-        ` : ``}
-      </div>
-    `).join("");
+        `;
+      }).join("");
+
+      return `
+        <div class="card">
+          <div class="kicker">${fmtDateFR(a.date)}</div>
+          <h3>${safeText(a.title)}</h3>
+          <p>${safeText(a.summary)}</p>
+
+          <!-- grille des médias -->
+          <div class="grid grid-3" style="margin-top:12px">
+            ${itemsHTML}
+          </div>
+
+          ${a.moreLink ? `
+            <div class="btns">
+              <a class="btn btn-ghost" href="${a.moreLink}" target="_blank" rel="noopener">Voir plus</a>
+            </div>
+          ` : ``}
+        </div>
+      `;
+    }).join("");
+
   } catch(err){
-    el.innerHTML = `<div class="notice">Impossible de charger la galerie. Vérifie <strong>/data/gallery.json</strong>.</div>`;
+    el.innerHTML = `<div class="notice">Impossible de charger la galerie. Vérifie <strong>/data/gallery.json</strong> (JSON valide) et les chemins d’images.</div>`;
+    console.error(err);
   }
 }
+
+/* ========= INIT ========= */
+window.addEventListener("DOMContentLoaded", () => {
+  if(!root.getAttribute("data-theme")){
+    root.setAttribute("data-theme", "light");
+  }
+  loadGallery();
+});
+
 
 /* ========= INIT ========= */
 window.addEventListener("DOMContentLoaded", () => {
