@@ -260,3 +260,67 @@ iframe.calendar{
   #galleryBlocks .grid-3{ grid-template-columns: 1fr; }
   #galleryBlocks img{ height:220px; }
 }
+/* HERO PHOTO — cadrage + overlay + texte */
+.hero-side {
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  min-height: clamp(260px, 38vw, 520px);
+}
+
+.hero-side img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center 35%;
+  transform: scale(1.02);
+}
+
+.hero-side .overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(1200px 600px at 20% 10%, rgba(11, 37, 69, 0.35), transparent 60%),
+    linear-gradient(to top, rgba(11, 37, 69, 0.75), rgba(11, 37, 69, 0.10) 55%, rgba(11, 37, 69, 0.05));
+  pointer-events: none;
+}
+
+.hero-photo-text {
+  position: absolute;
+  inset: auto 18px 18px 18px;
+  color: #fff;
+  z-index: 2;
+  max-width: 92%;
+}
+
+.hero-photo-badge {
+  display: inline-block;
+  padding: 8px 10px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  letter-spacing: 0.2px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
+}
+
+.hero-photo-title {
+  margin-top: 10px;
+  font-weight: 800;
+  font-size: clamp(1.2rem, 2.2vw, 1.9rem);
+  line-height: 1.15;
+  text-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+.hero-photo-sub {
+  margin-top: 8px;
+  font-size: clamp(0.95rem, 1.4vw, 1.05rem);
+  opacity: 0.95;
+  text-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+@media (max-width: 720px) {
+  .hero-side { min-height: 300px; }
+  .hero-photo-text { inset: auto 14px 14px 14px; }
+}
