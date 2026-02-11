@@ -8,18 +8,14 @@
   <meta name="description" content="Charte officielle du Parlement JPV — principes, valeurs et règles de fonctionnement (Lycée Jean-Pierre Vernant — Sèvres)." />
   <meta name="theme-color" content="#0b2545" />
 
-  <!-- SEO -->
   <link rel="canonical" href="https://parlementjpv.github.io/parlementjpv/charte.html" />
   <meta name="robots" content="index,follow" />
 
-  <!-- Icons -->
   <link rel="icon" href="assets/img/favicon.png" sizes="any" />
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png" />
 
-  <!-- CSS global -->
   <link rel="stylesheet" href="css/styles.css" />
 
-  <!-- JSON-LD : document -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -32,65 +28,72 @@
   }
   </script>
 
-  <!-- CSS page (premium, sans casser ton site) -->
+  <!-- Styles premium page : alignés sur tes variables -->
   <style>
+    /* ========= Tokens (basés sur ton CSS) ========= */
     :root{
-      --ink:#0b2545;
-      --paper:#ffffff;
-      --paper2:#f7f8fb;
-      --line: rgba(15, 30, 55, .10);
-      --shadow: 0 18px 50px rgba(11,37,69,.12);
+      --charte-ink: var(--night);
+      --charte-line: var(--border);
+      --charte-paper: var(--card);
+      --charte-bg: var(--bg);
+      --charte-shadow: var(--shadow);
+      --charte-radius: var(--radius);
+      --charte-gold: var(--gold);
     }
 
+    /* ========= HERO premium ========= */
     .charte-hero{
       position: relative;
       overflow: hidden;
-      padding: 28px 22px;
-      background: linear-gradient(135deg, rgba(11,37,69,.96), rgba(11,37,69,.84));
+      padding: 22px;
+      border-radius: var(--charte-radius);
+      background:
+        radial-gradient(1200px 600px at 10% 10%, rgba(212,175,55,.20), transparent 45%),
+        linear-gradient(135deg, var(--night), #0a1d35);
       color: #fff;
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: var(--charte-shadow);
     }
+    :root[data-theme="dark"] .charte-hero{
+      border: 1px solid rgba(255,255,255,.14);
+    }
+
     .charte-hero::before{
       content:"";
-      position:absolute; inset:-2px;
+      position:absolute;
+      inset:-2px;
       background:
         radial-gradient(900px 420px at 12% 5%, rgba(255,255,255,.14), transparent 55%),
         radial-gradient(700px 420px at 88% 10%, rgba(255,255,255,.10), transparent 55%);
       pointer-events:none;
     }
+
     .charte-hero .topline{
-      display:flex; gap:14px; align-items:center; justify-content:space-between;
-      position:relative;
+      position: relative;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap: wrap;
     }
+
     .charte-hero .seal{
-      display:flex; gap:12px; align-items:center;
+      display:flex;
+      gap:12px;
+      align-items:center;
       padding: 10px 12px;
+      border-radius: 14px;
       border: 1px solid rgba(255,255,255,.18);
       background: rgba(255,255,255,.08);
-      border-radius: 14px;
       backdrop-filter: blur(10px);
     }
     .charte-hero .seal img{
-      width:42px; height:42px; object-fit:contain;
+      width:42px;height:42px;
+      object-fit:contain;
       filter: drop-shadow(0 14px 22px rgba(0,0,0,.25));
     }
-    .charte-hero h1{
-      position:relative;
-      margin: 14px 0 8px 0;
-      font-size: clamp(1.6rem, 2.6vw, 2.3rem);
-      line-height: 1.15;
-    }
-    .charte-hero .subtitle{
-      position:relative;
-      opacity:.95;
-      max-width: 70ch;
-    }
-    .charte-hero .meta{
-      position:relative;
-      margin-top: 12px;
-      display:flex; flex-wrap:wrap; gap:8px;
-      opacity:.95;
-    }
-    .pill{
+
+    .charte-hero .docpill{
       display:inline-flex;
       align-items:center;
       padding: 8px 10px;
@@ -98,21 +101,67 @@
       border: 1px solid rgba(255,255,255,.20);
       background: rgba(255,255,255,.10);
       font-size: .92rem;
+      font-weight: 800;
       backdrop-filter: blur(10px);
+      white-space: nowrap;
     }
+
+    .charte-hero h1{
+      position: relative;
+      margin: 14px 0 8px 0;
+      font-size: clamp(1.6rem, 2.6vw, 2.3rem);
+      line-height: 1.15;
+      letter-spacing: .2px;
+    }
+    .charte-hero .subtitle{
+      position: relative;
+      opacity: .95;
+      max-width: 70ch;
+      color: rgba(255,255,255,.92);
+      margin: 0;
+    }
+
+    .charte-hero .meta{
+      position: relative;
+      margin-top: 12px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      opacity:.98;
+    }
+    .charte-hero .meta .pill{
+      border-color: rgba(255,255,255,.22);
+      color: rgba(255,255,255,.90);
+      background: rgba(255,255,255,.08);
+    }
+
     .charte-hero .actions{
       position:relative;
       margin-top: 14px;
-      display:flex; flex-wrap:wrap; gap:10px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
     }
-    .charte-hero .btn{
-      border-color: rgba(255,255,255,.22);
+    .charte-hero .actions .btn{
+      border-color: rgba(255,255,255,.20);
     }
-    .charte-hero .btn.btn-primary{
+    .charte-hero .actions .btn.btn-primary{
       background: rgba(255,255,255,.14);
+      color:#fff;
+      border: 1px solid rgba(255,255,255,.18);
+    }
+    .charte-hero .actions .btn.btn-ghost{
+      color: rgba(255,255,255,.95);
+      border: 1px solid rgba(255,255,255,.22);
+    }
+    .charte-hero .actions .btn.btn-gold{
+      border: 1px solid rgba(0,0,0,.08);
     }
 
-    /* Layout premium : doc + sommaire sticky */
+    .mobile-toc-toggle{ display:none; margin-top: 10px; }
+
+    /* ========= Layout doc + TOC ========= */
     .charte-layout{
       display:grid;
       grid-template-columns: 320px 1fr;
@@ -120,51 +169,58 @@
       align-items:start;
       margin-top: 14px;
     }
-    @media (max-width: 980px){
-      .charte-layout{ grid-template-columns: 1fr; }
-    }
 
     .toc{
       position: sticky;
       top: 14px;
-      border: 1px solid var(--line);
-      background: #fff;
-      box-shadow: var(--shadow);
-    }
-    .toc h2{
-      margin: 0 0 10px 0;
-      font-size: 1.05rem;
+      background: var(--charte-paper);
+      border: 1px solid var(--charte-line);
+      border-radius: var(--charte-radius);
+      box-shadow: var(--charte-shadow);
+      overflow:hidden;
     }
     .toc .toc-inner{
       padding: 16px;
     }
+    .toc h2{
+      margin: 0 0 10px 0;
+      font-size: 1.05rem;
+      color: var(--text);
+    }
     .toc a{
       display:block;
-      padding: 8px 10px;
-      border-radius: 10px;
-      text-decoration: none;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-weight: 800;
+      color: var(--muted);
       border: 1px solid transparent;
     }
     .toc a:hover{
-      border-color: var(--line);
-      background: var(--paper2);
+      border-color: var(--charte-line);
+      background: color-mix(in srgb, var(--card) 92%, transparent);
+      color: var(--text);
     }
 
+    .toc-mobile{ display:none; }
+
     .doc{
-      border: 1px solid var(--line);
-      background: #fff;
-      box-shadow: var(--shadow);
+      background: var(--charte-paper);
+      border: 1px solid var(--charte-line);
+      border-radius: var(--charte-radius);
+      box-shadow: var(--charte-shadow);
       padding: 22px;
     }
+
     .doc .doc-head{
       display:flex;
       justify-content:space-between;
       align-items:flex-start;
       gap: 14px;
       padding-bottom: 14px;
-      border-bottom: 1px dashed var(--line);
+      border-bottom: 1px dashed var(--charte-line);
       margin-bottom: 14px;
     }
+
     .doc .doc-head .stamp{
       text-align:right;
       min-width: 220px;
@@ -173,27 +229,24 @@
       display:inline-block;
       padding: 8px 10px;
       border-radius: 12px;
-      border: 1px solid var(--line);
-      background: var(--paper2);
-      font-weight: 700;
-      color: var(--ink);
+      border: 1px solid var(--charte-line);
+      background: color-mix(in srgb, var(--card) 92%, transparent);
+      font-weight: 900;
+      color: var(--night);
     }
-    .doc .doc-head .stamp .small{
-      margin-top: 8px;
-      opacity: .85;
-    }
+    .doc .doc-head .stamp .small{ margin-top: 8px; }
 
     .article{
-      scroll-margin-top: 90px; /* pour ancre */
+      scroll-margin-top: 90px;
       padding: 14px 0;
-      border-bottom: 1px solid rgba(15, 30, 55, .08);
+      border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
     }
-    .article:last-child{ border-bottom: none; }
+    .article:last-child{ border-bottom:none; }
 
     .article h2{
       margin: 0 0 8px 0;
       font-size: 1.25rem;
-      color: var(--ink);
+      color: var(--night);
       letter-spacing: .2px;
     }
     .article p{ margin: 0 0 10px 0; }
@@ -202,21 +255,82 @@
       margin: 14px 0;
       padding: 14px 14px;
       border-radius: 14px;
-      border: 1px solid var(--line);
-      background: linear-gradient(180deg, #fff, var(--paper2));
+      border: 1px solid var(--charte-line);
+      background:
+        radial-gradient(900px 420px at 10% 10%, rgba(212,175,55,.14), transparent 45%),
+        linear-gradient(180deg, var(--card), color-mix(in srgb, var(--card) 88%, var(--bg)));
     }
 
     .download-row{
       display:flex;
-      gap: 10px;
-      flex-wrap: wrap;
+      gap:10px;
+      flex-wrap:wrap;
       align-items:center;
       margin-top: 10px;
     }
 
-    /* Impression propre */
+    /* ========= Mobile premium ========= */
+    @media (max-width: 980px){
+      .charte-layout{ grid-template-columns: 1fr; }
+      .toc{ display:none; }
+
+      .mobile-toc-toggle{ display:block; }
+
+      .toc-mobile{
+        display:block;
+        margin-top: 12px;
+        background: var(--charte-paper);
+        border: 1px solid var(--charte-line);
+        border-radius: var(--charte-radius);
+        box-shadow: var(--charte-shadow);
+      }
+      .toc-mobile .toc-inner{ padding: 16px; }
+      .toc-mobile a{
+        display:block;
+        padding: 10px 12px;
+        border-radius: 12px;
+        font-weight: 850;
+        color: var(--muted);
+        border: 1px solid transparent;
+      }
+      .toc-mobile a:hover{
+        border-color: var(--charte-line);
+        background: color-mix(in srgb, var(--card) 92%, transparent);
+        color: var(--text);
+      }
+
+      .charte-hero{ padding: 20px 16px; }
+      .charte-hero .topline{
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      /* boutons en colonne (ultra lisible) */
+      .charte-hero .actions{
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .charte-hero .actions .btn{ width:100%; }
+
+      .doc{ padding: 16px; }
+      .doc .doc-head{
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .doc .doc-head .stamp{
+        text-align:left;
+        min-width:0;
+      }
+    }
+
+    @media (max-width: 420px){
+      .charte-hero h1{ font-size: 1.55rem; }
+    }
+
+    /* ========= Impression ========= */
     @media print{
-      .header, .footer, .toc, .charte-hero .actions { display:none !important; }
+      .header, .footer, .toc, .charte-hero .actions, .mobile-toc-toggle, .toc-mobile { display:none !important; }
       .container{ max-width: none !important; }
       .doc{ box-shadow:none !important; border: none !important; padding: 0 !important; }
       .article{ page-break-inside: avoid; }
@@ -262,302 +376,4 @@
         <a href="galerie.html">Galerie</a>
         <a href="media.html">Médias</a>
         <a href="rejoindre.html">Rejoindre</a>
-        <a href="contact.html">Contact</a>
-      </nav>
-    </div>
-  </header>
-
-  <main id="contenu">
-    <section class="section-tight">
-      <div class="container">
-
-        <!-- HERO PREMIUM -->
-        <div class="card charte-hero">
-          <div class="topline">
-            <div class="seal" aria-label="Identification">
-              <img src="assets/img/logo.png" alt="Logo Parlement JPV" />
-              <div>
-                <div style="font-weight:800; letter-spacing:.2px;">Parlement JPV</div>
-                <div style="opacity:.92;">Lycée Jean-Pierre Vernant — Sèvres</div>
-              </div>
-            </div>
-
-            <div class="pill" title="Document officiel">📌 Document officiel</div>
-          </div>
-
-          <h1>Charte du Parlement JPV</h1>
-          <p class="subtitle">
-            Principes, valeurs et règles de fonctionnement — cadre du débat, de la parole et de l’engagement citoyen.
-          </p>
-
-          <div class="meta">
-            <span class="pill">Respect</span>
-            <span class="pill">Neutralité</span>
-            <span class="pill">Ouverture</span>
-            <span class="pill">Engagement</span>
-          </div>
-
-          <div class="actions">
-            <a class="btn btn-primary" href="assets/docs/CHARTE_PARLEMENT_JPV.pdf" download>📥 Télécharger le PDF officiel</a>
-            <a class="btn btn-ghost" href="#" onclick="window.print(); return false;">🖨️ Imprimer</a>
-            <a class="btn btn-gold" href="rejoindre.html">📝 Rejoindre</a>
-          </div>
-        </div>
-
-        <!-- LAYOUT -->
-        <div class="charte-layout">
-
-          <!-- TOC -->
-          <aside class="card toc" aria-label="Sommaire">
-            <div class="toc-inner">
-              <h2>Sommaire</h2>
-              <div class="list">
-                <a href="#preambule">Préambule</a>
-                <a href="#art1">Article 1 — Objectifs</a>
-                <a href="#art2">Article 2 — Valeurs</a>
-                <a href="#art3">Article 3 — Organisation</a>
-                <a href="#art4">Article 4 — Inscription et participation</a>
-                <a href="#art5">Article 5 — Activités</a>
-                <a href="#art6">Article 6 — Lieu et matériel</a>
-                <a href="#art7">Article 7 — Financement</a>
-                <a href="#art8">Article 8 — Structure du Parlement JPV</a>
-                <a href="#art9">Article 9 — Évolution de la charte</a>
-                <a href="#art10">Article 10 — Respect de la charte</a>
-                <a href="#validite">Validité & références</a>
-              </div>
-
-              <div class="callout" style="margin-top:12px;">
-                <div style="font-weight:800; color:var(--ink); margin-bottom:6px;">Téléchargement</div>
-                <div class="small">Version PDF identique au document officiel.</div>
-                <div class="download-row">
-                  <a class="btn btn-primary" href="assets/docs/CHARTE_PARLEMENT_JPV.pdf" download>📥 PDF</a>
-                  <a class="btn btn-ghost" href="#" onclick="window.print(); return false;">Imprimer</a>
-                </div>
-              </div>
-            </div>
-          </aside>
-
-          <!-- DOCUMENT -->
-          <article class="doc" aria-label="Charte officielle">
-            <div class="doc-head">
-              <div>
-                <div class="kicker">Charte</div>
-                <div style="font-weight:900; font-size:1.25rem; color:var(--ink);">Parlement JPV</div>
-                <div class="small">Lycée Jean-Pierre Vernant — Sèvres</div>
-              </div>
-              <div class="stamp">
-                <div class="tag">Version web officielle</div>
-                <div class="small">Téléchargement PDF disponible</div>
-              </div>
-            </div>
-
-            <section id="preambule" class="article">
-              <h2>Préambule</h2>
-              <p>
-                Le Parlement JPV est une initiative lycéenne fondée sur la conviction que la parole, le débat
-                et la réflexion citoyenne sont au cœur de la vie démocratique.
-              </p>
-              <p>
-                Ce projet vise à offrir à chaque élève un espace de liberté d’expression, de dialogue et
-                d’engagement. Chaque participant s’engage à respecter la Charte de la Laïcité à l’École, et
-                le règlement intérieur garants du vivre-ensemble, ainsi que l’ensemble des valeurs
-                républicaines qui guident les actions du Parlement JPV.
-              </p>
-            </section>
-
-            <section id="art1" class="article">
-              <h2>Article 1 — Objectifs</h2>
-              <p>Le Parlement JPV a pour objectif de :</p>
-              <ul>
-                <li>Promouvoir la prise de parole, l’esprit critique et l’appropriation des valeurs républicaines par les lycéens.</li>
-                <li>Encourager le débat démocratique, le respect des opinions, la tolérance et le vivre-ensemble, dans un cadre fondé sur la laïcité et le respect mutuel.</li>
-                <li>Sensibiliser les élèves aux enjeux citoyens, et culturels.</li>
-                <li>Offrir des activités formatrices : débats, conférences, concours d’éloquence, visites institutionnelles.</li>
-              </ul>
-            </section>
-
-            <section id="art2" class="article">
-              <h2>Article 2 — Valeurs</h2>
-              <p>Les membres s’engagent à respecter les valeurs suivantes :</p>
-              <ul>
-                <li>Respect des opinions, des personnes et du cadre scolaire.</li>
-                <li>Neutralité : le Parlement JPV n’a pas vocation à promouvoir une opinion politique, religieuse ou idéologique.</li>
-                <li>Ouverture : accueil de tous les élèves, quelle que soit leur classe, section ou spécialités. Chaque professeur est également le bienvenu.</li>
-                <li>Engagement : participation active et bienveillante à la vie du Club.</li>
-              </ul>
-            </section>
-
-            <section id="art3" class="article">
-              <h2>Article 3 — Organisation</h2>
-              <p>
-                Le Parlement JPV fonctionne sous la responsabilité du Conseil de la Vie Lycéenne et en lien
-                avec ses professeures référentes : Madame Harand-Busson (professeure documentaliste)
-                et Madame Aubossu (C.P.E.).
-              </p>
-              <p>
-                La présence d’au moins un professeur est obligatoire pour permettre la tenue d’une séance,
-                de préférence un professeur différent à chaque séance afin de varier les points de vue et
-                d’éviter une surcharge de travail.
-              </p>
-              <div class="callout">
-                <ul style="margin:0;">
-                  <li>Activités possibles en partenariat avec les ambassadeurs du lycée et les éco-délégués.</li>
-                  <li>Réunion selon disponibilités des membres, professeurs et salles (date fixée par le président du club).</li>
-                  <li>Débats : 30 minutes sur l’heure de midi ou en fin de journée.</li>
-                </ul>
-              </div>
-            </section>
-
-            <section id="art4" class="article">
-              <h2>Article 4 — Inscription et participation</h2>
-              <p>L’inscription se fait sur le principe du volontariat.</p>
-              <ul>
-                <li>Les élèves intéressés remplissent un formulaire d’inscription auprès de la professeure référente au CDI ou en ligne via le lien indiqué.</li>
-                <li>L’inscription permet de participer aux débats, aux conférences, ateliers et concours organisés.</li>
-                <li>Les membres peuvent proposer des thèmes ou des invités, sous validation du comité d'organisation et du proviseur.</li>
-                <li>Un engagement de respect mutuel est signé à l’inscription.</li>
-              </ul>
-            </section>
-
-            <section id="art5" class="article">
-              <h2>Article 5 — Activités</h2>
-              <p>Les principales actions du Parlement JPV sont :</p>
-              <ul>
-                <li>Débats citoyens sur des sujets d’actualité ou internes au lycée.</li>
-                <li>Conférences avec des invités extérieurs (journalistes, élus, chercheurs…).</li>
-                <li>Concours d’éloquence individuel ou par équipe.</li>
-                <li>Visites d’institutions locales et rencontres avec des acteurs de la vie publique, sous autorisation du chef d'établissement.</li>
-                <li>Ateliers d’expression orale pour préparer les oraux et concours.</li>
-                <li>Compte Instagram (@parlementjpv) destiné à promouvoir ses activités, avec communication conforme à la charte.</li>
-              </ul>
-            </section>
-
-            <section id="art6" class="article">
-              <h2>Article 6 — Lieu et matériel</h2>
-              <p>
-                Les activités se tiennent au lycée, principalement en salle Samuel Paty ou en salle de classe
-                selon le nombre de participants et la disponibilité.
-              </p>
-              <p>Le lycée dispose du matériel nécessaire (micros, projecteur, pupitres).</p>
-            </section>
-
-            <section id="art7" class="article">
-              <h2>Article 7 — Financement</h2>
-              <p>Les actions peuvent être financées par :</p>
-              <ul>
-                <li>La MDL (Maison des Lycéens).</li>
-                <li>Fonds de vie lycéen.</li>
-                <li>Des subventions locales.</li>
-              </ul>
-            </section>
-
-            <section id="art8" class="article">
-              <h2>Article 8 — Structure du Parlement JPV</h2>
-              <p>
-                Le Parlement JPV est placé sous la responsabilité du CVL qui nomme le président du club.
-                Ce président peut être assisté de porte-paroles et de responsables thématiques qu’il nomme
-                parmi les membres inscrits, avec l’accord du bureau du CVL.
-              </p>
-              <div class="callout">
-                <p style="margin:0 0 8px 0; font-weight:800; color:var(--ink);">Rôles possibles</p>
-                <ul style="margin:0;">
-                  <li>Président : coordination, animation, ordre du jour avec le CVL (élu par le CVL).</li>
-                  <li>Vice-président : seconde le président et assure l’intérim.</li>
-                  <li>Secrétaire général : comptes rendus, inscriptions, convocations (élu par le CVL).</li>
-                  <li>Porte-paroles : représentation auprès des élèves et du CVL.</li>
-                  <li>Responsables thématiques : groupes de travail (environnement, égalité, culture, vie scolaire, etc.).</li>
-                </ul>
-              </div>
-            </section>
-
-            <section id="art9" class="article">
-              <h2>Article 9 — Évolution de la charte</h2>
-              <p>
-                Le CVL se réserve le droit, avec l’accord de Madame Aubossu, Madame Harrand-Busson et du proviseur,
-                de modifier la présente charte afin de l’adapter à l’évolution du projet et aux besoins de la communauté lycéenne.
-              </p>
-              <p>La charte est présentée chaque année pour évolution, approbation et reconduction.</p>
-            </section>
-
-            <section id="art10" class="article">
-              <h2>Article 10 — Respect de la charte</h2>
-              <p>
-                Tout membre inscrit au Parlement JPV s’engage à respecter les valeurs et les principes de cette charte.
-              </p>
-              <p>
-                Le règlement intérieur du lycée Jean-Pierre Vernant s’applique dans toutes les activités du Parlement JPV.
-                Tout manquement à ce règlement pourra entraîner la suspension de la participation d’un membre.
-              </p>
-            </section>
-
-            <section id="validite" class="article">
-              <h2>Validité & références</h2>
-              <div class="callout">
-                <p style="margin:0 0 10px 0;">
-                  <strong>Référence :</strong> version PDF officielle téléchargeable depuis cette page.
-                </p>
-                <p class="small" style="margin:0;">
-                  Ce texte est la transcription web de la charte officielle du Parlement JPV. :contentReference[oaicite:1]{index=1}
-                </p>
-              </div>
-
-              <div class="callout" style="display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap;">
-                <div>
-                  <div style="font-weight:800; color:var(--ink);">Mentions</div>
-                  <div class="small">Sous responsabilité du CVL — en lien avec les professeures référentes et le proviseur.</div>
-                </div>
-                <div>
-                  <div style="font-weight:800; color:var(--ink);">Signature</div>
-                  <div class="small">Parlement JPV — Lycée Jean-Pierre Vernant</div>
-                </div>
-              </div>
-            </section>
-
-          </article>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="footer" role="contentinfo">
-    <div class="container">
-      <div class="small">© <span id="year"></span> Parlement JPV — Lycée Jean-Pierre Vernant</div>
-    </div>
-  </footer>
-
-  <script src="js/main.js" defer></script>
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    // fallback menu mobile si main.js ne l'a pas
-    (function () {
-      const btn = document.getElementById("mobileNavBtn");
-      const nav = document.getElementById("mobileNav");
-      if (!btn || !nav) return;
-
-      if (typeof window.toggleMobile !== "function") {
-        window.toggleMobile = function () {
-          const isOpen = btn.getAttribute("aria-expanded") === "true";
-          btn.setAttribute("aria-expanded", String(!isOpen));
-          nav.hidden = isOpen;
-        };
-      }
-
-      nav.addEventListener("click", (e) => {
-        const a = e.target.closest("a");
-        if (!a) return;
-        btn.setAttribute("aria-expanded", "false");
-        nav.hidden = true;
-      });
-
-      document.addEventListener("keydown", (e) => {
-        if (e.key !== "Escape") return;
-        btn.setAttribute("aria-expanded", "false");
-        nav.hidden = true;
-      });
-    })();
-  </script>
-
-</body>
-</html>
+        <a href="contact.html
