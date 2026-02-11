@@ -5,159 +5,559 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <title>Charte officielle — Parlement JPV</title>
-  <meta name="description" content="Charte officielle du Parlement JPV — Lycée Jean-Pierre Vernant (Sèvres)." />
+  <meta name="description" content="Charte officielle du Parlement JPV — principes, valeurs et règles de fonctionnement (Lycée Jean-Pierre Vernant — Sèvres)." />
   <meta name="theme-color" content="#0b2545" />
 
+  <!-- SEO -->
   <link rel="canonical" href="https://parlementjpv.github.io/parlementjpv/charte.html" />
   <meta name="robots" content="index,follow" />
 
-  <link rel="icon" href="assets/img/favicon.png" />
+  <!-- Icons -->
+  <link rel="icon" href="assets/img/favicon.png" sizes="any" />
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png" />
+
+  <!-- CSS global -->
   <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- JSON-LD : document -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"CreativeWork",
+    "name":"Charte du Parlement JPV",
+    "description":"Document officiel définissant les principes, valeurs et règles de fonctionnement du Parlement JPV (Lycée Jean-Pierre Vernant — Sèvres).",
+    "inLanguage":"fr-FR",
+    "isPartOf":{"@type":"Organization","name":"Parlement JPV"},
+    "url":"https://parlementjpv.github.io/parlementjpv/charte.html"
+  }
+  </script>
+
+  <!-- CSS page (premium, sans casser ton site) -->
+  <style>
+    :root{
+      --ink:#0b2545;
+      --paper:#ffffff;
+      --paper2:#f7f8fb;
+      --line: rgba(15, 30, 55, .10);
+      --shadow: 0 18px 50px rgba(11,37,69,.12);
+    }
+
+    .charte-hero{
+      position: relative;
+      overflow: hidden;
+      padding: 28px 22px;
+      background: linear-gradient(135deg, rgba(11,37,69,.96), rgba(11,37,69,.84));
+      color: #fff;
+    }
+    .charte-hero::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(900px 420px at 12% 5%, rgba(255,255,255,.14), transparent 55%),
+        radial-gradient(700px 420px at 88% 10%, rgba(255,255,255,.10), transparent 55%);
+      pointer-events:none;
+    }
+    .charte-hero .topline{
+      display:flex; gap:14px; align-items:center; justify-content:space-between;
+      position:relative;
+    }
+    .charte-hero .seal{
+      display:flex; gap:12px; align-items:center;
+      padding: 10px 12px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.08);
+      border-radius: 14px;
+      backdrop-filter: blur(10px);
+    }
+    .charte-hero .seal img{
+      width:42px; height:42px; object-fit:contain;
+      filter: drop-shadow(0 14px 22px rgba(0,0,0,.25));
+    }
+    .charte-hero h1{
+      position:relative;
+      margin: 14px 0 8px 0;
+      font-size: clamp(1.6rem, 2.6vw, 2.3rem);
+      line-height: 1.15;
+    }
+    .charte-hero .subtitle{
+      position:relative;
+      opacity:.95;
+      max-width: 70ch;
+    }
+    .charte-hero .meta{
+      position:relative;
+      margin-top: 12px;
+      display:flex; flex-wrap:wrap; gap:8px;
+      opacity:.95;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.20);
+      background: rgba(255,255,255,.10);
+      font-size: .92rem;
+      backdrop-filter: blur(10px);
+    }
+    .charte-hero .actions{
+      position:relative;
+      margin-top: 14px;
+      display:flex; flex-wrap:wrap; gap:10px;
+    }
+    .charte-hero .btn{
+      border-color: rgba(255,255,255,.22);
+    }
+    .charte-hero .btn.btn-primary{
+      background: rgba(255,255,255,.14);
+    }
+
+    /* Layout premium : doc + sommaire sticky */
+    .charte-layout{
+      display:grid;
+      grid-template-columns: 320px 1fr;
+      gap: 16px;
+      align-items:start;
+      margin-top: 14px;
+    }
+    @media (max-width: 980px){
+      .charte-layout{ grid-template-columns: 1fr; }
+    }
+
+    .toc{
+      position: sticky;
+      top: 14px;
+      border: 1px solid var(--line);
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+    .toc h2{
+      margin: 0 0 10px 0;
+      font-size: 1.05rem;
+    }
+    .toc .toc-inner{
+      padding: 16px;
+    }
+    .toc a{
+      display:block;
+      padding: 8px 10px;
+      border-radius: 10px;
+      text-decoration: none;
+      border: 1px solid transparent;
+    }
+    .toc a:hover{
+      border-color: var(--line);
+      background: var(--paper2);
+    }
+
+    .doc{
+      border: 1px solid var(--line);
+      background: #fff;
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+    .doc .doc-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap: 14px;
+      padding-bottom: 14px;
+      border-bottom: 1px dashed var(--line);
+      margin-bottom: 14px;
+    }
+    .doc .doc-head .stamp{
+      text-align:right;
+      min-width: 220px;
+    }
+    .doc .doc-head .stamp .tag{
+      display:inline-block;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: var(--paper2);
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .doc .doc-head .stamp .small{
+      margin-top: 8px;
+      opacity: .85;
+    }
+
+    .article{
+      scroll-margin-top: 90px; /* pour ancre */
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(15, 30, 55, .08);
+    }
+    .article:last-child{ border-bottom: none; }
+
+    .article h2{
+      margin: 0 0 8px 0;
+      font-size: 1.25rem;
+      color: var(--ink);
+      letter-spacing: .2px;
+    }
+    .article p{ margin: 0 0 10px 0; }
+
+    .callout{
+      margin: 14px 0;
+      padding: 14px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #fff, var(--paper2));
+    }
+
+    .download-row{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items:center;
+      margin-top: 10px;
+    }
+
+    /* Impression propre */
+    @media print{
+      .header, .footer, .toc, .charte-hero .actions { display:none !important; }
+      .container{ max-width: none !important; }
+      .doc{ box-shadow:none !important; border: none !important; padding: 0 !important; }
+      .article{ page-break-inside: avoid; }
+      a{ color: inherit; text-decoration: none; }
+    }
+  </style>
 </head>
 
 <body>
 
-<header class="header">
-  <div class="container">
-    <div class="nav">
-      <a class="brand" href="index.html">
-        <img src="assets/img/logo.png" width="44" height="44" />
-        <div>
-          <div class="title">Parlement JPV</div>
-          <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
+  <!-- HEADER -->
+  <header class="header" role="banner">
+    <div class="container">
+      <div class="nav">
+        <a class="brand" href="index.html" aria-label="Accueil Parlement JPV">
+          <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44" />
+          <div class="brand-text">
+            <div class="title">Parlement JPV</div>
+            <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
+          </div>
+        </a>
+
+        <nav class="nav-links" aria-label="Navigation principale">
+          <a href="institution.html">L’institution</a>
+          <a href="rapports.html">Rapports</a>
+          <a href="galerie.html">Galerie</a>
+          <a href="media.html">Médias</a>
+          <a href="rejoindre.html">Rejoindre</a>
+          <a href="contact.html">Contact</a>
+          <a href="index.html">Accueil</a>
+        </nav>
+
+        <div class="nav-actions">
+          <button class="icon-btn" type="button" onclick="toggleTheme()" aria-label="Basculer le thème" title="Thème">☾</button>
+          <button class="icon-btn burger" type="button" onclick="toggleMobile()" aria-label="Ouvrir le menu" aria-controls="mobileNav" aria-expanded="false" id="mobileNavBtn" title="Menu">☰</button>
         </div>
-      </a>
-      <nav class="nav-links">
+      </div>
+
+      <nav id="mobileNav" class="mobile" aria-label="Menu mobile" hidden>
         <a href="index.html">Accueil</a>
-        <a href="institution.html">Institution</a>
+        <a href="institution.html">L’institution</a>
         <a href="rapports.html">Rapports</a>
+        <a href="galerie.html">Galerie</a>
+        <a href="media.html">Médias</a>
         <a href="rejoindre.html">Rejoindre</a>
+        <a href="contact.html">Contact</a>
       </nav>
     </div>
-  </div>
-</header>
+  </header>
 
-<main class="section">
-  <div class="container">
+  <main id="contenu">
+    <section class="section-tight">
+      <div class="container">
 
-    <!-- HERO CHARTE -->
-    <div class="card" style="margin-bottom:20px;">
-      <div class="kicker">Document officiel</div>
-      <h1>Charte du Parlement JPV</h1>
-      <p class="small">
-        Texte fondateur définissant les principes, valeurs et règles de fonctionnement du Parlement JPV.
-      </p>
+        <!-- HERO PREMIUM -->
+        <div class="card charte-hero">
+          <div class="topline">
+            <div class="seal" aria-label="Identification">
+              <img src="assets/img/logo.png" alt="Logo Parlement JPV" />
+              <div>
+                <div style="font-weight:800; letter-spacing:.2px;">Parlement JPV</div>
+                <div style="opacity:.92;">Lycée Jean-Pierre Vernant — Sèvres</div>
+              </div>
+            </div>
 
-      <div class="btns" style="margin-top:14px;">
-        <a class="btn btn-primary" href="assets/docs/CHARTE_PARLEMENT_JPV.pdf" download>
-          📥 Télécharger la version PDF officielle
-        </a>
+            <div class="pill" title="Document officiel">📌 Document officiel</div>
+          </div>
+
+          <h1>Charte du Parlement JPV</h1>
+          <p class="subtitle">
+            Principes, valeurs et règles de fonctionnement — cadre du débat, de la parole et de l’engagement citoyen.
+          </p>
+
+          <div class="meta">
+            <span class="pill">Respect</span>
+            <span class="pill">Neutralité</span>
+            <span class="pill">Ouverture</span>
+            <span class="pill">Engagement</span>
+          </div>
+
+          <div class="actions">
+            <a class="btn btn-primary" href="assets/docs/CHARTE_PARLEMENT_JPV.pdf" download>📥 Télécharger le PDF officiel</a>
+            <a class="btn btn-ghost" href="#" onclick="window.print(); return false;">🖨️ Imprimer</a>
+            <a class="btn btn-gold" href="rejoindre.html">📝 Rejoindre</a>
+          </div>
+        </div>
+
+        <!-- LAYOUT -->
+        <div class="charte-layout">
+
+          <!-- TOC -->
+          <aside class="card toc" aria-label="Sommaire">
+            <div class="toc-inner">
+              <h2>Sommaire</h2>
+              <div class="list">
+                <a href="#preambule">Préambule</a>
+                <a href="#art1">Article 1 — Objectifs</a>
+                <a href="#art2">Article 2 — Valeurs</a>
+                <a href="#art3">Article 3 — Organisation</a>
+                <a href="#art4">Article 4 — Inscription et participation</a>
+                <a href="#art5">Article 5 — Activités</a>
+                <a href="#art6">Article 6 — Lieu et matériel</a>
+                <a href="#art7">Article 7 — Financement</a>
+                <a href="#art8">Article 8 — Structure du Parlement JPV</a>
+                <a href="#art9">Article 9 — Évolution de la charte</a>
+                <a href="#art10">Article 10 — Respect de la charte</a>
+                <a href="#validite">Validité & références</a>
+              </div>
+
+              <div class="callout" style="margin-top:12px;">
+                <div style="font-weight:800; color:var(--ink); margin-bottom:6px;">Téléchargement</div>
+                <div class="small">Version PDF identique au document officiel.</div>
+                <div class="download-row">
+                  <a class="btn btn-primary" href="assets/docs/CHARTE_PARLEMENT_JPV.pdf" download>📥 PDF</a>
+                  <a class="btn btn-ghost" href="#" onclick="window.print(); return false;">Imprimer</a>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <!-- DOCUMENT -->
+          <article class="doc" aria-label="Charte officielle">
+            <div class="doc-head">
+              <div>
+                <div class="kicker">Charte</div>
+                <div style="font-weight:900; font-size:1.25rem; color:var(--ink);">Parlement JPV</div>
+                <div class="small">Lycée Jean-Pierre Vernant — Sèvres</div>
+              </div>
+              <div class="stamp">
+                <div class="tag">Version web officielle</div>
+                <div class="small">Téléchargement PDF disponible</div>
+              </div>
+            </div>
+
+            <section id="preambule" class="article">
+              <h2>Préambule</h2>
+              <p>
+                Le Parlement JPV est une initiative lycéenne fondée sur la conviction que la parole, le débat
+                et la réflexion citoyenne sont au cœur de la vie démocratique.
+              </p>
+              <p>
+                Ce projet vise à offrir à chaque élève un espace de liberté d’expression, de dialogue et
+                d’engagement. Chaque participant s’engage à respecter la Charte de la Laïcité à l’École, et
+                le règlement intérieur garants du vivre-ensemble, ainsi que l’ensemble des valeurs
+                républicaines qui guident les actions du Parlement JPV.
+              </p>
+            </section>
+
+            <section id="art1" class="article">
+              <h2>Article 1 — Objectifs</h2>
+              <p>Le Parlement JPV a pour objectif de :</p>
+              <ul>
+                <li>Promouvoir la prise de parole, l’esprit critique et l’appropriation des valeurs républicaines par les lycéens.</li>
+                <li>Encourager le débat démocratique, le respect des opinions, la tolérance et le vivre-ensemble, dans un cadre fondé sur la laïcité et le respect mutuel.</li>
+                <li>Sensibiliser les élèves aux enjeux citoyens, et culturels.</li>
+                <li>Offrir des activités formatrices : débats, conférences, concours d’éloquence, visites institutionnelles.</li>
+              </ul>
+            </section>
+
+            <section id="art2" class="article">
+              <h2>Article 2 — Valeurs</h2>
+              <p>Les membres s’engagent à respecter les valeurs suivantes :</p>
+              <ul>
+                <li>Respect des opinions, des personnes et du cadre scolaire.</li>
+                <li>Neutralité : le Parlement JPV n’a pas vocation à promouvoir une opinion politique, religieuse ou idéologique.</li>
+                <li>Ouverture : accueil de tous les élèves, quelle que soit leur classe, section ou spécialités. Chaque professeur est également le bienvenu.</li>
+                <li>Engagement : participation active et bienveillante à la vie du Club.</li>
+              </ul>
+            </section>
+
+            <section id="art3" class="article">
+              <h2>Article 3 — Organisation</h2>
+              <p>
+                Le Parlement JPV fonctionne sous la responsabilité du Conseil de la Vie Lycéenne et en lien
+                avec ses professeures référentes : Madame Harand-Busson (professeure documentaliste)
+                et Madame Aubossu (C.P.E.).
+              </p>
+              <p>
+                La présence d’au moins un professeur est obligatoire pour permettre la tenue d’une séance,
+                de préférence un professeur différent à chaque séance afin de varier les points de vue et
+                d’éviter une surcharge de travail.
+              </p>
+              <div class="callout">
+                <ul style="margin:0;">
+                  <li>Activités possibles en partenariat avec les ambassadeurs du lycée et les éco-délégués.</li>
+                  <li>Réunion selon disponibilités des membres, professeurs et salles (date fixée par le président du club).</li>
+                  <li>Débats : 30 minutes sur l’heure de midi ou en fin de journée.</li>
+                </ul>
+              </div>
+            </section>
+
+            <section id="art4" class="article">
+              <h2>Article 4 — Inscription et participation</h2>
+              <p>L’inscription se fait sur le principe du volontariat.</p>
+              <ul>
+                <li>Les élèves intéressés remplissent un formulaire d’inscription auprès de la professeure référente au CDI ou en ligne via le lien indiqué.</li>
+                <li>L’inscription permet de participer aux débats, aux conférences, ateliers et concours organisés.</li>
+                <li>Les membres peuvent proposer des thèmes ou des invités, sous validation du comité d'organisation et du proviseur.</li>
+                <li>Un engagement de respect mutuel est signé à l’inscription.</li>
+              </ul>
+            </section>
+
+            <section id="art5" class="article">
+              <h2>Article 5 — Activités</h2>
+              <p>Les principales actions du Parlement JPV sont :</p>
+              <ul>
+                <li>Débats citoyens sur des sujets d’actualité ou internes au lycée.</li>
+                <li>Conférences avec des invités extérieurs (journalistes, élus, chercheurs…).</li>
+                <li>Concours d’éloquence individuel ou par équipe.</li>
+                <li>Visites d’institutions locales et rencontres avec des acteurs de la vie publique, sous autorisation du chef d'établissement.</li>
+                <li>Ateliers d’expression orale pour préparer les oraux et concours.</li>
+                <li>Compte Instagram (@parlementjpv) destiné à promouvoir ses activités, avec communication conforme à la charte.</li>
+              </ul>
+            </section>
+
+            <section id="art6" class="article">
+              <h2>Article 6 — Lieu et matériel</h2>
+              <p>
+                Les activités se tiennent au lycée, principalement en salle Samuel Paty ou en salle de classe
+                selon le nombre de participants et la disponibilité.
+              </p>
+              <p>Le lycée dispose du matériel nécessaire (micros, projecteur, pupitres).</p>
+            </section>
+
+            <section id="art7" class="article">
+              <h2>Article 7 — Financement</h2>
+              <p>Les actions peuvent être financées par :</p>
+              <ul>
+                <li>La MDL (Maison des Lycéens).</li>
+                <li>Fonds de vie lycéen.</li>
+                <li>Des subventions locales.</li>
+              </ul>
+            </section>
+
+            <section id="art8" class="article">
+              <h2>Article 8 — Structure du Parlement JPV</h2>
+              <p>
+                Le Parlement JPV est placé sous la responsabilité du CVL qui nomme le président du club.
+                Ce président peut être assisté de porte-paroles et de responsables thématiques qu’il nomme
+                parmi les membres inscrits, avec l’accord du bureau du CVL.
+              </p>
+              <div class="callout">
+                <p style="margin:0 0 8px 0; font-weight:800; color:var(--ink);">Rôles possibles</p>
+                <ul style="margin:0;">
+                  <li>Président : coordination, animation, ordre du jour avec le CVL (élu par le CVL).</li>
+                  <li>Vice-président : seconde le président et assure l’intérim.</li>
+                  <li>Secrétaire général : comptes rendus, inscriptions, convocations (élu par le CVL).</li>
+                  <li>Porte-paroles : représentation auprès des élèves et du CVL.</li>
+                  <li>Responsables thématiques : groupes de travail (environnement, égalité, culture, vie scolaire, etc.).</li>
+                </ul>
+              </div>
+            </section>
+
+            <section id="art9" class="article">
+              <h2>Article 9 — Évolution de la charte</h2>
+              <p>
+                Le CVL se réserve le droit, avec l’accord de Madame Aubossu, Madame Harrand-Busson et du proviseur,
+                de modifier la présente charte afin de l’adapter à l’évolution du projet et aux besoins de la communauté lycéenne.
+              </p>
+              <p>La charte est présentée chaque année pour évolution, approbation et reconduction.</p>
+            </section>
+
+            <section id="art10" class="article">
+              <h2>Article 10 — Respect de la charte</h2>
+              <p>
+                Tout membre inscrit au Parlement JPV s’engage à respecter les valeurs et les principes de cette charte.
+              </p>
+              <p>
+                Le règlement intérieur du lycée Jean-Pierre Vernant s’applique dans toutes les activités du Parlement JPV.
+                Tout manquement à ce règlement pourra entraîner la suspension de la participation d’un membre.
+              </p>
+            </section>
+
+            <section id="validite" class="article">
+              <h2>Validité & références</h2>
+              <div class="callout">
+                <p style="margin:0 0 10px 0;">
+                  <strong>Référence :</strong> version PDF officielle téléchargeable depuis cette page.
+                </p>
+                <p class="small" style="margin:0;">
+                  Ce texte est la transcription web de la charte officielle du Parlement JPV. :contentReference[oaicite:1]{index=1}
+                </p>
+              </div>
+
+              <div class="callout" style="display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap;">
+                <div>
+                  <div style="font-weight:800; color:var(--ink);">Mentions</div>
+                  <div class="small">Sous responsabilité du CVL — en lien avec les professeures référentes et le proviseur.</div>
+                </div>
+                <div>
+                  <div style="font-weight:800; color:var(--ink);">Signature</div>
+                  <div class="small">Parlement JPV — Lycée Jean-Pierre Vernant</div>
+                </div>
+              </div>
+            </section>
+
+          </article>
+        </div>
       </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="small">© <span id="year"></span> Parlement JPV — Lycée Jean-Pierre Vernant</div>
     </div>
+  </footer>
 
-    <!-- CONTENU -->
-    <div class="card">
+  <script src="js/main.js" defer></script>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
 
-      <h2>Préambule</h2>
-      <p>
-        Le Parlement JPV est une initiative lycéenne fondée sur la conviction que la parole,
-        le débat et la réflexion citoyenne sont au cœur de la vie démocratique.
-        Ce projet vise à offrir à chaque élève un espace de liberté d’expression,
-        de dialogue et d’engagement.
-        Chaque participant s’engage à respecter la Charte de la Laïcité à l’École,
-        le règlement intérieur et l’ensemble des valeurs républicaines
-        qui guident les actions du Parlement JPV.
-      </p>
+    // fallback menu mobile si main.js ne l'a pas
+    (function () {
+      const btn = document.getElementById("mobileNavBtn");
+      const nav = document.getElementById("mobileNav");
+      if (!btn || !nav) return;
 
-      <h2>Article 1 — Objectifs</h2>
-      <ul>
-        <li>Promouvoir la prise de parole, l’esprit critique et l’appropriation des valeurs républicaines.</li>
-        <li>Encourager le débat démocratique, la tolérance et le vivre-ensemble.</li>
-        <li>Sensibiliser aux enjeux citoyens et culturels.</li>
-        <li>Organiser débats, conférences, concours d’éloquence et visites institutionnelles.</li>
-      </ul>
+      if (typeof window.toggleMobile !== "function") {
+        window.toggleMobile = function () {
+          const isOpen = btn.getAttribute("aria-expanded") === "true";
+          btn.setAttribute("aria-expanded", String(!isOpen));
+          nav.hidden = isOpen;
+        };
+      }
 
-      <h2>Article 2 — Valeurs</h2>
-      <ul>
-        <li><strong>Respect</strong> des opinions, des personnes et du cadre scolaire.</li>
-        <li><strong>Neutralité</strong> : aucune promotion politique, religieuse ou idéologique.</li>
-        <li><strong>Ouverture</strong> : accessible à tous les élèves et professeurs.</li>
-        <li><strong>Engagement</strong> : participation active et bienveillante.</li>
-      </ul>
+      nav.addEventListener("click", (e) => {
+        const a = e.target.closest("a");
+        if (!a) return;
+        btn.setAttribute("aria-expanded", "false");
+        nav.hidden = true;
+      });
 
-      <h2>Article 3 — Organisation</h2>
-      <p>
-        Le Parlement JPV fonctionne sous la responsabilité du Conseil de la Vie Lycéenne,
-        en lien avec ses professeures référentes.
-        La présence d’au moins un professeur est obligatoire lors des séances.
-      </p>
-
-      <h2>Article 4 — Inscription et participation</h2>
-      <p>L’inscription est volontaire via formulaire.</p>
-      <ul>
-        <li>Participation aux débats, conférences et ateliers.</li>
-        <li>Proposition de thèmes ou invités sous validation du comité et du proviseur.</li>
-        <li>Signature d’un engagement de respect mutuel.</li>
-      </ul>
-
-      <h2>Article 5 — Activités</h2>
-      <ul>
-        <li>Débats citoyens.</li>
-        <li>Conférences avec invités extérieurs.</li>
-        <li>Concours d’éloquence.</li>
-        <li>Visites institutionnelles.</li>
-        <li>Ateliers d’expression orale.</li>
-      </ul>
-
-      <h2>Article 6 — Lieu et matériel</h2>
-      <p>
-        Activités organisées au lycée (salle Samuel Paty ou salle de classe).
-        Matériel mis à disposition : micros, projecteur, pupitres.
-      </p>
-
-      <h2>Article 7 — Financement</h2>
-      <ul>
-        <li>MDL (Maison des Lycéens).</li>
-        <li>Fonds de vie lycéen.</li>
-        <li>Subventions locales.</li>
-      </ul>
-
-      <h2>Article 8 — Structure</h2>
-      <p>
-        Placé sous la responsabilité du CVL.
-        Président nommé par le CVL, assisté d’un vice-président,
-        secrétaire général, porte-paroles et responsables thématiques.
-      </p>
-
-      <h2>Article 9 — Évolution</h2>
-      <p>
-        La charte peut être modifiée avec validation du CVL,
-        des professeures référentes et du proviseur.
-        Présentation annuelle pour reconduction.
-      </p>
-
-      <h2>Article 10 — Respect de la charte</h2>
-      <p>
-        Tout membre s’engage à respecter cette charte.
-        Le règlement intérieur du lycée s’applique.
-        Tout manquement peut entraîner une suspension.
-      </p>
-
-    </div>
-  </div>
-</main>
-
-<footer class="footer">
-  <div class="container">
-    <div class="small">
-      © <span id="year"></span> Parlement JPV — Lycée Jean-Pierre Vernant
-    </div>
-  </div>
-</footer>
-
-<script>
-  document.getElementById("year").textContent = new Date().getFullYear();
-</script>
+      document.addEventListener("keydown", (e) => {
+        if (e.key !== "Escape") return;
+        btn.setAttribute("aria-expanded", "false");
+        nav.hidden = true;
+      });
+    })();
+  </script>
 
 </body>
 </html>
