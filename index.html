@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr" dir="ltr">
+<html lang="fr">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,54 +8,317 @@
   <meta name="description" content="Instance lycéenne de débat, d’engagement citoyen et d’initiative institutionnelle au Lycée Jean-Pierre Vernant (Sèvres)." />
   <meta name="theme-color" content="#0b2545" />
 
-  <!-- SEO -->
-  <link rel="canonical" href="https://parlementjpv.github.io/parlementjpv/" />
-  <meta name="robots" content="index,follow" />
-
-  <!-- Icons -->
-  <link rel="icon" href="assets/img/favicon.png" sizes="any" />
-  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png" />
-
-  <!-- Social -->
+  <link rel="icon" href="assets/img/favicon.png" />
   <meta property="og:title" content="Parlement JPV — Lycée Jean-Pierre Vernant" />
   <meta property="og:description" content="Débats, éloquence, conférences, initiatives citoyennes. Une instance lycéenne ambitieuse et structurée." />
   <meta property="og:image" content="assets/img/og.jpg" />
   <meta property="og:type" content="website" />
-  <meta property="og:locale" content="fr_FR" />
-  <meta property="og:url" content="https://parlementjpv.github.io/parlementjpv/" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <!-- Perf: preconnect (si tu utilises Google Fonts dans styles.css) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <style>
+    :root{
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --text:#111827;
+      --muted:#6b7280;
+      --border:rgba(17,24,39,.10);
+      --nav:#0b2545;
+      --gold:#c6a15b;
+      --shadow:0 18px 55px rgba(15,23,42,.10);
+      --radius:22px;
+    }
+    [data-theme="dark"]{
+      --bg:#0b1220;
+      --card:#0f1a2e;
+      --text:#e5e7eb;
+      --muted:#9ca3af;
+      --border:rgba(229,231,235,.12);
+      --shadow:0 18px 55px rgba(0,0,0,.35);
+    }
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="css/styles.css" />
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:var(--bg);
+      color:var(--text);
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;height:auto}
 
-  <!-- JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"Organization",
-    "name":"Parlement JPV",
-    "description":"Instance lycéenne de débat et d’engagement citoyen au Lycée Jean-Pierre Vernant (Sèvres).",
-    "logo":"https://parlementjpv.github.io/parlementjpv/assets/img/logo.png",
-    "url":"https://parlementjpv.github.io/parlementjpv/",
-    "sameAs":[
-      "https://instagram.com/parlementjpv"
-    ]
-  }
-  </script>
+    .container{
+      width:min(1100px, 100%);
+      margin:0 auto;
+      padding:0 18px;
+    }
+
+    /* Header */
+    .header{
+      background:var(--nav);
+      color:#fff;
+      padding:16px 0;
+      position:sticky;
+      top:0;
+      z-index:50;
+      box-shadow:0 10px 30px rgba(0,0,0,.15);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+    .brand img{
+      width:42px;
+      height:42px;
+      object-fit:contain;
+      display:block;
+    }
+    .brand .title{font-weight:800;letter-spacing:.2px}
+    .brand .sub{font-size:.85rem;opacity:.85}
+
+    .nav-links{
+      display:flex;
+      gap:14px;
+      align-items:center;
+    }
+    .nav-links a{
+      opacity:.92;
+      font-weight:600;
+      font-size:.95rem;
+      padding:10px 10px;
+      border-radius:12px;
+    }
+    .nav-links a:hover{background:rgba(255,255,255,.10);opacity:1}
+
+    .nav-actions{display:flex;gap:8px}
+    .icon-btn{
+      border:1px solid rgba(255,255,255,.22);
+      background:rgba(255,255,255,.08);
+      color:#fff;
+      border-radius:14px;
+      padding:10px 12px;
+      cursor:pointer;
+      font-weight:800;
+      line-height:1;
+    }
+    .icon-btn:hover{background:rgba(255,255,255,.14)}
+    .burger{display:none}
+
+    /* Mobile nav */
+    .mobile{
+      margin-top:12px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:16px;
+      padding:10px;
+    }
+    .mobile a{
+      padding:12px 12px;
+      border-radius:12px;
+      font-weight:700;
+      opacity:.95;
+    }
+    .mobile a:hover{background:rgba(255,255,255,.10)}
+    .line{height:1px;background:rgba(255,255,255,.16);margin:6px 0}
+
+    /* General UI */
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+    .section{padding:28px 0}
+    .section-tight{padding:22px 0}
+
+    .kicker{
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-weight:900;
+      font-size:.74rem;
+      color:var(--muted);
+    }
+    h1{margin:10px 0 10px;font-size:2rem;line-height:1.15}
+    h2{margin:8px 0 6px;font-size:1.55rem}
+    p{margin:10px 0;color:var(--muted);line-height:1.5}
+    .badge{
+      display:inline-block;
+      padding:8px 12px;
+      border-radius:999px;
+      font-weight:800;
+      font-size:.85rem;
+      background:rgba(198,161,91,.16);
+      border:1px solid rgba(198,161,91,.32);
+      color:var(--text);
+    }
+
+    .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:12px 14px;
+      border-radius:14px;
+      font-weight:900;
+      border:1px solid var(--border);
+      background:transparent;
+    }
+    .btn-primary{
+      background:var(--nav);
+      color:#fff;
+      border-color:transparent;
+    }
+    .btn-gold{
+      background:var(--gold);
+      color:#111;
+      border-color:transparent;
+    }
+    .btn-ghost:hover{background:rgba(15,23,42,.06)}
+    [data-theme="dark"] .btn-ghost:hover{background:rgba(255,255,255,.06)}
+
+    /* Hero layout */
+    .hero{padding:26px 0 16px}
+    .hero-wrap{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:14px;
+      align-items:stretch;
+    }
+    .hero-card{padding:18px}
+    .hero-side{
+      /* IMPORTANT: aucune marge/padding interne qui crée des bandes */
+      padding:0;
+      overflow:hidden;
+      position:relative;
+
+      /* Tu peux forcer un ratio “propre” */
+      min-height: 260px;
+    }
+
+    /* 🔥 LE FIX : image plein cadre, zéro espace vide */
+    .hero-side img{
+      display:block;           /* supprime les espaces inline */
+      width:100%;
+      height:100%;
+      object-fit:cover;        /* remplit le cadre */
+      object-position:center;  /* tu peux changer à 'center 35%' si besoin */
+    }
+
+    .hero-side .overlay{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,.10));
+    }
+
+    .stats{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:10px;
+    }
+    .stat{
+      padding:12px;
+      border-radius:18px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.55);
+    }
+    [data-theme="dark"] .stat{background: rgba(255,255,255,.06)}
+    .stat .n{font-size:1.4rem;font-weight:1000;color:var(--text)}
+    .stat .l{font-size:.85rem;color:var(--muted);font-weight:800}
+
+    .grid{display:grid;gap:14px}
+    .grid-2{grid-template-columns: repeat(2, 1fr)}
+    .grid-3{grid-template-columns: repeat(3, 1fr)}
+    .card-pad{padding:18px}
+
+    .list{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+    .event{
+      padding:14px;
+      border-radius:18px;
+      border:1px solid var(--border);
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      background: rgba(255,255,255,.55);
+    }
+    [data-theme="dark"] .event{background: rgba(255,255,255,.06)}
+    .pill{
+      align-self:flex-start;
+      padding:7px 10px;
+      border-radius:999px;
+      font-weight:900;
+      font-size:.82rem;
+      border:1px solid var(--border);
+      color:var(--muted);
+    }
+    .event .t{font-weight:1000;font-size:1.05rem;color:var(--text)}
+    .event .m{font-weight:800;color:var(--muted)}
+
+    /* Footer */
+    .footer{padding:26px 0 30px}
+    .footer-grid{
+      display:grid;
+      grid-template-columns: 1.4fr .8fr .8fr;
+      gap:14px;
+      align-items:start;
+    }
+    .small{font-size:.92rem}
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .nav-links{display:none}
+      .burger{display:inline-flex}
+      .hero-wrap{grid-template-columns: 1fr}
+      .hero-side{min-height: 220px}
+      .grid-2{grid-template-columns: 1fr}
+      .grid-3{grid-template-columns: 1fr}
+      .footer-grid{grid-template-columns: 1fr}
+      .stats{grid-template-columns: repeat(2, 1fr)}
+    }
+
+    /* Accessibilité */
+    .skip-link{
+      position:absolute;
+      left:-999px;
+      top:auto;
+      width:1px;height:1px;
+      overflow:hidden;
+    }
+    .skip-link:focus{
+      position:static;
+      width:auto;height:auto;
+      padding:10px 14px;
+      display:inline-block;
+      margin:10px;
+      border-radius:12px;
+      background:#fff;
+      color:#111;
+      font-weight:900;
+    }
+  </style>
 </head>
 
+<body>
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
 
-
-  <!-- HEADER -->
-  <header class="header" role="banner">
+  <header class="header">
     <div class="container">
       <div class="nav">
         <a class="brand" href="index.html" aria-label="Accueil Parlement JPV">
-          <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44" />
+          <img src="assets/img/logo.png" alt="Logo Parlement JPV">
           <div class="brand-text">
             <div class="title">Parlement JPV</div>
             <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
@@ -73,24 +336,11 @@
         </nav>
 
         <div class="nav-actions">
-          <button class="icon-btn" type="button" onclick="toggleTheme()" aria-label="Basculer le thème" title="Thème">
-            ☾
-          </button>
-
-          <button
-            class="icon-btn burger"
-            type="button"
-            onclick="toggleMobile()"
-            aria-label="Ouvrir le menu"
-            aria-controls="mobileNav"
-            aria-expanded="false"
-            id="mobileNavBtn"
-            title="Menu"
-          >☰</button>
+          <button class="icon-btn" type="button" onclick="toggleTheme()" aria-label="Basculer le thème">☾</button>
+          <button class="icon-btn burger" type="button" onclick="toggleMobile()" aria-label="Ouvrir le menu" aria-controls="mobileNav" aria-expanded="false" id="mobileBtn">☰</button>
         </div>
       </div>
 
-      <!-- MOBILE NAV -->
       <nav id="mobileNav" class="mobile" aria-label="Menu mobile" hidden>
         <a href="institution.html">L’institution</a>
         <a href="rapports.html">Rapports</a>
@@ -99,21 +349,16 @@
         <a href="rejoindre.html">Rejoindre</a>
         <a href="contact.html">Contact</a>
         <a href="qui-sommes-nous.html">Qui sommes-nous</a>
-
-        <div class="line" role="separator" aria-hidden="true"></div>
-
-        <a
-          href="https://docs.google.com/forms/d/e/1FAIpQLSdQ86QZ8sMoY7YgOhT6DBMy5KG85yfm65O6BWMmFp7bzuorqg/viewform?usp=header"
-          target="_blank"
-          rel="noopener"
-        >Candidater (Formulaire)</a>
+        <div class="line"></div>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdQ86QZ8sMoY7YgOhT6DBMy5KG85yfm65O6BWMmFp7bzuorqg/viewform?usp=header" target="_blank" rel="noopener">
+          Candidater (Formulaire)
+        </a>
       </nav>
     </div>
   </header>
 
   <main id="contenu">
-    <!-- HERO -->
-    <section class="hero" aria-label="Présentation">
+    <section class="hero">
       <div class="container">
         <div class="hero-wrap">
           <div class="card hero-card">
@@ -121,14 +366,9 @@
 
             <div class="kicker" style="margin-top:12px">Parlement JPV</div>
             <h1>Une institution lycéenne structurée, exigeante et tournée vers l’action.</h1>
-
             <p>
               Le Parlement JPV organise des débats, des conférences et des exercices d’éloquence
-              pour former des élèves capables d’argumenter, décider et agir — avec rigueur, méthode et ambition.
-            </p>
-
-            <p class="small">
-              Cadre : respect, neutralité et ouverture à tous les élèves. :contentReference[oaicite:1]{index=1}
+              afin de former des élèves capables d’argumenter, décider et agir — avec rigueur, méthode et ambition.
             </p>
 
             <div class="btns">
@@ -144,86 +384,43 @@
             </div>
           </div>
 
-          <figure class="card hero-side">
-            <img
-              src="assets/img/romaintheo.png"
-              alt="Séance du Parlement JPV"
-              loading="lazy"
-              decoding="async"
-            />
-            <figcaption class="sr-only">Parlement JPV — photo d’activité</figcaption>
+          <!-- ✅ Ici : la photo remplit TOUJOURS la carte (zéro bande) -->
+          <figure class="card hero-side" aria-label="Photo Parlement JPV">
+            <img src="assets/img/romaintheo.png" alt="Séance du Parlement JPV" loading="lazy" decoding="async">
             <div class="overlay" aria-hidden="true"></div>
           </figure>
         </div>
       </div>
     </section>
 
-    <!-- UPCOMING -->
-    <section class="section-tight" aria-label="Événements à venir">
+    <section class="section-tight">
       <div class="container">
         <div class="grid grid-2">
-          <article class="card">
+          <article class="card card-pad">
             <div class="kicker">À venir</div>
             <h2>Prochains événements</h2>
             <div id="upcomingEvents" class="list" aria-live="polite"></div>
-            <div class="btns" style="margin-top:14px">
-              <a class="btn btn-ghost" href="media.html">Voir les médias</a>
-              <a class="btn btn-primary" href="rejoindre.html">Participer</a>
-            </div>
           </article>
 
-          <article class="card">
-            <div class="kicker">Accès rapide</div>
-            <h2>Documents & transparence</h2>
-            <p class="small">
-              Ordres du jour, comptes rendus, suivis d’actions : tout est centralisé et consultable.
-            </p>
-            <div class="btns" style="margin-top:14px">
-              <a class="btn btn-primary" href="rapports.html">📄 Tous les rapports</a>
-              <a class="btn btn-ghost" href="institution.html">🏛 Fonctionnement</a>
+          <article class="card card-pad">
+            <div class="kicker">Notre méthode</div>
+            <h2>Exigence, structure, impact.</h2>
+            <p class="small">Débats structurés, éloquence avec feedback exigeant, rapports publics et suivi d’actions.</p>
+            <div class="btns">
+              <a class="btn btn-primary" href="institution.html">🏛 Comprendre l’institution</a>
+              <a class="btn btn-ghost" href="galerie.html">📸 Galerie</a>
             </div>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- PILLARS -->
-    <section class="section" aria-label="Méthode">
+    <section class="section-tight">
       <div class="container">
-        <div class="kicker">Notre méthode</div>
-        <h2>Exigence, structure, impact.</h2>
-
-        <div class="grid grid-3" style="margin-top:14px">
-          <article class="card">
-            <h3>Débats à haut niveau</h3>
-            <p>Format structuré : thèses, preuves, réfutation, synthèse et décisions. Pas de blabla.</p>
-          </article>
-
-          <article class="card">
-            <h3>Éloquence & rigueur</h3>
-            <p>Exercices (avocat du diable, cross-exam, discours) + feedback exigeant.</p>
-          </article>
-
-          <article class="card">
-            <h3>Traçabilité institutionnelle</h3>
-            <p>Rapports, suivi d’actions, comptes rendus : tout est archivé et public.</p>
-          </article>
-        </div>
-
-        <div class="btns" style="margin-top:14px">
-          <a class="btn btn-primary" href="institution.html">🏛 Comprendre l’institution</a>
-          <a class="btn btn-ghost" href="galerie.html">📸 Voir la galerie</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- REPORTS PREVIEW -->
-    <section class="section-tight" aria-label="Rapports">
-      <div class="container">
-        <div class="card">
+        <div class="card card-pad">
           <div class="kicker">Transparence</div>
           <h2>Rapports officiels</h2>
-          <p class="small">Accédez aux rapports et comptes rendus publiés.</p>
+          <p class="small">Ordres du jour, comptes rendus et décisions : tout est archivé et consultable.</p>
           <div class="btns">
             <a class="btn btn-primary" href="rapports.html">📄 Voir tous les rapports</a>
           </div>
@@ -231,113 +428,117 @@
       </div>
     </section>
 
-    <!-- JOIN CTA -->
-    <section class="section" aria-label="Candidature">
+    <section class="section">
       <div class="container">
-        <div class="card">
+        <div class="card card-pad">
           <div class="kicker">Candidature</div>
           <h2>Rejoindre le Parlement JPV</h2>
-          <p>
-            Toute candidature est soigneusement étudiée par le bureau.
-            Vous serez rapidement recontacté par courriel.
-          </p>
+          <p>Toute candidature est soigneusement étudiée par le bureau. Vous serez rapidement recontacté par courriel.</p>
           <div class="btns">
             <a class="btn btn-gold" href="rejoindre.html">📝 Candidater</a>
-            <a
-              class="btn btn-ghost"
-              href="https://docs.google.com/forms/d/e/1FAIpQLSdQ86QZ8sMoY7YgOhT6DBMy5KG85yfm65O6BWMmFp7bzuorqg/viewform?usp=header"
-              target="_blank"
-              rel="noopener"
-            >Ouvrir le formulaire</a>
+            <a class="btn btn-ghost" href="https://docs.google.com/forms/d/e/1FAIpQLSdQ86QZ8sMoY7YgOhT6DBMy5KG85yfm65O6BWMmFp7bzuorqg/viewform?usp=header" target="_blank" rel="noopener">
+              Ouvrir le formulaire
+            </a>
           </div>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- FOOTER -->
-  <footer class="footer" role="contentinfo">
+  <footer class="footer">
     <div class="container">
-      <div class="footer-grid">
-        <div>
-          <div class="brand" style="gap:10px">
-            <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44" loading="lazy" decoding="async" />
-            <div>
-              <div class="title">Parlement JPV</div>
-              <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
+      <div class="card card-pad">
+        <div class="footer-grid">
+          <div>
+            <div class="brand" style="gap:10px;color:var(--text)">
+              <img src="assets/img/logo.png" alt="Logo Parlement JPV" style="width:44px;height:44px;display:block">
+              <div>
+                <div class="title">Parlement JPV</div>
+                <div class="sub" style="color:var(--muted)">Lycée Jean-Pierre Vernant — Sèvres</div>
+              </div>
+            </div>
+            <p class="small" style="margin-top:10px">
+              Instance lycéenne de débat, d’engagement citoyen et d’initiatives structurées.
+            </p>
+          </div>
+
+          <div>
+            <div class="kicker">Pages</div>
+            <div class="list">
+              <a href="institution.html">L’institution</a>
+              <a href="rapports.html">Rapports</a>
+              <a href="galerie.html">Galerie</a>
+              <a href="media.html">Médias</a>
+              <a href="qui-sommes-nous.html">Qui sommes-nous</a>
             </div>
           </div>
 
-          <p class="small" style="margin-top:10px">
-            Instance lycéenne de débat, d’engagement citoyen et d’initiatives structurées.
-          </p>
-        </div>
-
-        <div>
-          <div class="kicker">Pages</div>
-          <div class="list">
-            <a href="institution.html">L’institution</a>
-            <a href="rapports.html">Rapports</a>
-            <a href="galerie.html">Galerie</a>
-            <a href="media.html">Médias</a>
-            <a href="qui-sommes-nous.html">Qui sommes-nous</a>
+          <div>
+            <div class="kicker">Contact</div>
+            <div class="list">
+              <a href="rejoindre.html">Rejoindre</a>
+              <a href="contact.html">Contact</a>
+              <a href="https://instagram.com/parlementjpv" target="_blank" rel="noopener">Instagram</a>
+            </div>
+            <div class="small" style="margin-top:10px">© <span id="year"></span> Parlement JPV</div>
           </div>
-        </div>
-
-        <div>
-          <div class="kicker">Contact</div>
-          <div class="list">
-            <a href="rejoindre.html">Rejoindre</a>
-            <a href="contact.html">Contact</a>
-            <a href="https://instagram.com/parlementjpv" target="_blank" rel="noopener">Instagram</a>
-          </div>
-          <div class="small" style="margin-top:10px">© <span id="year"></span> Parlement JPV</div>
         </div>
       </div>
     </div>
   </footer>
 
-  <noscript>
-    <div class="container" style="padding: 12px 0;">
-      <p class="small">Certaines fonctionnalités (menu, thème, événements) nécessitent JavaScript.</p>
-    </div>
-  </noscript>
-
-  <script src="js/main.js" defer></script>
   <script>
     // Année
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    // Accessibilité menu mobile : synchronise aria-expanded + hidden
-    (function () {
-      const btn = document.getElementById("mobileNavBtn");
+    // Menu mobile
+    function toggleMobile(){
       const nav = document.getElementById("mobileNav");
-      if (!btn || !nav) return;
+      const btn = document.getElementById("mobileBtn");
+      const open = !nav.hidden;
+      nav.hidden = open;
+      btn.setAttribute("aria-expanded", String(!open));
+    }
 
-      // Si ton toggleMobile() existe déjà, on le laisse ; sinon fallback minimal.
-      if (typeof window.toggleMobile !== "function") {
-        window.toggleMobile = function () {
-          const isOpen = btn.getAttribute("aria-expanded") === "true";
-          btn.setAttribute("aria-expanded", String(!isOpen));
-          nav.hidden = isOpen;
-        };
-      }
-
-      // Fermer au clic sur un lien (UX)
-      nav.addEventListener("click", (e) => {
-        const a = e.target.closest("a");
-        if (!a) return;
-        btn.setAttribute("aria-expanded", "false");
-        nav.hidden = true;
-      });
-
-      // Fermer au clavier (Escape)
-      document.addEventListener("keydown", (e) => {
-        if (e.key !== "Escape") return;
-        btn.setAttribute("aria-expanded", "false");
-        nav.hidden = true;
-      });
+    // Thème
+    function toggleTheme(){
+      const root = document.documentElement;
+      const isDark = root.getAttribute("data-theme")==="dark";
+      root.setAttribute("data-theme", isDark ? "light" : "dark");
+      localStorage.setItem("theme", isDark ? "light" : "dark");
+    }
+    (function initTheme(){
+      const saved = localStorage.getItem("theme");
+      if(saved) document.documentElement.setAttribute("data-theme", saved);
     })();
+
+    // Démo events (remplace par ton vrai système)
+    (function renderEvents(){
+      const el = document.getElementById("upcomingEvents");
+      if(!el) return;
+
+      const events = [
+        {
+          type:"Débat",
+          title:"Trump, Xi ou Poutine : l’Europe est-elle condamnée à choisir ?",
+          meta:"lundi 16 février 2026 · 12:00 — 13:00 · Lycée Jean-Pierre Vernant"
+        }
+      ];
+
+      el.innerHTML = events.map(e => `
+        <div class="event">
+          <span class="pill">${e.type}</span>
+          <div class="t">${e.title}</div>
+          <div class="m">${e.meta}</div>
+        </div>
+      `).join("");
+    })();
+
+    // Stats (exemple)
+    document.getElementById("statParticipants").textContent = "—";
+    document.getElementById("statDebates").textContent = "—";
+    document.getElementById("statConfs").textContent = "3";
+    document.getElementById("statActions").textContent = "1";
   </script>
 </body>
 </html>
