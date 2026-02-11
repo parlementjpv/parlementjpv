@@ -1,22 +1,12 @@
 {
-  "club": {
-    "name": "Parlement JPV",
-    "lycee": "Lycée Jean-Pierre Vernant",
-    "ville": "Sèvres",
-    "annee_scolaire": "2025-2026",
-    "formulaire_inscription": "https://forms.gle/Rkm6GwJb6KDjzYUEA"
-  },
-
-  "stats_2026": {
+  "stats de 2026": {
     "inscrits": 104,
     "debats": 4,
     "conferences": 3,
     "actions": 10
   },
-
   "events": [
     {
-      "id": 1,
       "title": "Débat — Trump, Xi ou Poutine : l’Europe est-elle condamnée à choisir ?",
       "type": "Débat",
       "tag": "Événement public",
@@ -25,7 +15,6 @@
       "location": "Lycée Jean-Pierre Vernant — Sèvres"
     },
     {
-      "id": 2,
       "title": "Atelier éloquence — Avocat du diable",
       "type": "Atelier",
       "tag": "Formation",
@@ -33,38 +22,5 @@
       "end": "2026-02-18T13:00:00+01:00",
       "location": "Salle à confirmer"
     }
-  ],
-
-  "charte": {
-    "valeurs": [
-      "Respect des opinions et des personnes",
-      "Neutralité politique et religieuse",
-      "Ouverture à tous les élèves",
-      "Engagement actif et bienveillant"
-    ],
-    "objectifs": [
-      "Promouvoir la prise de parole",
-      "Encourager l’esprit critique",
-      "Organiser débats et conférences",
-      "Former à l’éloquence et à l’oral"
-    ],
-    "financement": [
-      "MDL",
-      "Subventions locales",
-      "Fonds de vie lycéenne"
-    ]
-  },
-
-  "organisation": {
-    "autorite": "CVL",
-    "professeur_referent": "Madame Harand-Busson",
-    "roles": [
-      "Président",
-      "Vice-président",
-      "Secrétaire général",
-      "Porte-paroles",
-      "Responsables thématiques"
-    ]
-  }
+  ]
 }
-
