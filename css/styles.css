@@ -132,6 +132,7 @@ strong{color:var(--text)}
   .burger{display:inline-flex}
 }
 
+/* Mobile nav : compatible avec JS qui toggle la classe open */
 .mobile{
   display:none;
   padding:8px 0 14px;
@@ -151,30 +152,104 @@ strong{color:var(--text)}
   padding:34px 0 28px;
 }
 .hero-wrap{
-  display:grid;grid-template-columns:1.1fr .9fr;gap:18px;align-items:stretch;
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:18px;
+  align-items:stretch;
 }
 @media (max-width: 860px){
   .hero-wrap{grid-template-columns:1fr}
 }
+
 .hero-card{
   padding:22px;
   background:
     radial-gradient(1200px 600px at 10% 10%, rgba(212,175,55,.18), transparent 45%),
     linear-gradient(135deg, color-mix(in srgb, var(--card) 92%, transparent), var(--card));
 }
+
+/* =========================================================
+   HERO PHOTO (UNE SEULE VERSION — pas de doublon)
+   + FIX MOBILE: plus de bandes à gauche/droite
+   ========================================================= */
 .hero-side{
-  overflow:hidden;position:relative;padding:0;
+  position: relative;
+  overflow: hidden;
+  padding: 0;               /* pas de padding -> pas de bande */
+  min-height: clamp(260px, 38vw, 520px);
 }
-.hero-side img{width:100%;height:100%;object-fit:cover}
+
+/* Image toujours plein cadre */
+.hero-side > img{
+  width: 100%;
+  height: 100%;
+  display: block;           /* supprime l’espace inline */
+  object-fit: cover;
+  object-position: center 35%;
+  transform: scale(1.02);
+}
+
 .hero-side .overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(180deg, rgba(0,0,0,.0), rgba(0,0,0,.55));
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(1200px 600px at 20% 10%, rgba(11, 37, 69, 0.35), transparent 60%),
+    linear-gradient(to top, rgba(11, 37, 69, 0.75), rgba(11, 37, 69, 0.10) 55%, rgba(11, 37, 69, 0.05));
+  pointer-events: none;
 }
-.hero-side .caption{
-  position:absolute;left:14px;right:14px;bottom:12px;color:#fff;
-  font-weight:800;
+
+/* Texte sur photo */
+.hero-photo-text{
+  position: absolute;
+  inset: auto 18px 18px 18px;
+  color: #fff;
+  z-index: 2;
+  max-width: 92%;
 }
-.hero-side .caption small{display:block;color:rgba(255,255,255,.75);font-weight:650;margin-top:3px}
+
+.hero-photo-badge{
+  display: inline-block;
+  padding: 8px 10px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  letter-spacing: 0.2px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
+}
+
+.hero-photo-title{
+  margin-top: 10px;
+  font-weight: 800;
+  font-size: clamp(1.2rem, 2.2vw, 1.9rem);
+  line-height: 1.15;
+  text-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+.hero-photo-sub{
+  margin-top: 8px;
+  font-size: clamp(0.95rem, 1.4vw, 1.05rem);
+  opacity: 0.95;
+  text-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+/* ✅ MOBILE: “full-bleed” (annule le padding du container 18px) */
+@media (max-width: 860px){
+  /* format stable et visuel plus grand */
+  .hero-side{
+    aspect-ratio: 16 / 9;
+    min-height: 0; /* laisse l’aspect-ratio faire le job */
+  }
+
+  /* IMPORTANT: marche si tu as ajouté la classe hero-side--bleed au <figure> */
+  .hero-side.hero-side--bleed{
+    width: calc(100% + 36px);
+    margin-left: -18px;
+  }
+
+  .hero-photo-text{ inset: auto 14px 14px 14px; }
+}
+/* ========================================================= */
 
 .stats{display:grid;grid-template-columns:repeat(4, minmax(0,1fr));gap:12px;margin-top:14px}
 @media (max-width: 860px){.stats{grid-template-columns:repeat(2, minmax(0,1fr))}}
@@ -259,68 +334,4 @@ iframe.calendar{
 @media (max-width: 520px){
   #galleryBlocks .grid-3{ grid-template-columns: 1fr; }
   #galleryBlocks img{ height:220px; }
-}
-/* HERO PHOTO — cadrage + overlay + texte */
-.hero-side {
-  position: relative;
-  overflow: hidden;
-  padding: 0;
-  min-height: clamp(260px, 38vw, 520px);
-}
-
-.hero-side img {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-  object-position: center 35%;
-  transform: scale(1.02);
-}
-
-.hero-side .overlay {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(1200px 600px at 20% 10%, rgba(11, 37, 69, 0.35), transparent 60%),
-    linear-gradient(to top, rgba(11, 37, 69, 0.75), rgba(11, 37, 69, 0.10) 55%, rgba(11, 37, 69, 0.05));
-  pointer-events: none;
-}
-
-.hero-photo-text {
-  position: absolute;
-  inset: auto 18px 18px 18px;
-  color: #fff;
-  z-index: 2;
-  max-width: 92%;
-}
-
-.hero-photo-badge {
-  display: inline-block;
-  padding: 8px 10px;
-  border-radius: 999px;
-  font-size: 0.85rem;
-  letter-spacing: 0.2px;
-  background: rgba(255, 255, 255, 0.14);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(8px);
-}
-
-.hero-photo-title {
-  margin-top: 10px;
-  font-weight: 800;
-  font-size: clamp(1.2rem, 2.2vw, 1.9rem);
-  line-height: 1.15;
-  text-shadow: 0 10px 30px rgba(0,0,0,0.35);
-}
-
-.hero-photo-sub {
-  margin-top: 8px;
-  font-size: clamp(0.95rem, 1.4vw, 1.05rem);
-  opacity: 0.95;
-  text-shadow: 0 10px 30px rgba(0,0,0,0.35);
-}
-
-@media (max-width: 720px) {
-  .hero-side { min-height: 300px; }
-  .hero-photo-text { inset: auto 14px 14px 14px; }
 }
