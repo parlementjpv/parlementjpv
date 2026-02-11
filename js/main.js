@@ -52,13 +52,15 @@ async function loadEvents(){
     if(!res.ok) throw new Error("events.json not found");
     const data = await res.json();
 
-    // ✅ STATS
-    if(statParticipants) statParticipants.textContent = data.stats?.participants ?? "—";
-    if(statDebates) statDebates.textContent = data.stats?.debates ?? "—";
-    if(statConfs) statConfs.textContent = data.stats?.conferences ?? "—";
-    if(statActions) statActions.textContent = data.stats?.actions ?? "—";
+    /* ✅ STATS — CORRIGÉ POUR TON JSON */
+    const stats2026 = data["stats de 2026"] || {};
 
-    // ✅ LISTE “À venir”
+    if(statParticipants) statParticipants.textContent = stats2026.inscrits ?? "—";
+    if(statDebates)      statDebates.textContent      = stats2026.debats ?? "—";
+    if(statConfs)        statConfs.textContent        = stats2026.conferences ?? "—";
+    if(statActions)      statActions.textContent      = stats2026.actions ?? "—";
+
+    /* ✅ LISTE “À venir” */
     if(el){
       const upcoming = (data.events || [])
         .filter(e => isFuture(e.start))
@@ -145,7 +147,6 @@ async function loadGallery(){
       return;
     }
 
-    // ✅ pas de slice = toutes les photos
     el.innerHTML = albums.map(a => {
       const itemsHTML = (a.items || []).map(it => {
         if(it.type === "video"){
