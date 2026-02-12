@@ -267,47 +267,55 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="footer" role="contentinfo">
+    <div class="site-header" role="banner">
     <div class="container">
-      <div class="footer-grid">
-        <div>
-          <div class="brand" style="gap:10px">
-            <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44" loading="lazy" decoding="async" />
-            <div>
-              <div class="title">Parlement JPV</div>
-              <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
-            </div>
+      <div class="nav">
+        <a class="brand" href="index.html">
+          <!-- logo du header = pas lazy, sinon micro flash possible -->
+          <img src="assets/img/logo.png" alt="Logo Parlement JPV" decoding="async">
+          <div>
+            <div class="title">Parlement JPV</div>
+            <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
           </div>
+        </a>
 
-          <p class="small" style="margin-top:10px">
-            Instance lycéenne de débat, d’engagement citoyen et d’initiatives structurées.
-          </p>
-        </div>
+        <nav class="nav-links" aria-label="Pages">
+          <a href="institution.html">L’institution</a>
+          <a href="rapports.html">Rapports</a>
+          <a href="galerie.html">Galerie</a>
+          <a href="media.html">Médias</a>
+          <a href="charte.html">Charte</a>
+          <a class="primary" href="qui-sommes-nous.html" aria-current="page">Qui sommes-nous</a>
+          <a href="rejoindre.html">Rejoindre</a>
+        </nav>
 
-        <div>
-          <div class="kicker">Pages</div>
-          <div class="list">
-            <a href="institution.html">L’institution</a>
-            <a href="rapports.html">Rapports</a>
-            <a href="galerie.html">Galerie</a>
-            <a href="media.html">Médias</a>
-            <a href="charte.html">Charte</a>
-            <a href="qui-sommes-nous.html">Qui sommes-nous</a>
-          </div>
-        </div>
-
-        <div>
-          <div class="kicker">Contact</div>
-          <div class="list">
-            <a href="rejoindre.html">Rejoindre</a>
-            <a href="contact.html">Contact</a>
-            <a href="https://instagram.com/parlementjpv" target="_blank" rel="noopener">Instagram</a>
-          </div>
-          <div class="small" style="margin-top:10px">© <span id="year"></span> Parlement JPV</div>
-        </div>
+        <button
+          id="mobileNavBtn"
+          class="mobile-btn"
+          type="button"
+          aria-label="Ouvrir le menu"
+          aria-expanded="false"
+          aria-controls="mobileNav"
+          onclick="toggleMobile()"
+        >
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
       </div>
+
+      <nav id="mobileNav" class="mobile-nav" aria-label="Menu mobile" hidden>
+        <a href="institution.html">L’institution</a>
+        <a href="rapports.html">Rapports</a>
+        <a href="galerie.html">Galerie</a>
+        <a href="media.html">Médias</a>
+        <a href="charte.html">Charte</a>
+        <a href="qui-sommes-nous.html" aria-current="page">Qui sommes-nous</a>
+        <a href="rejoindre.html">Rejoindre</a>
+        <a href="contact.html">Contact</a>
+      </nav>
     </div>
-  </footer>
+  </div>
 
   <noscript>
     <div class="container" style="padding: 12px 0;">
