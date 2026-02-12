@@ -424,3 +424,43 @@ strong{color:var(--text)}
   }
 }
 
+/* ===============================
+   COOKIE BANNER
+=================================*/
+.cookie-banner{
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  padding: 14px;
+  z-index: 9999;
+}
+
+.cookie-card{
+  max-width: var(--max);
+  margin: 0 auto;
+  background: color-mix(in srgb, var(--card) 92%, var(--bg));
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 14px 14px;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cookie-actions{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cookie-text p{ margin: 6px 0 0; }
+
+@media (max-width: 700px){
+  .cookie-card{
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .cookie-actions{ justify-content: stretch; }
+  .cookie-actions .btn{ width: 100%; }
+}
