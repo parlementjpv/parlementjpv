@@ -1,393 +1,391 @@
-
-<!doctype html>
-<html lang="fr" dir="ltr">
+<!DOCTYPE html>
+<html lang="fr" dir="ltr" data-theme="light">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Parlement JPV — Lycée Jean-Pierre Vernant</title>
-  <meta name="description" content="Instance lycéenne de débat, d’engagement citoyen et d’initiative institutionnelle au Lycée Jean-Pierre Vernant (Sèvres)." />
-  <meta name="theme-color" content="#0b2545" />
+<title>Parlement JPV — Institution lycéenne officielle</title>
+<meta name="description" content="Instance lycéenne officielle du Lycée Jean-Pierre Vernant. Débats structurés, rapports publics et engagement citoyen exigeant.">
 
-  <!-- SEO -->
-  <link rel="canonical" href="https://parlementjpv.github.io/parlementjpv/" />
-  <meta name="robots" content="index,follow" />
+<meta name="theme-color" content="#0b2545">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://parlementjpv.github.io/parlementjpv/">
 
-  <!-- Icons (multi-plateformes) -->
-  <link rel="icon" href="assets/img/favicon.ico" sizes="any" />
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png" />
-  <link rel="manifest" href="site.webmanifest" />
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Parlement JPV">
+<meta property="og:description" content="Institution lycéenne de débat et d’engagement citoyen.">
+<meta property="og:image" content="assets/img/opt/hero-1280.webp">
+<meta property="og:locale" content="fr_FR">
 
-  <!-- Social -->
-  <meta property="og:title" content="Parlement JPV — Lycée Jean-Pierre Vernant" />
-  <meta property="og:description" content="Débats, éloquence, conférences, initiatives citoyennes. Une instance lycéenne ambitieuse et structurée." />
-  <meta property="og:image" content="assets/img/og-1200x630.jpg" />
-  <meta property="og:type" content="website" />
-  <meta property="og:locale" content="fr_FR" />
-  <meta property="og:url" content="https://parlementjpv.github.io/parlementjpv/" />
-  <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:card" content="summary_large_image">
 
-  <!-- Fonts (cohérence visuelle) -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Perf -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<!-- Preload Hero -->
+<link rel="preload" as="image"
+      href="assets/img/opt/hero-1280.webp"
+      imagesrcset="assets/img/opt/hero-640.webp 640w,
+                   assets/img/opt/hero-960.webp 960w,
+                   assets/img/opt/hero-1280.webp 1280w"
+      imagesizes="100vw">
 
-  <!-- Hero preload (mobile/desktop) -->
-  <link rel="preload" as="image" href="assets/img/opt/hero-960.webp" imagesrcset="assets/img/opt/hero-640.webp 640w, assets/img/opt/hero-960.webp 960w, assets/img/opt/hero-1280.webp 1280w" imagesizes="(max-width: 860px) 100vw, 40vw">
+<link rel="icon" href="assets/img/favicon.ico">
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="css/styles.css" />
+<style>
 
-  <!-- JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"Organization",
-    "name":"Parlement JPV",
-    "description":"Instance lycéenne de débat et d’engagement citoyen au Lycée Jean-Pierre Vernant (Sèvres).",
-    "logo":"https://parlementjpv.github.io/parlementjpv/assets/img/logo.png",
-    "url":"https://parlementjpv.github.io/parlementjpv/",
-    "sameAs":[
-      "https://instagram.com/parlementjpv"
-    ]
+/* ===============================
+   DESIGN SYSTEM
+================================= */
+
+:root{
+  --primary:#0b2545;
+  --primary-soft:#122f5e;
+  --accent:#d4af37;
+  --bg:#f6f8fc;
+  --surface:#ffffff;
+  --text:#111827;
+  --text-muted:#5f6b7a;
+  --radius:22px;
+  --shadow-soft:0 15px 40px rgba(0,0,0,.06);
+  --shadow-premium:0 35px 90px rgba(0,0,0,.12);
+  --max:1250px;
+}
+
+*,
+*::before,
+*::after{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+}
+
+img{
+  max-width:100%;
+  display:block;
+}
+
+.container{
+  max-width:var(--max);
+  margin:auto;
+  padding:0 24px;
+}
+
+/* ===============================
+   HEADER
+================================= */
+
+.header{
+  position:fixed;
+  inset:0 0 auto 0;
+  height:80px;
+  display:flex;
+  align-items:center;
+  z-index:1000;
+  backdrop-filter:blur(18px);
+  background:rgba(255,255,255,.75);
+  transition:.3s ease;
+}
+
+.header.scrolled{
+  box-shadow:0 15px 40px rgba(0,0,0,.08);
+}
+
+.nav{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  width:100%;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  text-decoration:none;
+  color:inherit;
+}
+
+.brand-title{
+  font-weight:700;
+  font-size:1.1rem;
+}
+
+.brand-sub{
+  font-size:.8rem;
+  color:var(--text-muted);
+}
+
+.nav-links{
+  display:flex;
+  gap:30px;
+}
+
+.nav-links a{
+  text-decoration:none;
+  font-weight:500;
+  color:var(--text);
+  position:relative;
+}
+
+.nav-links a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-6px;
+  width:0;
+  height:2px;
+  background:var(--primary);
+  transition:.3s;
+}
+
+.nav-links a:hover::after{
+  width:100%;
+}
+
+/* ===============================
+   HERO
+================================= */
+
+.hero{
+  position:relative;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:white;
+  overflow:hidden;
+}
+
+.hero img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transform:scale(1.08);
+  transition:transform 8s ease;
+}
+
+.hero:hover img{
+  transform:scale(1);
+}
+
+.hero-overlay{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,
+    rgba(11,37,69,.8),
+    rgba(11,37,69,.95)
+  );
+}
+
+.hero-content{
+  position:relative;
+  z-index:2;
+  max-width:820px;
+}
+
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.2rem,4vw,3.4rem);
+  margin-bottom:20px;
+  line-height:1.2;
+}
+
+.hero p{
+  font-size:1.15rem;
+  opacity:.9;
+  margin-bottom:35px;
+}
+
+.btn{
+  display:inline-block;
+  padding:14px 26px;
+  border-radius:50px;
+  text-decoration:none;
+  font-weight:600;
+  transition:.3s;
+}
+
+.btn-primary{
+  background:white;
+  color:var(--primary);
+}
+
+.btn-primary:hover{
+  transform:translateY(-3px);
+  box-shadow:var(--shadow-soft);
+}
+
+.btn-gold{
+  background:var(--accent);
+  color:#111;
+  margin-left:15px;
+}
+
+/* ===============================
+   SECTION
+================================= */
+
+.section{
+  padding:120px 0;
+}
+
+.grid-3{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:30px;
+}
+
+.card{
+  background:var(--surface);
+  padding:32px;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-soft);
+  transition:.4s;
+}
+
+.card:hover{
+  transform:translateY(-8px);
+  box-shadow:var(--shadow-premium);
+}
+
+/* ===============================
+   FOOTER
+================================= */
+
+.footer{
+  background:var(--primary);
+  color:white;
+  padding:60px 0;
+}
+
+.footer a{
+  color:white;
+  text-decoration:none;
+  opacity:.8;
+}
+
+.footer a:hover{
+  opacity:1;
+}
+
+/* ===============================
+   RESPONSIVE
+================================= */
+
+@media(max-width:900px){
+
+  .nav-links{
+    display:none;
   }
-  </script>
+
+  .grid-3{
+    grid-template-columns:1fr;
+  }
+
+  .hero p{
+    font-size:1rem;
+  }
+
+}
+
+</style>
 </head>
 
 <body>
-  <!-- Skip link (accessibilité) -->
-  <a class="skip-link" href="#contenu">Aller au contenu</a>
 
-  <!-- COOKIE BANNER -->
-  <div id="cookieBanner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Consentement cookies" hidden>
-    <div class="cookie-card">
-      <div class="cookie-text">
-        <strong>Cookies</strong>
-        <p class="small">
-          Nous utilisons des cookies uniquement pour améliorer l’expérience (ex : mémoriser le thème).
-          Tu peux accepter ou refuser.
-        </p>
+<header class="header" id="header">
+  <div class="container nav">
+    <a href="index.html" class="brand">
+      <img src="assets/img/logo-160.png" width="44" height="44" alt="Logo Parlement JPV">
+      <div>
+        <div class="brand-title">Parlement JPV</div>
+        <div class="brand-sub">Lycée Jean-Pierre Vernant</div>
       </div>
-      <div class="cookie-actions">
-        <button class="btn btn-ghost" id="cookieDecline" type="button">Refuser</button>
-        <button class="btn btn-primary" id="cookieAccept" type="button">Accepter</button>
-      </div>
+    </a>
+
+    <nav class="nav-links">
+      <a href="institution.html">Institution</a>
+      <a href="rapports.html">Rapports</a>
+      <a href="galerie.html">Galerie</a>
+      <a href="rejoindre.html">Rejoindre</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<section class="hero">
+  <picture>
+    <source srcset="assets/img/opt/hero-1280.webp" type="image/webp">
+    <img src="assets/img/hero.jpg" alt="Séance du Parlement JPV" loading="eager">
+  </picture>
+
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <h1>Former les voix qui construiront demain.</h1>
+    <p>
+      Une institution lycéenne structurée dédiée au débat exigeant,
+      à l’analyse rigoureuse et à l’engagement responsable.
+    </p>
+    <a href="rapports.html" class="btn btn-primary">Voir les rapports</a>
+    <a href="rejoindre.html" class="btn btn-gold">Rejoindre</a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container grid-3">
+    <div class="card">
+      <h3>Débat structuré</h3>
+      <p>Argumentation formalisée, contradictoire et exigeante.</p>
+    </div>
+    <div class="card">
+      <h3>Transparence</h3>
+      <p>Rapports publics et archivés.</p>
+    </div>
+    <div class="card">
+      <h3>Impact réel</h3>
+      <p>Engagement citoyen concret et suivi.</p>
     </div>
   </div>
+</section>
 
-  <!-- HEADER -->
-  <header class="header" role="banner">
-    <div class="container">
-      <div class="nav">
-        <a class="brand" href="index.html" aria-label="Accueil Parlement JPV">
-          <picture>
-            <source srcset="assets/img/opt/logo-96.webp 96w, assets/img/opt/logo-160.webp 160w, assets/img/opt/logo-256.webp 256w" type="image/webp" />
-            <img
-              src="assets/img/logo-160.png"
-              srcset="assets/img/logo-160.png 160w, assets/img/logo-320.png 320w"
-              sizes="44px"
-              alt="Logo Parlement JPV"
-              width="44"
-              height="44"
-              decoding="async"
-            />
-          </picture>
-          <div class="brand-text">
-            <div class="title">Parlement JPV</div>
-            <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
-          </div>
-        </a>
+</main>
 
-        <nav class="nav-links" aria-label="Navigation principale">
-          <a href="institution.html">L’institution</a>
-          <a href="rapports.html">Rapports</a>
-          <a href="galerie.html">Galerie</a>
-          <a href="media.html">Médias</a>
-          <a href="rejoindre.html">Rejoindre</a>
-          <a href="contact.html">Contact</a>
-          <a href="qui-sommes-nous.html">Qui sommes-nous</a>
-        </nav>
+<footer class="footer">
+  <div class="container">
+    <p>© 2025 Parlement JPV — Institution lycéenne officielle</p>
+  </div>
+</footer>
 
-        <div class="nav-actions">
-          <button class="icon-btn" type="button" id="themeBtn" aria-label="Basculer le thème" title="Thème">
-            <span class="icon" aria-hidden="true">☾</span>
-          </button>
+<script>
+window.addEventListener("scroll",()=>{
+  const header=document.getElementById("header");
+  if(window.scrollY>50){
+    header.classList.add("scrolled");
+  }else{
+    header.classList.remove("scrolled");
+  }
+});
+</script>
 
-          <button
-            class="icon-btn burger"
-            type="button"
-            id="mobileNavBtn"
-            aria-label="Ouvrir le menu"
-            aria-controls="mobileNav"
-            aria-expanded="false"
-            title="Menu"
-          >☰</button>
-        </div>
-      </div>
-
-      <!-- MOBILE NAV -->
-      <nav id="mobileNav" class="mobile" aria-label="Menu mobile" hidden>
-        <a href="institution.html">L’institution</a>
-        <a href="rapports.html">Rapports</a>
-        <a href="galerie.html">Galerie</a>
-        <a href="media.html">Médias</a>
-        <a href="rejoindre.html">Rejoindre</a>
-        <a href="contact.html">Contact</a>
-        <a href="qui-sommes-nous.html">Qui sommes-nous</a>
-        <a href="charte.html">Charte</a>
-
-        <div class="line" role="separator" aria-hidden="true"></div>
-
-        <a
-          href="https://docs.google.com/forms/d/e/1FAIpQLSdQ86QZ8sMoY7YgOhT6DBMy5KG85yfm65O6BWMmFp7bzuorqg/viewform?usp=header"
-          target="_blank"
-          rel="noopener"
-        >Candidater (Formulaire)</a>
-      </nav>
-    </div>
-  </header>
-
-  <main id="contenu">
-    <!-- HERO -->
-    <section class="hero" aria-label="Présentation">
-      <div class="container">
-        <div class="hero-wrap">
-          <!-- TEXTE -->
-          <div class="card hero-card">
-            <span class="badge">Instance lycéenne — Débat, éloquence, initiatives</span>
-
-            <div class="kicker" style="margin-top:12px">Parlement JPV</div>
-            <h1>Une institution lycéenne structurée, exigeante et tournée vers l’action.</h1>
-
-            <p>
-              Le Parlement JPV organise des débats, des conférences et des exercices d’éloquence
-              pour former des élèves capables d’argumenter, décider et agir — avec rigueur, méthode et ambition.
-            </p>
-
-            <p class="small">
-              Cadre : respect, neutralité et ouverture à tous les élèves.
-            </p>
-
-            <div class="btns">
-              <a class="btn btn-primary" href="rapports.html">📄 Rapports officiels</a>
-              <a class="btn btn-gold" href="rejoindre.html">📝 Rejoindre</a>
-              <a class="btn btn-ghost" href="charte.html">📌 Lire la charte</a>
-            </div>
-
-            <div class="stats" aria-label="Indicateurs d’impact">
-              <div class="stat"><div class="n" id="statParticipants">—</div><div class="l">inscrits</div></div>
-              <div class="stat"><div class="n" id="statDebates">—</div><div class="l">débats</div></div>
-              <div class="stat"><div class="n" id="statConfs">—</div><div class="l">conférences à venir</div></div>
-              <div class="stat"><div class="n" id="statActions">—</div><div class="l">actions</div></div>
-            </div>
-          </div>
-
-          <!-- PHOTO -->
-          <figure class="card hero-side hero-side--bleed">
-            <picture>
-              <source
-                type="image/webp"
-                srcset="assets/img/opt/hero-640.webp 640w, assets/img/opt/hero-960.webp 960w, assets/img/opt/hero-1280.webp 1280w"
-                sizes="(max-width: 860px) 100vw, 40vw"
-              />
-              <img
-                src="assets/img/hero.jpg"
-                alt="Séance du Parlement JPV"
-                loading="eager"
-                decoding="async"
-              />
-            </picture>
-
-            <div class="overlay" aria-hidden="true"></div>
-
-            <div class="hero-photo-text" aria-hidden="true">
-              <div class="hero-photo-badge">Événement</div>
-              <div class="hero-photo-title">Débat du lundi 09 fév.</div>
-              <div class="hero-photo-subtitle">Trump, Xi ou Poutine : l’Europe est-elle condamnée à choisir ?</div>
-            </div>
-
-            <figcaption class="sr-only">Parlement JPV — photo d’activité</figcaption>
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <!-- UPCOMING -->
-    <section class="section-tight" aria-label="Événements à venir">
-      <div class="container">
-        <div class="grid grid-2">
-          <article class="card">
-            <div class="kicker">À venir</div>
-            <h2>Prochains événements</h2>
-            <div id="upcomingEvents" class="list" aria-live="polite"></div>
-            <div class="btns" style="margin-top:14px">
-              <a class="btn btn-ghost" href="media.html">Voir les médias</a>
-              <a class="btn btn-primary" href="rejoindre.html">Participer</a>
-            </div>
-          </article>
-
-          <article class="card">
-            <div class="kicker">Accès rapide</div>
-            <h2>Documents & transparence</h2>
-            <p class="small">
-              Ordres du jour, comptes rendus, suivis d’actions : tout est centralisé et consultable.
-            </p>
-            <div class="btns" style="margin-top:14px">
-              <a class="btn btn-primary" href="rapports.html">📄 Tous les rapports</a>
-              <a class="btn btn-ghost" href="institution.html">🏛 Fonctionnement</a>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- PILLARS -->
-    <section class="section" aria-label="Méthode">
-      <div class="container">
-        <div class="kicker">Notre méthode</div>
-        <h2>Exigence, structure, impact.</h2>
-
-        <div class="grid grid-3" style="margin-top:14px">
-          <article class="card">
-            <h3>Débats à haut niveau</h3>
-            <p>Format structuré : thèses, preuves, réfutation, synthèse et décisions. Pas de blabla.</p>
-          </article>
-
-          <article class="card">
-            <h3>Éloquence & rigueur</h3>
-            <p>Exercices (avocat du diable, cross-exam, discours) + feedback exigeant.</p>
-          </article>
-
-          <article class="card">
-            <h3>Traçabilité institutionnelle</h3>
-            <p>Rapports, suivi d’actions, comptes rendus : tout est archivé et public.</p>
-          </article>
-        </div>
-
-        <div class="btns" style="margin-top:14px">
-          <a class="btn btn-primary" href="institution.html">🏛 Comprendre l’institution</a>
-          <a class="btn btn-ghost" href="galerie.html">📸 Voir la galerie</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- REPORTS PREVIEW -->
-    <section class="section-tight" aria-label="Rapports">
-      <div class="container">
-        <div class="card">
-          <div class="kicker">Transparence</div>
-          <h2>Rapports officiels</h2>
-          <p class="small">Accédez aux rapports et comptes rendus publiés.</p>
-          <div class="btns">
-            <a class="btn btn-primary" href="rapports.html">📄 Voir tous les rapports</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- JOIN CTA -->
-    <section class="section" aria-label="Candidature">
-      <div class="container">
-        <div class="card">
-          <div class="kicker">Candidature</div>
-          <h2>Rejoindre le Parlement JPV</h2>
-          <p>
-            Toute candidature est étudiée par le bureau.
-            Vous serez recontacté par courriel.
-          </p>
-          <div class="btns">
-            <a class="btn btn-gold" href="rejoindre.html">📝 Candidater</a>
-            <a
-              class="btn btn-ghost"
-              href="https://docs.google.com/forms/d/e/1FAIpQLSdQ86QZ8sMoY7YgOhT6DBMy5KG85yfm65O6BWMmFp7bzuorqg/viewform?usp=header"
-              target="_blank"
-              rel="noopener"
-            >Ouvrir le formulaire</a>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="footer" role="contentinfo">
-    <div class="container">
-      <div class="footer-grid">
-
-        <div class="footer-col footer-brand-col">
-          <a class="brand footer-brand" href="index.html" aria-label="Accueil Parlement JPV">
-            <picture>
-              <source srcset="assets/img/opt/logo-96.webp 96w, assets/img/opt/logo-160.webp 160w, assets/img/opt/logo-256.webp 256w" type="image/webp" />
-              <img
-                src="assets/img/logo-160.png"
-                srcset="assets/img/logo-160.png 160w, assets/img/logo-320.png 320w"
-                sizes="44px"
-                alt="Logo Parlement JPV"
-                width="44"
-                height="44"
-                decoding="async"
-              />
-            </picture>
-            <div>
-              <div class="title">Parlement JPV</div>
-              <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
-            </div>
-          </a>
-
-          <p class="small footer-desc">
-            Instance lycéenne de débat, d’engagement citoyen et d’initiatives structurées.
-          </p>
-        </div>
-
-        <div class="footer-col">
-          <div class="kicker footer-kicker"><span class="dot"></span> Pages</div>
-          <nav class="footer-list" aria-label="Liens du site">
-            <a href="institution.html">L’institution</a>
-            <a href="rapports.html">Rapports</a>
-            <a href="galerie.html">Galerie</a>
-            <a href="media.html">Médias</a>
-            <a href="charte.html">Charte</a>
-            <a href="qui-sommes-nous.html">Qui sommes-nous</a>
-          </nav>
-        </div>
-
-        <div class="footer-col">
-          <div class="kicker footer-kicker"><span class="dot"></span> Contact</div>
-          <div class="footer-list">
-            <a href="rejoindre.html">Rejoindre</a>
-            <a href="contact.html">Contact</a>
-            <a href="https://instagram.com/parlementjpv" target="_blank" rel="noopener">Instagram</a>
-          </div>
-
-          <div class="kicker footer-kicker" style="margin-top:18px">
-            <span class="dot"></span> Transparence
-          </div>
-          <div class="footer-list">
-            <a href="mentions-legales.html">Mentions légales</a>
-            <a href="politique-confidentialite.html">Politique de confidentialité</a>
-            <a href="#" id="cookieReset">Réinitialiser mes choix cookies</a>
-          </div>
-
-          <div class="small footer-copy">
-            © <span id="year"></span> Parlement JPV
-          </div>
-        </div>
-
-      </div>
-
-      <div class="footer-divider"></div>
-
-      <p class="small footer-note">
-        Parlement JPV — Lycée Jean-Pierre Vernant • Instance lycéenne de débat et d’engagement citoyen.
-      </p>
-    </div>
-  </footer>
-
-  <!-- JS (unique, robuste, partagé) -->
-  <script src="js/app.js" defer></script>
 </body>
 </html>
