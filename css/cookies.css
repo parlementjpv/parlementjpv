@@ -1,0 +1,100 @@
+/* ==============================
+   COOKIE BANNER — Parlement JPV
+   ============================== */
+.cookie-banner{
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  z-index: 9999;
+
+  max-width: 1100px;
+  margin: 0 auto;
+
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.18)), #0f1b2d;
+  color: #eaf0ff;
+
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  overflow: hidden;
+}
+
+.cookie-banner__inner{
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 14px;
+  padding: 16px 16px;
+  align-items: center;
+}
+
+.cookie-banner__title{
+  font-weight: 900;
+  letter-spacing: .2px;
+  margin: 0 0 4px 0;
+}
+
+.cookie-banner__text{
+  margin: 0;
+  opacity: .82;
+  line-height: 1.35;
+  font-size: .95rem;
+}
+
+.cookie-banner__links{
+  margin-top: 8px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cookie-banner__links a{
+  color: #eaf0ff;
+  opacity: .85;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.cookie-banner__actions{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.cookie-btn{
+  appearance: none;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 14px;
+  padding: 10px 12px;
+  font-weight: 800;
+  cursor: pointer;
+  background: rgba(255,255,255,.06);
+  color: #eaf0ff;
+}
+
+.cookie-btn:hover{ filter: brightness(1.06); }
+
+.cookie-btn--primary{
+  border-color: rgba(47,107,255,.55);
+  background: linear-gradient(180deg, rgba(47,107,255,.9), rgba(47,107,255,.62));
+}
+
+.cookie-btn--danger{
+  border-color: rgba(255,255,255,.14);
+  background: rgba(0,0,0,.20);
+}
+
+.cookie-banner[hidden]{ display: none !important; }
+
+@media (max-width: 720px){
+  .cookie-banner__inner{
+    grid-template-columns: 1fr;
+  }
+  .cookie-banner__actions{
+    justify-content: stretch;
+  }
+  .cookie-btn{
+    width: 100%;
+  }
+}
