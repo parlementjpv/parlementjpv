@@ -53,10 +53,9 @@
       background:rgba(255,255,255,.08); border:1px solid var(--border);
     }
     .skip-link:focus{ left:12px; outline:none; box-shadow:var(--focus); }
-
     :focus-visible{ outline:none; box-shadow:var(--focus); border-radius:14px; }
 
-    /* ===== Header / Nav (cohérent avec ton JS) ===== */
+    /* ===== Header / Nav ===== */
     .site-header{
       position:sticky;
       top:0;
@@ -134,11 +133,9 @@
     }
     .mobile-btn svg{ width:22px; height:22px; }
 
-    .mobile-nav{
-      display:none;
-      border-top: 1px solid rgba(255,255,255,.10);
-      padding:12px 0 18px;
-    }
+    /* IMPORTANT : menu mobile piloté UNIQUEMENT via [hidden] */
+    .mobile-nav{ display:none; border-top: 1px solid rgba(255,255,255,.10); padding:12px 0 18px; }
+    .mobile-nav:not([hidden]){ display:block; }
     .mobile-nav a{
       display:flex;
       padding:12px 12px;
@@ -535,7 +532,6 @@
       .footer-grid{ grid-template-columns: 1fr; }
       .nav-links{ display:none; }
       .mobile-btn{ display:inline-flex; }
-      .mobile-nav{ display:block; }
     }
     @media(max-width:600px){
       header.page-hero{ padding:44px 0 24px; }
@@ -554,9 +550,10 @@
   <!-- HEADER -->
   <div class="site-header" role="banner">
     <div class="container">
-      <div class="nav" aria-label="Navigation principale">
+      <div class="nav">
         <a class="brand" href="index.html">
-          <img src="assets/img/logo.png" alt="Logo Parlement JPV" loading="lazy" decoding="async">
+          <!-- logo du header = pas lazy, sinon micro flash possible -->
+          <img src="assets/img/logo.png" alt="Logo Parlement JPV" decoding="async">
           <div>
             <div class="title">Parlement JPV</div>
             <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
@@ -573,14 +570,22 @@
           <a href="rejoindre.html">Rejoindre</a>
         </nav>
 
-        <button id="mobileNavBtn" class="mobile-btn" type="button" aria-label="Ouvrir le menu" aria-expanded="false" onclick="toggleMobile()">
+        <button
+          id="mobileNavBtn"
+          class="mobile-btn"
+          type="button"
+          aria-label="Ouvrir le menu"
+          aria-expanded="false"
+          aria-controls="mobileNav"
+          onclick="toggleMobile()"
+        >
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
           </svg>
         </button>
       </div>
 
-        <nav id="mobileNav" class="mobile-nav" hidden>
+      <nav id="mobileNav" class="mobile-nav" aria-label="Menu mobile" hidden>
         <a href="institution.html">L’institution</a>
         <a href="rapports.html">Rapports</a>
         <a href="galerie.html">Galerie</a>
@@ -899,7 +904,7 @@
       <div class="footer-grid">
         <div>
           <div class="brand" style="gap:10px">
-            <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44" loading="lazy" decoding="async" />
+            <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44" decoding="async" />
             <div>
               <div class="title">Parlement JPV</div>
               <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
@@ -946,27 +951,33 @@
     </div>
   </noscript>
 
+  <!-- IMPORTANT : si ton main.js contient encore un toggleMobile en mode ".open",
+       soit tu le modifies, soit tu peux le retirer ici pour éviter les conflits.
+       Je le laisse pour ton site, mais la fonction ci-dessous écrase tout. -->
   <script src="js/main.js" defer></script>
+
   <script>
     // Année
     const y = document.getElementById("year");
     if (y) y.textContent = new Date().getFullYear();
 
-    // Menu mobile : synchronise aria-expanded + hidden
+    // Menu mobile : pilotage unique via hidden + aria-expanded (anti-bug)
     (function () {
       const btn = document.getElementById("mobileNavBtn");
       const nav = document.getElementById("mobileNav");
       if (!btn || !nav) return;
 
-      // fallback si main.js n’injecte pas toggleMobile
-      if (typeof window.toggleMobile !== "function") {
-        window.toggleMobile = function () {
-          const isOpen = btn.getAttribute("aria-expanded") === "true";
-          btn.setAttribute("aria-expanded", String(!isOpen));
-          nav.hidden = isOpen;
-        };
-      }
+      // état initial blindé
+      btn.setAttribute("aria-expanded", "false");
+      nav.hidden = true;
 
+      window.toggleMobile = function () {
+        const isOpen = btn.getAttribute("aria-expanded") === "true";
+        btn.setAttribute("aria-expanded", String(!isOpen));
+        nav.hidden = isOpen;
+      };
+
+      // Ferme après clic sur un lien
       nav.addEventListener("click", (e) => {
         const a = e.target.closest("a");
         if (!a) return;
@@ -974,10 +985,20 @@
         nav.hidden = true;
       });
 
+      // ESC pour fermer
       document.addEventListener("keydown", (e) => {
         if (e.key !== "Escape") return;
         btn.setAttribute("aria-expanded", "false");
         nav.hidden = true;
+      });
+
+      // Ferme si on repasse en desktop (sécurité)
+      const mq = window.matchMedia("(min-width: 981px)");
+      mq.addEventListener?.("change", () => {
+        if (mq.matches) {
+          btn.setAttribute("aria-expanded", "false");
+          nav.hidden = true;
+        }
       });
     })();
   </script>
