@@ -209,3 +209,22 @@ window.addEventListener("DOMContentLoaded", () => {
   loadReports();
   loadGallery();
 });
+(function cookieConsent(){
+  const KEY = "cookie_consent_v1";
+  const banner = document.getElementById("cookieBanner");
+  if (!banner) return;
+
+  const saved = localStorage.getItem(KEY);
+  if (!saved) banner.hidden = false;
+
+  const accept = document.getElementById("cookieAccept");
+  const decline = document.getElementById("cookieDecline");
+
+  function close(choice){
+    localStorage.setItem(KEY, choice); // "accepted" ou "declined"
+    banner.hidden = true;
+  }
+
+  accept?.addEventListener("click", () => close("accepted"));
+  decline?.addEventListener("click", () => close("declined"));
+})();
