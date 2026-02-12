@@ -1,56 +1,106 @@
 <!doctype html>
-<html lang="fr" dir="ltr">
+<html lang="fr" dir="ltr" data-theme="light">
 <head>
+  <!-- =========================================================
+       HEAD — SEO / PERF / SOCIAL / ACCESSIBILITY
+       ========================================================= -->
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
   <title>Parlement JPV — Lycée Jean-Pierre Vernant</title>
-  <meta name="description" content="Instance lycéenne de débat, d’engagement citoyen et d’initiative institutionnelle au Lycée Jean-Pierre Vernant (Sèvres)." />
+  <meta name="description" content="Site officiel du Parlement JPV — instance lycéenne de débat, éloquence, conférences et initiatives citoyennes au Lycée Jean-Pierre Vernant (Sèvres)." />
   <meta name="theme-color" content="#0b2545" />
   <meta name="color-scheme" content="light dark" />
 
-  <!-- SEO -->
+  <!-- Canonical / Robots -->
   <link rel="canonical" href="https://parlementjpv.github.io/parlementjpv/" />
-  <meta name="robots" content="index,follow" />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
 
-  <!-- Icons -->
+  <!-- Favicons / PWA (si tu as ces fichiers) -->
   <link rel="icon" href="assets/img/favicon.png" sizes="any" />
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png" />
+  <link rel="manifest" href="site.webmanifest" />
 
-  <!-- Social -->
+  <!-- Open Graph / Twitter -->
+  <meta property="og:site_name" content="Parlement JPV" />
   <meta property="og:title" content="Parlement JPV — Lycée Jean-Pierre Vernant" />
-  <meta property="og:description" content="Débats, éloquence, conférences, initiatives citoyennes. Une instance lycéenne ambitieuse et structurée." />
+  <meta property="og:description" content="Débats, éloquence, conférences et initiatives citoyennes. Une instance lycéenne ambitieuse et structurée." />
   <meta property="og:image" content="assets/img/og.jpg" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="fr_FR" />
   <meta property="og:url" content="https://parlementjpv.github.io/parlementjpv/" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <!-- Perf: fonts (si tu utilises Inter / Playfair) -->
+  <!-- Performance hints -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
 
-  <!-- CSS -->
+  <!-- Fonts (si tu les utilises) -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- CSS global -->
   <link rel="stylesheet" href="css/styles.css" />
 
-  <!-- JSON-LD -->
+  <!-- =========================================================
+       CRITICAL CSS (MINI) — pour éviter flash et assurer le layout
+       (tu peux laisser, c’est léger et utile)
+       ========================================================= -->
+  <style>
+    /* === Critical tiny base (ne remplace pas ton CSS) === */
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .skip{position:absolute;left:-9999px;top:10px;z-index:9999;background:#fff;border:1px solid rgba(0,0,0,.12);border-radius:12px;padding:10px 12px}
+    .skip:focus{left:10px}
+    @media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+  </style>
+
+  <!-- =========================================================
+       JSON-LD — Organization + WebSite + (option) Event template
+       ========================================================= -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
-    "@type":"Organization",
-    "name":"Parlement JPV",
-    "description":"Instance lycéenne de débat et d’engagement citoyen au Lycée Jean-Pierre Vernant (Sèvres).",
-    "logo":"https://parlementjpv.github.io/parlementjpv/assets/img/logo.png",
-    "url":"https://parlementjpv.github.io/parlementjpv/"
+    "@graph":[
+      {
+        "@type":"Organization",
+        "@id":"https://parlementjpv.github.io/parlementjpv/#org",
+        "name":"Parlement JPV",
+        "url":"https://parlementjpv.github.io/parlementjpv/",
+        "logo":"https://parlementjpv.github.io/parlementjpv/assets/img/logo.png",
+        "description":"Instance lycéenne de débat, d’engagement citoyen et d’initiatives structurées au Lycée Jean-Pierre Vernant (Sèvres).",
+        "sameAs":[
+          "https://instagram.com/parlementjpv"
+        ]
+      },
+      {
+        "@type":"WebSite",
+        "@id":"https://parlementjpv.github.io/parlementjpv/#website",
+        "url":"https://parlementjpv.github.io/parlementjpv/",
+        "name":"Parlement JPV",
+        "publisher":{"@id":"https://parlementjpv.github.io/parlementjpv/#org"},
+        "inLanguage":"fr-FR"
+      },
+      {
+        "@type":"WebPage",
+        "@id":"https://parlementjpv.github.io/parlementjpv/#home",
+        "url":"https://parlementjpv.github.io/parlementjpv/",
+        "name":"Accueil — Parlement JPV",
+        "isPartOf":{"@id":"https://parlementjpv.github.io/parlementjpv/#website"},
+        "about":{"@id":"https://parlementjpv.github.io/parlementjpv/#org"},
+        "inLanguage":"fr-FR"
+      }
+    ]
   }
   </script>
 </head>
 
 <body>
+  <!-- Skip link -->
   <a class="skip" href="#contenu">Aller au contenu</a>
 
-  <!-- HEADER -->
+  <!-- =========================================================
+       HEADER / NAV — structure premium + accessibilité
+       ========================================================= -->
   <header class="site-header" role="banner">
     <div class="container header-row">
       <a class="brand" href="index.html" aria-label="Accueil Parlement JPV">
@@ -90,7 +140,7 @@
       </div>
     </div>
 
-    <!-- Mobile drawer -->
+    <!-- Mobile backdrop + drawer -->
     <div class="mobile-backdrop" data-mobile-backdrop hidden></div>
 
     <nav id="mobileNav" class="mobile-drawer" aria-label="Menu mobile" hidden>
@@ -117,6 +167,8 @@
         <a href="contact.html">Contact</a>
         <a href="qui-sommes-nous.html">Qui sommes-nous</a>
         <a href="charte.html">Charte</a>
+        <a href="mentions-legales.html">Mentions légales</a>
+        <a href="politique-confidentialite.html">Confidentialité</a>
       </div>
 
       <div class="mobile-cta">
@@ -131,11 +183,17 @@
     </nav>
   </header>
 
+  <!-- =========================================================
+       MAIN CONTENT
+       ========================================================= -->
   <main id="contenu">
-    <!-- HERO -->
+
+    <!-- =========================================================
+         HERO — “big site” structure
+         ========================================================= -->
     <section class="hero" aria-label="Présentation">
       <div class="container hero-grid">
-        <!-- Copy -->
+        <!-- Left: Copy -->
         <div class="card hero-card">
           <div class="badge-row">
             <span class="badge">Instance lycéenne — Débat, éloquence, initiatives</span>
@@ -143,11 +201,11 @@
           </div>
 
           <p class="kicker">Parlement JPV</p>
-          <h1>Une institution lycéenne structurée, exigeante et tournée vers l’action.</h1>
+          <h1>Former des élèves capables d’argumenter, décider et agir.</h1>
 
           <p class="lead">
-            Débats, conférences et exercices d’éloquence pour former des élèves capables d’argumenter, décider et agir —
-            avec rigueur, méthode et ambition.
+            Le Parlement JPV structure des débats exigeants, des conférences et des exercices d’éloquence.
+            Objectif : développer la rigueur, l’esprit critique et la capacité à construire une décision collective.
           </p>
 
           <div class="hero-actions">
@@ -167,7 +225,7 @@
             </div>
             <div class="stat">
               <div class="n" id="statConfs">—</div>
-              <div class="l">conférences à venir</div>
+              <div class="l">conférences</div>
             </div>
             <div class="stat">
               <div class="n" id="statActions">—</div>
@@ -176,11 +234,11 @@
           </div>
 
           <p class="fine">
-            Cadre : respect, neutralité, ouverture à tous les élèves.
+            Cadre : neutralité, respect, ouverture à tous les élèves. Transparence : rapports publics.
           </p>
         </div>
 
-        <!-- Visual -->
+        <!-- Right: Media -->
         <figure class="card hero-media hero-media--bleed">
           <img
             src="assets/img/hero.jpg"
@@ -199,14 +257,16 @@
       </div>
     </section>
 
-    <!-- TRUST STRIP -->
+    <!-- =========================================================
+         STRIP — proof / trust
+         ========================================================= -->
     <section class="strip" aria-label="Repères">
       <div class="container strip-grid">
         <div class="strip-item">
           <div class="strip-ico" aria-hidden="true">🏛</div>
           <div>
             <div class="strip-title">Méthode</div>
-            <div class="strip-sub">formats structurés, décisions, synthèses</div>
+            <div class="strip-sub">formats structurés, synthèse, décisions</div>
           </div>
         </div>
         <div class="strip-item">
@@ -219,20 +279,78 @@
         <div class="strip-item">
           <div class="strip-ico" aria-hidden="true">📄</div>
           <div>
-            <div class="strip-title">Traçabilité</div>
+            <div class="strip-title">Transparence</div>
             <div class="strip-sub">rapports publics & suivi d’actions</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- UPCOMING -->
-    <section class="section" aria-label="Événements à venir">
+    <!-- =========================================================
+         SECTION — What we do (cards)
+         ========================================================= -->
+    <section class="section" aria-label="Ce que nous faisons">
+      <div class="container">
+        <p class="kicker">Mission</p>
+        <h2>Trois axes : débattre, former, agir.</h2>
+
+        <div class="grid-3">
+          <article class="card">
+            <h3>Débats à haut niveau</h3>
+            <p class="muted">
+              Thèses, preuves, réfutation, synthèse : un format exigeant qui force la précision.
+              L’objectif n’est pas de parler plus fort, mais de penser plus juste.
+            </p>
+            <div class="card-actions">
+              <a class="btn btn-ghost" href="institution.html">Comprendre le format</a>
+              <a class="btn btn-primary" href="media.html">Voir un extrait</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>Éloquence & rigueur</h3>
+            <p class="muted">
+              Discours, cross-exam, “avocat du diable”, argumentation : un entraînement sérieux,
+              avec feedback et progression.
+            </p>
+            <div class="card-actions">
+              <a class="btn btn-ghost" href="rejoindre.html">Rejoindre</a>
+              <a class="btn btn-primary" href="qui-sommes-nous.html">Découvrir le bureau</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>Traçabilité institutionnelle</h3>
+            <p class="muted">
+              Ordres du jour, comptes rendus, suivis d’actions : tout est archivé, clair et consultable.
+              Une institution crédible laisse des traces.
+            </p>
+            <div class="card-actions">
+              <a class="btn btn-primary" href="rapports.html">Voir les rapports</a>
+              <a class="btn btn-ghost" href="charte.html">Lire la charte</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SECTION — Upcoming + Transparency (2 columns)
+         ========================================================= -->
+    <section class="section" aria-label="Événements et documents">
       <div class="container grid-2">
         <article class="card">
           <p class="kicker">À venir</p>
           <h2>Prochains événements</h2>
-          <div id="upcomingEvents" class="list" aria-live="polite"></div>
+
+          <div id="upcomingEvents" class="list" aria-live="polite">
+            <!-- Rempli par JS si tu veux, sinon placeholder -->
+            <div class="item">
+              <div class="t">Calendrier en mise à jour</div>
+              <div class="m">Consulte la page Médias ou Rejoindre pour les prochaines dates.</div>
+            </div>
+          </div>
+
           <div class="card-actions">
             <a class="btn btn-ghost" href="media.html">Voir les médias</a>
             <a class="btn btn-primary" href="rejoindre.html">Participer</a>
@@ -240,12 +358,28 @@
         </article>
 
         <article class="card">
-          <p class="kicker">Accès rapide</p>
-          <h2>Documents & transparence</h2>
+          <p class="kicker">Transparence</p>
+          <h2>Documents & comptes rendus</h2>
           <p class="muted">
-            Ordres du jour, comptes rendus, suivis d’actions : tout est centralisé et consultable.
+            Rapports officiels, décisions, ordres du jour : accès simple, lisible, public.
           </p>
-          <div class="card-actions">
+
+          <div class="grid-3" style="margin-top:14px">
+            <div class="card" style="padding:14px">
+              <div class="kicker">Rapports</div>
+              <div class="muted">Tous les documents publiés</div>
+            </div>
+            <div class="card" style="padding:14px">
+              <div class="kicker">Charte</div>
+              <div class="muted">Cadre, neutralité, respect</div>
+            </div>
+            <div class="card" style="padding:14px">
+              <div class="kicker">Suivi</div>
+              <div class="muted">Actions & avancement</div>
+            </div>
+          </div>
+
+          <div class="card-actions" style="margin-top:14px">
             <a class="btn btn-primary" href="rapports.html">📄 Tous les rapports</a>
             <a class="btn btn-ghost" href="institution.html">🏛 Fonctionnement</a>
           </div>
@@ -253,35 +387,250 @@
       </div>
     </section>
 
-    <!-- PILLARS -->
-    <section class="section" aria-label="Méthode">
+    <!-- =========================================================
+         SECTION — “How it works” timeline
+         ========================================================= -->
+    <section class="section" aria-label="Processus">
       <div class="container">
-        <p class="kicker">Notre méthode</p>
-        <h2>Exigence, structure, impact.</h2>
+        <p class="kicker">Processus</p>
+        <h2>Comment se déroule un débat (format institutionnel)</h2>
 
         <div class="grid-3">
           <article class="card">
-            <h3>Débats à haut niveau</h3>
-            <p class="muted">Thèses, preuves, réfutation, synthèse. Pas de blabla, du fond.</p>
+            <h3>1) Préparation</h3>
+            <p class="muted">
+              Sujet annoncé, ressources cadrées, rôles distribués.
+              On vient avec des arguments, pas avec des impressions.
+            </p>
           </article>
+
           <article class="card">
-            <h3>Éloquence & rigueur</h3>
-            <p class="muted">Cross-exam, discours, avocat du diable + feedback exigeant.</p>
+            <h3>2) Débat</h3>
+            <p class="muted">
+              Thèse / antithèse, preuves, questions, réfutation.
+              Objectif : clarifier, pas “gagner”.
+            </p>
           </article>
+
           <article class="card">
-            <h3>Traçabilité institutionnelle</h3>
-            <p class="muted">Rapports, suivi d’actions, comptes rendus : archivé et public.</p>
+            <h3>3) Synthèse</h3>
+            <p class="muted">
+              On résume, on tranche, on écrit.
+              La trace écrite transforme un débat en institution.
+            </p>
           </article>
         </div>
 
         <div class="center-actions">
-          <a class="btn btn-primary" href="institution.html">🏛 Comprendre l’institution</a>
-          <a class="btn btn-ghost" href="galerie.html">📸 Voir la galerie</a>
+          <a class="btn btn-primary" href="institution.html">Voir le détail du fonctionnement</a>
+          <a class="btn btn-ghost" href="charte.html">Lire la charte</a>
         </div>
       </div>
     </section>
 
-    <!-- CTA -->
+    <!-- =========================================================
+         SECTION — Featured reports (preview)
+         (tu pourras brancher en JS à un JSON plus tard)
+         ========================================================= -->
+    <section class="section" aria-label="Rapports à la une">
+      <div class="container">
+        <p class="kicker">Sélection</p>
+        <h2>À la une : rapports et décisions</h2>
+
+        <div class="grid-3">
+          <article class="card">
+            <h3>Compte rendu — Débat</h3>
+            <p class="muted">Synthèse structurée : arguments, objections, décision, suites.</p>
+            <div class="card-actions">
+              <a class="btn btn-primary" href="rapports.html">Lire</a>
+              <a class="btn btn-ghost" href="rapports.html">Tous les rapports</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>Ordre du jour</h3>
+            <p class="muted">Agenda clair des prochaines séances et thèmes traités.</p>
+            <div class="card-actions">
+              <a class="btn btn-primary" href="rapports.html">Voir</a>
+              <a class="btn btn-ghost" href="media.html">Médias</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>Suivi d’actions</h3>
+            <p class="muted">Ce qui a été décidé, ce qui est en cours, ce qui est terminé.</p>
+            <div class="card-actions">
+              <a class="btn btn-primary" href="rapports.html">Consulter</a>
+              <a class="btn btn-ghost" href="institution.html">Méthode</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SECTION — Media highlight (image/video placeholders)
+         ========================================================= -->
+    <section class="section" aria-label="Médias">
+      <div class="container">
+        <p class="kicker">Médias</p>
+        <h2>Voir, comprendre, vérifier.</h2>
+
+        <div class="grid-2">
+          <article class="card">
+            <h3>Galerie</h3>
+            <p class="muted">
+              Photos des séances, moments forts, ateliers.
+              Une institution visible inspire confiance.
+            </p>
+            <div class="card-actions">
+              <a class="btn btn-primary" href="galerie.html">📸 Ouvrir la galerie</a>
+              <a class="btn btn-ghost" href="media.html">Médias</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>Vidéos</h3>
+            <p class="muted">
+              Extraits courts : prises de parole, synthèses, formats d’éloquence.
+            </p>
+            <div class="card-actions">
+              <a class="btn btn-primary" href="media.html">▶ Voir les vidéos</a>
+              <a class="btn btn-ghost" href="rejoindre.html">Participer</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SECTION — Agenda embed (option Google Calendar)
+         ========================================================= -->
+    <section class="section" aria-label="Agenda">
+      <div class="container">
+        <p class="kicker">Agenda</p>
+        <h2>Dates & séances</h2>
+        <p class="muted">
+          Si tu utilises Google Calendar, tu peux intégrer ici un agenda propre.
+          (Tu peux remplacer l’iframe par ton embed réel.)
+        </p>
+
+        <div class="card" style="padding:0; overflow:hidden">
+          <iframe
+            title="Agenda Parlement JPV"
+            src="https://calendar.google.com/calendar/embed?src=parlementjpv%40gmail.com&ctz=Europe%2FParis"
+            style="border:0; width:100%; height:520px"
+            loading="lazy"
+          ></iframe>
+        </div>
+
+        <div class="center-actions">
+          <a class="btn btn-primary" href="rejoindre.html">Participer</a>
+          <a class="btn btn-ghost" href="contact.html">Nous contacter</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SECTION — Team preview
+         ========================================================= -->
+    <section class="section" aria-label="Équipe">
+      <div class="container">
+        <p class="kicker">Équipe</p>
+        <h2>Une organisation claire (pas un club flou).</h2>
+
+        <div class="grid-3">
+          <article class="card">
+            <h3>Présidence</h3>
+            <p class="muted">
+              Direction, cadrage, arbitrage du format et de la méthode.
+              Garant du niveau d’exigence.
+            </p>
+            <div class="card-actions">
+              <a class="btn btn-primary" href="qui-sommes-nous.html">Découvrir</a>
+              <a class="btn btn-ghost" href="rejoindre.html">Candidater</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>Secrétariat</h3>
+            <p class="muted">
+              Comptes rendus, ordres du jour, archivage, publication.
+              La trace écrite = crédibilité.
+            </p>
+            <div class="card-actions">
+              <a class="btn btn-primary" href="rapports.html">Voir les rapports</a>
+              <a class="btn btn-ghost" href="institution.html">Fonctionnement</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>Pôles</h3>
+            <p class="muted">
+              Événements, communication, logistique, partenariats.
+              Répartition des rôles = efficacité.
+            </p>
+            <div class="card-actions">
+              <a class="btn btn-primary" href="qui-sommes-nous.html">Voir les pôles</a>
+              <a class="btn btn-ghost" href="contact.html">Contact</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SECTION — FAQ (gros site)
+         ========================================================= -->
+    <section class="section" aria-label="FAQ">
+      <div class="container">
+        <p class="kicker">FAQ</p>
+        <h2>Questions fréquentes</h2>
+
+        <div class="grid-2">
+          <article class="card">
+            <h3>Qui peut participer ?</h3>
+            <p class="muted">
+              Tous les élèves du lycée, selon les modalités indiquées sur la page Rejoindre.
+              L’objectif : ouvrir, encadrer, et maintenir un niveau exigeant.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Comment candidater ?</h3>
+            <p class="muted">
+              Via la page Rejoindre ou le formulaire officiel.
+              Une candidature sérieuse = motivation + disponibilité + respect du cadre.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Pourquoi des rapports publics ?</h3>
+            <p class="muted">
+              Parce qu’une institution crédible documente ses décisions.
+              Transparence = confiance.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Le Parlement JPV est-il politique ?</h3>
+            <p class="muted">
+              Non : il est neutre et encadré. On débat d’idées et de sujets,
+              pas de militantisme.
+            </p>
+          </article>
+        </div>
+
+        <div class="center-actions">
+          <a class="btn btn-primary" href="charte.html">Lire la charte</a>
+          <a class="btn btn-ghost" href="contact.html">Poser une question</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SECTION — Final CTA (big site finish)
+         ========================================================= -->
     <section class="section" aria-label="Candidature">
       <div class="container">
         <div class="card cta">
@@ -292,6 +641,7 @@
               Toute candidature est étudiée par le bureau. Vous serez recontacté par courriel.
             </p>
           </div>
+
           <div class="cta-actions">
             <a class="btn btn-gold" href="rejoindre.html">📝 Candidater</a>
             <a
@@ -306,7 +656,9 @@
     </section>
   </main>
 
-  <!-- FOOTER -->
+  <!-- =========================================================
+       FOOTER — vrai footer + liens légaux
+       ========================================================= -->
   <footer class="footer" role="contentinfo">
     <div class="container footer-grid">
       <div>
@@ -326,26 +678,45 @@
         <div class="footer-kicker">Pages</div>
         <a href="institution.html">L’institution</a><br />
         <a href="rapports.html">Rapports</a><br />
-        <a href="charte.html">Charte</a><br />
+        <a href="galerie.html">Galerie</a><br />
+        <a href="media.html">Médias</a><br />
+        <a href="qui-sommes-nous.html">Qui sommes-nous</a><br />
+        <a href="rejoindre.html">Rejoindre</a><br />
         <a href="contact.html">Contact</a>
       </div>
 
       <div>
-        <div class="footer-kicker">Transparence</div>
-        <a href="rapports.html">Rapports officiels</a><br />
-        <a href="galerie.html">Galerie</a><br />
-        <a href="media.html">Médias</a>
+        <div class="footer-kicker">Cadre</div>
+        <a href="charte.html">Charte</a><br />
+        <a href="mentions-legales.html">Mentions légales</a><br />
+        <a href="politique-confidentialite.html">Confidentialité</a><br />
       </div>
     </div>
 
     <div class="container footer-bottom">
       <span>© <span id="year"></span> Parlement JPV</span>
       <span class="dot-sep" aria-hidden="true">•</span>
-      <a href="mentions-legales.html">Mentions légales</a>
-      <span class="dot-sep" aria-hidden="true">•</span>
-      <a href="politique-confidentialite.html">Politique de confidentialité</a>
+      <span class="muted">Site officiel — instance lycéenne</span>
     </div>
   </footer>
+
+  <!-- =========================================================
+       COOKIE BANNER (markup prêt — pilotage via JS si tu veux)
+       ========================================================= -->
+  <div class="cookie" id="cookieBanner" hidden role="dialog" aria-live="polite" aria-label="Préférences cookies">
+    <div class="cookie-card">
+      <div class="cookie-title">Préférences cookies</div>
+      <div class="cookie-text">
+        Nous utilisons des cookies nécessaires au fonctionnement du site, et (optionnel) des cookies de mesure d’audience.
+        Vous pouvez accepter, refuser ou personnaliser.
+      </div>
+      <div class="cookie-actions">
+        <button class="btn btn-primary" type="button" data-cookie-accept>Accepter</button>
+        <button class="btn btn-ghost" type="button" data-cookie-reject>Refuser</button>
+        <a class="btn btn-ghost" href="politique-confidentialite.html">En savoir plus</a>
+      </div>
+    </div>
+  </div>
 
   <noscript>
     <div class="container noscript">
@@ -353,6 +724,20 @@
     </div>
   </noscript>
 
+  <!-- =========================================================
+       JS
+       ========================================================= -->
   <script src="js/main.js" defer></script>
+
+  <!-- =========================================================
+       Safety inline fallback (ne casse rien si ton main.js existe)
+       ========================================================= -->
+  <script>
+    (function(){
+      // Year safe
+      var y = document.getElementById("year");
+      if (y) y.textContent = String(new Date().getFullYear());
+    })();
+  </script>
 </body>
 </html>
