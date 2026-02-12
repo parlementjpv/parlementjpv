@@ -266,73 +266,70 @@
   </main>
 
   <!-- FOOTER -->
-<footer class="site-footer">
-  <div class="footer-container">
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
 
-    <!-- IDENTITÉ -->
-    <div class="footer-col footer-brand-col">
-      <div class="footer-brand">
-        <img src="assets/img/logo.png" alt="Logo Parlement JPV" class="footer-logo">
-        <span>Parlement JPV</span>
+      <!-- IDENTITÉ -->
+      <div class="footer-col footer-brand-col">
+        <a class="brand footer-brand" href="index.html" aria-label="Accueil Parlement JPV">
+          <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44" decoding="async" />
+          <div>
+            <div class="title">Parlement JPV</div>
+            <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
+          </div>
+        </a>
+
+        <p class="small footer-desc">
+          Instance lycéenne de débat, d’engagement citoyen et d’initiatives structurées.
+        </p>
       </div>
 
-      <p class="footer-desc">
-        Instance lycéenne de débat et d’engagement citoyen  
-        au Lycée Jean-Pierre Vernant — Sèvres.
-      </p>
-
-      <div class="footer-founded">
-        Fondé en 2025
+      <!-- PAGES -->
+      <div class="footer-col">
+        <div class="kicker footer-kicker"><span class="dot"></span> Pages</div>
+        <nav class="footer-list" aria-label="Liens du site">
+          <a href="institution.html">L’institution</a>
+          <a href="rapports.html">Rapports</a>
+          <a href="galerie.html">Galerie</a>
+          <a href="media.html">Médias</a>
+          <a href="charte.html">Charte</a>
+          <a href="qui-sommes-nous.html">Qui sommes-nous</a>
+        </nav>
       </div>
-    </div>
 
-    <!-- NAVIGATION -->
-    <div class="footer-col">
-      <h4>Navigation</h4>
-      <ul>
-        <li><a href="index.html">Accueil</a></li>
-        <li><a href="institution.html">L’institution</a></li>
-        <li><a href="qui-sommes-nous.html">Qui sommes-nous</a></li>
-        <li><a href="galerie.html">Galerie</a></li>
-        <li><a href="rapports.html">Rapports</a></li>
-      </ul>
-    </div>
+      <!-- CONTACT & TRANSPARENCE -->
+      <div class="footer-col">
+        <div class="kicker footer-kicker"><span class="dot"></span> Contact</div>
+        <div class="footer-list">
+          <a href="rejoindre.html">Rejoindre</a>
+          <a href="contact.html">Contact</a>
+          <a href="https://instagram.com/parlementjpv" target="_blank" rel="noopener">Instagram</a>
+        </div>
 
-    <!-- TRANSPARENCE -->
-    <div class="footer-col">
-      <h4>Transparence</h4>
-      <ul>
-        <li><a href="mentions-legales.html">Mentions légales</a></li>
-        <li><a href="politique-confidentialite.html">Confidentialité</a></li>
-        <li>
+        <div class="kicker footer-kicker" style="margin-top:18px">
+          <span class="dot"></span> Transparence
+        </div>
+        <div class="footer-list">
+          <a href="mentions-legales.html">Mentions légales</a>
+          <a href="politique-confidentialite.html">Politique de confidentialité</a>
           <a href="#" onclick="localStorage.clear(); location.reload(); return false;">
             Réinitialiser mes choix cookies
           </a>
-        </li>
-      </ul>
+        </div>
+
+        <div class="small footer-copy">
+          © <span id="year"></span> Parlement JPV
+        </div>
+      </div>
+
     </div>
 
-    <!-- CONTACT -->
-    <div class="footer-col">
-      <h4>Contact</h4>
-      <ul>
-        <li><a href="mailto:parlementjpv@gmail.com">parlementjpv@gmail.com</a></li>
-        <li>
-          <a href="https://forms.gle/Rkm6GwJb6KDjzYUEA" target="_blank" rel="noopener">
-            Formulaire d’inscription
-          </a>
-        </li>
-        <li>
-          <a href="https://instagram.com/parlementjpv" target="_blank" rel="noopener">
-            Instagram
-          </a>
-        </li>
-      </ul>
-    </div>
+    <div class="footer-divider"></div>
 
-  </div>
-
-  <div class="footer-bottom">
-    © 2026 Parlement JPV — Tous droits réservés
+    <p class="small footer-note">
+      Parlement JPV — Lycée Jean-Pierre Vernant • Instance lycéenne de débat et d’engagement citoyen.
+    </p>
   </div>
 </footer>
+
