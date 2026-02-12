@@ -1,15 +1,31 @@
+:root{
+  --bg: #0b1220;        /* fond général */
+  --card: #0f1b2d;      /* fond cartes */
+  --border: rgba(255,255,255,.14);
+  --text: #eaf0ff;
+  --muted: rgba(234,240,255,.72);
+  --accent: #2f6bff;    /* bleu institutionnel */
+}
+
+/* Optionnel : si tu as un thème clair quelque part */
+body{
+  background: var(--bg);
+  color: var(--text);
+}
+
 /* =========================================================
-   MEMBER CARDS — ULTRA PREMIUM + MOBILE FIRST
+   MEMBER CARDS — ULTRA PREMIUM + MOBILE FIRST (ROBUSTE)
    ========================================================= */
 
 .member-card{
   position: relative;
   padding: 26px;
   border-radius: 26px;
-  background:
-    radial-gradient(1200px 480px at 10% 0%, rgba(255,255,255,.08), transparent 55%),
-    linear-gradient(180deg, color-mix(in srgb, var(--card) 96%, #000 4%), color-mix(in srgb, var(--bg) 92%, var(--card)));
-  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+
+  /* FALLBACK (compat max) */
+  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.18)), var(--card);
+  border: 1px solid var(--border);
+
   overflow: hidden;
   box-shadow: 0 14px 40px rgba(0,0,0,.10);
   transform: translateZ(0);
@@ -18,7 +34,20 @@
               border-color .55s cubic-bezier(.2,.9,.2,1);
 }
 
-/* Bordure “lumière” animée (très haut de gamme) */
+/* Si le navigateur supporte color-mix, on upgrade le rendu */
+@supports (color: color-mix(in srgb, #000 50%, #fff)){
+  .member-card{
+    background:
+      radial-gradient(1200px 480px at 10% 0%, rgba(255,255,255,.08), transparent 55%),
+      linear-gradient(180deg,
+        color-mix(in srgb, var(--card) 96%, #000 4%),
+        color-mix(in srgb, var(--bg) 92%, var(--card))
+      );
+    border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  }
+}
+
+/* Bordure “lumière” animée */
 .member-card::before{
   content:"";
   position:absolute;
@@ -31,7 +60,7 @@
       rgba(255,255,255,.16) 60%,
       transparent 70% 100%);
   filter: blur(10px);
-  opacity: .0;
+  opacity: 0;
   transition: opacity .6s ease;
   pointer-events:none;
 }
@@ -48,21 +77,31 @@
   pointer-events:none;
 }
 
-/* Hover desktop (lourd, mais propre) */
+/* Hover desktop */
 @media (hover:hover){
   .member-card:hover{
     transform: translateY(-10px) scale(1.012);
     box-shadow: 0 26px 70px rgba(0,0,0,.16);
-    border-color: color-mix(in srgb, var(--accent) 28%, var(--border));
+    border-color: rgba(47,107,255,.35); /* fallback */
+  }
+  @supports (color: color-mix(in srgb, #000 50%, #fff)){
+    .member-card:hover{
+      border-color: color-mix(in srgb, var(--accent) 28%, var(--border));
+    }
   }
   .member-card:hover::before{ opacity: .9; }
 }
 
-/* Focus clavier accessible */
+/* Focus clavier */
 .member-card:focus-within{
   outline: none;
-  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+  border-color: rgba(47,107,255,.55); /* fallback */
   box-shadow: 0 22px 64px rgba(0,0,0,.16);
+}
+@supports (color: color-mix(in srgb, #000 50%, #fff)){
+  .member-card:focus-within{
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+  }
 }
 .member-card:focus-within::before{ opacity: .95; }
 
@@ -78,9 +117,8 @@
   gap:16px;
 }
 
-/* Zone texte : meilleure densité */
 .member-meta{
-  min-width: 0; /* évite le débordement en flex */
+  min-width: 0;
 }
 
 .member-role{
@@ -88,11 +126,17 @@
   font-size: .92rem;
   font-weight: 650;
   letter-spacing: .2px;
-  color: color-mix(in srgb, var(--muted) 82%, var(--text));
+  color: var(--muted);
+}
+
+@supports (color: color-mix(in srgb, #000 50%, #fff)){
+  .member-role{
+    color: color-mix(in srgb, var(--muted) 82%, var(--text));
+  }
 }
 
 /* ======================
-   AVATAR — PREMIUM
+   AVATAR
    ====================== */
 
 .member-avatar{
@@ -102,7 +146,7 @@
   object-fit:cover;
   border: 2px solid rgba(255,255,255,.42);
   box-shadow: 0 14px 34px rgba(0,0,0,.18);
-  background: color-mix(in srgb, var(--card) 92%, transparent);
+  background: rgba(255,255,255,.03);
   transition: transform .55s cubic-bezier(.2,.9,.2,1), filter .55s ease;
 }
 
@@ -113,9 +157,8 @@
   }
 }
 
-
 /* ======================
-   NAME — AUTORITÉ + GRADIENT
+   NAME
    ====================== */
 
 .member-name{
@@ -125,28 +168,49 @@
   letter-spacing: .9px;
   text-transform: uppercase;
   line-height: 1.05;
-  background: linear-gradient(90deg,
-    color-mix(in srgb, var(--text) 95%, white),
-    color-mix(in srgb, var(--accent) 60%, var(--text)));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+
+  /* fallback */
+  color: var(--text);
 }
 
-/* petite ligne institutionnelle */
+/* Upgrade gradient texte si support */
+@supports (-webkit-background-clip: text){
+  .member-name{
+    background: linear-gradient(90deg, rgba(234,240,255,.95), rgba(47,107,255,.85));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  @supports (color: color-mix(in srgb, #000 50%, #fff)){
+    .member-name{
+      background: linear-gradient(90deg,
+        color-mix(in srgb, var(--text) 95%, white),
+        color-mix(in srgb, var(--accent) 60%, var(--text))
+      );
+    }
+  }
+}
+
 .member-divider{
   height:1px;
   width: 100%;
   margin: 14px 0 12px;
-  background: linear-gradient(90deg,
-    transparent,
-    color-mix(in srgb, var(--border) 80%, transparent),
-    transparent);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
   opacity: .9;
 }
 
+@supports (color: color-mix(in srgb, #000 50%, #fff)){
+  .member-divider{
+    background: linear-gradient(90deg,
+      transparent,
+      color-mix(in srgb, var(--border) 80%, transparent),
+      transparent
+    );
+  }
+}
 
 /* ======================
-   TAGS — “BADGES” PRO
+   TAGS
    ====================== */
 
 .member-tags{
@@ -164,26 +228,41 @@
   border-radius:999px;
   letter-spacing: .7px;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--text) 86%, var(--accent));
-  background:
-    linear-gradient(180deg,
-      color-mix(in srgb, var(--accent) 14%, transparent),
-      color-mix(in srgb, var(--accent) 8%, transparent));
-  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+
+  /* fallback */
+  color: rgba(234,240,255,.88);
+  background: rgba(47,107,255,.12);
+  border: 1px solid rgba(47,107,255,.28);
+
   box-shadow: 0 10px 22px rgba(0,0,0,.06);
   transition: transform .45s cubic-bezier(.2,.9,.2,1), border-color .45s ease;
 }
 
-@media (hover:hover){
-  .member-card:hover .member-tags span{
-    border-color: color-mix(in srgb, var(--accent) 48%, transparent);
-    transform: translateY(-1px);
+@supports (color: color-mix(in srgb, #000 50%, #fff)){
+  .member-tags span{
+    color: color-mix(in srgb, var(--text) 86%, var(--accent));
+    background:
+      linear-gradient(180deg,
+        color-mix(in srgb, var(--accent) 14%, transparent),
+        color-mix(in srgb, var(--accent) 8%, transparent));
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
   }
 }
 
+@media (hover:hover){
+  .member-card:hover .member-tags span{
+    border-color: rgba(47,107,255,.45); /* fallback */
+    transform: translateY(-1px);
+  }
+  @supports (color: color-mix(in srgb, #000 50%, #fff)){
+    .member-card:hover .member-tags span{
+      border-color: color-mix(in srgb, var(--accent) 48%, transparent);
+    }
+  }
+}
 
 /* =========================================================
-   PRESIDENT — “CHEF D’INSTITUTION”
+   PRESIDENT
    ========================================================= */
 
 .member--president{
@@ -195,7 +274,6 @@
   box-shadow: 0 26px 90px rgba(0,0,0,.34);
 }
 
-/* Halo doré en coin */
 .member--president::after{
   content:"";
   position:absolute;
@@ -204,7 +282,6 @@
   pointer-events:none;
 }
 
-/* Ruban Président (vraiment premium) */
 .member--president .member-ribbon{
   position:absolute;
   top:18px;
@@ -220,7 +297,6 @@
   box-shadow: 0 10px 26px rgba(0,0,0,.35);
 }
 
-/* Hover président : glow contrôlé */
 @media (hover:hover){
   .member--president:hover{
     box-shadow: 0 34px 110px rgba(212,175,55,.32), 0 28px 90px rgba(0,0,0,.35);
@@ -229,12 +305,10 @@
   .member--president:hover::before{ opacity: 1; }
 }
 
-
 /* =========================================================
-   MOBILE — VRAIE VERSION MOBILE (pas juste “un peu plus grand”)
+   MOBILE
    ========================================================= */
 
-/* Tablettes / mobiles : layout stable et tactile */
 @media (max-width: 860px){
   .member-card{
     padding: 20px;
@@ -246,7 +320,6 @@
     gap: 14px;
   }
 
-  /* Avatar à gauche, texte fluide */
   .member-avatar{
     width:78px;
     height:78px;
@@ -254,7 +327,6 @@
     flex: 0 0 auto;
   }
 
-  /* Nom plus lisible, moins “écrasant” */
   .member-name{
     font-size: 1.12rem;
     letter-spacing: .6px;
@@ -269,7 +341,6 @@
     padding: 7px 11px;
   }
 
-  /* Ruban président repositionné (sinon ça déborde) */
   .member--president .member-ribbon{
     top: 14px;
     right: -64px;
@@ -277,11 +348,10 @@
     font-size: .70rem;
   }
 
-  /* Pas d’effet hover inutile sur mobile */
+  /* pas d’hover forcé sur mobile */
   .member-card{ transform:none; }
 }
 
-/* Très petit mobile */
 @media (max-width: 420px){
   .member-card{
     padding: 18px;
@@ -306,12 +376,8 @@
   }
 }
 
-/* Préférence utilisateur : réduire animations */
 @media (prefers-reduced-motion: reduce){
   .member-card, .member-avatar, .member-tags span{
     transition: none !important;
   }
 }
-
-
-
