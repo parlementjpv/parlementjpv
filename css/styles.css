@@ -385,3 +385,123 @@ iframe.calendar{
 .site-footer{
   margin-top: 80px;
   background: linear-gradient(180deg, rgba(255,255,255,.0
+
+                                           /* ===============================
+   FOOTER — VERSION PREMIUM
+=================================*/
+
+.site-footer{
+  background: linear-gradient(180deg, #0b1d36 0%, #081426 100%);
+  color: #eaf0ff;
+  padding: 80px 0 30px;
+  margin-top: 100px;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+
+.footer-container{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+}
+
+/* Logo + identité */
+.footer-brand{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+
+.footer-logo{
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.footer-desc{
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255,255,255,.75);
+  max-width: 280px;
+}
+
+.footer-founded{
+  margin-top: 18px;
+  font-size: 12px;
+  color: rgba(255,255,255,.4);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Colonnes */
+.footer-col h4{
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 18px;
+  color: rgba(255,255,255,.6);
+}
+
+.footer-col ul{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-col ul li{
+  margin-bottom: 12px;
+}
+
+.footer-col a{
+  text-decoration: none;
+  font-size: 14px;
+  color: rgba(255,255,255,.75);
+  transition: all .25s ease;
+}
+
+.footer-col a:hover{
+  color: #d4af37;
+  transform: translateX(4px);
+}
+
+/* Ligne du bas */
+.footer-bottom{
+  margin-top: 70px;
+  padding-top: 20px;
+  text-align: center;
+  font-size: 13px;
+  color: rgba(255,255,255,.5);
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+@media (max-width: 900px){
+
+  .footer-container{
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+}
+
+@media (max-width: 600px){
+
+  .footer-container{
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .footer-desc{
+    margin: 0 auto;
+  }
+
+  .footer-brand{
+    justify-content: center;
+  }
+
+}
