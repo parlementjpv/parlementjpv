@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="fr" dir="ltr">
 <head>
@@ -17,19 +16,6 @@
   <link rel="icon" href="assets/img/favicon.png" sizes="any" />
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png" />
 
-  <!-- Social -->
-  <meta property="og:title" content="Parlement JPV — Lycée Jean-Pierre Vernant" />
-  <meta property="og:description" content="Débats, éloquence, conférences, initiatives citoyennes. Une instance lycéenne ambitieuse et structurée." />
-  <meta property="og:image" content="assets/img/og.jpg" />
-  <meta property="og:type" content="website" />
-  <meta property="og:locale" content="fr_FR" />
-  <meta property="og:url" content="https://parlementjpv.github.io/parlementjpv/" />
-  <meta name="twitter:card" content="summary_large_image" />
-
-  <!-- Perf (si Google Fonts dans styles.css) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
   <!-- CSS -->
   <link rel="stylesheet" href="css/styles.css" />
 
@@ -39,57 +25,27 @@
     "@context":"https://schema.org",
     "@type":"Organization",
     "name":"Parlement JPV",
-    "description":"Instance lycéenne de débat et d’engagement citoyen au Lycée Jean-Pierre Vernant (Sèvres).",
     "logo":"https://parlementjpv.github.io/parlementjpv/assets/img/logo.png",
-    "url":"https://parlementjpv.github.io/parlementjpv/",
-    "sameAs":[
-      "https://instagram.com/parlementjpv"
-    ]
+    "url":"https://parlementjpv.github.io/parlementjpv/"
   }
   </script>
 </head>
 
 <body>
+
   <!-- HEADER -->
   <header class="header" role="banner">
-    <div class="container">
-      <div class="nav">
-        <a class="brand" href="index.html" aria-label="Accueil Parlement JPV">
-          <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44" />
-          <div class="brand-text">
-            <div class="title">Parlement JPV</div>
-            <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
-          </div>
-        </a>
-
-        <nav class="nav-links" aria-label="Navigation principale">
-          <a href="institution.html">L’institution</a>
-          <a href="rapports.html">Rapports</a>
-          <a href="galerie.html">Galerie</a>
-          <a href="media.html">Médias</a>
-          <a href="rejoindre.html">Rejoindre</a>
-          <a href="contact.html">Contact</a>
-          <a href="qui-sommes-nous.html">Qui sommes-nous</a>
-        </nav>
-
-        <div class="nav-actions">
-          <button class="icon-btn" type="button" onclick="toggleTheme()" aria-label="Basculer le thème" title="Thème">☾</button>
-
-          <button
-            class="icon-btn burger"
-            type="button"
-            onclick="toggleMobile()"
-            aria-label="Ouvrir le menu"
-            aria-controls="mobileNav"
-            aria-expanded="false"
-            id="mobileNavBtn"
-            title="Menu"
-          >☰</button>
+    <div class="container nav">
+      
+      <a class="brand" href="index.html">
+        <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44">
+        <div>
+          <div class="title">Parlement JPV</div>
+          <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
         </div>
-      </div>
+      </a>
 
-      <!-- MOBILE NAV -->
-      <nav id="mobileNav" class="mobile" aria-label="Menu mobile" hidden>
+      <nav class="nav-links" aria-label="Navigation principale">
         <a href="institution.html">L’institution</a>
         <a href="rapports.html">Rapports</a>
         <a href="galerie.html">Galerie</a>
@@ -97,264 +53,146 @@
         <a href="rejoindre.html">Rejoindre</a>
         <a href="contact.html">Contact</a>
         <a href="qui-sommes-nous.html">Qui sommes-nous</a>
-        <a href="charte.html">Charte</a>
-
-        <div class="line" role="separator" aria-hidden="true"></div>
-
-        <a
-          href="https://docs.google.com/forms/d/e/1FAIpQLSdQ86QZ8sMoY7YgOhT6DBMy5KG85yfm65O6BWMmFp7bzuorqg/viewform?usp=header"
-          target="_blank"
-          rel="noopener"
-        >Candidater (Formulaire)</a>
       </nav>
+
+      <div class="nav-actions">
+        <button class="icon-btn" type="button" onclick="toggleTheme()" aria-label="Basculer le thème">☾</button>
+
+        <button
+          class="icon-btn burger"
+          type="button"
+          aria-label="Ouvrir le menu"
+          aria-controls="mobileNav"
+          aria-expanded="false"
+          id="mobileNavBtn"
+        >☰</button>
+      </div>
     </div>
+
+    <!-- MOBILE NAV -->
+    <nav id="mobileNav" class="mobile-nav" hidden>
+      <a href="institution.html">L’institution</a>
+      <a href="rapports.html">Rapports</a>
+      <a href="galerie.html">Galerie</a>
+      <a href="media.html">Médias</a>
+      <a href="rejoindre.html">Rejoindre</a>
+      <a href="contact.html">Contact</a>
+      <a href="qui-sommes-nous.html">Qui sommes-nous</a>
+      <a href="charte.html">Charte</a>
+    </nav>
   </header>
 
-  <main id="contenu">
+  <main>
+
     <!-- HERO -->
-    <section class="hero" aria-label="Présentation">
-      <div class="container">
-        <div class="hero-wrap">
-          <!-- TEXTE -->
-          <div class="card hero-card">
-            <span class="badge">Instance lycéenne — Débat, éloquence, initiatives</span>
+    <section class="hero">
+      <div class="container hero-wrap">
 
-            <div class="kicker" style="margin-top:12px">Parlement JPV</div>
-            <h1>Une institution lycéenne structurée, exigeante et tournée vers l’action.</h1>
+        <div class="card hero-card">
+          <span class="badge">Instance lycéenne — Débat & éloquence</span>
 
-            <p>
-              Le Parlement JPV organise des débats, des conférences et des exercices d’éloquence
-              pour former des élèves capables d’argumenter, décider et agir — avec rigueur, méthode et ambition.
-            </p>
+          <h1>Une institution lycéenne structurée et ambitieuse.</h1>
 
-            <p class="small">
-              Cadre : respect, neutralité et ouverture à tous les élèves.
-            </p>
-
-            <div class="btns">
-              <a class="btn btn-primary" href="rapports.html">📄 Rapports officiels</a>
-              <a class="btn btn-gold" href="rejoindre.html">📝 Rejoindre</a>
-              <a class="btn btn-ghost" href="charte.html">📌 Lire la charte</a>
-            </div>
-
-            <div class="stats" aria-label="Indicateurs d’impact">
-              <div class="stat"><div class="n" id="statParticipants">—</div><div class="l">inscrits</div></div>
-              <div class="stat"><div class="n" id="statDebates">—</div><div class="l">débats</div></div>
-              <div class="stat"><div class="n" id="statConfs">—</div><div class="l">conférences à venir</div></div>
-              <div class="stat"><div class="n" id="statActions">—</div><div class="l">actions</div></div>
-            </div>
-          </div>
-
-         <!-- PHOTO -->
-<figure class="card hero-side hero-side--bleed">
-  <img
-    src="assets/img/hero.jpg"
-    alt="Séance du Parlement JPV"
-    loading="lazy"
-    decoding="async"
-  />
-
-<div class="overlay" aria-hidden="true"></div>
-
-<div class="hero-photo-text" aria-hidden="true">
-  <div class="hero-photo-badge">Événement</div>
-  <div class="hero-photo-title">Débat du lundi 09 fév.</div>
-  <div class="Trump, Xi ou Poutine : l’Europe est-elle condamnée à choisir ?</div>
-</div>
-
-  <figcaption class="sr-only">Parlement JPV — photo d’activité</figcaption>
-</figure>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- UPCOMING -->
-    <section class="section-tight" aria-label="Événements à venir">
-      <div class="container">
-        <div class="grid grid-2">
-          <article class="card">
-            <div class="kicker">À venir</div>
-            <h2>Prochains événements</h2>
-            <div id="upcomingEvents" class="list" aria-live="polite"></div>
-            <div class="btns" style="margin-top:14px">
-              <a class="btn btn-ghost" href="media.html">Voir les médias</a>
-              <a class="btn btn-primary" href="rejoindre.html">Participer</a>
-            </div>
-          </article>
-
-          <article class="card">
-            <div class="kicker">Accès rapide</div>
-            <h2>Documents & transparence</h2>
-            <p class="small">
-              Ordres du jour, comptes rendus, suivis d’actions : tout est centralisé et consultable.
-            </p>
-            <div class="btns" style="margin-top:14px">
-              <a class="btn btn-primary" href="rapports.html">📄 Tous les rapports</a>
-              <a class="btn btn-ghost" href="institution.html">🏛 Fonctionnement</a>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- PILLARS -->
-    <section class="section" aria-label="Méthode">
-      <div class="container">
-        <div class="kicker">Notre méthode</div>
-        <h2>Exigence, structure, impact.</h2>
-
-        <div class="grid grid-3" style="margin-top:14px">
-          <article class="card">
-            <h3>Débats à haut niveau</h3>
-            <p>Format structuré : thèses, preuves, réfutation, synthèse et décisions. Pas de blabla.</p>
-          </article>
-
-          <article class="card">
-            <h3>Éloquence & rigueur</h3>
-            <p>Exercices (avocat du diable, cross-exam, discours) + feedback exigeant.</p>
-          </article>
-
-          <article class="card">
-            <h3>Traçabilité institutionnelle</h3>
-            <p>Rapports, suivi d’actions, comptes rendus : tout est archivé et public.</p>
-          </article>
-        </div>
-
-        <div class="btns" style="margin-top:14px">
-          <a class="btn btn-primary" href="institution.html">🏛 Comprendre l’institution</a>
-          <a class="btn btn-ghost" href="galerie.html">📸 Voir la galerie</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- REPORTS PREVIEW -->
-    <section class="section-tight" aria-label="Rapports">
-      <div class="container">
-        <div class="card">
-          <div class="kicker">Transparence</div>
-          <h2>Rapports officiels</h2>
-          <p class="small">Accédez aux rapports et comptes rendus publiés.</p>
-          <div class="btns">
-            <a class="btn btn-primary" href="rapports.html">📄 Voir tous les rapports</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- JOIN CTA -->
-    <section class="section" aria-label="Candidature">
-      <div class="container">
-        <div class="card">
-          <div class="kicker">Candidature</div>
-          <h2>Rejoindre le Parlement JPV</h2>
           <p>
-            Toute candidature est étudiée par le bureau.
-            Vous serez recontacté par courriel.
+            Le Parlement JPV organise débats, conférences et exercices
+            d’éloquence pour former des élèves capables d’argumenter,
+            décider et agir avec rigueur.
           </p>
+
           <div class="btns">
-            <a class="btn btn-gold" href="rejoindre.html">📝 Candidater</a>
-            <a
-              class="btn btn-ghost"
-              href="https://docs.google.com/forms/d/e/1FAIpQLSdQ86QZ8sMoY7YgOhT6DBMy5KG85yfm65O6BWMmFp7bzuorqg/viewform?usp=header"
-              target="_blank"
-              rel="noopener"
-            >Ouvrir le formulaire</a>
+            <a class="btn btn-primary" href="rapports.html">📄 Rapports officiels</a>
+            <a class="btn btn-gold" href="rejoindre.html">📝 Rejoindre</a>
+            <a class="btn btn-ghost" href="charte.html">📌 Lire la charte</a>
           </div>
         </div>
+
+        <!-- PHOTO -->
+        <figure class="card hero-side">
+          <img
+            src="assets/img/hero.jpg"
+            alt="Séance du Parlement JPV"
+            loading="lazy"
+            decoding="async"
+          >
+
+          <div class="overlay"></div>
+
+          <div class="hero-photo-text">
+            <div class="hero-photo-badge">Événement</div>
+            <div class="hero-photo-title">Débat du lundi 09 fév.</div>
+            <div class="hero-photo-subtitle">
+              Trump, Xi ou Poutine : l’Europe est-elle condamnée à choisir ?
+            </div>
+          </div>
+        </figure>
+
       </div>
     </section>
+
   </main>
 
   <!-- FOOTER -->
-    <div class="site-header" role="banner">
-    <div class="container">
-      <div class="nav">
-        <a class="brand" href="index.html">
-          <!-- logo du header = pas lazy, sinon micro flash possible -->
-          <img src="assets/img/logo.png" alt="Logo Parlement JPV" decoding="async">
+  <footer class="footer" role="contentinfo">
+    <div class="container footer-grid">
+
+      <div>
+        <div class="brand">
+          <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="40">
           <div>
             <div class="title">Parlement JPV</div>
             <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
           </div>
-        </a>
-
-        <nav class="nav-links" aria-label="Pages">
-          <a href="institution.html">L’institution</a>
-          <a href="rapports.html">Rapports</a>
-          <a href="galerie.html">Galerie</a>
-          <a href="media.html">Médias</a>
-          <a href="charte.html">Charte</a>
-          <a class="primary" href="qui-sommes-nous.html" aria-current="page">Qui sommes-nous</a>
-          <a href="rejoindre.html">Rejoindre</a>
-        </nav>
-
-        <button
-          id="mobileNavBtn"
-          class="mobile-btn"
-          type="button"
-          aria-label="Ouvrir le menu"
-          aria-expanded="false"
-          aria-controls="mobileNav"
-          onclick="toggleMobile()"
-        >
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </button>
+        </div>
+        <p class="small">
+          Instance lycéenne de débat, d’engagement citoyen et d’initiatives structurées.
+        </p>
       </div>
 
-      <nav id="mobileNav" class="mobile-nav" aria-label="Menu mobile" hidden>
-        <a href="institution.html">L’institution</a>
-        <a href="rapports.html">Rapports</a>
-        <a href="galerie.html">Galerie</a>
-        <a href="media.html">Médias</a>
+      <div>
+        <h4>Navigation</h4>
+        <a href="institution.html">L’institution</a><br>
+        <a href="rapports.html">Rapports</a><br>
         <a href="charte.html">Charte</a>
-        <a href="qui-sommes-nous.html" aria-current="page">Qui sommes-nous</a>
-        <a href="rejoindre.html">Rejoindre</a>
-        <a href="contact.html">Contact</a>
-      </nav>
-    </div>
-  </div>
+      </div>
 
-  <noscript>
-    <div class="container" style="padding: 12px 0;">
-      <p class="small">Certaines fonctionnalités (menu, thème, événements) nécessitent JavaScript.</p>
+      <div>
+        <h4>Contact</h4>
+        <a href="contact.html">Nous écrire</a>
+      </div>
+
     </div>
-  </noscript>
+
+    <div class="footer-bottom">
+      © <span id="year"></span> Parlement JPV
+    </div>
+  </footer>
 
   <script src="js/main.js" defer></script>
+
   <script>
-    // Année
-    document.getElementById("year").textContent = new Date().getFullYear();
+    // Année automatique
+    const yearEl = document.getElementById("year");
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-    // Menu mobile : synchronise aria-expanded + hidden
-    (function () {
-      const btn = document.getElementById("mobileNavBtn");
-      const nav = document.getElementById("mobileNav");
-      if (!btn || !nav) return;
+    // Menu mobile propre
+    const btn = document.getElementById("mobileNavBtn");
+    const nav = document.getElementById("mobileNav");
 
-      if (typeof window.toggleMobile !== "function") {
-        window.toggleMobile = function () {
-          const isOpen = btn.getAttribute("aria-expanded") === "true";
-          btn.setAttribute("aria-expanded", String(!isOpen));
-          nav.hidden = isOpen;
-        };
-      }
-
-      nav.addEventListener("click", (e) => {
-        const a = e.target.closest("a");
-        if (!a) return;
-        btn.setAttribute("aria-expanded", "false");
-        nav.hidden = true;
+    if (btn && nav) {
+      btn.addEventListener("click", () => {
+        const isOpen = btn.getAttribute("aria-expanded") === "true";
+        btn.setAttribute("aria-expanded", String(!isOpen));
+        nav.hidden = isOpen;
       });
 
       document.addEventListener("keydown", (e) => {
-        if (e.key !== "Escape") return;
-        btn.setAttribute("aria-expanded", "false");
-        nav.hidden = true;
+        if (e.key === "Escape") {
+          btn.setAttribute("aria-expanded", "false");
+          nav.hidden = true;
+        }
       });
-    })();
+    }
   </script>
+
 </body>
 </html>
