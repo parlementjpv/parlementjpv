@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="fr" dir="ltr">
 <head>
@@ -12,22 +13,31 @@
   <link rel="canonical" href="https://parlementjpv.github.io/parlementjpv/" />
   <meta name="robots" content="index,follow" />
 
-  <!-- Icons -->
-  <link rel="icon" href="assets/img/favicon.png" sizes="any" />
-  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png" />
+  <!-- Icons (multi-plateformes) -->
+  <link rel="icon" href="assets/img/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png" />
+  <link rel="manifest" href="site.webmanifest" />
 
   <!-- Social -->
   <meta property="og:title" content="Parlement JPV — Lycée Jean-Pierre Vernant" />
   <meta property="og:description" content="Débats, éloquence, conférences, initiatives citoyennes. Une instance lycéenne ambitieuse et structurée." />
-  <meta property="og:image" content="assets/img/og.jpg" />
+  <meta property="og:image" content="assets/img/og-1200x630.jpg" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="fr_FR" />
   <meta property="og:url" content="https://parlementjpv.github.io/parlementjpv/" />
   <meta name="twitter:card" content="summary_large_image" />
 
+  <!-- Fonts (cohérence visuelle) -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+
   <!-- Perf -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Hero preload (mobile/desktop) -->
+  <link rel="preload" as="image" href="assets/img/opt/hero-960.webp" imagesrcset="assets/img/opt/hero-640.webp 640w, assets/img/opt/hero-960.webp 960w, assets/img/opt/hero-1280.webp 1280w" imagesizes="(max-width: 860px) 100vw, 40vw">
 
   <!-- CSS -->
   <link rel="stylesheet" href="css/styles.css" />
@@ -49,6 +59,9 @@
 </head>
 
 <body>
+  <!-- Skip link (accessibilité) -->
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+
   <!-- COOKIE BANNER -->
   <div id="cookieBanner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Consentement cookies" hidden>
     <div class="cookie-card">
@@ -71,7 +84,18 @@
     <div class="container">
       <div class="nav">
         <a class="brand" href="index.html" aria-label="Accueil Parlement JPV">
-          <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44" />
+          <picture>
+            <source srcset="assets/img/opt/logo-96.webp 96w, assets/img/opt/logo-160.webp 160w, assets/img/opt/logo-256.webp 256w" type="image/webp" />
+            <img
+              src="assets/img/logo-160.png"
+              srcset="assets/img/logo-160.png 160w, assets/img/logo-320.png 320w"
+              sizes="44px"
+              alt="Logo Parlement JPV"
+              width="44"
+              height="44"
+              decoding="async"
+            />
+          </picture>
           <div class="brand-text">
             <div class="title">Parlement JPV</div>
             <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
@@ -89,7 +113,9 @@
         </nav>
 
         <div class="nav-actions">
-          <button class="icon-btn" type="button" id="themeBtn" aria-label="Basculer le thème" title="Thème">☾</button>
+          <button class="icon-btn" type="button" id="themeBtn" aria-label="Basculer le thème" title="Thème">
+            <span class="icon" aria-hidden="true">☾</span>
+          </button>
 
           <button
             class="icon-btn burger"
@@ -162,12 +188,19 @@
 
           <!-- PHOTO -->
           <figure class="card hero-side hero-side--bleed">
-            <img
-              src="assets/img/hero.jpg"
-              alt="Séance du Parlement JPV"
-              loading="lazy"
-              decoding="async"
-            />
+            <picture>
+              <source
+                type="image/webp"
+                srcset="assets/img/opt/hero-640.webp 640w, assets/img/opt/hero-960.webp 960w, assets/img/opt/hero-1280.webp 1280w"
+                sizes="(max-width: 860px) 100vw, 40vw"
+              />
+              <img
+                src="assets/img/hero.jpg"
+                alt="Séance du Parlement JPV"
+                loading="eager"
+                decoding="async"
+              />
+            </picture>
 
             <div class="overlay" aria-hidden="true"></div>
 
@@ -287,7 +320,18 @@
 
         <div class="footer-col footer-brand-col">
           <a class="brand footer-brand" href="index.html" aria-label="Accueil Parlement JPV">
-            <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44" decoding="async" />
+            <picture>
+              <source srcset="assets/img/opt/logo-96.webp 96w, assets/img/opt/logo-160.webp 160w, assets/img/opt/logo-256.webp 256w" type="image/webp" />
+              <img
+                src="assets/img/logo-160.png"
+                srcset="assets/img/logo-160.png 160w, assets/img/logo-320.png 320w"
+                sizes="44px"
+                alt="Logo Parlement JPV"
+                width="44"
+                height="44"
+                decoding="async"
+              />
+            </picture>
             <div>
               <div class="title">Parlement JPV</div>
               <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
@@ -343,95 +387,7 @@
     </div>
   </footer>
 
-  <!-- JS (propre, stable) -->
-  <script>
-    // ===== Year
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    // ===== Theme (respect cookie consent)
-    const root = document.documentElement;
-    const themeBtn = document.getElementById("themeBtn");
-
-    function applyTheme(next){
-      root.setAttribute("data-theme", next);
-      // On stocke seulement si consentement
-      if (localStorage.getItem("cookieConsent") === "accepted") {
-        localStorage.setItem("theme", next);
-      }
-    }
-
-    function toggleTheme(){
-      const current = root.getAttribute("data-theme") || "light";
-      const next = current === "dark" ? "light" : "dark";
-      applyTheme(next);
-    }
-
-    themeBtn?.addEventListener("click", toggleTheme);
-
-    // Init theme
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme) root.setAttribute("data-theme", savedTheme);
-
-    // ===== Mobile nav
-    const mobileNav = document.getElementById("mobileNav");
-    const mobileBtn = document.getElementById("mobileNavBtn");
-
-    function setMobile(open){
-      if (!mobileNav || !mobileBtn) return;
-      mobileNav.classList.toggle("open", open);
-      mobileNav.hidden = !open;
-      mobileBtn.setAttribute("aria-expanded", String(open));
-    }
-
-    mobileBtn?.addEventListener("click", () => {
-      const open = !mobileNav.classList.contains("open");
-      setMobile(open);
-    });
-
-    // Ferme le menu si on clique un lien
-    mobileNav?.addEventListener("click", (e) => {
-      const a = e.target.closest("a");
-      if (a) setMobile(false);
-    });
-
-    // Ferme si on repasse en desktop
-    window.addEventListener("resize", () => {
-      if (window.matchMedia("(min-width: 901px)").matches) setMobile(false);
-    });
-
-    // ===== Cookies consent
-    const banner = document.getElementById("cookieBanner");
-    const accept = document.getElementById("cookieAccept");
-    const decline = document.getElementById("cookieDecline");
-    const reset = document.getElementById("cookieReset");
-
-    function showBannerIfNeeded(){
-      const consent = localStorage.getItem("cookieConsent");
-      if (!consent) banner.hidden = false;
-    }
-
-    function setConsent(value){
-      localStorage.setItem("cookieConsent", value);
-      banner.hidden = true;
-
-      // si refus, on purge ce qui est "non essentiel"
-      if (value !== "accepted"){
-        localStorage.removeItem("theme");
-        root.removeAttribute("data-theme");
-      }
-    }
-
-    accept?.addEventListener("click", () => setConsent("accepted"));
-    decline?.addEventListener("click", () => setConsent("declined"));
-    reset?.addEventListener("click", (e) => {
-      e.preventDefault();
-      localStorage.removeItem("cookieConsent");
-      localStorage.removeItem("theme");
-      root.removeAttribute("data-theme");
-      showBannerIfNeeded();
-    });
-
-    showBannerIfNeeded();
-  </script>
+  <!-- JS (unique, robuste, partagé) -->
+  <script src="js/app.js" defer></script>
 </body>
 </html>
