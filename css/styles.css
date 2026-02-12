@@ -335,3 +335,44 @@ iframe.calendar{
   #galleryBlocks .grid-3{ grid-template-columns: 1fr; }
   #galleryBlocks img{ height:220px; }
 }
+
+/* ====== Member cards (Qui sommes-nous) ====== */
+.member-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:14px;
+}
+
+.member-tags{margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;}
+
+.member-avatar{
+  width:72px;
+  height:72px;
+  border-radius:16px;
+  object-fit:cover;
+  border:1px solid var(--border);
+  box-shadow: var(--shadow);
+  background: color-mix(in srgb, var(--card) 92%, transparent);
+}
+
+/* Nom un peu plus “leadership” */
+.member-name{
+  margin: 12px 0 6px;
+  color: var(--text);
+  font-weight: 900;
+}
+
+/* Mise en avant Président */
+.member--president{
+  border: 1px solid rgba(212,175,55,.35);
+  background:
+    radial-gradient(900px 420px at 10% 10%, rgba(212,175,55,.14), transparent 45%),
+    linear-gradient(180deg, var(--card), color-mix(in srgb, var(--card) 88%, var(--bg)));
+}
+
+/* Mobile: avatar un peu plus grand */
+@media (max-width: 860px){
+  .member-avatar{ width:84px; height:84px; }
+}
+
