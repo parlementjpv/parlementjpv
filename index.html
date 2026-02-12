@@ -25,7 +25,7 @@
   <meta property="og:url" content="https://parlementjpv.github.io/parlementjpv/" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <!-- Perf (si Google Fonts dans styles.css) -->
+  <!-- Perf -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
@@ -47,23 +47,25 @@
   }
   </script>
 </head>
-<div id="cookieBanner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Consentement cookies" hidden>
-  <div class="cookie-card">
-    <div class="cookie-text">
-      <strong>Cookies</strong>
-      <p class="small">
-        Nous utilisons des cookies uniquement pour améliorer l’expérience (ex : mémoriser le thème).  
-        Tu peux accepter ou refuser.
-      </p>
-    </div>
-    <div class="cookie-actions">
-      <button class="btn btn-ghost" id="cookieDecline" type="button">Refuser</button>
-      <button class="btn btn-primary" id="cookieAccept" type="button">Accepter</button>
-    </div>
-  </div>
-</div>
 
 <body>
+  <!-- COOKIE BANNER -->
+  <div id="cookieBanner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Consentement cookies" hidden>
+    <div class="cookie-card">
+      <div class="cookie-text">
+        <strong>Cookies</strong>
+        <p class="small">
+          Nous utilisons des cookies uniquement pour améliorer l’expérience (ex : mémoriser le thème).
+          Tu peux accepter ou refuser.
+        </p>
+      </div>
+      <div class="cookie-actions">
+        <button class="btn btn-ghost" id="cookieDecline" type="button">Refuser</button>
+        <button class="btn btn-primary" id="cookieAccept" type="button">Accepter</button>
+      </div>
+    </div>
+  </div>
+
   <!-- HEADER -->
   <header class="header" role="banner">
     <div class="container">
@@ -87,16 +89,15 @@
         </nav>
 
         <div class="nav-actions">
-          <button class="icon-btn" type="button" onclick="toggleTheme()" aria-label="Basculer le thème" title="Thème">☾</button>
+          <button class="icon-btn" type="button" id="themeBtn" aria-label="Basculer le thème" title="Thème">☾</button>
 
           <button
             class="icon-btn burger"
             type="button"
-            onclick="toggleMobile()"
+            id="mobileNavBtn"
             aria-label="Ouvrir le menu"
             aria-controls="mobileNav"
             aria-expanded="false"
-            id="mobileNavBtn"
             title="Menu"
           >☰</button>
         </div>
@@ -159,26 +160,25 @@
             </div>
           </div>
 
-         <!-- PHOTO -->
-<figure class="card hero-side hero-side--bleed">
-  <img
-    src="assets/img/hero.jpg"
-    alt="Séance du Parlement JPV"
-    loading="lazy"
-    decoding="async"
-  />
+          <!-- PHOTO -->
+          <figure class="card hero-side hero-side--bleed">
+            <img
+              src="assets/img/hero.jpg"
+              alt="Séance du Parlement JPV"
+              loading="lazy"
+              decoding="async"
+            />
 
-<div class="overlay" aria-hidden="true"></div>
+            <div class="overlay" aria-hidden="true"></div>
 
-<div class="hero-photo-text" aria-hidden="true">
-  <div class="hero-photo-badge">Événement</div>
-  <div class="hero-photo-title">Débat du lundi 09 fév.</div>
-  <div class="Trump, Xi ou Poutine : l’Europe est-elle condamnée à choisir ?</div>
-</div>
+            <div class="hero-photo-text" aria-hidden="true">
+              <div class="hero-photo-badge">Événement</div>
+              <div class="hero-photo-title">Débat du lundi 09 fév.</div>
+              <div class="hero-photo-subtitle">Trump, Xi ou Poutine : l’Europe est-elle condamnée à choisir ?</div>
+            </div>
 
-  <figcaption class="sr-only">Parlement JPV — photo d’activité</figcaption>
-</figure>
-
+            <figcaption class="sr-only">Parlement JPV — photo d’activité</figcaption>
+          </figure>
         </div>
       </div>
     </section>
@@ -281,70 +281,157 @@
   </main>
 
   <!-- FOOTER -->
-<footer class="footer" role="contentinfo">
-  <div class="container">
-    <div class="footer-grid">
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
 
-      <!-- IDENTITÉ -->
-      <div class="footer-col footer-brand-col">
-        <a class="brand footer-brand" href="index.html" aria-label="Accueil Parlement JPV">
-          <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44" decoding="async" />
-          <div>
-            <div class="title">Parlement JPV</div>
-            <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
-          </div>
-        </a>
-
-        <p class="small footer-desc">
-          Instance lycéenne de débat, d’engagement citoyen et d’initiatives structurées.
-        </p>
-      </div>
-
-      <!-- PAGES -->
-      <div class="footer-col">
-        <div class="kicker footer-kicker"><span class="dot"></span> Pages</div>
-        <nav class="footer-list" aria-label="Liens du site">
-          <a href="institution.html">L’institution</a>
-          <a href="rapports.html">Rapports</a>
-          <a href="galerie.html">Galerie</a>
-          <a href="media.html">Médias</a>
-          <a href="charte.html">Charte</a>
-          <a href="qui-sommes-nous.html">Qui sommes-nous</a>
-        </nav>
-      </div>
-
-      <!-- CONTACT & TRANSPARENCE -->
-      <div class="footer-col">
-        <div class="kicker footer-kicker"><span class="dot"></span> Contact</div>
-        <div class="footer-list">
-          <a href="rejoindre.html">Rejoindre</a>
-          <a href="contact.html">Contact</a>
-          <a href="https://instagram.com/parlementjpv" target="_blank" rel="noopener">Instagram</a>
-        </div>
-
-        <div class="kicker footer-kicker" style="margin-top:18px">
-          <span class="dot"></span> Transparence
-        </div>
-        <div class="footer-list">
-          <a href="mentions-legales.html">Mentions légales</a>
-          <a href="politique-confidentialite.html">Politique de confidentialité</a>
-          <a href="#" onclick="localStorage.clear(); location.reload(); return false;">
-            Réinitialiser mes choix cookies
+        <div class="footer-col footer-brand-col">
+          <a class="brand footer-brand" href="index.html" aria-label="Accueil Parlement JPV">
+            <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44" decoding="async" />
+            <div>
+              <div class="title">Parlement JPV</div>
+              <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
+            </div>
           </a>
+
+          <p class="small footer-desc">
+            Instance lycéenne de débat, d’engagement citoyen et d’initiatives structurées.
+          </p>
         </div>
 
-        <div class="small footer-copy">
-          © <span id="year"></span> Parlement JPV
+        <div class="footer-col">
+          <div class="kicker footer-kicker"><span class="dot"></span> Pages</div>
+          <nav class="footer-list" aria-label="Liens du site">
+            <a href="institution.html">L’institution</a>
+            <a href="rapports.html">Rapports</a>
+            <a href="galerie.html">Galerie</a>
+            <a href="media.html">Médias</a>
+            <a href="charte.html">Charte</a>
+            <a href="qui-sommes-nous.html">Qui sommes-nous</a>
+          </nav>
         </div>
+
+        <div class="footer-col">
+          <div class="kicker footer-kicker"><span class="dot"></span> Contact</div>
+          <div class="footer-list">
+            <a href="rejoindre.html">Rejoindre</a>
+            <a href="contact.html">Contact</a>
+            <a href="https://instagram.com/parlementjpv" target="_blank" rel="noopener">Instagram</a>
+          </div>
+
+          <div class="kicker footer-kicker" style="margin-top:18px">
+            <span class="dot"></span> Transparence
+          </div>
+          <div class="footer-list">
+            <a href="mentions-legales.html">Mentions légales</a>
+            <a href="politique-confidentialite.html">Politique de confidentialité</a>
+            <a href="#" id="cookieReset">Réinitialiser mes choix cookies</a>
+          </div>
+
+          <div class="small footer-copy">
+            © <span id="year"></span> Parlement JPV
+          </div>
+        </div>
+
       </div>
 
+      <div class="footer-divider"></div>
+
+      <p class="small footer-note">
+        Parlement JPV — Lycée Jean-Pierre Vernant • Instance lycéenne de débat et d’engagement citoyen.
+      </p>
     </div>
+  </footer>
 
-    <div class="footer-divider"></div>
+  <!-- JS (propre, stable) -->
+  <script>
+    // ===== Year
+    document.getElementById("year").textContent = new Date().getFullYear();
 
-    <p class="small footer-note">
-      Parlement JPV — Lycée Jean-Pierre Vernant • Instance lycéenne de débat et d’engagement citoyen.
-    </p>
-  </div>
-</footer>
+    // ===== Theme (respect cookie consent)
+    const root = document.documentElement;
+    const themeBtn = document.getElementById("themeBtn");
 
+    function applyTheme(next){
+      root.setAttribute("data-theme", next);
+      // On stocke seulement si consentement
+      if (localStorage.getItem("cookieConsent") === "accepted") {
+        localStorage.setItem("theme", next);
+      }
+    }
+
+    function toggleTheme(){
+      const current = root.getAttribute("data-theme") || "light";
+      const next = current === "dark" ? "light" : "dark";
+      applyTheme(next);
+    }
+
+    themeBtn?.addEventListener("click", toggleTheme);
+
+    // Init theme
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) root.setAttribute("data-theme", savedTheme);
+
+    // ===== Mobile nav
+    const mobileNav = document.getElementById("mobileNav");
+    const mobileBtn = document.getElementById("mobileNavBtn");
+
+    function setMobile(open){
+      if (!mobileNav || !mobileBtn) return;
+      mobileNav.classList.toggle("open", open);
+      mobileNav.hidden = !open;
+      mobileBtn.setAttribute("aria-expanded", String(open));
+    }
+
+    mobileBtn?.addEventListener("click", () => {
+      const open = !mobileNav.classList.contains("open");
+      setMobile(open);
+    });
+
+    // Ferme le menu si on clique un lien
+    mobileNav?.addEventListener("click", (e) => {
+      const a = e.target.closest("a");
+      if (a) setMobile(false);
+    });
+
+    // Ferme si on repasse en desktop
+    window.addEventListener("resize", () => {
+      if (window.matchMedia("(min-width: 901px)").matches) setMobile(false);
+    });
+
+    // ===== Cookies consent
+    const banner = document.getElementById("cookieBanner");
+    const accept = document.getElementById("cookieAccept");
+    const decline = document.getElementById("cookieDecline");
+    const reset = document.getElementById("cookieReset");
+
+    function showBannerIfNeeded(){
+      const consent = localStorage.getItem("cookieConsent");
+      if (!consent) banner.hidden = false;
+    }
+
+    function setConsent(value){
+      localStorage.setItem("cookieConsent", value);
+      banner.hidden = true;
+
+      // si refus, on purge ce qui est "non essentiel"
+      if (value !== "accepted"){
+        localStorage.removeItem("theme");
+        root.removeAttribute("data-theme");
+      }
+    }
+
+    accept?.addEventListener("click", () => setConsent("accepted"));
+    decline?.addEventListener("click", () => setConsent("declined"));
+    reset?.addEventListener("click", (e) => {
+      e.preventDefault();
+      localStorage.removeItem("cookieConsent");
+      localStorage.removeItem("theme");
+      root.removeAttribute("data-theme");
+      showBannerIfNeeded();
+    });
+
+    showBannerIfNeeded();
+  </script>
+</body>
+</html>
