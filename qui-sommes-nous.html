@@ -1,354 +1,138 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Qui sommes-nous — Parlement JPV</title>
-  <meta name="description" content="Présentation du Parlement JPV : bureau, pôles, fonctionnement et modalités pour rejoindre." />
-  <link rel="icon" href="assets/img/favicon.png" />
-  <link rel="stylesheet" href="css/styles.css" />
-</head>
+/* ====== MEMBER CARDS — VERSION INSTITUTIONNELLE ====== */
 
-<body>
-  <!-- HEADER (copie le même que tes autres pages) -->
-  <header class="header">
-    <div class="container">
-      <div class="nav">
-        <a class="brand" href="index.html">
-          <img src="assets/img/logo.png" alt="Logo Parlement JPV">
-          <div>
-            <div class="title">Parlement JPV</div>
-            <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
-          </div>
-        </a>
+.member-card{
+  position: relative;
+  padding: 28px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, var(--card), color-mix(in srgb, var(--card) 92%, var(--bg)));
+  border: 1px solid var(--border);
+  overflow: hidden;
+  transition: all .45s cubic-bezier(.2,.8,.2,1);
+  box-shadow: 0 8px 28px rgba(0,0,0,.08);
+}
 
-        <nav class="nav-links" aria-label="Navigation principale">
-          <a href="institution.html">L’institution</a>
-          <a href="qui-sommes-nous.html">Qui sommes-nous</a>
-          <a href="rapports.html">Rapports</a>
-          <a href="galerie.html">Galerie</a>
-          <a href="media.html">Médias</a>
-          <a href="rejoindre.html">Rejoindre</a>
-          <a href="contact.html">Contact</a>
-        </nav>
+/* Effet lumière subtile premium */
+.member-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: radial-gradient(600px 300px at -10% -20%, rgba(255,255,255,.08), transparent 60%);
+  pointer-events:none;
+}
 
-        <div class="nav-actions">
-          <button class="icon-btn" onclick="toggleTheme()" aria-label="Basculer mode sombre">☾</button>
-          <button class="icon-btn burger" onclick="toggleMobile()" aria-label="Ouvrir le menu">☰</button>
-        </div>
-      </div>
+/* Hover classe élite */
+.member-card:hover{
+  transform: translateY(-6px);
+  box-shadow: 0 18px 48px rgba(0,0,0,.15);
+  border-color: rgba(0,0,0,.15);
+}
 
-      <div id="mobileNav" class="mobile" aria-label="Menu mobile">
-        <a href="institution.html">L’institution</a>
-        <a href="qui-sommes-nous.html">Qui sommes-nous</a>
-        <a href="rapports.html">Rapports</a>
-        <a href="galerie.html">Galerie</a>
-        <a href="media.html">Médias</a>
-        <a href="rejoindre.html">Rejoindre</a>
-        <a href="contact.html">Contact</a>
-        <div class="line"></div>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdQ86QZ8sMoY7YgOhT6DBMy5KG85yfm65O6BWMmFp7bzuorqg/viewform?usp=header" target="_blank" rel="noopener">Candidater (Formulaire)</a>
-      </div>
-    </div>
-  </header>
 
-  <main class="section">
-    <div class="container">
-      <span class="badge">Équipe — structure — recrutement</span>
-      <div class="kicker" style="margin-top:12px">Qui sommes-nous</div>
-      <h1>Le Parlement JPV : une équipe, des pôles, une méthode.</h1>
-      <p>
-        Le Parlement JPV est une instance lycéenne structurée qui organise débats, conférences et exercices d’éloquence.
-        Notre ambition : produire du fond, former rapidement, et laisser des traces (rapports, décisions, actions).
-      </p>
+/* ====== HEADER STRUCTURE ====== */
 
-      <!-- Mission / valeurs -->
-      <div class="grid grid-3" style="margin-top:16px">
-        <div class="card">
-          <h3>Notre mission</h3>
-          <p>Former à l’argumentation, à la prise de parole et à la décision collective.</p>
-        </div>
-        <div class="card">
-          <h3>Notre exigence</h3>
-          <p>Des débats cadrés, des sources, des rôles, une synthèse et des comptes rendus.</p>
-        </div>
-        <div class="card">
-          <h3>Notre impact</h3>
-          <p>Des initiatives concrètes et un suivi : on construit, on ne “fait pas semblant”.</p>
-        </div>
-      </div>
+.member-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+}
 
-      <!-- Bureau -->
-      <div class="section-tight">
-        <div class="kicker">Le bureau</div>
-        <h2>Une équipe de pilotage</h2>
 
-      <div class="card member member--president">
-  <div class="member-top">
-    <div>
-      <h3>Président</h3>
-      <div class="member-tags">
-        <span class="pill">Fondateur</span>
-      </div>
-    </div>
+/* ====== AVATAR PREMIUM ====== */
 
-    <img
-      class="member-avatar"
-      src="assets/img/bureau/president.jpg"
-      alt="Gustave Jeannin, Président et fondateur du Parlement JPV"
-      loading="lazy"
-      decoding="async"
-    />
-  </div>
+.member-avatar{
+  width:84px;
+  height:84px;
+  border-radius:20px;
+  object-fit:cover;
+  border: 2px solid rgba(255,255,255,.4);
+  box-shadow: 0 10px 30px rgba(0,0,0,.15);
+  transition: all .4s ease;
+}
 
-  <p class="member-name"><strong>Gustave Jeannin</strong></p>
-  <p class="small">Vision, coordination générale, partenariats institutionnels.</p>
-</div>
-          <div class="card">
-            <h3>Vice-président</h3>
-            <p><strong>Emma D.</strong></p>
-            <p class="small">Organisation, logistique, fonctionnement interne.</p>
-          </div>
-          <div class="card">
-            <h3>Secrétaire général</h3>
-            <p><strong>Lara G.S.</strong></p>
-            <p class="small">Rapports, comptes rendus, suivi des décisions.</p>
-          </div>
-          <div class="card">
-            <h3>Trésorier</h3>
-            <p><strong>Eliott F.</strong></p>
-            <p class="small">Budget, matériel, demandes et ressources.</p>
-          </div>
-          <div class="card">
-            <h3>Responsable Communication</h3>
-            <p><strong>Sacha P.</strong></p>
-            <p class="small">Identité, réseaux, visuels, annonces, couverture photo/vidéo.</p>
-          </div>
-             <div class="card">
-            <h3>Responsable Visites</h3>
-            <p><strong>Arthur Fortier</strong></p>
-            <p class="small">Prises de contact, organisation des visites</p>
-          </div>
-          <div class="card">
-            <h3>Responsable Conférences</h3>
-            <p><strong>Lara G.</strong></p>
-            <p class="small">Invités, prises de contact, organisation des interventions.</p>
-          </div>
-        </div>
-      </div>
+.member-card:hover .member-avatar{
+  transform: scale(1.05);
+}
 
-      <!-- Pôles -->
-      <div class="section-tight">
-        <div class="kicker">Les pôles</div>
-        <h2>Des équipes spécialisées</h2>
-        <p>Chaque pôle recrute. Choisis-en un selon ton profil.</p>
 
-        <div class="grid grid-2" style="margin-top:14px">
-          <div class="card">
-            <h3>Pôle Débats</h3>
-            <p class="small">Prépare les sujets, construit les rôles, encadre le format et la modération.</p>
-            <div class="list">
-              <div class="item">
-                <div class="left">
-                  <div class="title">Ce qu’on fait</div>
-                  <div class="meta">sujets • briefs • sources • modération • synthèse</div>
-                </div>
-                <div class="pill">Organisation</div>
-              </div>
-              <div class="item">
-                <div class="left">
-                  <div class="title">Profil recherché</div>
-                  <div class="meta">rigoureux • aime lire • aime structurer</div>
-                </div>
-                <div class="pill">Exigence</div>
-              </div>
-            </div>
-          </div>
+/* ====== NOM — STYLE AUTORITÉ ====== */
 
-          <div class="card">
-            <h3>Pôle Conférences</h3>
-            <p class="small">Contacte des intervenants, prépare les dossiers, gère l’accueil et le protocole.</p>
-            <div class="list">
-              <div class="item">
-                <div class="left">
-                  <div class="title">Ce qu’on fait</div>
-                  <div class="meta">prospection • mail/LinkedIn • logistique • protocole</div>
-                </div>
-                <div class="pill">Réseau</div>
-              </div>
-              <div class="item">
-                <div class="left">
-                  <div class="title">Profil recherché</div>
-                  <div class="meta">à l’aise à l’écrit • sérieux • persévérant</div>
-                </div>
-                <div class="pill">Contact</div>
-              </div>
-            </div>
-          </div>
+.member-name{
+  margin: 18px 0 6px;
+  font-weight: 900;
+  font-size: 1.25rem;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, var(--text), color-mix(in srgb, var(--text) 60%, var(--accent)));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
-          <div class="card">
-            <h3>Pôle Communication</h3>
-            <p class="small">Branding, photos/vidéos, posts, stories, affiches, site.</p>
-            <div class="list">
-              <div class="item">
-                <div class="left">
-                  <div class="title">Ce qu’on fait</div>
-                  <div class="meta">visuels • instagram • recap • site web</div>
-                </div>
-                <div class="pill">Image</div>
-              </div>
-              <div class="item">
-                <div class="left">
-                  <div class="title">Profil recherché</div>
-                  <div class="meta">créatif • régulier • sens du détail</div>
-                </div>
-                <div class="pill">Créa</div>
-              </div>
-            </div>
-          </div>
 
-          <div class="card">
-            <h3>Pôle Éloquence</h3>
-            <p class="small">Prépare les exercices, coachings, formats type avocat du diable, joutes, speechs.</p>
-            <div class="list">
-              <div class="item">
-                <div class="left">
-                  <div class="title">Ce qu’on fait</div>
-                  <div class="meta">exercices • entraînement • feedback • progression</div>
-                </div>
-                <div class="pill">Oral</div>
-              </div>
-              <div class="item">
-                <div class="left">
-                  <div class="title">Profil recherché</div>
-                  <div class="meta">à l’aise à l’oral • bienveillant mais exigeant</div>
-                </div>
-                <div class="pill">Coaching</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+/* ====== TAGS MODERNES ====== */
 
-      <!-- Comment rejoindre -->
-      <div class="section-tight">
-        <div class="kicker">Rejoindre</div>
-        <h2>Comment intégrer le bureau du Parlement JPV</h2>
+.member-tags{
+  margin-top:10px;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
 
-        <div class="grid grid-3" style="margin-top:14px">
-          <div class="card">
-            <h3>1) Candidature</h3>
-            <p class="small">Remplis le formulaire en indiquant ton pôle souhaité.</p>
-          </div>
-          <div class="card">
-            <h3>2) Entretien court</h3>
-            <p class="small">10 minutes : motivation, sérieux, rôle que tu peux tenir.</p>
-          </div>
-          <div class="card">
-            <h3>3) Période test</h3>
-            <p class="small">Tu participes à 1–2 réunions, si on est convaincus tu feras parti du bureau.</p>
-          </div>
-        </div>
+.member-tags span{
+  padding:6px 12px;
+  font-size:.75rem;
+  font-weight:600;
+  border-radius:999px;
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  letter-spacing:.5px;
+}
 
-        <div class="card" style="margin-top:16px">
-          <h3>Formulaire candidature bureau</h3>
-          <p class="small">Lien direct + page “Rejoindre” si tu veux plus d’infos.</p>
-          <div class="btns">
-            <a class="btn btn-gold" href="FORMULAIRE UREAU" rel="noopener">📝 Candidater</a>
-            <a class="btn btn-primary" href="rejoindre.html">📌 Page Rejoindre</a>
-            <a class="btn btn-ghost" href="contact.html">✉️ Nous contacter</a>
-          </div>
-        </div>
 
-        <div class="notice" style="margin-top:14px">
-          ⚠️ Si tu rejoins le bureau, tu t’engages. 
-        </div>
-      </div>
-    </div>
-  </main>
+/* ====== PRESIDENT — VERSION CHEF D’ÉTAT ====== */
 
-  <!-- FOOTER -->
-  <footer class="footer" role="contentinfo">
-    <div class="container">
-      <div class="footer-grid">
-        <div>
-          <div class="brand" style="gap:10px">
-            <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44" loading="lazy" decoding="async" />
-            <div>
-              <div class="title">Parlement JPV</div>
-              <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
-            </div>
-          </div>
+.member--president{
+  border: 1px solid rgba(212,175,55,.6);
+  background:
+    radial-gradient(900px 420px at 0% 0%, rgba(212,175,55,.18), transparent 55%),
+    linear-gradient(180deg, #1b2230, #141923);
+  box-shadow: 0 20px 60px rgba(0,0,0,.35);
+}
 
-          <p class="small" style="margin-top:10px">
-            Instance lycéenne de débat, d’engagement citoyen et d’initiatives structurées.
-          </p>
-        </div>
+/* Bandeau Président */
+.member--president::after{
+  content: "PRÉSIDENT";
+  position:absolute;
+  top:20px;
+  right:-45px;
+  transform: rotate(45deg);
+  background: linear-gradient(90deg,#d4af37,#f6e27a);
+  color:#1b1b1b;
+  font-weight:900;
+  font-size:.7rem;
+  padding:6px 60px;
+  letter-spacing:1px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.4);
+}
 
-        <div>
-          <div class="kicker">Pages</div>
-          <div class="list">
-            <a href="institution.html">L’institution</a>
-            <a href="rapports.html">Rapports</a>
-            <a href="galerie.html">Galerie</a>
-            <a href="media.html">Médias</a>
-            <a href="charte.html">Charte</a>
-            <a href="qui-sommes-nous.html">Qui sommes-nous</a>
-          </div>
-        </div>
 
-        <div>
-          <div class="kicker">Contact</div>
-          <div class="list">
-            <a href="rejoindre.html">Rejoindre</a>
-            <a href="contact.html">Contact</a>
-            <a href="https://instagram.com/parlementjpv" target="_blank" rel="noopener">Instagram</a>
-          </div>
-          <div class="small" style="margin-top:10px">© <span id="year"></span> Parlement JPV</div>
-        </div>
-      </div>
-    </div>
-  </footer>
+/* Glow doré subtil */
+.member--president:hover{
+  box-shadow: 0 25px 80px rgba(212,175,55,.35);
+}
 
-  <noscript>
-    <div class="container" style="padding: 12px 0;">
-      <p class="small">Certaines fonctionnalités (menu, thème, événements) nécessitent JavaScript.</p>
-    </div>
-  </noscript>
 
-  <script src="js/main.js" defer></script>
-  <script>
-    // Année
-    document.getElementById("year").textContent = new Date().getFullYear();
+/* ====== MOBILE ====== */
 
-    // Menu mobile : synchronise aria-expanded + hidden
-    (function () {
-      const btn = document.getElementById("mobileNavBtn");
-      const nav = document.getElementById("mobileNav");
-      if (!btn || !nav) return;
+@media (max-width: 860px){
+  .member-avatar{
+    width:92px;
+    height:92px;
+  }
 
-      if (typeof window.toggleMobile !== "function") {
-        window.toggleMobile = function () {
-          const isOpen = btn.getAttribute("aria-expanded") === "true";
-          btn.setAttribute("aria-expanded", String(!isOpen));
-          nav.hidden = isOpen;
-        };
-      }
+  .member-card{
+    padding:22px;
+  }
+}
 
-      nav.addEventListener("click", (e) => {
-        const a = e.target.closest("a");
-        if (!a) return;
-        btn.setAttribute("aria-expanded", "false");
-        nav.hidden = true;
-      });
-
-      document.addEventListener("keydown", (e) => {
-        if (e.key !== "Escape") return;
-        btn.setAttribute("aria-expanded", "false");
-        nav.hidden = true;
-      });
-    })();
-  </script>
-</body>
-</html>
 
