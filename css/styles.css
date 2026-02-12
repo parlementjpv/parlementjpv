@@ -1,3 +1,8 @@
+/* =========================================================
+   STYLES.CSS — PARLEMENT JPV (à jour)
+   Inclut: footer premium + cookies + nav mobile robuste
+   ========================================================= */
+
 :root{
   --bg:#f6f7fb;
   --card:#ffffff;
@@ -12,6 +17,9 @@
   --radius:18px;
   --max:1120px;
 }
+
+/* Accent (utilisé par footer/cookies si tu veux) */
+:root{ --accent: var(--night); }
 
 :root[data-theme="dark"]{
   --bg:#0b0f16;
@@ -93,6 +101,10 @@ strong{color:var(--text)}
   border:1px solid var(--border);
 }
 
+/* ===============================
+   HEADER / NAV
+   =============================== */
+
 .header{
   position:sticky;top:0;z-index:50;
   backdrop-filter: blur(14px);
@@ -126,6 +138,7 @@ strong{color:var(--text)}
   cursor:pointer;
 }
 
+/* Burger legacy */
 .burger{display:none}
 @media (max-width: 860px){
   .nav-links{display:none}
@@ -148,9 +161,32 @@ strong{color:var(--text)}
 .mobile a:hover{background:rgba(90,95,106,.10);color:var(--text)}
 .mobile .line{height:1px;background:var(--border);margin:10px 0}
 
-.hero{
-  padding:34px 0 28px;
+/* ===========================
+   MOBILE NAV — ROBUSTE
+   (pour structure .mobile-btn + .mobile-nav[hidden])
+   =========================== */
+.nav-links{ display:flex; }
+.mobile-btn{ display:none; }
+.mobile-nav{ display:none; }
+
+@media (max-width: 980px){
+  .nav-links{ display:none !important; }
+  .mobile-btn{ display:inline-flex !important; }
+  .mobile-nav{
+    display:block;
+    margin-top: 10px;
+  }
+  .mobile-nav[hidden]{ display:none !important; }
 }
+@media (max-width: 600px){
+  .mobile-nav a{ width:100%; }
+}
+
+/* ===============================
+   HERO
+   =============================== */
+
+.hero{ padding:34px 0 28px; }
 .hero-wrap{
   display:grid;
   grid-template-columns:1.1fr .9fr;
@@ -175,20 +211,17 @@ strong{color:var(--text)}
 .hero-side{
   position: relative;
   overflow: hidden;
-  padding: 0;               /* pas de padding -> pas de bande */
+  padding: 0;
   min-height: clamp(260px, 38vw, 520px);
 }
-
-/* Image toujours plein cadre */
 .hero-side > img{
   width: 100%;
   height: 100%;
-  display: block;           /* supprime l’espace inline */
+  display: block;
   object-fit: cover;
   object-position: center 35%;
   transform: scale(1.02);
 }
-
 .hero-side .overlay{
   position: absolute;
   inset: 0;
@@ -197,8 +230,6 @@ strong{color:var(--text)}
     linear-gradient(to top, rgba(11, 37, 69, 0.75), rgba(11, 37, 69, 0.10) 55%, rgba(11, 37, 69, 0.05));
   pointer-events: none;
 }
-
-/* Texte sur photo */
 .hero-photo-text{
   position: absolute;
   inset: auto 18px 18px 18px;
@@ -206,7 +237,6 @@ strong{color:var(--text)}
   z-index: 2;
   max-width: 92%;
 }
-
 .hero-photo-badge{
   display: inline-block;
   padding: 8px 10px;
@@ -217,7 +247,6 @@ strong{color:var(--text)}
   border: 1px solid rgba(255, 255, 255, 0.18);
   backdrop-filter: blur(8px);
 }
-
 .hero-photo-title{
   margin-top: 10px;
   font-weight: 800;
@@ -225,28 +254,22 @@ strong{color:var(--text)}
   line-height: 1.15;
   text-shadow: 0 10px 30px rgba(0,0,0,0.35);
 }
-
 .hero-photo-sub{
   margin-top: 8px;
   font-size: clamp(0.95rem, 1.4vw, 1.05rem);
   opacity: 0.95;
   text-shadow: 0 10px 30px rgba(0,0,0,0.35);
 }
-
-/* ✅ MOBILE: “full-bleed” (annule le padding du container 18px) */
 @media (max-width: 860px){
-  /* format stable et visuel plus grand */
   .hero-side{
     aspect-ratio: 16 / 9;
-    min-height: 0; /* laisse l’aspect-ratio faire le job */
+    min-height: 0;
   }
-
-  /* IMPORTANT: marche si tu as ajouté la classe hero-side--bleed au <figure> */
+  /* marche si tu ajoutes hero-side--bleed au <figure> */
   .hero-side.hero-side--bleed{
     width: calc(100% + 36px);
     margin-left: -18px;
   }
-
   .hero-photo-text{ inset: auto 14px 14px 14px; }
 }
 /* ========================================================= */
@@ -275,18 +298,6 @@ strong{color:var(--text)}
   font-weight:800;font-size:.86rem;color:var(--muted);
   white-space:nowrap;
 }
-
-.footer{
-  padding:26px 0;
-  border-top:1px solid var(--border);
-}
-.footer-grid{
-  display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:18px;
-}
-@media (max-width: 860px){.footer-grid{grid-template-columns:1fr}}
-.footer a{color:var(--muted);font-weight:700}
-.footer a:hover{color:var(--text)}
-.small{font-size:.92rem;color:var(--muted)}
 
 .notice{
   padding:12px 14px;
@@ -319,15 +330,13 @@ iframe.calendar{
   box-shadow:var(--shadow);
 }
 
-/* Galerie : évite les images trop grandes */
+/* Galerie */
 #galleryBlocks img{
   width:100%;
   height:260px;
   object-fit:cover;
   display:block;
 }
-
-/* Mobile : 2 colonnes au lieu de 3 */
 @media (max-width: 860px){
   #galleryBlocks .grid-3{ grid-template-columns: 1fr 1fr; }
 }
@@ -343,9 +352,7 @@ iframe.calendar{
   justify-content:space-between;
   gap:14px;
 }
-
 .member-tags{margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;}
-
 .member-avatar{
   width:72px;
   height:72px;
@@ -355,50 +362,26 @@ iframe.calendar{
   box-shadow: var(--shadow);
   background: color-mix(in srgb, var(--card) 92%, transparent);
 }
-
-/* Nom un peu plus “leadership” */
 .member-name{
   margin: 12px 0 6px;
   color: var(--text);
   font-weight: 900;
 }
-
-/* Mise en avant Président */
 .member--president{
   border: 1px solid rgba(212,175,55,.35);
   background:
     radial-gradient(900px 420px at 10% 10%, rgba(212,175,55,.14), transparent 45%),
     linear-gradient(180deg, var(--card), color-mix(in srgb, var(--card) 88%, var(--bg)));
 }
-
-/* Mobile: avatar un peu plus grand */
 @media (max-width: 860px){
   .member-avatar{ width:84px; height:84px; }
 }
 
+/* =========================================================
+   FOOTER — PREMIUM (remplace ton ancien .footer)
+   Utilise <footer class="site-footer">...</footer>
+   ========================================================= */
 
-/* ===========================
-   MOBILE NAV — ROBUSTE
-   =========================== */
-
-/* Etat par défaut (desktop) */
-.nav-links{ display:flex; }
-.mobile-btn{ display:none; }
-.mobile-nav{ display:none; } /* important: évite “double menu” si un style saute */
-
-/* Tablette / mobile */
-@media (max-width: 980px){
-  .nav-links{ display:none !important; }
-  .mobile-btn{ display:inline-flex !important; }
-  .mobile-nav{
-    display:block;             /* le conteneur existe */
-    margin-top: 10px;
-  }
-  /* Si le menu est “hidden”, il ne s’affiche pas */
-  .mobile-nav[hidden]{ display:none !important; }
-}
-
-@media (max-width: 600px){
-  .mobile-nav a{ width:100%; }
-}
-
+.site-footer{
+  margin-top: 80px;
+  background: linear-gradient(180deg, rgba(255,255,255,.0
