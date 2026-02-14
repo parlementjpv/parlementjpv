@@ -98,3 +98,79 @@
     width: 100%;
   }
 }
+
+
+/* ==============================
+   COOKIE WALL (modal) — Parlement JPV
+   Affiché au premier chargement pour consentement analytics
+   ============================== */
+.cookie-wall{
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(6px);
+}
+
+.cookie-wall[hidden]{ display:none !important; }
+
+.cookie-wall__card{
+  width: min(720px, 100%);
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.18)), #0f1b2d;
+  color: #eaf0ff;
+  box-shadow: 0 22px 70px rgba(0,0,0,.55);
+  padding: 18px 18px 16px;
+}
+
+.cookie-wall__title{
+  font-weight: 1000;
+  font-size: 1.15rem;
+  letter-spacing: .2px;
+  margin: 0 0 10px 0;
+}
+
+.cookie-wall__text{
+  margin: 0;
+  opacity: .86;
+  line-height: 1.45;
+  font-size: 1rem;
+}
+
+.cookie-wall__links{
+  margin-top: 10px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cookie-wall__links a{
+  color: #eaf0ff;
+  opacity: .85;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.cookie-wall__actions{
+  margin-top: 14px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.cookie-wall__note{
+  margin: 12px 0 0;
+  opacity: .7;
+  font-size: .9rem;
+  line-height: 1.35;
+}
+
+@media (max-width: 520px){
+  .cookie-wall__actions{ justify-content: stretch; }
+  .cookie-btn{ width: 100%; }
+}
