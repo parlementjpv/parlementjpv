@@ -30,6 +30,7 @@
 
   <!-- CSS global -->
   <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/cookies.css" />
 
   <!-- Page CSS (même identité, autonome, sans casser ton styles.css) -->
   <style>
@@ -260,6 +261,30 @@
 </head>
 
 <body>
+
+  <!-- COOKIE CONSENT (analytics) -->
+  <div id="cookieWall" class="cookie-wall" hidden role="dialog" aria-modal="true" aria-label="Préférences de cookies">
+    <div class="cookie-wall__card">
+      <div class="cookie-wall__title">Cookies & mesures d’audience</div>
+      <p class="cookie-wall__text">
+        Nous utilisons des cookies de mesure d’audience (Google Analytics) pour comprendre la fréquentation du site
+        (pages consultées, durée de visite), améliorer le contenu et mesurer l’impact de nos actions.
+      </p>
+      <div class="cookie-wall__links">
+        <a href="politique-confidentialite.html">Politique de confidentialité</a>
+        <a href="mentions-legales.html">Mentions légales</a>
+      </div>
+      <div class="cookie-wall__actions">
+        <button class="cookie-btn cookie-btn--danger" type="button" data-cookie-decline>Continuer sans analytics</button>
+        <button class="cookie-btn cookie-btn--primary" type="button" data-cookie-accept>Accepter</button>
+      </div>
+      <p class="cookie-wall__note">
+        Tu peux changer d’avis plus tard : supprime le stockage du navigateur (localStorage) ou relance en navigation privée.
+      </p>
+    </div>
+  </div>
+
+
   <a class="skip-link" href="#contenu">Aller au contenu</a>
 
   <!-- HEADER -->
@@ -534,6 +559,7 @@
     </div>
   </noscript>
 
+    <script src="js/analytics-consent.js" defer></script>
   <script src="js/main.js" defer></script>
   <script>
     // Année
