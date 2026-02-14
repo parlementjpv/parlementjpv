@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mentions légales — Parlement JPV</title>
-  <meta name="description" content="Mentions légales du site officiel du Parlement JPV.">
-  <link rel="stylesheet" href="css/styles.css">
+  <meta name="description" content="Mentions légales du site officiel du Parlement JPV." />
+  <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/cookies.css" />
 </head>
 <body>
@@ -32,8 +32,7 @@
     </div>
   </div>
 
-
-<header class="header" role="banner">
+  <header class="header" role="banner">
     <div class="container">
       <div class="nav">
         <a class="brand" href="index.html" aria-label="Accueil Parlement JPV">
@@ -71,7 +70,7 @@
     </div>
   </header>
 
-<div id="mobileOverlay" class="mobile-overlay" hidden></div>
+  <div id="mobileOverlay" class="mobile-overlay" hidden></div>
 
   <nav id="mobileNav" class="mobile" aria-label="Menu mobile" hidden>
     <div class="mobile-head">
@@ -97,102 +96,215 @@
     >Candidater (Formulaire)</a>
   </nav>
 
-<main class="legal-container">
+  <!-- MAIN (design premium) -->
+  <main class="legal">
+    <div class="container">
 
-  <h1>Mentions légales</h1>
+      <!-- HERO -->
+      <header class="legal-hero">
+        <div class="legal-hero__bg" aria-hidden="true"></div>
 
-  <section>
-    <h2>Éditeur du site</h2>
-    <p>
-      Le site <strong>Parlement JPV</strong> est édité par :
-    </p>
-    <p>
-      Association / Initiative lycéenne Parlement JPV<br>
-      Lycée Jean-Pierre Vernant<br>
-      [Adresse complète du lycée]<br>
-      Email : [adresse email officielle]<br>
-    </p>
-  </section>
+        <nav class="legal-breadcrumb" aria-label="Fil d’ariane">
+          <a href="index.html">Accueil</a>
+          <span aria-hidden="true">›</span>
+          <span>Mentions légales</span>
+        </nav>
 
-  <section>
-    <h2>Responsable de publication</h2>
-    <p>
-      Le responsable de publication est :<br>
-      [Nom du Président] — Président du Parlement JPV
-    </p>
-  </section>
+        <div class="legal-hero__content">
+          <div>
+            <h1 class="legal-title">Mentions légales</h1>
+            <p class="legal-lead">
+              Informations d’édition, d’hébergement et règles d’utilisation du site du Parlement JPV.
+            </p>
+            <div class="legal-meta">
+              <span class="pill">Dernière mise à jour : <time datetime="2026-02-14">14 février 2026</time></span>
+              <span class="pill">Version : v1</span>
+            </div>
+          </div>
 
-  <section>
-    <h2>Hébergement</h2>
-    <p>
-      Le site est hébergé par :<br>
-      GitHub, Inc.<br>
-      88 Colin P. Kelly Jr. Street<br>
-      San Francisco, CA 94107<br>
-      États-Unis<br>
-      Site web : https://github.com
-    </p>
-  </section>
+          <div class="legal-actions">
+            <button class="btn btn--ghost" type="button" onclick="window.print()">Imprimer</button>
+            <a class="btn btn--primary" href="politique-confidentialite.html">Politique de confidentialité</a>
+          </div>
+        </div>
+      </header>
 
-  <section>
-    <h2>Propriété intellectuelle</h2>
-    <p>
-      L’ensemble des contenus présents sur le site (textes, images, logo, éléments graphiques)
-      sont protégés par le droit d’auteur.
-      Toute reproduction, représentation ou diffusion sans autorisation écrite préalable est interdite.
-    </p>
-  </section>
+      <div class="legal-layout">
+        <!-- SOMMAIRE -->
+        <aside class="legal-aside" aria-label="Sommaire">
+          <div class="legal-card legal-card--sticky">
+            <div class="legal-card__kicker">Sommaire</div>
+            <div class="legal-toc">
+              <a href="#editeur">Éditeur du site</a>
+              <a href="#publication">Responsable de publication</a>
+              <a href="#hebergement">Hébergement</a>
+              <a href="#pi">Propriété intellectuelle</a>
+              <a href="#responsabilite">Limitation de responsabilité</a>
+            </div>
 
-  <section>
-    <h2>Limitation de responsabilité</h2>
-    <p>
-      Le Parlement JPV s’efforce de fournir des informations exactes et à jour.
-      Toutefois, aucune garantie n’est donnée quant à l’exactitude, la complétude
-      ou l’actualité des contenus publiés.
-    </p>
-  </section>
+            <div class="legal-mini">
+              <div class="legal-mini__title">Contact</div>
+              <p class="small">
+                Pour toute question liée au site ou aux contenus, utilise la page <a href="contact.html">Contact</a>.
+              </p>
+            </div>
+          </div>
+        </aside>
 
-</main>
+        <!-- CONTENU -->
+        <section class="legal-content" aria-label="Contenu légal">
 
-<footer class="footer" role="contentinfo">
-<div class="container">
-<div class="footer-grid">
-<div>
-<div class="brand" style="gap:10px">
-<img alt="Logo Parlement JPV" decoding="async" height="44" loading="lazy" src="assets/img/logo.png" width="44"/>
-<div>
-<div class="title">Parlement JPV</div>
-<div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
-</div>
-</div>
-<p class="small" style="margin-top:10px">
+          <article id="editeur" class="legal-card">
+            <div class="legal-card__head">
+              <h2>Éditeur du site</h2>
+              <span class="badge">Obligatoire</span>
+            </div>
+            <div class="legal-card__body">
+              <p>Le site <strong>Parlement JPV</strong> est édité par :</p>
+
+              <div class="legal-grid">
+                <div class="legal-field">
+                  <div class="legal-field__label">Structure</div>
+                  <div class="legal-field__value">Initiative lycéenne / Parlement JPV</div>
+                </div>
+                <div class="legal-field">
+                  <div class="legal-field__label">Établissement</div>
+                  <div class="legal-field__value">Lycée Jean-Pierre Vernant — Sèvres</div>
+                </div>
+                <div class="legal-field">
+                  <div class="legal-field__label">Adresse</div>
+                  <div class="legal-field__value">[Adresse complète du lycée]</div>
+                </div>
+                <div class="legal-field">
+                  <div class="legal-field__label">Email</div>
+                  <div class="legal-field__value">[adresse email officielle]</div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article id="publication" class="legal-card">
+            <div class="legal-card__head">
+              <h2>Responsable de publication</h2>
+              <span class="badge badge--soft">Information</span>
+            </div>
+            <div class="legal-card__body">
+              <p>
+                Le responsable de publication est :<br />
+                <strong>[Nom du Président]</strong> — Président du Parlement JPV
+              </p>
+            </div>
+          </article>
+
+          <article id="hebergement" class="legal-card">
+            <div class="legal-card__head">
+              <h2>Hébergement</h2>
+              <span class="badge badge--soft">Technique</span>
+            </div>
+            <div class="legal-card__body">
+              <p>Le site est hébergé par :</p>
+
+              <div class="legal-grid">
+                <div class="legal-field">
+                  <div class="legal-field__label">Hébergeur</div>
+                  <div class="legal-field__value">GitHub, Inc.</div>
+                </div>
+                <div class="legal-field">
+                  <div class="legal-field__label">Adresse</div>
+                  <div class="legal-field__value">88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA</div>
+                </div>
+                <div class="legal-field">
+                  <div class="legal-field__label">Site</div>
+                  <div class="legal-field__value">github.com</div>
+                </div>
+              </div>
+
+              <div class="legal-note">
+                <strong>Note :</strong> l’hébergeur assure l’infrastructure. Le Parlement JPV reste responsable des contenus publiés.
+              </div>
+            </div>
+          </article>
+
+          <article id="pi" class="legal-card">
+            <div class="legal-card__head">
+              <h2>Propriété intellectuelle</h2>
+              <span class="badge">Important</span>
+            </div>
+            <div class="legal-card__body">
+              <p>
+                L’ensemble des contenus présents sur le site (textes, images, logo, éléments graphiques) est protégé par le droit d’auteur.
+                Toute reproduction, représentation ou diffusion sans autorisation écrite préalable est interdite.
+              </p>
+            </div>
+          </article>
+
+          <article id="responsabilite" class="legal-card">
+            <div class="legal-card__head">
+              <h2>Limitation de responsabilité</h2>
+              <span class="badge badge--soft">Cadre</span>
+            </div>
+            <div class="legal-card__body">
+              <p>
+                Le Parlement JPV s’efforce de fournir des informations exactes et à jour.
+                Toutefois, aucune garantie n’est donnée quant à l’exactitude, la complétude ou l’actualité des contenus publiés.
+              </p>
+            </div>
+          </article>
+
+          <div class="legal-bottom">
+            <div class="legal-bottom__line"></div>
+            <p class="small">
+              Pour la gestion des données et des cookies : <a href="politique-confidentialite.html">Politique de confidentialité</a>.
+            </p>
+          </div>
+
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="brand" style="gap:10px">
+            <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44" loading="lazy" decoding="async" />
+            <div>
+              <div class="title">Parlement JPV</div>
+              <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
+            </div>
+          </div>
+          <p class="small" style="margin-top:10px">
             Instance lycéenne de débat, d’engagement citoyen et d’initiatives structurées.
           </p>
-</div>
-<div>
-<div class="kicker">Pages</div>
-<div class="list">
-<a href="institution.html">L’institution</a>
-<a href="rapports.html">Rapports</a>
-<a href="galerie.html">Galerie</a>
-<a href="media.html">Médias</a>
-<a href="charte.html">Charte</a>
-<a href="qui-sommes-nous.html">Qui sommes-nous</a>
-</div>
-</div>
-<div>
-<div class="kicker">Contact</div>
-<div class="list">
-<a href="rejoindre.html">Rejoindre</a>
-<a href="contact.html">Contact</a>
-<a href="https://instagram.com/parlementjpv" rel="noopener" target="_blank">Instagram</a>
-</div>
-<div class="small" style="margin-top:10px">© <span id="year"></span> Parlement JPV</div>
-</div>
-</div>
-</div>
-</footer>
-    <script src="js/analytics-consent.js" defer></script>
+        </div>
+
+        <div>
+          <div class="kicker">Pages</div>
+          <div class="list">
+            <a href="institution.html">L’institution</a>
+            <a href="rapports.html">Rapports</a>
+            <a href="galerie.html">Galerie</a>
+            <a href="media.html">Médias</a>
+            <a href="charte.html">Charte</a>
+            <a href="qui-sommes-nous.html">Qui sommes-nous</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="kicker">Contact</div>
+          <div class="list">
+            <a href="rejoindre.html">Rejoindre</a>
+            <a href="contact.html">Contact</a>
+            <a href="https://instagram.com/parlementjpv" target="_blank" rel="noopener">Instagram</a>
+          </div>
+          <div class="small" style="margin-top:10px">© <span id="year"></span> Parlement JPV</div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/analytics-consent.js" defer></script>
   <script src="js/main.js" defer></script>
 </body>
 </html>
