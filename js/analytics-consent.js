@@ -3,7 +3,7 @@
    Stockage: localStorage
    ========================================================= */
 
-const GA_MEASUREMENT_ID = "G-XXXXXXXXXX"; // <-- remplace
+const GA_MEASUREMENT_ID = "G-SJZ6CRDLPS"; // <-- remplace
 
 function hasAnalyticsConsent(){
   return localStorage.getItem("cookie_consent_analytics") === "yes";
