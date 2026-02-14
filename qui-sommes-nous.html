@@ -11,21 +11,49 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
 
   <style>
+    /* =========================================================
+       IDENTITÉ VISUELLE — PARLEMENT JPV (CLAIRE + INSTITUTIONNELLE)
+       - Base claire (premium)
+       - Bleu nuit = autorité / institution
+       - Or = distinction / symbolique républicaine
+       ========================================================= */
+
     :root{
+      /* Palette */
+      --bg: #f4f7fb;
+      --bg2:#eef3fb;
+      --card:#ffffff;
+      --card2:#f7f9fe;
+      --text:#0b1220;
+      --muted: rgba(11,18,32,.72);
+      --border: rgba(11,18,32,.10);
+
+      --night:#0b2545;
+      --accent:#1f5eff;     /* bleu plus net mais lisible sur fond clair */
+      --gold:#d4af37;
+
+      /* Effets */
+      --shadow: 0 14px 40px rgba(11,18,32,.10);
+      --shadow2: 0 28px 90px rgba(11,18,32,.16);
+      --radius: 22px;
+      --radius2: 16px;
+      --max: 1200px;
+
+      --focus: 0 0 0 4px rgba(31,94,255,.20);
+    }
+
+    /* Optionnel : dark mode (si tu veux le garder) */
+    :root[data-theme="dark"]{
       --bg:#0b1220;
+      --bg2:#0b1220;
       --card:#0f1b2d;
       --card2:#0c1728;
-      --border:rgba(255,255,255,.14);
       --text:#eaf0ff;
-      --muted:rgba(234,240,255,.72);
-      --accent:#2f6bff;
-      --gold:#d4af37;
+      --muted: rgba(234,240,255,.74);
+      --border: rgba(255,255,255,.14);
+
       --shadow:0 14px 40px rgba(0,0,0,.18);
       --shadow2:0 28px 80px rgba(0,0,0,.35);
-      --radius:26px;
-      --radius2:18px;
-      --max:1200px;
-
       --focus: 0 0 0 4px rgba(47,107,255,.28);
     }
 
@@ -35,10 +63,10 @@
       font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       color:var(--text);
       background:
-        radial-gradient(1100px 750px at 14% 10%, rgba(47,107,255,.18), transparent 60%),
-        radial-gradient(1000px 700px at 92% -5%, rgba(212,175,55,.10), transparent 55%),
-        radial-gradient(900px 650px at 70% 110%, rgba(47,107,255,.10), transparent 55%),
-        var(--bg);
+        radial-gradient(1100px 750px at 12% 0%, rgba(31,94,255,.10), transparent 60%),
+        radial-gradient(1000px 700px at 92% -10%, rgba(212,175,55,.10), transparent 55%),
+        radial-gradient(900px 650px at 70% 110%, rgba(11,37,69,.10), transparent 55%),
+        linear-gradient(180deg, var(--bg2), var(--bg));
       overflow-x:hidden;
     }
 
@@ -50,7 +78,9 @@
     .skip-link{
       position:absolute; left:-9999px; top:8px;
       padding:10px 12px; border-radius:12px;
-      background:rgba(255,255,255,.08); border:1px solid var(--border);
+      background:rgba(255,255,255,.9);
+      border:1px solid var(--border);
+      color:var(--text);
     }
     .skip-link:focus{ left:12px; outline:none; box-shadow:var(--focus); }
     :focus-visible{ outline:none; box-shadow:var(--focus); border-radius:14px; }
@@ -61,9 +91,14 @@
       top:0;
       z-index:50;
       backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(244,247,251,.92), rgba(244,247,251,.72));
+      border-bottom: 1px solid var(--border);
+    }
+    :root[data-theme="dark"] .site-header{
       background: linear-gradient(180deg, rgba(11,18,32,.86), rgba(11,18,32,.60));
       border-bottom: 1px solid rgba(255,255,255,.10);
     }
+
     .nav{
       display:flex;
       align-items:center;
@@ -77,11 +112,17 @@
     }
     .brand img{
       width:44px; height:44px; border-radius:12px;
+      border:1px solid var(--border);
+      box-shadow: 0 12px 26px rgba(11,18,32,.12);
+      background: rgba(255,255,255,.7);
+      object-fit:cover;
+    }
+    :root[data-theme="dark"] .brand img{
       border:1px solid rgba(255,255,255,.12);
       box-shadow: 0 12px 26px rgba(0,0,0,.30);
       background: rgba(255,255,255,.04);
-      object-fit:cover;
     }
+
     .brand .title{
       font-weight:900;
       letter-spacing:.2px;
@@ -95,14 +136,14 @@
     }
 
     .nav-links{
-      display:flex; gap:14px; flex-wrap:wrap;
+      display:flex; gap:12px; flex-wrap:wrap;
       justify-content:flex-end;
       align-items:center;
     }
     .nav-links a{
       padding:10px 12px;
       border-radius:14px;
-      color:rgba(234,240,255,.90);
+      color: rgba(11,18,32,.88);
       border:1px solid transparent;
       background:transparent;
       font-weight:800;
@@ -110,14 +151,27 @@
       letter-spacing:.1px;
       transition: transform .18s ease, background .18s ease, border-color .18s ease;
     }
+    :root[data-theme="dark"] .nav-links a{ color: rgba(234,240,255,.90); }
+
     .nav-links a:hover{
       transform: translateY(-1px);
+      border-color: var(--border);
+      background: rgba(11,18,32,.03);
+    }
+    :root[data-theme="dark"] .nav-links a:hover{
       border-color: rgba(255,255,255,.12);
       background: rgba(255,255,255,.04);
     }
+
     .nav-links a.primary{
+      border-color: rgba(31,94,255,.35);
+      background: rgba(31,94,255,.10);
+      color: rgba(11,18,32,.92);
+    }
+    :root[data-theme="dark"] .nav-links a.primary{
       border-color: rgba(47,107,255,.40);
       background: rgba(47,107,255,.12);
+      color: rgba(234,240,255,.92);
     }
 
     .mobile-btn{
@@ -126,25 +180,37 @@
       justify-content:center;
       width:44px; height:44px;
       border-radius:14px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(255,255,255,.04);
-      color:rgba(234,240,255,.92);
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.7);
+      color: rgba(11,18,32,.92);
       cursor:pointer;
+    }
+    :root[data-theme="dark"] .mobile-btn{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      color: rgba(234,240,255,.92);
     }
     .mobile-btn svg{ width:22px; height:22px; }
 
-    /* IMPORTANT : menu mobile piloté UNIQUEMENT via [hidden] */
-    .mobile-nav{ display:none; border-top: 1px solid rgba(255,255,255,.10); padding:12px 0 18px; }
+    /* Menu mobile (piloté via [hidden]) */
+    .mobile-nav{ display:none; border-top: 1px solid var(--border); padding:12px 0 18px; }
     .mobile-nav:not([hidden]){ display:block; }
     .mobile-nav a{
       display:flex;
       padding:12px 12px;
       border-radius:14px;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.03);
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.70);
       margin-top:10px;
       font-weight:900;
       letter-spacing:.1px;
+    }
+    :root[data-theme="dark"] .mobile-nav{
+      border-top: 1px solid rgba(255,255,255,.10);
+    }
+    :root[data-theme="dark"] .mobile-nav a{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
     }
 
     /* ===== Hero ===== */
@@ -160,17 +226,20 @@
       padding:8px 14px;
       border-radius:999px;
       border:1px solid var(--border);
-      background:rgba(255,255,255,.04);
-      color:var(--muted);
+      background: rgba(255,255,255,.65);
+      color: var(--muted);
       font-weight:800;
       letter-spacing:.35px;
       text-transform:uppercase;
       font-size:.78rem;
     }
+    :root[data-theme="dark"] .kicker{
+      background: rgba(255,255,255,.04);
+    }
     .kicker .dot{
       width:8px; height:8px; border-radius:999px;
-      background:rgba(47,107,255,.9);
-      box-shadow: 0 0 0 4px rgba(47,107,255,.14);
+      background: rgba(31,94,255,.95);
+      box-shadow: 0 0 0 4px rgba(31,94,255,.14);
     }
     header.page-hero h1{
       font-family:'Playfair Display',serif;
@@ -182,7 +251,7 @@
     .hero-sub{
       margin:0 auto;
       max-width:920px;
-      color:var(--muted);
+      color: var(--muted);
       line-height:1.75;
       font-size:1.05rem;
     }
@@ -196,9 +265,14 @@
     }
     .stat{
       border-radius:18px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.75);
+      padding:14px 14px;
+      box-shadow: 0 12px 26px rgba(11,18,32,.08);
+    }
+    :root[data-theme="dark"] .stat{
       border:1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.03);
-      padding:14px 14px;
       box-shadow: 0 12px 26px rgba(0,0,0,.12);
     }
     .stat strong{
@@ -210,7 +284,7 @@
     .stat span{
       display:block;
       margin-top:6px;
-      color:var(--muted);
+      color: var(--muted);
       font-size:.92rem;
       line-height:1.35;
     }
@@ -221,8 +295,12 @@
     .divider{
       height:1px;
       margin:22px 0;
-      background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);
+      background: linear-gradient(90deg, transparent, rgba(11,18,32,.14), transparent);
     }
+    :root[data-theme="dark"] .divider{
+      background: linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);
+    }
+
     .section-title{
       display:flex;
       justify-content:space-between;
@@ -239,7 +317,7 @@
     }
     .section-title p{
       margin:0;
-      color:var(--muted);
+      color: var(--muted);
       font-size:.95rem;
       max-width:740px;
       line-height:1.6;
@@ -253,17 +331,26 @@
     .card{
       border-radius:var(--radius);
       background:
-        radial-gradient(900px 500px at 20% 0%, rgba(47,107,255,.12), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.18)),
-        var(--card);
+        radial-gradient(900px 500px at 20% 0%, rgba(31,94,255,.08), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.90), rgba(255,255,255,.72));
       border:1px solid var(--border);
       box-shadow:var(--shadow);
       overflow:hidden;
       transition: transform .45s cubic-bezier(.2,.9,.2,1), box-shadow .45s cubic-bezier(.2,.9,.2,1), border-color .25s ease;
     }
+    :root[data-theme="dark"] .card{
+      background:
+        radial-gradient(900px 500px at 20% 0%, rgba(47,107,255,.12), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.18)),
+        var(--card);
+      border:1px solid var(--border);
+    }
     .card:hover{
       transform:translateY(-6px);
       box-shadow:var(--shadow2);
+      border-color:rgba(31,94,255,.25);
+    }
+    :root[data-theme="dark"] .card:hover{
       border-color:rgba(47,107,255,.35);
     }
     .card-inner{ padding:22px; }
@@ -278,6 +365,11 @@
       font-weight:900;
       letter-spacing:.35px;
       text-transform:uppercase;
+      background: rgba(31,94,255,.10);
+      border:1px solid rgba(31,94,255,.22);
+      color: var(--night);
+    }
+    :root[data-theme="dark"] .pill{
       background:rgba(47,107,255,.14);
       border:1px solid rgba(47,107,255,.35);
       color:var(--text);
@@ -289,7 +381,7 @@
       list-style:none;
       display:grid;
       gap:10px;
-      color:var(--muted);
+      color: var(--muted);
       line-height:1.6;
       font-size:.98rem;
     }
@@ -299,8 +391,8 @@
       height:10px;
       margin-top:7px;
       border-radius:999px;
-      background:rgba(47,107,255,.85);
-      box-shadow:0 0 0 4px rgba(47,107,255,.14);
+      background: rgba(31,94,255,.95);
+      box-shadow:0 0 0 4px rgba(31,94,255,.14);
     }
 
     /* Bureau */
@@ -314,20 +406,30 @@
       padding:24px;
       border-radius:var(--radius);
       background:
-        radial-gradient(900px 500px at 10% 10%, rgba(255,255,255,.04), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.20)),
-        var(--card2);
+        radial-gradient(900px 500px at 10% 10%, rgba(31,94,255,.06), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.74));
       border:1px solid var(--border);
       overflow:hidden;
       box-shadow:var(--shadow);
       transition: transform .45s cubic-bezier(.2,.9,.2,1), box-shadow .45s cubic-bezier(.2,.9,.2,1), border-color .25s ease;
       min-height:220px;
     }
+    :root[data-theme="dark"] .member-card{
+      background:
+        radial-gradient(900px 500px at 10% 10%, rgba(255,255,255,.04), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.20)),
+        var(--card2);
+      border:1px solid var(--border);
+    }
     .member-card:hover{
       transform:translateY(-8px);
       box-shadow:var(--shadow2);
+      border-color:rgba(31,94,255,.25);
+    }
+    :root[data-theme="dark"] .member-card:hover{
       border-color:rgba(47,107,255,.4);
     }
+
     .member-top{
       display:flex;
       justify-content:space-between;
@@ -338,37 +440,53 @@
       width:86px; height:86px;
       border-radius:20px;
       object-fit:cover;
+      box-shadow:0 12px 30px rgba(11,18,32,.18);
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.8);
+    }
+    :root[data-theme="dark"] .member-avatar{
       box-shadow:0 12px 30px rgba(0,0,0,.3);
       border:1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.04);
     }
+
     .member-role{
       margin:0;
       font-size:.9rem;
-      color:var(--muted);
+      color: var(--muted);
       font-weight:800;
     }
     .member-name{
       margin:10px 0 6px;
       font-weight:900;
-      font-size:1.14rem;
+      font-size:1.12rem;
       text-transform:uppercase;
       letter-spacing:.8px;
+      background: linear-gradient(90deg, var(--night), rgba(31,94,255,.95));
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+    :root[data-theme="dark"] .member-name{
       background:linear-gradient(90deg,#ffffff,#2f6bff);
       -webkit-background-clip:text;
       -webkit-text-fill-color:transparent;
     }
+
     .member-desc{
       margin:10px 0 0;
-      color:var(--muted);
+      color: var(--muted);
       line-height:1.6;
       font-size:.98rem;
     }
     .member-divider{
       height:1px;
       margin:14px 0;
+      background: linear-gradient(90deg,transparent, rgba(11,18,32,.16), transparent);
+    }
+    :root[data-theme="dark"] .member-divider{
       background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);
     }
+
     .tags{
       display:flex;
       flex-wrap:wrap;
@@ -379,15 +497,28 @@
       padding:6px 12px;
       font-size:.70rem;
       border-radius:999px;
-      background:rgba(47,107,255,.12);
-      border:1px solid rgba(47,107,255,.32);
+      background: rgba(31,94,255,.08);
+      border:1px solid rgba(31,94,255,.20);
       text-transform:uppercase;
       font-weight:900;
       letter-spacing:.3px;
+      color: rgba(11,18,32,.82);
+    }
+    :root[data-theme="dark"] .tags span{
+      background:rgba(47,107,255,.12);
+      border:1px solid rgba(47,107,255,.32);
       color:rgba(234,240,255,.92);
     }
 
     .member--president{
+      border:1px solid rgba(212,175,55,.55);
+      background:
+        radial-gradient(850px 420px at 0% 0%, rgba(212,175,55,.22), transparent 60%),
+        radial-gradient(850px 520px at 90% 10%, rgba(31,94,255,.10), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.78));
+      box-shadow:0 30px 100px rgba(11,18,32,.14);
+    }
+    :root[data-theme="dark"] .member--president{
       border:1px solid rgba(212,175,55,.70);
       background:
         radial-gradient(850px 420px at 0% 0%, rgba(212,175,55,.22), transparent 60%),
@@ -395,6 +526,7 @@
         linear-gradient(180deg,#151c28,#0f141d);
       box-shadow:0 30px 100px rgba(0,0,0,.50);
     }
+
     .member-ribbon{
       position:absolute;
       top:18px;
@@ -419,7 +551,7 @@
     }
     .role-what{
       margin:0;
-      color:var(--muted);
+      color: var(--muted);
       line-height:1.65;
       font-size:.98rem;
     }
@@ -435,6 +567,11 @@
       font-size:.72rem;
       font-weight:900;
       text-transform:uppercase;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.70);
+      color: rgba(11,18,32,.80);
+    }
+    :root[data-theme="dark"] .role-meta span{
       border:1px solid rgba(255,255,255,.14);
       background:rgba(255,255,255,.04);
       color:rgba(234,240,255,.88);
@@ -443,11 +580,10 @@
     /* CTA */
     .cta{
       border-radius:var(--radius);
-      border:1px solid rgba(47,107,255,.35);
+      border:1px solid rgba(31,94,255,.22);
       background:
-        radial-gradient(700px 400px at 0% 0%, rgba(47,107,255,.22), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.20)),
-        var(--card);
+        radial-gradient(700px 400px at 0% 0%, rgba(31,94,255,.10), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.74));
       box-shadow:var(--shadow);
       padding:22px;
       display:flex;
@@ -456,12 +592,20 @@
       gap:16px;
       flex-wrap:wrap;
     }
+    :root[data-theme="dark"] .cta{
+      border:1px solid rgba(47,107,255,.35);
+      background:
+        radial-gradient(700px 400px at 0% 0%, rgba(47,107,255,.22), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.20)),
+        var(--card);
+    }
+
     .cta strong{
       display:block;
       font-size:1.05rem;
       letter-spacing:.2px;
     }
-    .cta p{ margin:8px 0 0; color:var(--muted); line-height:1.6; max-width:740px; }
+    .cta p{ margin:8px 0 0; color: var(--muted); line-height:1.6; max-width:740px; }
 
     .btn{
       display:inline-flex;
@@ -470,20 +614,26 @@
       gap:10px;
       padding:12px 16px;
       border-radius:14px;
-      border:1px solid rgba(47,107,255,.55);
-      background:linear-gradient(180deg, rgba(47,107,255,.95), rgba(47,107,255,.72));
+      border:1px solid rgba(31,94,255,.32);
+      background: linear-gradient(180deg, rgba(11,37,69,.95), rgba(11,37,69,.82));
       color:white;
       font-weight:1000;
       letter-spacing:.2px;
-      box-shadow:0 14px 30px rgba(47,107,255,.18);
+      box-shadow:0 14px 30px rgba(11,37,69,.16);
       transition:transform .2s ease, filter .2s ease;
       min-width: 170px;
     }
-    .btn:hover{ transform:translateY(-2px); filter:brightness(1.05); }
+    .btn:hover{ transform:translateY(-2px); filter:brightness(1.03); }
+
     .btn.secondary{
+      background: rgba(255,255,255,.75);
+      border:1px solid var(--border);
+      box-shadow:none;
+      color: rgba(11,18,32,.88);
+    }
+    :root[data-theme="dark"] .btn.secondary{
       background:rgba(255,255,255,.04);
       border:1px solid rgba(255,255,255,.16);
-      box-shadow:none;
       color:rgba(234,240,255,.92);
     }
 
@@ -491,9 +641,14 @@
     .footer{
       margin-top: 22px;
       padding:42px 0 56px;
+      border-top:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.25));
+    }
+    :root[data-theme="dark"] .footer{
       border-top:1px solid rgba(255,255,255,.10);
       background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.18));
     }
+
     .footer-grid{
       display:grid;
       grid-template-columns: 1.2fr .8fr .8fr;
@@ -509,20 +664,31 @@
     .footer .list{
       gap:10px;
       font-size:.95rem;
+      display:grid;
     }
     .footer .list a{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.70);
       padding:10px 12px;
       border-radius:14px;
       transition: transform .18s ease, border-color .18s ease, background .18s ease;
     }
+    :root[data-theme="dark"] .footer .list a{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+    }
     .footer .list a:hover{
       transform: translateY(-1px);
+      border-color: rgba(11,18,32,.18);
+      background: rgba(255,255,255,.82);
+    }
+    :root[data-theme="dark"] .footer .list a:hover{
       border-color: rgba(255,255,255,.18);
       background: rgba(255,255,255,.05);
     }
-    .small{ color:rgba(234,240,255,.60); font-size:.92rem; line-height:1.6; }
+
+    .small{ color: rgba(11,18,32,.62); font-size:.92rem; line-height:1.6; }
+    :root[data-theme="dark"] .small{ color: rgba(234,240,255,.60); }
 
     @media(max-width:980px){
       header.page-hero h1{ font-size:2.35rem; }
@@ -552,7 +718,6 @@
     <div class="container">
       <div class="nav">
         <a class="brand" href="index.html">
-          <!-- logo du header = pas lazy, sinon micro flash possible -->
           <img src="assets/img/logo.png" alt="Logo Parlement JPV" decoding="async">
           <div>
             <div class="title">Parlement JPV</div>
@@ -658,7 +823,7 @@
             <span class="pill">Valeurs</span>
             <ul class="list">
               <li><span class="dot"></span><span><strong>Respect</strong> des personnes, des opinions et du cadre scolaire.</span></li>
-              <li><span class="dot"></span><span><strong>Neutralité</strong> : pas de promotion politique ou religieuse.</span></li>
+              <li><span class="dot"></span><span><strong>Neutralité</strong> : pas de promotion politique, religieuse ou idéologique.</span></li>
               <li><span class="dot"></span><span><strong>Ouverture</strong> : participation sans barrière inutile.</span></li>
               <li><span class="dot"></span><span><strong>Engagement</strong> : implication, fiabilité, bienveillance.</span></li>
             </ul>
@@ -691,229 +856,233 @@
       <div class="members-grid">
 
         <!-- PRESIDENT -->
-       <article class="member-card member--president">
- 
+        <article class="member-card member--president">
+          <div class="member-ribbon">Fondateur</div>
 
-  <div class="member-top">
-    <div>
-      <p class="member-role">Fondateur & Président</p>
-      <h3 class="member-name">Gustave Jeannin</h3>
-    </div>
-    <img class="member-avatar" src="assets/img/gustave.jpg" alt="Gustave Jeannin">
-  </div>
+          <div class="member-top">
+            <div>
+              <p class="member-role">Fondateur & Président</p>
+              <h3 class="member-name">Gustave Jeannin</h3>
+            </div>
+            <img class="member-avatar" src="assets/img/gustave.jpg" alt="Gustave Jeannin">
+          </div>
 
-  <p class="member-desc">
-   Fondateur et Président du Parlement JPV, je conçois ce projet comme une institution lycéenne à part entière.
-Il ne s’agit pas seulement d’organiser des débats, mais de former le plus detudiants possible a argumenter, de décider et de s’engager avec exigence.
-Je pilote l’organisation générale : planification, coordination, relations avec les partenaires et la direction. 
-« La parole n’est légitime que lorsqu’elle sert l’intérêt collectif. »
-  </p>
+          <p class="member-desc">
+            Fondateur et président du Parlement JPV, j’ai voulu créer une <strong>institution lycéenne</strong> capable de durer :
+            un cadre où l’on apprend à <strong>argumenter</strong>, à <strong>écouter</strong>, et à <strong>prendre position avec méthode</strong>.
+            Je pilote l’organisation générale (planification, coordination, relations avec les partenaires et l’établissement) pour que chaque action soit
+            <strong>utile</strong>, <strong>sérieuse</strong> et <strong>cohérente</strong>.
+            <br><br>
+            <em>« La parole n’a de valeur que si elle s’accompagne d’exigence. »</em>
+          </p>
 
-  <div class="member-divider"></div>
+          <div class="member-divider"></div>
 
-  <div class="tags">
-    <span>Direction</span>
-    <span>Animation</span>
-    <span>Représentation</span>
-  </div>
-</article>
+          <div class="tags">
+            <span>Direction</span>
+            <span>Animation</span>
+            <span>Représentation</span>
+          </div>
+        </article>
 
-<!-- VICE-PRESIDENTE -->
-<article class="member-card">
-  <div class="member-top">
-    <div>
-      <p class="member-role">Vice-présidente</p>
-      <h3 class="member-name">Emma D.</h3>
-    </div>
-    <img class="member-avatar" src="assets/img/vicepresident.jpg" alt="Emma D.">
-  </div>
+        <!-- VICE-PRESIDENTE -->
+        <article class="member-card">
+          <div class="member-top">
+            <div>
+              <p class="member-role">Vice-présidente</p>
+              <h3 class="member-name">Emma D.</h3>
+            </div>
+            <img class="member-avatar" src="assets/img/vicepresident.jpg" alt="Emma D.">
+          </div>
 
-  <p class="member-desc">
-    Assure la solidité opérationnelle : logistique, matériel, salle, timing, et gestion des imprévus.
-    Elle accompagne l’animation quand nécessaire, vérifie que les consignes sont respectées,
-    et prend le relais pour garantir la continuité en cas d’absence du président.
-  </p>
+          <p class="member-desc">
+            Assure la solidité opérationnelle : logistique, matériel, salle, timing et gestion des imprévus.
+            Elle accompagne l’animation si nécessaire, vérifie que les consignes sont respectées et prend le relais
+            pour garantir la continuité en cas d’absence du président.
+          </p>
 
-  <div class="member-divider"></div>
+          <div class="member-divider"></div>
 
-  <div class="tags">
-    <span>Organisation</span>
-    <span>Logistique</span>
-    <span>Continuité</span>
-  </div>
-</article>
+          <div class="tags">
+            <span>Organisation</span>
+            <span>Logistique</span>
+            <span>Continuité</span>
+          </div>
+        </article>
 
-<!-- SECRETAIRE GENERAL -->
-<article class="member-card">
-  <div class="member-top">
-    <div>
-      <p class="member-role">Secrétaire général</p>
-      <h3 class="member-name">Lara G.S.</h3>
-    </div>
-    <img class="member-avatar" src="assets/img/sg.jpg" alt="Lara G.S.">
-  </div>
+        <!-- SECRETAIRE GENERAL -->
+        <article class="member-card">
+          <div class="member-top">
+            <div>
+              <p class="member-role">Secrétaire générale</p>
+              <h3 class="member-name">Lara G.S.</h3>
+            </div>
+            <img class="member-avatar" src="assets/img/sg.jpg" alt="Lara G.S.">
+          </div>
 
-  <p class="member-desc">
-    Garantit le sérieux et la traçabilité : comptes rendus, suivi des décisions, archivage des documents.
-    Elle gère également les listes d’inscrits, les convocations et les informations pratiques,
-    pour que chaque séance et chaque événement aient une organisation claire et fiable.
-  </p>
+          <p class="member-desc">
+            Garantit le sérieux et la traçabilité : comptes rendus, suivi des décisions, archivage des documents.
+            Elle gère aussi les listes d’inscrits, les convocations et les informations pratiques
+            pour que chaque séance soit claire, fiable et cadrée.
+          </p>
 
-  <div class="member-divider"></div>
+          <div class="member-divider"></div>
 
-  <div class="tags">
-    <span>Comptes rendus</span>
-    <span>Archives</span>
-    <span>Suivi</span>
-  </div>
-</article>
+          <div class="tags">
+            <span>Comptes rendus</span>
+            <span>Archives</span>
+            <span>Suivi</span>
+          </div>
+        </article>
 
-<!-- RESPONSABLE DEBAT -->
-<article class="member-card">
-  <div class="member-top">
-    <div>
-      <p class="member-role">Responsable Débat</p>
-      <h3 class="member-name">Théo Volenweider</h3>
-    </div>
-    <img class="member-avatar" src="assets/img/porteparole.jpg" alt="Théo Volenweider">
-  </div>
+        <!-- RESPONSABLE DEBAT -->
+        <article class="member-card">
+          <div class="member-top">
+            <div>
+              <p class="member-role">Responsable Débat</p>
+              <h3 class="member-name">Théo Volenweider</h3>
+            </div>
+            <img class="member-avatar" src="assets/img/porteparole.jpg" alt="Théo Volenweider">
+          </div>
 
-  <p class="member-desc">
-    Conçoit et structure les débats : choix des motions/problématiques, formats (pour/contre, tables rondes),
-    répartition des rôles, et préparation des interventions. Il veille au respect du cadre (temps de parole,
-    écoute, argumentation) et accompagne les élèves pour améliorer clarté et rigueur.
-  </p>
+          <p class="member-desc">
+            Conçoit et structure les débats : choix des problématiques, formats (pour/contre, table ronde),
+            répartition des rôles, préparation des interventions. Il veille au respect du cadre (temps de parole,
+            écoute, rigueur) et accompagne les élèves pour gagner en clarté et en méthode.
+          </p>
 
-  <div class="member-divider"></div>
+          <div class="member-divider"></div>
 
-  <div class="tags">
-    <span>Débats</span>
-    <span>Contenu</span>
-    <span>Animation</span>
-  </div>
-</article>
+          <div class="tags">
+            <span>Débats</span>
+            <span>Contenu</span>
+            <span>Animation</span>
+          </div>
+        </article>
 
-<!-- RESPONSABLE VISITES -->
-<article class="member-card">
-  <div class="member-top">
-    <div>
-      <p class="member-role">Responsable Visites</p>
-      <h3 class="member-name">Arthur Fortier</h3>
-    </div>
-    <img class="member-avatar" src="assets/img/thematique.jpg" alt="Arthur Fortier">
-  </div>
+        <!-- RESPONSABLE VISITES -->
+        <article class="member-card">
+          <div class="member-top">
+            <div>
+              <p class="member-role">Responsable Visites</p>
+              <h3 class="member-name">Arthur Fortier</h3>
+            </div>
+            <img class="member-avatar" src="assets/img/thematique.jpg" alt="Arthur Fortier">
+          </div>
 
-  <p class="member-desc">
-    Organise les sorties et rencontres institutionnelles : repérage, prises de contact, autorisations,
-    listes d’élèves, transport et planning. Il prépare aussi le contenu en amont (objectifs, questions,
-    briefing) pour que chaque visite soit utile, cadrée et exploitable au retour.
-  </p>
+          <p class="member-desc">
+            Organise les sorties et rencontres institutionnelles : prises de contact, autorisations,
+            listes d’élèves, transport et planning. Il prépare aussi le contenu en amont (objectifs, questions,
+            briefing) pour que chaque visite soit utile, cadrée et exploitable au retour.
+          </p>
 
-  <div class="member-divider"></div>
+          <div class="member-divider"></div>
 
-  <div class="tags">
-    <span>Partenaires</span>
-    <span>Logistique</span>
-    <span>Coordination</span>
-  </div>
-</article>
+          <div class="tags">
+            <span>Partenaires</span>
+            <span>Logistique</span>
+            <span>Coordination</span>
+          </div>
+        </article>
 
-<!-- RESPONSABLE CONFERENCES -->
-<article class="member-card">
-  <div class="member-top">
-    <div>
-      <p class="member-role">Responsable Conférences</p>
-      <h3 class="member-name">Lara G.S.</h3>
-    </div>
-    <img class="member-avatar" src="assets/img/thematique.jpg" alt="Lara G.S.">
-  </div>
+        <!-- RESPONSABLE CONFERENCES -->
+        <article class="member-card">
+          <div class="member-top">
+            <div>
+              <p class="member-role">Responsable Conférences</p>
+              <h3 class="member-name">Lara G.S.</h3>
+            </div>
+            <img class="member-avatar" src="assets/img/thematique.jpg" alt="Lara G.S.">
+          </div>
 
-  <p class="member-desc">
-    Monte les conférences de A à Z : identification d’intervenants, préparation du format,
-    cadrage des sujets, et coordination le jour J (accueil, déroulé, questions du public).
-    Elle veille à la qualité : intervenants crédibles, angle clair, et respect du cadre de neutralité.
-  </p>
+          <p class="member-desc">
+            Monte les conférences de A à Z : identification d’intervenants, cadrage des sujets,
+            coordination le jour J (accueil, déroulé, questions). Elle veille à la qualité :
+            intervenants crédibles, angle clair, et respect strict de la neutralité.
+          </p>
 
-  <div class="member-divider"></div>
+          <div class="member-divider"></div>
 
-  <div class="tags">
-    <span>Intervenants</span>
-    <span>Programmation</span>
-    <span>Qualité</span>
-  </div>
-</article>
+          <div class="tags">
+            <span>Intervenants</span>
+            <span>Programmation</span>
+            <span>Qualité</span>
+          </div>
+        </article>
 
-<!-- RESPONSABLE COMMUNICATION -->
-<article class="member-card">
-  <div class="member-top">
-    <div>
-      <p class="member-role">Tresorier</p>
-      <h3 class="member-name">Eliott Funk Moreau</h3>
-    </div>
-    <img class="member-avatar" src="assets/img/thematique.jpg" alt="Eliott Funk Moreau">
-  </div>
+        <!-- TRESORIER -->
+        <article class="member-card">
+          <div class="member-top">
+            <div>
+              <p class="member-role">Trésorier</p>
+              <h3 class="member-name">Eliott Funk Moreau</h3>
+            </div>
+            <img class="member-avatar" src="assets/img/thematique.jpg" alt="Eliott Funk Moreau">
+          </div>
 
-  <p class="member-desc">
-    Gère les aspects financiers : budget prévisionnel, suivi des dépenses, demandes de subventions,
-    et relations avec les partenaires financiers. Il s’assure que les ressources sont utilisées de manière transparente et efficace pour soutenir les activités du Parlement.
-  </p>
+          <p class="member-desc">
+            Gère les aspects financiers : budget prévisionnel, suivi des dépenses, demandes de subventions,
+            et relations avec les partenaires. Il veille à une utilisation <strong>transparente</strong> et <strong>efficace</strong>
+            des ressources pour soutenir les activités du Parlement.
+          </p>
 
-  <div class="member-divider"></div>
+          <div class="member-divider"></div>
 
-  <div class="tags">
-    <span>Finances</span>
-    <span>Comptabilité</span>
-    <span>Organisation</span>
-  </div>
-</article>
+          <div class="tags">
+            <span>Finances</span>
+            <span>Comptabilité</span>
+            <span>Transparence</span>
+          </div>
+        </article>
 
-<!-- RESPONSABLE COMMUNICATION (ADJOINT / RELAIS) -->
-<article class="member-card">
-  <div class="member-top">
-    <div>
-      <p class="member-role">Responsable Communication</p>
-      <h3 class="member-name">Sacha P.</h3>
-    </div>
-    <img class="member-avatar" src="assets/img/thematique.jpg" alt="Sacha P.">
-  </div>
+        <!-- RESPONSABLE COMMUNICATION -->
+        <article class="member-card">
+          <div class="member-top">
+            <div>
+              <p class="member-role">Responsable Communication</p>
+              <h3 class="member-name">Sacha P.</h3>
+            </div>
+            <img class="member-avatar" src="assets/img/thematique.jpg" alt="Sacha P.">
+          </div>
 
-  <p class="member-desc">
-    Appuie la communication sur le terrain : diffusion dans le lycée, rappels des échéances,
-    collecte des retours et des besoins des élèves. Il aide aussi à préparer les supports
-    (stories, affiches, messages) pour renforcer la participation et éviter les infos “perdues”.
-  </p>
+          <p class="member-desc">
+            Porte la communication au quotidien : diffusion dans le lycée, rappels des échéances,
+            collecte des retours des élèves, et préparation des supports (stories, affiches, messages).
+            Objectif : faire monter la participation sans perdre d’informations en route.
+          </p>
 
-  <div class="member-divider"></div>
+          <div class="member-divider"></div>
 
-  <div class="tags">
-    <span>Insta</span>
-    <span>Communication</span>
-    <span>visuels</span>
-  </div>
-</article>
+          <div class="tags">
+            <span>Insta</span>
+            <span>Communication</span>
+            <span>Visuels</span>
+          </div>
+        </article>
 
-<!-- RESPONSABLE ELOAUENCE -->
-<article class="member-card">
-  <div class="member-top">
-    <div>
-      <p class="member-role">Responsable Éloquence</p>
-      <h3 class="member-name">Luca et Alexandre</h3>
-    </div>
-    <img class="member-avatar" src="assets/img/thematique.jpg" alt="Luca et Alexandre">
-  </div>
+        <!-- RESPONSABLE ELOQUENCE -->
+        <article class="member-card">
+          <div class="member-top">
+            <div>
+              <p class="member-role">Responsables Éloquence</p>
+              <h3 class="member-name">Luca & Alexandre</h3>
+            </div>
+            <img class="member-avatar" src="assets/img/thematique.jpg" alt="Luca et Alexandre">
+          </div>
 
-  <p class="member-desc">
-  Gère l’éloquence des débats : préparation des interventions, encadrement des élèves, animation de l’argumentation et de la discussion.
-  </p>
+          <p class="member-desc">
+            Encadrent l’éloquence : préparation des interventions, travail de posture et de diction,
+            structuration des arguments, et entraînement à la prise de parole sous contrainte de temps.
+          </p>
 
-  <div class="member-divider"></div>
+          <div class="member-divider"></div>
 
-  <div class="tags">
-    <span>Relais</span>
-    <span>Mobilisation</span>
-    <span>Terrain</span>
-  </div>
-</article>
+          <div class="tags">
+            <span>Oral</span>
+            <span>Argumentation</span>
+            <span>Coaching</span>
+          </div>
+        </article>
 
       </div>
     </section>
@@ -924,7 +1093,7 @@ Je pilote l’organisation générale : planification, coordination, relations a
     <section>
       <div class="section-title">
         <h2>Les rôles</h2>
-        <p>Qui fait quoi, concrètement. Clair, net. Pas de flou artistique.</p>
+        <p>Qui fait quoi, concrètement. Clair, net. Pas de flou.</p>
       </div>
 
       <div class="grid grid-auto">
@@ -948,7 +1117,7 @@ Je pilote l’organisation générale : planification, coordination, relations a
 
         <article class="card">
           <div class="card-inner">
-            <span class="pill">Secrétaire général</span>
+            <span class="pill">Secrétariat</span>
             <h3 class="role-title">Comptes rendus & suivi</h3>
             <p class="role-what">Rédige, archive, organise : inscriptions, convocations, documents. Sans suivi, pas de crédibilité.</p>
             <div class="role-meta"><span>Rigueur</span><span>Archives</span><span>Organisation</span></div>
@@ -957,7 +1126,7 @@ Je pilote l’organisation générale : planification, coordination, relations a
 
         <article class="card">
           <div class="card-inner">
-            <span class="pill">Porte-parole</span>
+            <span class="pill">Communication</span>
             <h3 class="role-title">Relais & mobilisation</h3>
             <p class="role-what">Fait vivre le Parlement dans le lycée : annonces, recrutement, remontées et coordination terrain.</p>
             <div class="role-meta"><span>Communication</span><span>Terrain</span><span>Mobilisation</span></div>
@@ -966,10 +1135,10 @@ Je pilote l’organisation générale : planification, coordination, relations a
 
         <article class="card">
           <div class="card-inner">
-            <span class="pill">Responsable thématique</span>
-            <h3 class="role-title">Contenu & préparation</h3>
-            <p class="role-what">Prépare les sujets, encadre un groupe, propose invités/thèmes et structure le contenu des séances.</p>
-            <div class="role-meta"><span>Contenu</span><span>Recherche</span><span>Encadrement</span></div>
+            <span class="pill">Contenu</span>
+            <h3 class="role-title">Préparation & cadrage</h3>
+            <p class="role-what">Prépare les sujets, structure les séances, propose thèmes et intervenants, garantit la neutralité.</p>
+            <div class="role-meta"><span>Contenu</span><span>Méthode</span><span>Neutralité</span></div>
           </div>
         </article>
       </div>
@@ -1054,9 +1223,6 @@ Je pilote l’organisation générale : planification, coordination, relations a
     </div>
   </noscript>
 
-  <!-- IMPORTANT : si ton main.js contient encore un toggleMobile en mode ".open",
-       soit tu le modifies, soit tu peux le retirer ici pour éviter les conflits.
-       Je le laisse pour ton site, mais la fonction ci-dessous écrase tout. -->
   <script src="js/main.js" defer></script>
 
   <script>
@@ -1070,7 +1236,6 @@ Je pilote l’organisation générale : planification, coordination, relations a
       const nav = document.getElementById("mobileNav");
       if (!btn || !nav) return;
 
-      // état initial blindé
       btn.setAttribute("aria-expanded", "false");
       nav.hidden = true;
 
@@ -1080,7 +1245,6 @@ Je pilote l’organisation générale : planification, coordination, relations a
         nav.hidden = isOpen;
       };
 
-      // Ferme après clic sur un lien
       nav.addEventListener("click", (e) => {
         const a = e.target.closest("a");
         if (!a) return;
@@ -1088,14 +1252,12 @@ Je pilote l’organisation générale : planification, coordination, relations a
         nav.hidden = true;
       });
 
-      // ESC pour fermer
       document.addEventListener("keydown", (e) => {
         if (e.key !== "Escape") return;
         btn.setAttribute("aria-expanded", "false");
         nav.hidden = true;
       });
 
-      // Ferme si on repasse en desktop (sécurité)
       const mq = window.matchMedia("(min-width: 981px)");
       mq.addEventListener?.("change", () => {
         if (mq.matches) {
