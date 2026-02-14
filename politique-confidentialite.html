@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" id="top">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Politique de confidentialité — Parlement JPV</title>
-  <meta name="description" content="Politique de confidentialité du site officiel du Parlement JPV : données, cookies, finalités, droits, conservation." />
+  <meta name="description" content="Politique de confidentialité du site Parlement JPV." />
+
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/cookies.css" />
 </head>
@@ -32,6 +33,7 @@
     </div>
   </div>
 
+  <!-- HEADER -->
   <header class="header" role="banner">
     <div class="container">
       <div class="nav">
@@ -70,6 +72,7 @@
     </div>
   </header>
 
+  <!-- MOBILE NAV -->
   <div id="mobileOverlay" class="mobile-overlay" hidden></div>
 
   <nav id="mobileNav" class="mobile" aria-label="Menu mobile" hidden>
@@ -96,290 +99,142 @@
     >Candidater (Formulaire)</a>
   </nav>
 
-  <!-- MAIN (design premium) -->
+  <!-- MAIN (DESIGN PREMIUM) -->
   <main class="legal">
-    <div class="container">
+    <header class="legal-hero">
+      <div class="container">
+        <div class="legal-hero__inner">
+          <div>
+            <div class="legal-eyebrow">
+              <span class="dot"></span> Documents officiels
+            </div>
+            <h1 class="legal-title">Politique de confidentialité</h1>
+            <p class="legal-subtitle">
+              Transparence sur les données, les cookies et tes droits — conformément au RGPD.
+            </p>
 
-      <!-- HERO -->
-      <header class="legal-hero">
-        <div class="legal-hero__bg" aria-hidden="true"></div>
+            <div class="legal-meta">
+              <span class="badge">RGPD</span>
+              <span class="badge badge--soft">Cookies</span>
+              <span class="badge badge--soft">Mesure d’audience</span>
+            </div>
+          </div>
 
-        <nav class="legal-breadcrumb" aria-label="Fil d’ariane">
-          <a href="index.html">Accueil</a>
-          <span aria-hidden="true">›</span>
-          <span>Politique de confidentialité</span>
+          <aside class="legal-card legal-card--highlight">
+            <div class="legal-card__kicker">Résumé</div>
+            <ul class="legal-bullets">
+              <li>Pas de collecte sans consentement explicite.</li>
+              <li>Audience : uniquement si tu acceptes.</li>
+              <li>Droits : accès, rectification, effacement, opposition.</li>
+            </ul>
+            <div class="legal-card__note">
+              Contact : <span class="muted">[email officiel]</span>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </header>
+
+    <section class="legal-body">
+      <div class="container legal-grid">
+        <!-- TOC -->
+        <nav class="legal-toc" aria-label="Sommaire">
+          <div class="legal-toc__title">Sommaire</div>
+          <a href="#donnees">1. Données collectées</a>
+          <a href="#finalite">2. Finalité du traitement</a>
+          <a href="#base-legale">3. Base légale</a>
+          <a href="#duree">4. Durée de conservation</a>
+          <a href="#droits">5. Droits des utilisateurs</a>
+          <a href="#cookies">6. Cookies</a>
+
+          <div class="legal-toc__actions">
+            <a class="toc-btn" href="mentions-legales.html">Mentions légales</a>
+            <a class="toc-btn toc-btn--primary" href="contact.html">Nous contacter</a>
+          </div>
         </nav>
 
-        <div class="legal-hero__content">
-          <div>
-            <h1 class="legal-title">Politique de confidentialité</h1>
-            <p class="legal-lead">
-              Cette page explique quelles données peuvent être traitées, à quelles fins, pendant combien de temps,
-              et comment exercer tes droits (RGPD).
+        <!-- CONTENT -->
+        <div class="legal-content">
+          <article class="legal-section" id="donnees">
+            <h2>1. Données collectées</h2>
+            <p>
+              Le site Parlement JPV ne collecte aucune donnée personnelle sans votre consentement explicite.
             </p>
-            <div class="legal-meta">
-              <span class="pill">Dernière mise à jour : <time datetime="2026-02-14">14 février 2026</time></span>
-              <span class="pill">Version : v1</span>
-            </div>
-          </div>
+            <p>
+              Les données éventuellement collectées via les formulaires (ex : Google Forms) sont limitées aux informations nécessaires
+              à l’organisation des activités du Parlement JPV.
+            </p>
+          </article>
 
-          <div class="legal-actions">
-            <button class="btn btn--ghost" type="button" onclick="window.print()">Imprimer</button>
-            <a class="btn btn--primary" href="mentions-legales.html">Mentions légales</a>
+          <article class="legal-section" id="finalite">
+            <h2>2. Finalité du traitement</h2>
+            <p>Les données sont utilisées uniquement pour :</p>
+            <ul>
+              <li>L’organisation des débats</li>
+              <li>La gestion des inscriptions</li>
+              <li>La communication interne liée aux activités</li>
+            </ul>
+          </article>
+
+          <article class="legal-section" id="base-legale">
+            <h2>3. Base légale</h2>
+            <p>
+              Le traitement repose sur le consentement des personnes concernées conformément au Règlement Général sur la Protection des Données (RGPD).
+            </p>
+          </article>
+
+          <article class="legal-section" id="duree">
+            <h2>4. Durée de conservation</h2>
+            <p>
+              Les données sont conservées pour la durée nécessaire à l’organisation des activités, puis supprimées.
+            </p>
+          </article>
+
+          <article class="legal-section" id="droits">
+            <h2>5. Droits des utilisateurs</h2>
+            <p>
+              Conformément au RGPD, vous disposez d’un droit d’accès,
+              de rectification, d’effacement et d’opposition
+              concernant vos données personnelles.
+            </p>
+
+            <div class="legal-callout">
+              <div class="legal-callout__title">Exercer vos droits</div>
+              <p class="legal-callout__text">
+                Pour exercer ces droits, contactez : <strong>[email officiel]</strong>
+              </p>
+            </div>
+          </article>
+
+          <article class="legal-section" id="cookies">
+            <h2>6. Cookies</h2>
+            <p>
+              Le site peut utiliser des cookies techniques nécessaires au bon fonctionnement.
+              Aucun cookie publicitaire n’est utilisé.
+            </p>
+
+            <details class="legal-faq">
+              <summary>Que se passe-t-il si je refuse les analytics ?</summary>
+              <p>Le site fonctionne pareil. On ne mesure simplement pas la fréquentation.</p>
+            </details>
+
+            <details class="legal-faq">
+              <summary>Comment changer d’avis ?</summary>
+              <p>Supprime le stockage du navigateur (localStorage) ou relance en navigation privée.</p>
+            </details>
+          </article>
+
+          <div class="legal-footerline">
+            <span>© <span id="yearInline"></span> Parlement JPV</span>
+            <span class="sep">•</span>
+            <a href="#top" class="backtop" onclick="window.scrollTo({top:0,behavior:'smooth'}); return false;">Retour en haut ↑</a>
           </div>
         </div>
-      </header>
-
-      <div class="legal-layout">
-        <!-- SOMMAIRE -->
-        <aside class="legal-aside" aria-label="Sommaire">
-          <div class="legal-card legal-card--sticky">
-            <div class="legal-card__kicker">Sommaire</div>
-            <div class="legal-toc">
-              <a href="#responsable">Responsable du traitement</a>
-              <a href="#donnees">Données traitées</a>
-              <a href="#finalites">Finalités & base légale</a>
-              <a href="#cookies">Cookies & mesure d’audience</a>
-              <a href="#destinataires">Destinataires</a>
-              <a href="#duree">Durées de conservation</a>
-              <a href="#droits">Tes droits</a>
-              <a href="#securite">Sécurité</a>
-              <a href="#contact">Nous contacter</a>
-            </div>
-
-            <div class="legal-mini">
-              <div class="legal-mini__title">En bref</div>
-              <p class="small">
-                Pas de revente de données. L’audience est mesurée uniquement si tu acceptes les cookies.
-              </p>
-            </div>
-          </div>
-        </aside>
-
-        <!-- CONTENU -->
-        <section class="legal-content" aria-label="Contenu confidentialité">
-
-          <article id="responsable" class="legal-card">
-            <div class="legal-card__head">
-              <h2>Responsable du traitement</h2>
-              <span class="badge">RGPD</span>
-            </div>
-            <div class="legal-card__body">
-              <p>
-                Le responsable du traitement des données est le <strong>Parlement JPV</strong> (initiative lycéenne),
-                rattachée au <strong>Lycée Jean-Pierre Vernant — Sèvres</strong>.
-                Les informations d’identification sont précisées dans les <a href="mentions-legales.html">Mentions légales</a>.
-              </p>
-            </div>
-          </article>
-
-          <article id="donnees" class="legal-card">
-            <div class="legal-card__head">
-              <h2>Données traitées</h2>
-              <span class="badge badge--soft">Transparence</span>
-            </div>
-            <div class="legal-card__body">
-              <p>Selon ton usage du site, nous pouvons traiter :</p>
-
-              <div class="legal-grid">
-                <div class="legal-field">
-                  <div class="legal-field__label">Données techniques</div>
-                  <div class="legal-field__value">Type d’appareil, navigateur, pages visitées (si analytics acceptés)</div>
-                </div>
-                <div class="legal-field">
-                  <div class="legal-field__label">Données de contact</div>
-                  <div class="legal-field__value">Informations envoyées via la page Contact (si tu nous écris)</div>
-                </div>
-                <div class="legal-field">
-                  <div class="legal-field__label">Candidatures</div>
-                  <div class="legal-field__value">Données saisies dans le formulaire Google Forms (si tu candidater)</div>
-                </div>
-                <div class="legal-field">
-                  <div class="legal-field__label">Cookies</div>
-                  <div class="legal-field__value">Préférence d’acceptation/refus (localStorage) + cookies analytics si acceptés</div>
-                </div>
-              </div>
-
-              <div class="legal-note">
-                <strong>Important :</strong> le site vitrine peut être consulté sans fournir de données personnelles.
-                Les données sont surtout liées à la prise de contact, aux candidatures et à la mesure d’audience (optionnelle).
-              </div>
-            </div>
-          </article>
-
-          <article id="finalites" class="legal-card">
-            <div class="legal-card__head">
-              <h2>Finalités & base légale</h2>
-              <span class="badge">Cadre</span>
-            </div>
-            <div class="legal-card__body">
-              <div class="legal-grid">
-                <div class="legal-field">
-                  <div class="legal-field__label">Répondre à tes messages</div>
-                  <div class="legal-field__value">Intérêt légitime / exécution d’une demande</div>
-                </div>
-                <div class="legal-field">
-                  <div class="legal-field__label">Gérer les candidatures</div>
-                  <div class="legal-field__value">Exécution d’une demande / intérêt légitime</div>
-                </div>
-                <div class="legal-field">
-                  <div class="legal-field__label">Mesurer l’audience</div>
-                  <div class="legal-field__value"><strong>Consentement</strong> (uniquement si tu acceptes)</div>
-                </div>
-                <div class="legal-field">
-                  <div class="legal-field__label">Améliorer le site</div>
-                  <div class="legal-field__value">Intérêt légitime (hors cookies soumis à consentement)</div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <article id="cookies" class="legal-card">
-            <div class="legal-card__head">
-              <h2>Cookies & mesure d’audience</h2>
-              <span class="badge badge--soft">Choix</span>
-            </div>
-            <div class="legal-card__body">
-              <p>
-                Un bandeau te permet d’accepter ou de refuser les cookies de mesure d’audience.
-                Si tu refuses, le site reste accessible normalement, sans analytics.
-              </p>
-              <div class="legal-grid" style="margin-top:12px">
-                <div class="legal-field">
-                  <div class="legal-field__label">Mesure d’audience</div>
-                  <div class="legal-field__value">Google Analytics (optionnel, selon consentement)</div>
-                </div>
-                <div class="legal-field">
-                  <div class="legal-field__label">Gestion du consentement</div>
-                  <div class="legal-field__value">Préférence stockée (localStorage) pour éviter de redemander</div>
-                </div>
-              </div>
-              <div class="legal-note">
-                <strong>Astuce :</strong> tu peux changer d’avis en supprimant le stockage du navigateur (localStorage/cookies)
-                ou en navigation privée.
-              </div>
-            </div>
-          </article>
-
-          <article id="destinataires" class="legal-card">
-            <div class="legal-card__head">
-              <h2>Destinataires</h2>
-              <span class="badge badge--soft">Avec qui ?</span>
-            </div>
-            <div class="legal-card__body">
-              <p>
-                Les données sont destinées au Parlement JPV et, selon les services utilisés :
-              </p>
-              <div class="legal-grid" style="margin-top:12px">
-                <div class="legal-field">
-                  <div class="legal-field__label">Hébergement</div>
-                  <div class="legal-field__value">GitHub Pages (hébergement du site)</div>
-                </div>
-                <div class="legal-field">
-                  <div class="legal-field__label">Formulaires</div>
-                  <div class="legal-field__value">Google Forms (si tu candidater via le formulaire)</div>
-                </div>
-                <div class="legal-field">
-                  <div class="legal-field__label">Analytics</div>
-                  <div class="legal-field__value">Google Analytics (uniquement si acceptation)</div>
-                </div>
-                <div class="legal-field">
-                  <div class="legal-field__label">Réseaux sociaux</div>
-                  <div class="legal-field__value">Instagram (si tu cliques vers Instagram)</div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <article id="duree" class="legal-card">
-            <div class="legal-card__head">
-              <h2>Durées de conservation</h2>
-              <span class="badge">Durées</span>
-            </div>
-            <div class="legal-card__body">
-              <div class="legal-grid">
-                <div class="legal-field">
-                  <div class="legal-field__label">Messages de contact</div>
-                  <div class="legal-field__value">Le temps de traiter la demande, puis archivage si nécessaire</div>
-                </div>
-                <div class="legal-field">
-                  <div class="legal-field__label">Candidatures</div>
-                  <div class="legal-field__value">Le temps de la sélection, puis suppression/archivage selon besoin</div>
-                </div>
-                <div class="legal-field">
-                  <div class="legal-field__label">Données d’audience</div>
-                  <div class="legal-field__value">Selon la configuration Google Analytics (si acceptées)</div>
-                </div>
-                <div class="legal-field">
-                  <div class="legal-field__label">Préférence cookies</div>
-                  <div class="legal-field__value">Jusqu’à suppression par l’utilisateur (localStorage)</div>
-                </div>
-              </div>
-
-              <div class="legal-note">
-                <strong>Note :</strong> si tu veux des durées “au mois près”, dis-moi ce que tu veux appliquer
-                (ex : candidatures 12 mois, contacts 6 mois) et je te le verrouille proprement.
-              </div>
-            </div>
-          </article>
-
-          <article id="droits" class="legal-card">
-            <div class="legal-card__head">
-              <h2>Tes droits</h2>
-              <span class="badge">RGPD</span>
-            </div>
-            <div class="legal-card__body">
-              <p>
-                Tu peux exercer tes droits d’accès, de rectification, d’effacement, de limitation,
-                d’opposition et, quand applicable, de portabilité, en nous contactant.
-              </p>
-              <div class="legal-note">
-                <strong>Conseil :</strong> précise l’objet, la page concernée et, si possible, une capture / date.
-                Ça accélère énormément.
-              </div>
-            </div>
-          </article>
-
-          <article id="securite" class="legal-card">
-            <div class="legal-card__head">
-              <h2>Sécurité</h2>
-              <span class="badge badge--soft">Protection</span>
-            </div>
-            <div class="legal-card__body">
-              <p>
-                Nous mettons en place des mesures raisonnables de sécurité pour protéger les données
-                (contrôles d’accès, gestion des comptes, bonnes pratiques de publication).
-                Aucune transmission sur Internet n’est toutefois totalement sûre.
-              </p>
-            </div>
-          </article>
-
-          <article id="contact" class="legal-card">
-            <div class="legal-card__head">
-              <h2>Nous contacter</h2>
-              <span class="badge">Contact</span>
-            </div>
-            <div class="legal-card__body">
-              <p>
-                Pour toute question ou demande liée à la confidentialité :<br />
-                <strong>[adresse email officielle]</strong><br />
-                ou via la page <a href="contact.html">Contact</a>.
-              </p>
-            </div>
-          </article>
-
-          <div class="legal-bottom">
-            <div class="legal-bottom__line"></div>
-            <p class="small">
-              Documents associés : <a href="mentions-legales.html">Mentions légales</a>.
-            </p>
-          </div>
-
-        </section>
       </div>
-    </div>
+    </section>
   </main>
 
+  <!-- FOOTER -->
   <footer class="footer" role="contentinfo">
     <div class="container">
       <div class="footer-grid">
@@ -413,13 +268,24 @@
           <div class="list">
             <a href="rejoindre.html">Rejoindre</a>
             <a href="contact.html">Contact</a>
-            <a href="https://instagram.com/parlementjpv" target="_blank" rel="noopener">Instagram</a>
+            <a href="https://instagram.com/parlementjpv" rel="noopener" target="_blank">Instagram</a>
           </div>
           <div class="small" style="margin-top:10px">© <span id="year"></span> Parlement JPV</div>
         </div>
       </div>
     </div>
   </footer>
+
+  <script>
+    // Année (footer + inline)
+    (function(){
+      const y = new Date().getFullYear();
+      const a = document.getElementById("year");
+      const b = document.getElementById("yearInline");
+      if (a) a.textContent = y;
+      if (b) b.textContent = y;
+    })();
+  </script>
 
   <script src="js/analytics-consent.js" defer></script>
   <script src="js/main.js" defer></script>
