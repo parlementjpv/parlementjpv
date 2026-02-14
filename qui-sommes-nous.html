@@ -1,1194 +1,415 @@
-<!DOCTYPE html>
-<html lang="fr">
+<!doctype html>
+<html lang="fr" dir="ltr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <title>Qui sommes-nous — Parlement JPV</title>
   <meta name="description" content="Présentation du Parlement JPV : mission, valeurs, organisation, bureau et rôles." />
+  <meta name="theme-color" content="#0b2545" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="canonical" href="https://parlementjpv.github.io/parlementjpv/qui-sommes-nous.html" />
+  <meta name="robots" content="index,follow" />
 
+  <link rel="icon" href="assets/img/favicon.png" sizes="any" />
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png" />
+
+  <meta property="og:title" content="Qui sommes-nous — Parlement JPV" />
+  <meta property="og:description" content="Le bureau, la mission et les rôles : une institution lycéenne structurée, exigeante et tournée vers l’action." />
+  <meta property="og:image" content="assets/img/og.jpg" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:url" content="https://parlementjpv.github.io/parlementjpv/qui-sommes-nous.html" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Optionnel : mini-ajustements spécifiques à cette page (0 conflit) -->
   <style>
-    /* =========================================================
-       IDENTITÉ VISUELLE — PARLEMENT JPV (CLAIRE + INSTITUTIONNELLE)
-       - Base claire (premium)
-       - Bleu nuit = autorité / institution
-       - Or = distinction / symbolique républicaine
-       ========================================================= */
-
-    :root{
-      /* Palette */
-      --bg: #f4f7fb;
-      --bg2:#eef3fb;
-      --card:#ffffff;
-      --card2:#f7f9fe;
-      --text:#0b1220;
-      --muted: rgba(11,18,32,.72);
-      --border: rgba(11,18,32,.10);
-
-      --night:#0b2545;
-      --accent:#1f5eff;     /* bleu plus net mais lisible sur fond clair */
-      --gold:#d4af37;
-
-      /* Effets */
-      --shadow: 0 14px 40px rgba(11,18,32,.10);
-      --shadow2: 0 28px 90px rgba(11,18,32,.16);
-      --radius: 22px;
-      --radius2: 16px;
-      --max: 1200px;
-
-      --focus: 0 0 0 4px rgba(31,94,255,.20);
-    }
-
-    /* Optionnel : dark mode (si tu veux le garder) */
-    :root[data-theme="dark"]{
-      --bg:#0b1220;
-      --bg2:#0b1220;
-      --card:#0f1b2d;
-      --card2:#0c1728;
-      --text:#eaf0ff;
-      --muted: rgba(234,240,255,.74);
-      --border: rgba(255,255,255,.14);
-
-      --shadow:0 14px 40px rgba(0,0,0,.18);
-      --shadow2:0 28px 80px rgba(0,0,0,.35);
-      --focus: 0 0 0 4px rgba(47,107,255,.28);
-    }
-
-    *{ box-sizing:border-box; }
-    html,body{ margin:0; padding:0; }
-    body{
-      font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(1100px 750px at 12% 0%, rgba(31,94,255,.10), transparent 60%),
-        radial-gradient(1000px 700px at 92% -10%, rgba(212,175,55,.10), transparent 55%),
-        radial-gradient(900px 650px at 70% 110%, rgba(11,37,69,.10), transparent 55%),
-        linear-gradient(180deg, var(--bg2), var(--bg));
-      overflow-x:hidden;
-    }
-
-    a{ color:inherit; text-decoration:none; }
-    img{ max-width:100%; display:block; }
-    .container{ max-width:var(--max); margin:0 auto; padding:0 20px; }
-
-    /* Accessibilité */
-    .skip-link{
-      position:absolute; left:-9999px; top:8px;
-      padding:10px 12px; border-radius:12px;
-      background:rgba(255,255,255,.9);
-      border:1px solid var(--border);
-      color:var(--text);
-    }
-    .skip-link:focus{ left:12px; outline:none; box-shadow:var(--focus); }
-    :focus-visible{ outline:none; box-shadow:var(--focus); border-radius:14px; }
-
-    /* ===== Header / Nav ===== */
-    .site-header{
-      position:sticky;
-      top:0;
-      z-index:50;
-      backdrop-filter: blur(10px);
-      background: linear-gradient(180deg, rgba(244,247,251,.92), rgba(244,247,251,.72));
-      border-bottom: 1px solid var(--border);
-    }
-    :root[data-theme="dark"] .site-header{
-      background: linear-gradient(180deg, rgba(11,18,32,.86), rgba(11,18,32,.60));
-      border-bottom: 1px solid rgba(255,255,255,.10);
-    }
-
-    .nav{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:18px;
-      padding:14px 0;
-    }
-    .brand{
-      display:flex; align-items:center; gap:12px;
-      min-width: 220px;
-    }
-    .brand img{
-      width:44px; height:44px; border-radius:12px;
-      border:1px solid var(--border);
-      box-shadow: 0 12px 26px rgba(11,18,32,.12);
-      background: rgba(255,255,255,.7);
-      object-fit:cover;
-    }
-    :root[data-theme="dark"] .brand img{
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow: 0 12px 26px rgba(0,0,0,.30);
-      background: rgba(255,255,255,.04);
-    }
-
-    .brand .title{
-      font-weight:900;
-      letter-spacing:.2px;
-      line-height:1.05;
-    }
-    .brand .sub{
-      color:var(--muted);
-      font-size:.88rem;
-      margin-top:3px;
-      line-height:1.2;
-    }
-
-    .nav-links{
-      display:flex; gap:12px; flex-wrap:wrap;
-      justify-content:flex-end;
-      align-items:center;
-    }
-    .nav-links a{
-      padding:10px 12px;
-      border-radius:14px;
-      color: rgba(11,18,32,.88);
-      border:1px solid transparent;
-      background:transparent;
-      font-weight:800;
-      font-size:.92rem;
-      letter-spacing:.1px;
-      transition: transform .18s ease, background .18s ease, border-color .18s ease;
-    }
-    :root[data-theme="dark"] .nav-links a{ color: rgba(234,240,255,.90); }
-
-    .nav-links a:hover{
-      transform: translateY(-1px);
-      border-color: var(--border);
-      background: rgba(11,18,32,.03);
-    }
-    :root[data-theme="dark"] .nav-links a:hover{
-      border-color: rgba(255,255,255,.12);
-      background: rgba(255,255,255,.04);
-    }
-
-    .nav-links a.primary{
-      border-color: rgba(31,94,255,.35);
-      background: rgba(31,94,255,.10);
-      color: rgba(11,18,32,.92);
-    }
-    :root[data-theme="dark"] .nav-links a.primary{
-      border-color: rgba(47,107,255,.40);
-      background: rgba(47,107,255,.12);
-      color: rgba(234,240,255,.92);
-    }
-
-    .mobile-btn{
-      display:none;
-      align-items:center;
-      justify-content:center;
-      width:44px; height:44px;
-      border-radius:14px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.7);
-      color: rgba(11,18,32,.92);
-      cursor:pointer;
-    }
-    :root[data-theme="dark"] .mobile-btn{
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.04);
-      color: rgba(234,240,255,.92);
-    }
-    .mobile-btn svg{ width:22px; height:22px; }
-
-    /* Menu mobile (piloté via [hidden]) */
-    .mobile-nav{ display:none; border-top: 1px solid var(--border); padding:12px 0 18px; }
-    .mobile-nav:not([hidden]){ display:block; }
-    .mobile-nav a{
-      display:flex;
-      padding:12px 12px;
-      border-radius:14px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.70);
-      margin-top:10px;
-      font-weight:900;
-      letter-spacing:.1px;
-    }
-    :root[data-theme="dark"] .mobile-nav{
-      border-top: 1px solid rgba(255,255,255,.10);
-    }
-    :root[data-theme="dark"] .mobile-nav a{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-    }
-
-    /* ===== Hero ===== */
-    header.page-hero{
-      padding:62px 0 32px;
-      text-align:center;
-      position:relative;
-    }
-    .kicker{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding:8px 14px;
-      border-radius:999px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.65);
-      color: var(--muted);
-      font-weight:800;
-      letter-spacing:.35px;
-      text-transform:uppercase;
-      font-size:.78rem;
-    }
-    :root[data-theme="dark"] .kicker{
-      background: rgba(255,255,255,.04);
-    }
-    .kicker .dot{
-      width:8px; height:8px; border-radius:999px;
-      background: rgba(31,94,255,.95);
-      box-shadow: 0 0 0 4px rgba(31,94,255,.14);
-    }
-    header.page-hero h1{
-      font-family:'Playfair Display',serif;
-      font-size:3.05rem;
-      margin:16px 0 10px;
-      line-height:1.05;
-      letter-spacing:.2px;
-    }
-    .hero-sub{
-      margin:0 auto;
-      max-width:920px;
-      color: var(--muted);
-      line-height:1.75;
-      font-size:1.05rem;
-    }
-
-    .hero-stats{
-      margin:26px auto 0;
-      max-width:1000px;
-      display:grid;
-      grid-template-columns: repeat(4, minmax(0,1fr));
-      gap:12px;
-    }
-    .stat{
-      border-radius:18px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.75);
-      padding:14px 14px;
-      box-shadow: 0 12px 26px rgba(11,18,32,.08);
-    }
-    :root[data-theme="dark"] .stat{
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.03);
-      box-shadow: 0 12px 26px rgba(0,0,0,.12);
-    }
-    .stat strong{
-      display:block;
-      font-weight:900;
-      letter-spacing:.2px;
-      font-size:1.05rem;
-    }
-    .stat span{
-      display:block;
-      margin-top:6px;
-      color: var(--muted);
-      font-size:.92rem;
-      line-height:1.35;
-    }
-
-    /* Sections */
-    main{ padding-bottom: 24px; }
-    section{ padding:26px 0; }
-    .divider{
-      height:1px;
-      margin:22px 0;
-      background: linear-gradient(90deg, transparent, rgba(11,18,32,.14), transparent);
-    }
-    :root[data-theme="dark"] .divider{
-      background: linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);
-    }
-
-    .section-title{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-end;
-      gap:16px;
-      margin:10px 0 18px;
-    }
-    .section-title h2{
-      margin:0;
-      font-size:1.22rem;
-      letter-spacing:.25px;
-      text-transform:uppercase;
-      font-weight:900;
-    }
-    .section-title p{
-      margin:0;
-      color: var(--muted);
-      font-size:.95rem;
-      max-width:740px;
-      line-height:1.6;
-    }
-
-    /* Grids / cards */
-    .grid{ display:grid; gap:18px; }
-    .grid-3{ grid-template-columns:repeat(3, minmax(0,1fr)); }
-    .grid-auto{ grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); }
-
-    .card{
-      border-radius:var(--radius);
-      background:
-        radial-gradient(900px 500px at 20% 0%, rgba(31,94,255,.08), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.90), rgba(255,255,255,.72));
-      border:1px solid var(--border);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-      transition: transform .45s cubic-bezier(.2,.9,.2,1), box-shadow .45s cubic-bezier(.2,.9,.2,1), border-color .25s ease;
-    }
-    :root[data-theme="dark"] .card{
-      background:
-        radial-gradient(900px 500px at 20% 0%, rgba(47,107,255,.12), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.18)),
-        var(--card);
-      border:1px solid var(--border);
-    }
-    .card:hover{
-      transform:translateY(-6px);
-      box-shadow:var(--shadow2);
-      border-color:rgba(31,94,255,.25);
-    }
-    :root[data-theme="dark"] .card:hover{
-      border-color:rgba(47,107,255,.35);
-    }
-    .card-inner{ padding:22px; }
-
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:6px 10px;
-      border-radius:999px;
-      font-size:.72rem;
-      font-weight:900;
-      letter-spacing:.35px;
-      text-transform:uppercase;
-      background: rgba(31,94,255,.10);
-      border:1px solid rgba(31,94,255,.22);
-      color: var(--night);
-    }
-    :root[data-theme="dark"] .pill{
-      background:rgba(47,107,255,.14);
-      border:1px solid rgba(47,107,255,.35);
-      color:var(--text);
-    }
-
-    .list{
-      margin:12px 0 0;
-      padding:0;
-      list-style:none;
-      display:grid;
-      gap:10px;
-      color: var(--muted);
-      line-height:1.6;
-      font-size:.98rem;
-    }
-    .list li{ display:flex; gap:10px; align-items:flex-start; }
-    .dot{
-      flex:0 0 10px;
-      height:10px;
-      margin-top:7px;
-      border-radius:999px;
-      background: rgba(31,94,255,.95);
-      box-shadow:0 0 0 4px rgba(31,94,255,.14);
-    }
-
-    /* Bureau */
-    .members-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-      gap:22px;
-    }
-    .member-card{
-      position:relative;
-      padding:24px;
-      border-radius:var(--radius);
-      background:
-        radial-gradient(900px 500px at 10% 10%, rgba(31,94,255,.06), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.74));
-      border:1px solid var(--border);
-      overflow:hidden;
-      box-shadow:var(--shadow);
-      transition: transform .45s cubic-bezier(.2,.9,.2,1), box-shadow .45s cubic-bezier(.2,.9,.2,1), border-color .25s ease;
-      min-height:220px;
-    }
-    :root[data-theme="dark"] .member-card{
-      background:
-        radial-gradient(900px 500px at 10% 10%, rgba(255,255,255,.04), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.20)),
-        var(--card2);
-      border:1px solid var(--border);
-    }
-    .member-card:hover{
-      transform:translateY(-8px);
-      box-shadow:var(--shadow2);
-      border-color:rgba(31,94,255,.25);
-    }
-    :root[data-theme="dark"] .member-card:hover{
-      border-color:rgba(47,107,255,.4);
-    }
-
-    .member-top{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:16px;
-    }
+    .members{ margin-top:14px; }
+    .member-grid{ display:grid; gap:14px; }
+    @media (min-width: 900px){ .member-grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    .member-card{ position:relative; }
+    .member-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
     .member-avatar{
-      width:86px; height:86px;
-      border-radius:20px;
-      object-fit:cover;
-      box-shadow:0 12px 30px rgba(11,18,32,.18);
+      width:74px; height:74px; border-radius:16px; object-fit:cover;
+      border:1px solid var(--border); background: color-mix(in srgb, var(--card) 92%, transparent);
+    }
+    .member-role{ margin:0; opacity:.8; font-weight:700; }
+    .member-name{ margin:10px 0 6px; font-weight:900; letter-spacing:.6px; text-transform:uppercase; }
+    .member-desc{ margin:0; }
+    .member-tags{ margin-top:12px; display:flex; flex-wrap:wrap; gap:8px; }
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px; border-radius:999px;
       border:1px solid var(--border);
-      background: rgba(255,255,255,.8);
+      background: color-mix(in srgb, var(--card) 92%, transparent);
+      font-size:.78rem; font-weight:800;
     }
-    :root[data-theme="dark"] .member-avatar{
-      box-shadow:0 12px 30px rgba(0,0,0,.3);
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-    }
-
-    .member-role{
-      margin:0;
-      font-size:.9rem;
-      color: var(--muted);
-      font-weight:800;
-    }
-    .member-name{
-      margin:10px 0 6px;
-      font-weight:900;
-      font-size:1.12rem;
-      text-transform:uppercase;
-      letter-spacing:.8px;
-      background: linear-gradient(90deg, var(--night), rgba(31,94,255,.95));
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-    }
-    :root[data-theme="dark"] .member-name{
-      background:linear-gradient(90deg,#ffffff,#2f6bff);
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-    }
-
-    .member-desc{
-      margin:10px 0 0;
-      color: var(--muted);
-      line-height:1.6;
-      font-size:.98rem;
-    }
-    .member-divider{
-      height:1px;
-      margin:14px 0;
-      background: linear-gradient(90deg,transparent, rgba(11,18,32,.16), transparent);
-    }
-    :root[data-theme="dark"] .member-divider{
-      background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);
-    }
-
-    .tags{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top:12px;
-    }
-    .tags span{
-      padding:6px 12px;
-      font-size:.70rem;
-      border-radius:999px;
-      background: rgba(31,94,255,.08);
-      border:1px solid rgba(31,94,255,.20);
-      text-transform:uppercase;
-      font-weight:900;
-      letter-spacing:.3px;
-      color: rgba(11,18,32,.82);
-    }
-    :root[data-theme="dark"] .tags span{
-      background:rgba(47,107,255,.12);
-      border:1px solid rgba(47,107,255,.32);
-      color:rgba(234,240,255,.92);
-    }
-
-    .member--president{
-      border:1px solid rgba(212,175,55,.55);
-      background:
-        radial-gradient(850px 420px at 0% 0%, rgba(212,175,55,.22), transparent 60%),
-        radial-gradient(850px 520px at 90% 10%, rgba(31,94,255,.10), transparent 55%),
-        linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.78));
-      box-shadow:0 30px 100px rgba(11,18,32,.14);
-    }
-    :root[data-theme="dark"] .member--president{
-      border:1px solid rgba(212,175,55,.70);
-      background:
-        radial-gradient(850px 420px at 0% 0%, rgba(212,175,55,.22), transparent 60%),
-        radial-gradient(850px 520px at 90% 10%, rgba(47,107,255,.16), transparent 55%),
-        linear-gradient(180deg,#151c28,#0f141d);
-      box-shadow:0 30px 100px rgba(0,0,0,.50);
-    }
-
-    .member-ribbon{
-      position:absolute;
-      top:18px;
-      right:-55px;
-      transform:rotate(45deg);
-      background:linear-gradient(90deg,#d4af37,#f7eaa6);
-      color:#1a1a1a;
-      font-weight:1000;
-      font-size:.7rem;
-      padding:8px 70px;
-      text-transform:uppercase;
-      letter-spacing:.4px;
-    }
-
-    /* Roles */
-    .role-title{
-      margin:12px 0 8px;
-      font-weight:1000;
-      letter-spacing:.3px;
-      text-transform:uppercase;
-      font-size:1rem;
-    }
-    .role-what{
-      margin:0;
-      color: var(--muted);
-      line-height:1.65;
-      font-size:.98rem;
-    }
-    .role-meta{
-      margin-top:14px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    .role-meta span{
-      padding:6px 10px;
-      border-radius:999px;
-      font-size:.72rem;
-      font-weight:900;
-      text-transform:uppercase;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.70);
-      color: rgba(11,18,32,.80);
-    }
-    :root[data-theme="dark"] .role-meta span{
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(255,255,255,.04);
-      color:rgba(234,240,255,.88);
-    }
-
-    /* CTA */
-    .cta{
-      border-radius:var(--radius);
-      border:1px solid rgba(31,94,255,.22);
-      background:
-        radial-gradient(700px 400px at 0% 0%, rgba(31,94,255,.10), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.74));
-      box-shadow:var(--shadow);
-      padding:22px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
-      flex-wrap:wrap;
-    }
-    :root[data-theme="dark"] .cta{
-      border:1px solid rgba(47,107,255,.35);
-      background:
-        radial-gradient(700px 400px at 0% 0%, rgba(47,107,255,.22), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.20)),
-        var(--card);
-    }
-
-    .cta strong{
-      display:block;
-      font-size:1.05rem;
-      letter-spacing:.2px;
-    }
-    .cta p{ margin:8px 0 0; color: var(--muted); line-height:1.6; max-width:740px; }
-
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-      padding:12px 16px;
-      border-radius:14px;
-      border:1px solid rgba(31,94,255,.32);
-      background: linear-gradient(180deg, rgba(11,37,69,.95), rgba(11,37,69,.82));
-      color:white;
-      font-weight:1000;
-      letter-spacing:.2px;
-      box-shadow:0 14px 30px rgba(11,37,69,.16);
-      transition:transform .2s ease, filter .2s ease;
-      min-width: 170px;
-    }
-    .btn:hover{ transform:translateY(-2px); filter:brightness(1.03); }
-
-    .btn.secondary{
-      background: rgba(255,255,255,.75);
-      border:1px solid var(--border);
-      box-shadow:none;
-      color: rgba(11,18,32,.88);
-    }
-    :root[data-theme="dark"] .btn.secondary{
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.16);
-      color:rgba(234,240,255,.92);
-    }
-
-    /* Footer */
-    .footer{
-      margin-top: 22px;
-      padding:42px 0 56px;
-      border-top:1px solid var(--border);
-      background: linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.25));
-    }
-    :root[data-theme="dark"] .footer{
-      border-top:1px solid rgba(255,255,255,.10);
-      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.18));
-    }
-
-    .footer-grid{
-      display:grid;
-      grid-template-columns: 1.2fr .8fr .8fr;
-      gap:18px;
-      align-items:flex-start;
-    }
-    .footer .kicker{
-      display:inline-flex;
-      margin-bottom:10px;
-      font-size:.74rem;
-      opacity:.95;
-    }
-    .footer .list{
-      gap:10px;
-      font-size:.95rem;
-      display:grid;
-    }
-    .footer .list a{
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.70);
-      padding:10px 12px;
-      border-radius:14px;
-      transition: transform .18s ease, border-color .18s ease, background .18s ease;
-    }
-    :root[data-theme="dark"] .footer .list a{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-    }
-    .footer .list a:hover{
-      transform: translateY(-1px);
-      border-color: rgba(11,18,32,.18);
-      background: rgba(255,255,255,.82);
-    }
-    :root[data-theme="dark"] .footer .list a:hover{
-      border-color: rgba(255,255,255,.18);
-      background: rgba(255,255,255,.05);
-    }
-
-    .small{ color: rgba(11,18,32,.62); font-size:.92rem; line-height:1.6; }
-    :root[data-theme="dark"] .small{ color: rgba(234,240,255,.60); }
-
-    @media(max-width:980px){
-      header.page-hero h1{ font-size:2.35rem; }
-      .section-title{ flex-direction:column; align-items:flex-start; }
-      .grid-3{ grid-template-columns:1fr; }
-      .hero-stats{ grid-template-columns: repeat(2, minmax(0,1fr)); }
-      .footer-grid{ grid-template-columns: 1fr; }
-      .nav-links{ display:none; }
-      .mobile-btn{ display:inline-flex; }
-    }
-    @media(max-width:600px){
-      header.page-hero{ padding:44px 0 24px; }
-      header.page-hero h1{ font-size:2.05rem; }
-      .member-top{ flex-direction:column-reverse; align-items:flex-start; }
-      .member-avatar{ width:92px; height:92px; }
-      .btn{ width:100%; }
-      .hero-stats{ grid-template-columns: 1fr; }
+    .ribbon{
+      position:absolute; top:14px; right:-48px; transform: rotate(45deg);
+      background: linear-gradient(90deg, var(--gold), #f7eaa6);
+      color:#141414; font-weight:900; letter-spacing:.3px;
+      padding:8px 62px; font-size:.72rem;
     }
   </style>
 </head>
 
 <body>
-  <a class="skip-link" href="#contenu">Aller au contenu</a>
-
-  <!-- HEADER -->
-  <div class="site-header" role="banner">
+  <!-- HEADER (copie conforme index) -->
+  <header class="header" role="banner">
     <div class="container">
       <div class="nav">
-        <a class="brand" href="index.html">
-          <img src="assets/img/logo.png" alt="Logo Parlement JPV" decoding="async">
-          <div>
+        <a class="brand" href="index.html" aria-label="Accueil Parlement JPV">
+          <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44" />
+          <div class="brand-text">
             <div class="title">Parlement JPV</div>
             <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
           </div>
         </a>
 
-        <nav class="nav-links" aria-label="Pages">
+        <nav class="nav-links" aria-label="Navigation principale">
           <a href="institution.html">L’institution</a>
           <a href="rapports.html">Rapports</a>
           <a href="galerie.html">Galerie</a>
           <a href="media.html">Médias</a>
-          <a href="charte.html">Charte</a>
-          <a class="primary" href="qui-sommes-nous.html" aria-current="page">Qui sommes-nous</a>
           <a href="rejoindre.html">Rejoindre</a>
+          <a href="contact.html">Contact</a>
+          <a href="qui-sommes-nous.html" aria-current="page">Qui sommes-nous</a>
         </nav>
 
-        <button
-          id="mobileNavBtn"
-          class="mobile-btn"
-          type="button"
-          aria-label="Ouvrir le menu"
-          aria-expanded="false"
-          aria-controls="mobileNav"
-          onclick="toggleMobile()"
-        >
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </button>
+        <div class="nav-actions">
+          <button class="icon-btn" type="button" onclick="toggleTheme()" aria-label="Basculer le thème" title="Thème">☾</button>
+          <button
+            class="icon-btn burger"
+            type="button"
+            onclick="toggleMobile()"
+            aria-label="Ouvrir le menu"
+            aria-controls="mobileNav"
+            aria-expanded="false"
+            id="mobileNavBtn"
+            title="Menu"
+          >☰</button>
+        </div>
       </div>
 
-      <nav id="mobileNav" class="mobile-nav" aria-label="Menu mobile" hidden>
+      <!-- MOBILE NAV -->
+      <nav id="mobileNav" class="mobile" aria-label="Menu mobile" hidden>
         <a href="institution.html">L’institution</a>
         <a href="rapports.html">Rapports</a>
         <a href="galerie.html">Galerie</a>
         <a href="media.html">Médias</a>
-        <a href="charte.html">Charte</a>
-        <a href="qui-sommes-nous.html" aria-current="page">Qui sommes-nous</a>
         <a href="rejoindre.html">Rejoindre</a>
         <a href="contact.html">Contact</a>
+        <a href="qui-sommes-nous.html" aria-current="page">Qui sommes-nous</a>
+        <a href="charte.html">Charte</a>
+
+        <div class="line" role="separator" aria-hidden="true"></div>
+
+        <a
+          href="https://docs.google.com/forms/d/e/1FAIpQLSdQ86QZ8sMoY7YgOhT6DBMy5KG85yfm65O6BWMmFp7bzuorqg/viewform?usp=header"
+          target="_blank"
+          rel="noopener"
+        >Candidater (Formulaire)</a>
       </nav>
-    </div>
-  </div>
-
-  <!-- HERO -->
-  <header class="page-hero">
-    <div class="container">
-      <span class="kicker"><span class="dot"></span> Parlement JPV • Lycée Jean-Pierre Vernant</span>
-      <h1>Qui sommes-nous ?</h1>
-      <p class="hero-sub">
-        Le Parlement JPV est une initiative lycéenne dédiée à la <strong>prise de parole</strong>,
-        au <strong>débat démocratique</strong> et à l’<strong>engagement citoyen</strong>.
-        Nous organisons des débats, conférences, concours d’éloquence et visites institutionnelles,
-        dans un cadre <strong>neutre</strong>, <strong>ouvert</strong> et <strong>exigeant</strong>.
-      </p>
-
-      <div class="hero-stats" aria-label="Repères">
-        <div class="stat">
-          <strong>Neutralité</strong>
-          <span>Pas de promotion idéologique : priorité au débat structuré.</span>
-        </div>
-        <div class="stat">
-          <strong>Exigence</strong>
-          <span>Argumentation, écoute, rigueur et respect : non négociables.</span>
-        </div>
-        <div class="stat">
-          <strong>Ouverture</strong>
-          <span>Participation accessible à tous les élèves volontaires.</span>
-        </div>
-        <div class="stat">
-          <strong>Cadre</strong>
-          <span>Organisation encadrée, suivi et continuité sur l’année.</span>
-        </div>
-      </div>
     </div>
   </header>
 
-  <main id="contenu" class="container" role="main">
+  <main id="contenu">
+    <!-- HERO (même style que l’index : card + badge + kicker) -->
+    <section class="hero" aria-label="Qui sommes-nous">
+      <div class="container">
+        <div class="hero-wrap">
+          <div class="card hero-card">
+            <span class="badge">Bureau • Rôles • Organisation</span>
 
-    <!-- Mission / Valeurs / Fonctionnement -->
-    <section>
-      <div class="section-title">
-        <h2>Notre mission</h2>
-        <p>Ce que le Parlement JPV apporte concrètement aux élèves et à la vie du lycée.</p>
-      </div>
+            <div class="kicker" style="margin-top:12px">Parlement JPV</div>
+            <h1>Une équipe structurée pour porter une institution lycéenne exigeante.</h1>
 
-      <div class="grid grid-3">
-        <article class="card">
-          <div class="card-inner">
-            <span class="pill">Objectifs</span>
-            <ul class="list">
-              <li><span class="dot"></span><span>Développer la prise de parole et l’esprit critique.</span></li>
-              <li><span class="dot"></span><span>Apprendre à débattre avec respect, rigueur et écoute.</span></li>
-              <li><span class="dot"></span><span>Sensibiliser aux enjeux citoyens, culturels et politiques.</span></li>
-              <li><span class="dot"></span><span>Proposer des activités formatrices : débats, conférences, concours, visites.</span></li>
-            </ul>
-          </div>
-        </article>
+            <p>
+              Le Parlement JPV est une initiative lycéenne dédiée à la <strong>prise de parole</strong>,
+              au <strong>débat démocratique</strong> et à l’<strong>engagement citoyen</strong>.
+              Nous organisons débats, conférences, concours d’éloquence et visites institutionnelles,
+              dans un cadre <strong>neutre</strong>, <strong>ouvert</strong> et <strong>rigoureux</strong>.
+            </p>
 
-        <article class="card">
-          <div class="card-inner">
-            <span class="pill">Valeurs</span>
-            <ul class="list">
-              <li><span class="dot"></span><span><strong>Respect</strong> des personnes, des opinions et du cadre scolaire.</span></li>
-              <li><span class="dot"></span><span><strong>Neutralité</strong> : pas de promotion politique, religieuse ou idéologique.</span></li>
-              <li><span class="dot"></span><span><strong>Ouverture</strong> : participation sans barrière inutile.</span></li>
-              <li><span class="dot"></span><span><strong>Engagement</strong> : implication, fiabilité, bienveillance.</span></li>
-            </ul>
-          </div>
-        </article>
+            <p class="small">
+              Cadre : respect, neutralité et ouverture à tous les élèves volontaires.
+            </p>
 
-        <article class="card">
-          <div class="card-inner">
-            <span class="pill">Cadre</span>
-            <ul class="list">
-              <li><span class="dot"></span><span>Instance sous la responsabilité du <strong>CVL</strong>, en lien avec une professeure référente.</span></li>
-              <li><span class="dot"></span><span>Présence d’au moins un adulte requise lors des séances.</span></li>
-              <li><span class="dot"></span><span>Réunions selon disponibilités (midi / après les cours).</span></li>
-              <li><span class="dot"></span><span>Matériel du lycée : micros, projecteur, pupitres (selon disponibilité).</span></li>
-            </ul>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <div class="divider"></div>
-
-    <!-- Bureau -->
-    <section>
-      <div class="section-title">
-        <h2>Le bureau</h2>
-        <p>Une équipe resserrée pour piloter, cadrer et professionnaliser l’organisation.</p>
-      </div>
-
-      <div class="members-grid">
-
-        <!-- PRESIDENT -->
-        <article class="member-card member--president">
-          <div class="member-ribbon">Fondateur</div>
-
-          <div class="member-top">
-            <div>
-              <p class="member-role">Fondateur & Président</p>
-              <h3 class="member-name">Gustave Jeannin</h3>
+            <div class="btns">
+              <a class="btn btn-primary" href="institution.html">🏛 Fonctionnement</a>
+              <a class="btn btn-gold" href="rejoindre.html">📝 Rejoindre</a>
+              <a class="btn btn-ghost" href="charte.html">📌 Lire la charte</a>
             </div>
-            <img class="member-avatar" src="assets/img/gustave.jpg" alt="Gustave Jeannin">
           </div>
 
-          <p class="member-desc">
-            Fondateur et président du Parlement JPV, j’ai voulu créer une <strong>institution lycéenne</strong> capable de durer :
-            un cadre où l’on apprend à <strong>argumenter</strong>, à <strong>écouter</strong>, et à <strong>prendre position avec méthode</strong>.
-            Je pilote l’organisation générale (planification, coordination, relations avec les partenaires et l’établissement) pour que chaque action soit
-            <strong>utile</strong>, <strong>sérieuse</strong> et <strong>cohérente</strong>.
-            <br><br>
-            <em>« La parole n’a de valeur que si elle s’accompagne d’exigence. »</em>
-          </p>
-
-          <div class="member-divider"></div>
-
-          <div class="tags">
-            <span>Direction</span>
-            <span>Animation</span>
-            <span>Représentation</span>
-          </div>
-        </article>
-
-        <!-- VICE-PRESIDENTE -->
-        <article class="member-card">
-          <div class="member-top">
-            <div>
-              <p class="member-role">Vice-présidente</p>
-              <h3 class="member-name">Emma D.</h3>
+          <!-- visuel dans le même esprit que l’index -->
+          <figure class="card hero-side hero-side--bleed">
+            <img src="assets/img/hero.jpg" alt="Séance du Parlement JPV" loading="lazy" decoding="async" />
+            <div class="overlay" aria-hidden="true"></div>
+            <div class="hero-photo-text" aria-hidden="true">
+              <div class="hero-photo-badge">Lycée Jean-Pierre Vernant — Sèvres</div>
+              <div class="hero-photo-title">Méthode. Exigence. Impact.</div>
+              <div class="hero-photo-sub">Respect • Neutralité • Ouverture à tous</div>
             </div>
-            <img class="member-avatar" src="assets/img/vicepresident.jpg" alt="Emma D.">
-          </div>
-
-          <p class="member-desc">
-            Assure la solidité opérationnelle : logistique, matériel, salle, timing et gestion des imprévus.
-            Elle accompagne l’animation si nécessaire, vérifie que les consignes sont respectées et prend le relais
-            pour garantir la continuité en cas d’absence du président.
-          </p>
-
-          <div class="member-divider"></div>
-
-          <div class="tags">
-            <span>Organisation</span>
-            <span>Logistique</span>
-            <span>Continuité</span>
-          </div>
-        </article>
-
-        <!-- SECRETAIRE GENERAL -->
-        <article class="member-card">
-          <div class="member-top">
-            <div>
-              <p class="member-role">Secrétaire générale</p>
-              <h3 class="member-name">Lara G.S.</h3>
-            </div>
-            <img class="member-avatar" src="assets/img/sg.jpg" alt="Lara G.S.">
-          </div>
-
-          <p class="member-desc">
-            Garantit le sérieux et la traçabilité : comptes rendus, suivi des décisions, archivage des documents.
-            Elle gère aussi les listes d’inscrits, les convocations et les informations pratiques
-            pour que chaque séance soit claire, fiable et cadrée.
-          </p>
-
-          <div class="member-divider"></div>
-
-          <div class="tags">
-            <span>Comptes rendus</span>
-            <span>Archives</span>
-            <span>Suivi</span>
-          </div>
-        </article>
-
-        <!-- RESPONSABLE DEBAT -->
-        <article class="member-card">
-          <div class="member-top">
-            <div>
-              <p class="member-role">Responsable Débat</p>
-              <h3 class="member-name">Théo Volenweider</h3>
-            </div>
-            <img class="member-avatar" src="assets/img/porteparole.jpg" alt="Théo Volenweider">
-          </div>
-
-          <p class="member-desc">
-            Conçoit et structure les débats : choix des problématiques, formats (pour/contre, table ronde),
-            répartition des rôles, préparation des interventions. Il veille au respect du cadre (temps de parole,
-            écoute, rigueur) et accompagne les élèves pour gagner en clarté et en méthode.
-          </p>
-
-          <div class="member-divider"></div>
-
-          <div class="tags">
-            <span>Débats</span>
-            <span>Contenu</span>
-            <span>Animation</span>
-          </div>
-        </article>
-
-        <!-- RESPONSABLE VISITES -->
-        <article class="member-card">
-          <div class="member-top">
-            <div>
-              <p class="member-role">Responsable Visites</p>
-              <h3 class="member-name">Arthur Fortier</h3>
-            </div>
-            <img class="member-avatar" src="assets/img/thematique.jpg" alt="Arthur Fortier">
-          </div>
-
-          <p class="member-desc">
-            Organise les sorties et rencontres institutionnelles : prises de contact, autorisations,
-            listes d’élèves, transport et planning. Il prépare aussi le contenu en amont (objectifs, questions,
-            briefing) pour que chaque visite soit utile, cadrée et exploitable au retour.
-          </p>
-
-          <div class="member-divider"></div>
-
-          <div class="tags">
-            <span>Partenaires</span>
-            <span>Logistique</span>
-            <span>Coordination</span>
-          </div>
-        </article>
-
-        <!-- RESPONSABLE CONFERENCES -->
-        <article class="member-card">
-          <div class="member-top">
-            <div>
-              <p class="member-role">Responsable Conférences</p>
-              <h3 class="member-name">Lara G.S.</h3>
-            </div>
-            <img class="member-avatar" src="assets/img/thematique.jpg" alt="Lara G.S.">
-          </div>
-
-          <p class="member-desc">
-            Monte les conférences de A à Z : identification d’intervenants, cadrage des sujets,
-            coordination le jour J (accueil, déroulé, questions). Elle veille à la qualité :
-            intervenants crédibles, angle clair, et respect strict de la neutralité.
-          </p>
-
-          <div class="member-divider"></div>
-
-          <div class="tags">
-            <span>Intervenants</span>
-            <span>Programmation</span>
-            <span>Qualité</span>
-          </div>
-        </article>
-
-        <!-- TRESORIER -->
-        <article class="member-card">
-          <div class="member-top">
-            <div>
-              <p class="member-role">Trésorier</p>
-              <h3 class="member-name">Eliott Funk Moreau</h3>
-            </div>
-            <img class="member-avatar" src="assets/img/thematique.jpg" alt="Eliott Funk Moreau">
-          </div>
-
-          <p class="member-desc">
-            Gère les aspects financiers : budget prévisionnel, suivi des dépenses, demandes de subventions,
-            et relations avec les partenaires. Il veille à une utilisation <strong>transparente</strong> et <strong>efficace</strong>
-            des ressources pour soutenir les activités du Parlement.
-          </p>
-
-          <div class="member-divider"></div>
-
-          <div class="tags">
-            <span>Finances</span>
-            <span>Comptabilité</span>
-            <span>Transparence</span>
-          </div>
-        </article>
-
-        <!-- RESPONSABLE COMMUNICATION -->
-        <article class="member-card">
-          <div class="member-top">
-            <div>
-              <p class="member-role">Responsable Communication</p>
-              <h3 class="member-name">Sacha P.</h3>
-            </div>
-            <img class="member-avatar" src="assets/img/thematique.jpg" alt="Sacha P.">
-          </div>
-
-          <p class="member-desc">
-            Porte la communication au quotidien : diffusion dans le lycée, rappels des échéances,
-            collecte des retours des élèves, et préparation des supports (stories, affiches, messages).
-            Objectif : faire monter la participation sans perdre d’informations en route.
-          </p>
-
-          <div class="member-divider"></div>
-
-          <div class="tags">
-            <span>Insta</span>
-            <span>Communication</span>
-            <span>Visuels</span>
-          </div>
-        </article>
-
-        <!-- RESPONSABLE ELOQUENCE -->
-        <article class="member-card">
-          <div class="member-top">
-            <div>
-              <p class="member-role">Responsables Éloquence</p>
-              <h3 class="member-name">Luca & Alexandre</h3>
-            </div>
-            <img class="member-avatar" src="assets/img/thematique.jpg" alt="Luca et Alexandre">
-          </div>
-
-          <p class="member-desc">
-            Encadrent l’éloquence : préparation des interventions, travail de posture et de diction,
-            structuration des arguments, et entraînement à la prise de parole sous contrainte de temps.
-          </p>
-
-          <div class="member-divider"></div>
-
-          <div class="tags">
-            <span>Oral</span>
-            <span>Argumentation</span>
-            <span>Coaching</span>
-          </div>
-        </article>
-
-      </div>
-    </section>
-
-    <div class="divider"></div>
-
-    <!-- Les rôles en détail -->
-    <section>
-      <div class="section-title">
-        <h2>Les rôles</h2>
-        <p>Qui fait quoi, concrètement. Clair, net. Pas de flou.</p>
-      </div>
-
-      <div class="grid grid-auto">
-        <article class="card">
-          <div class="card-inner">
-            <span class="pill">Président</span>
-            <h3 class="role-title">Coordination générale</h3>
-            <p class="role-what">Anime les séances, fixe l’ordre du jour, arbitre l’organisation et représente le Parlement.</p>
-            <div class="role-meta"><span>Animation</span><span>Décision</span><span>Représentation</span></div>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-inner">
-            <span class="pill">Vice-président</span>
-            <h3 class="role-title">Sécurisation & intérim</h3>
-            <p class="role-what">Soutien opérationnel : logistique, timing, gestion des imprévus. Assure l’intérim si besoin.</p>
-            <div class="role-meta"><span>Logistique</span><span>Qualité</span><span>Continuité</span></div>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-inner">
-            <span class="pill">Secrétariat</span>
-            <h3 class="role-title">Comptes rendus & suivi</h3>
-            <p class="role-what">Rédige, archive, organise : inscriptions, convocations, documents. Sans suivi, pas de crédibilité.</p>
-            <div class="role-meta"><span>Rigueur</span><span>Archives</span><span>Organisation</span></div>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-inner">
-            <span class="pill">Communication</span>
-            <h3 class="role-title">Relais & mobilisation</h3>
-            <p class="role-what">Fait vivre le Parlement dans le lycée : annonces, recrutement, remontées et coordination terrain.</p>
-            <div class="role-meta"><span>Communication</span><span>Terrain</span><span>Mobilisation</span></div>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-inner">
-            <span class="pill">Contenu</span>
-            <h3 class="role-title">Préparation & cadrage</h3>
-            <p class="role-what">Prépare les sujets, structure les séances, propose thèmes et intervenants, garantit la neutralité.</p>
-            <div class="role-meta"><span>Contenu</span><span>Méthode</span><span>Neutralité</span></div>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <div class="divider"></div>
-
-    <!-- Rejoindre -->
-    <section>
-      <div class="section-title">
-        <h2>Rejoindre le Parlement JPV</h2>
-        <p>Adhésion volontaire : inscription simple, participation aux débats, conférences, ateliers et concours.</p>
-      </div>
-
-      <div class="cta">
-        <div>
-          <strong>Tu veux participer aux débats et aux conférences ?</strong>
-          <p>
-            Inscris-toi via le formulaire. En rejoignant, tu t’engages à respecter la charte :
-            respect, neutralité, ouverture et engagement.
-          </p>
-        </div>
-        <div style="display:flex; gap:12px; flex-wrap:wrap;">
-          <a class="btn" href="https://forms.gle/Rkm6GwJb6KDjzYUEA" target="_blank" rel="noopener">S’inscrire</a>
-          <a class="btn secondary" href="index.html">Retour à l’accueil</a>
+            <figcaption class="sr-only">Parlement JPV — photo d’activité</figcaption>
+          </figure>
         </div>
       </div>
     </section>
 
+    <!-- MISSION / VALEURS / CADRE (mêmes cards / grid que l’index) -->
+    <section class="section" aria-label="Mission">
+      <div class="container">
+        <div class="kicker">Notre mission</div>
+        <h2>Former, structurer, transmettre.</h2>
+
+        <div class="grid grid-3" style="margin-top:14px">
+          <article class="card">
+            <h3>Objectifs</h3>
+            <p>Développer l’esprit critique, la prise de parole et la capacité à décider avec méthode.</p>
+          </article>
+
+          <article class="card">
+            <h3>Valeurs</h3>
+            <p>Respect des personnes, neutralité, ouverture et engagement : pas de compromis.</p>
+          </article>
+
+          <article class="card">
+            <h3>Cadre</h3>
+            <p>Organisation encadrée (CVL + référent), présence adulte, traçabilité et continuité.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- BUREAU -->
+    <section class="section-tight" aria-label="Le bureau">
+      <div class="container">
+        <div class="card">
+          <div class="kicker">Le bureau</div>
+          <h2>Une équipe resserrée, une exécution propre.</h2>
+          <p class="small">Pilotage, logistique, contenu, communication : chacun a un rôle net.</p>
+
+          <div class="members">
+            <div class="member-grid">
+
+              <!-- PRESIDENT -->
+              <article class="card member-card" style="border-color: color-mix(in srgb, var(--gold) 55%, var(--border));">
+                <div class="ribbon">Fondateur</div>
+
+                <div class="member-top">
+                  <div>
+                    <p class="member-role">Fondateur & Président</p>
+                    <div class="member-name">Gustave Jeannin</div>
+                  </div>
+                  <img class="member-avatar" src="assets/img/gustave.jpg" alt="Gustave Jeannin" />
+                </div>
+
+                <p class="member-desc">
+                  Fondateur et président du Parlement JPV, j’ai créé ce projet pour installer au lycée une <strong>vraie culture du débat</strong> :
+                  apprendre à argumenter, à écouter, à contredire proprement et à décider avec méthode.
+                  Je pilote la stratégie et l’exécution (planning, coordination, partenaires, direction) pour que chaque action soit
+                  <strong>utile</strong>, <strong>cadrée</strong> et <strong>crédible</strong>.
+                  <br><br>
+                  <em>« La parole n’est forte que lorsqu’elle est tenue par l’exigence. »</em>
+                </p>
+
+                <div class="member-tags">
+                  <span class="chip">Direction</span>
+                  <span class="chip">Animation</span>
+                  <span class="chip">Représentation</span>
+                </div>
+              </article>
+
+              <!-- VICE-PRESIDENTE -->
+              <article class="card member-card">
+                <div class="member-top">
+                  <div>
+                    <p class="member-role">Vice-présidente</p>
+                    <div class="member-name">Emma D.</div>
+                  </div>
+                  <img class="member-avatar" src="assets/img/vicepresident.jpg" alt="Emma D." />
+                </div>
+
+                <p class="member-desc">
+                  Assure la solidité opérationnelle : logistique, salle, matériel, timing et gestion des imprévus.
+                  Elle sécurise le cadre et garantit la continuité en cas d’absence du président.
+                </p>
+
+                <div class="member-tags">
+                  <span class="chip">Organisation</span>
+                  <span class="chip">Logistique</span>
+                  <span class="chip">Continuité</span>
+                </div>
+              </article>
+
+              <!-- SECRETAIRE GENERAL -->
+              <article class="card member-card">
+                <div class="member-top">
+                  <div>
+                    <p class="member-role">Secrétaire générale</p>
+                    <div class="member-name">Lara G.S.</div>
+                  </div>
+                  <img class="member-avatar" src="assets/img/sg.jpg" alt="Lara G.S." />
+                </div>
+
+                <p class="member-desc">
+                  Garantit le sérieux et la traçabilité : comptes rendus, suivi des décisions, archivage, inscriptions et convocations.
+                  Sans suivi, pas de crédibilité.
+                </p>
+
+                <div class="member-tags">
+                  <span class="chip">Comptes rendus</span>
+                  <span class="chip">Archives</span>
+                  <span class="chip">Suivi</span>
+                </div>
+              </article>
+
+              <!-- RESPONSABLE DEBAT -->
+              <article class="card member-card">
+                <div class="member-top">
+                  <div>
+                    <p class="member-role">Responsable Débat</p>
+                    <div class="member-name">Théo Volenweider</div>
+                  </div>
+                  <img class="member-avatar" src="assets/img/porteparole.jpg" alt="Théo Volenweider" />
+                </div>
+
+                <p class="member-desc">
+                  Conçoit et structure les débats : problématiques, formats, rôles, préparation et respect du temps de parole.
+                  Objectif : clarté, rigueur, réfutation propre.
+                </p>
+
+                <div class="member-tags">
+                  <span class="chip">Débats</span>
+                  <span class="chip">Contenu</span>
+                  <span class="chip">Animation</span>
+                </div>
+              </article>
+
+              <!-- VISITES -->
+              <article class="card member-card">
+                <div class="member-top">
+                  <div>
+                    <p class="member-role">Responsable Visites</p>
+                    <div class="member-name">Arthur Fortier</div>
+                  </div>
+                  <img class="member-avatar" src="assets/img/thematique.jpg" alt="Arthur Fortier" />
+                </div>
+
+                <p class="member-desc">
+                  Organise les sorties et rencontres institutionnelles : contacts, autorisations, listes, transport, planning.
+                  Il prépare aussi les objectifs et les questions en amont.
+                </p>
+
+                <div class="member-tags">
+                  <span class="chip">Partenaires</span>
+                  <span class="chip">Logistique</span>
+                  <span class="chip">Coordination</span>
+                </div>
+              </article>
+
+              <!-- COMMUNICATION -->
+              <article class="card member-card">
+                <div class="member-top">
+                  <div>
+                    <p class="member-role">Responsable Communication</p>
+                    <div class="member-name">Sacha P.</div>
+                  </div>
+                  <img class="member-avatar" src="assets/img/thematique.jpg" alt="Sacha P." />
+                </div>
+
+                <p class="member-desc">
+                  Anime la communication : annonces, visuels, relais Instagram, rappels et mobilisation dans le lycée.
+                  Son job : éviter que l’info se perde.
+                </p>
+
+                <div class="member-tags">
+                  <span class="chip">Insta</span>
+                  <span class="chip">Visuels</span>
+                  <span class="chip">Mobilisation</span>
+                </div>
+              </article>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ROLES (style index : grid + cards) -->
+    <section class="section" aria-label="Rôles">
+      <div class="container">
+        <div class="kicker">Rôles</div>
+        <h2>Qui fait quoi, sans flou.</h2>
+
+        <div class="grid grid-3" style="margin-top:14px">
+          <article class="card">
+            <h3>Présidence</h3>
+            <p>Coordination générale, arbitrage, représentation, ordre du jour, cadence et niveau d’exigence.</p>
+          </article>
+
+          <article class="card">
+            <h3>Secrétariat</h3>
+            <p>Comptes rendus, archives, inscriptions, convocations : traçabilité et continuité institutionnelle.</p>
+          </article>
+
+          <article class="card">
+            <h3>Contenu & animation</h3>
+            <p>Préparation des problématiques, formats, rôles, et maintien du cadre (temps, écoute, rigueur).</p>
+          </article>
+        </div>
+
+        <div class="btns" style="margin-top:14px">
+          <a class="btn btn-primary" href="rapports.html">📄 Voir les rapports</a>
+          <a class="btn btn-ghost" href="rejoindre.html">📝 Candidater</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section-tight" aria-label="Rejoindre">
+      <div class="container">
+        <div class="card">
+          <div class="kicker">Candidature</div>
+          <h2>Rejoindre le Parlement JPV</h2>
+          <p class="small">
+            Inscription simple. Participation volontaire. Respect strict de la charte.
+          </p>
+          <div class="btns">
+            <a class="btn btn-gold" href="rejoindre.html">📝 Candidater</a>
+            <a class="btn btn-ghost" href="charte.html">📌 Lire la charte</a>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <!-- FOOTER -->
+  <!-- FOOTER (copie conforme index) -->
   <footer class="footer" role="contentinfo">
     <div class="container">
       <div class="footer-grid">
         <div>
           <div class="brand" style="gap:10px">
-            <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44" decoding="async" />
+            <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44" loading="lazy" decoding="async" />
             <div>
               <div class="title">Parlement JPV</div>
               <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
             </div>
           </div>
+
           <p class="small" style="margin-top:10px">
             Instance lycéenne de débat, d’engagement citoyen et d’initiatives structurées.
           </p>
         </div>
 
         <div>
-          <div class="kicker"><span class="dot"></span> Pages</div>
+          <div class="kicker">Pages</div>
           <div class="list">
             <a href="institution.html">L’institution</a>
             <a href="rapports.html">Rapports</a>
@@ -1200,7 +421,7 @@
         </div>
 
         <div>
-          <div class="kicker"><span class="dot"></span> Contact</div>
+          <div class="kicker">Contact</div>
           <div class="list">
             <a href="rejoindre.html">Rejoindre</a>
             <a href="contact.html">Contact</a>
@@ -1209,11 +430,6 @@
           <div class="small" style="margin-top:10px">© <span id="year"></span> Parlement JPV</div>
         </div>
       </div>
-
-      <div class="divider" style="margin:18px 0 0;"></div>
-      <p class="small" style="margin:14px 0 0; text-align:center;">
-        Parlement JPV — Lycée Jean-Pierre Vernant • Instance lycéenne de débat et d’engagement citoyen.
-      </p>
     </div>
   </footer>
 
@@ -1224,26 +440,22 @@
   </noscript>
 
   <script src="js/main.js" defer></script>
-
   <script>
-    // Année
-    const y = document.getElementById("year");
-    if (y) y.textContent = new Date().getFullYear();
+    document.getElementById("year").textContent = new Date().getFullYear();
 
-    // Menu mobile : pilotage unique via hidden + aria-expanded (anti-bug)
+    // Menu mobile : synchronise aria-expanded + hidden (comme ton index)
     (function () {
       const btn = document.getElementById("mobileNavBtn");
       const nav = document.getElementById("mobileNav");
       if (!btn || !nav) return;
 
-      btn.setAttribute("aria-expanded", "false");
-      nav.hidden = true;
-
-      window.toggleMobile = function () {
-        const isOpen = btn.getAttribute("aria-expanded") === "true";
-        btn.setAttribute("aria-expanded", String(!isOpen));
-        nav.hidden = isOpen;
-      };
+      if (typeof window.toggleMobile !== "function") {
+        window.toggleMobile = function () {
+          const isOpen = btn.getAttribute("aria-expanded") === "true";
+          btn.setAttribute("aria-expanded", String(!isOpen));
+          nav.hidden = isOpen;
+        };
+      }
 
       nav.addEventListener("click", (e) => {
         const a = e.target.closest("a");
@@ -1256,14 +468,6 @@
         if (e.key !== "Escape") return;
         btn.setAttribute("aria-expanded", "false");
         nav.hidden = true;
-      });
-
-      const mq = window.matchMedia("(min-width: 981px)");
-      mq.addEventListener?.("change", () => {
-        if (mq.matches) {
-          btn.setAttribute("aria-expanded", "false");
-          nav.hidden = true;
-        }
       });
     })();
   </script>
