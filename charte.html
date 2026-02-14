@@ -15,6 +15,7 @@
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png" />
 
   <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/cookies.css" />
 
   <script type="application/ld+json">
   {
@@ -341,12 +342,36 @@
 
 <body>
 
+  <!-- COOKIE CONSENT (analytics) -->
+  <div id="cookieWall" class="cookie-wall" hidden role="dialog" aria-modal="true" aria-label="Préférences de cookies">
+    <div class="cookie-wall__card">
+      <div class="cookie-wall__title">Cookies & mesures d’audience</div>
+      <p class="cookie-wall__text">
+        Nous utilisons des cookies de mesure d’audience (Google Analytics) pour comprendre la fréquentation du site
+        (pages consultées, durée de visite), améliorer le contenu et mesurer l’impact de nos actions.
+      </p>
+      <div class="cookie-wall__links">
+        <a href="politique-confidentialite.html">Politique de confidentialité</a>
+        <a href="mentions-legales.html">Mentions légales</a>
+      </div>
+      <div class="cookie-wall__actions">
+        <button class="cookie-btn cookie-btn--danger" type="button" data-cookie-decline>Continuer sans analytics</button>
+        <button class="cookie-btn cookie-btn--primary" type="button" data-cookie-accept>Accepter</button>
+      </div>
+      <p class="cookie-wall__note">
+        Tu peux changer d’avis plus tard : supprime le stockage du navigateur (localStorage) ou relance en navigation privée.
+      </p>
+    </div>
+  </div>
+
+
+
   <!-- HEADER -->
   <header class="header" role="banner">
     <div class="container">
       <div class="nav">
         <a class="brand" href="index.html" aria-label="Accueil Parlement JPV">
-          <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44" />
+          <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44" decoding="async" />
           <div class="brand-text">
             <div class="title">Parlement JPV</div>
             <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
@@ -360,26 +385,51 @@
           <a href="media.html">Médias</a>
           <a href="rejoindre.html">Rejoindre</a>
           <a href="contact.html">Contact</a>
-          <a href="index.html">Accueil</a>
+          <a href="qui-sommes-nous.html">Qui sommes-nous</a>
         </nav>
 
         <div class="nav-actions">
-          <button class="icon-btn" type="button" onclick="toggleTheme()" aria-label="Basculer le thème" title="Thème">☾</button>
-          <button class="icon-btn burger" type="button" onclick="toggleMobile()" aria-label="Ouvrir le menu" aria-controls="mobileNav" aria-expanded="false" id="mobileNavBtn" title="Menu">☰</button>
+          <button class="icon-btn" type="button" onclick="toggleTheme?.()" aria-label="Basculer le thème" title="Thème">☾</button>
+
+          <button
+            class="icon-btn burger"
+            type="button"
+            aria-label="Ouvrir le menu"
+            aria-controls="mobileNav"
+            aria-expanded="false"
+            id="mobileNavBtn"
+            title="Menu"
+          >☰</button>
         </div>
       </div>
-
-      <nav id="mobileNav" class="mobile" aria-label="Menu mobile" hidden>
-        <a href="index.html">Accueil</a>
-        <a href="institution.html">L’institution</a>
-        <a href="rapports.html">Rapports</a>
-        <a href="galerie.html">Galerie</a>
-        <a href="media.html">Médias</a>
-        <a href="rejoindre.html">Rejoindre</a>
-        <a href="contact.html">Contact</a>
-      </nav>
     </div>
   </header>
+
+<div id="mobileOverlay" class="mobile-overlay" hidden></div>
+
+  <nav id="mobileNav" class="mobile" aria-label="Menu mobile" hidden>
+    <div class="mobile-head">
+      <div class="mobile-title">Menu</div>
+      <button id="mobileCloseBtn" class="icon-btn" type="button" aria-label="Fermer le menu">✕</button>
+    </div>
+
+    <a href="institution.html">L’institution</a>
+    <a href="rapports.html">Rapports</a>
+    <a href="galerie.html">Galerie</a>
+    <a href="media.html">Médias</a>
+    <a href="rejoindre.html">Rejoindre</a>
+    <a href="contact.html">Contact</a>
+    <a href="qui-sommes-nous.html">Qui sommes-nous</a>
+    <a href="charte.html">Charte</a>
+
+    <div class="line" role="separator" aria-hidden="true" style="margin:12px 0;"></div>
+
+    <a
+      href="https://docs.google.com/forms/d/e/1FAIpQLSdQ86QZ8sMoY7YgOhT6DBMy5KG85yfm65O6BWMmFp7bzuorqg/viewform?usp=header"
+      target="_blank"
+      rel="noopener"
+    >Candidater (Formulaire)</a>
+  </nav>
 
   <main id="contenu">
     <section class="section-tight">
@@ -661,11 +711,45 @@
   </main>
 
   <footer class="footer" role="contentinfo">
-    <div class="container">
-      <div class="small">© <span id="year"></span> Parlement JPV — Lycée Jean-Pierre Vernant</div>
-    </div>
-  </footer>
+<div class="container">
+<div class="footer-grid">
+<div>
+<div class="brand" style="gap:10px">
+<img alt="Logo Parlement JPV" decoding="async" height="44" loading="lazy" src="assets/img/logo.png" width="44"/>
+<div>
+<div class="title">Parlement JPV</div>
+<div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
+</div>
+</div>
+<p class="small" style="margin-top:10px">
+            Instance lycéenne de débat, d’engagement citoyen et d’initiatives structurées.
+          </p>
+</div>
+<div>
+<div class="kicker">Pages</div>
+<div class="list">
+<a href="institution.html">L’institution</a>
+<a href="rapports.html">Rapports</a>
+<a href="galerie.html">Galerie</a>
+<a href="media.html">Médias</a>
+<a href="charte.html">Charte</a>
+<a href="qui-sommes-nous.html">Qui sommes-nous</a>
+</div>
+</div>
+<div>
+<div class="kicker">Contact</div>
+<div class="list">
+<a href="rejoindre.html">Rejoindre</a>
+<a href="contact.html">Contact</a>
+<a href="https://instagram.com/parlementjpv" rel="noopener" target="_blank">Instagram</a>
+</div>
+<div class="small" style="margin-top:10px">© <span id="year"></span> Parlement JPV</div>
+</div>
+</div>
+</div>
+</footer>
 
+    <script src="js/analytics-consent.js" defer></script>
   <script src="js/main.js" defer></script>
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
