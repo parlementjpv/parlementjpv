@@ -1,10 +1,8 @@
-
 <!doctype html>
 <html lang="fr" dir="ltr">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
   <title>Parlement JPV — Lycée Jean-Pierre Vernant</title>
   <meta name="description" content="Instance lycéenne de débat, d’engagement citoyen et d’initiative institutionnelle au Lycée Jean-Pierre Vernant (Sèvres)." />
   <meta name="theme-color" content="#0b2545" />
@@ -26,12 +24,226 @@
   <meta property="og:url" content="https://parlementjpv.github.io/parlementjpv/" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <!-- Perf (si Google Fonts dans styles.css) -->
+  <!-- Perf -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-  <!-- CSS -->
+  <!-- CSS global -->
   <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Page CSS (même identité, autonome, sans casser ton styles.css) -->
+  <style>
+    /* =========================================================
+       INDEX — PARLEMENT JPV (CLAIR + INSTITUTIONNEL)
+       ========================================================= */
+
+    /* Micro utilitaires */
+    .sr-only{
+      position:absolute!important;
+      width:1px;height:1px;
+      padding:0;margin:-1px;
+      overflow:hidden;clip:rect(0,0,0,0);
+      white-space:nowrap;border:0;
+    }
+
+    /* On suppose que styles.css définit déjà :root + .container etc.
+       Ici on renforce la robustesse mobile sans “fight” ton CSS. */
+    .skip-link{
+      position:absolute; left:-9999px; top:10px;
+      z-index:999;
+      padding:10px 12px;
+      border-radius:12px;
+      background:rgba(255,255,255,.92);
+      border:1px solid rgba(11,18,32,.12);
+      color:#0b1220;
+    }
+    .skip-link:focus{ left:12px; outline:none; }
+
+    /* Header : on garde ta structure mais on stabilise */
+    .header{
+      position:sticky;
+      top:0;
+      z-index:60;
+      backdrop-filter: blur(10px);
+    }
+
+    /* Fix overflow brand sur mobile */
+    .nav{ min-width:0; }
+    .brand{ min-width:0; }
+    .brand-text{ min-width:0; }
+    .brand .title,
+    .brand .sub{
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      max-width: 56vw;
+    }
+
+    /* Boutons icônes (si pas déjà dans ton CSS) */
+    .icon-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:44px;height:44px;
+      border-radius:14px;
+      border:1px solid rgba(11,18,32,.12);
+      background: rgba(255,255,255,.70);
+      cursor:pointer;
+      font-weight:900;
+      line-height:1;
+    }
+
+    /* Drawer mobile + overlay (remplace le menu “simple” hidden) */
+    .mobile-overlay{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.35);
+      backdrop-filter: blur(2px);
+      z-index:80;
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .18s ease;
+    }
+    .mobile-overlay.open{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    /* IMPORTANT : on retarget ton nav#mobileNav.mobile */
+    #mobileNav.mobile{
+      position:fixed;
+      top:0;
+      right:0;
+      height:100dvh;
+      width:min(92vw, 380px);
+      padding:14px 14px 18px;
+      z-index:90;
+
+      border-left:1px solid rgba(11,18,32,.12);
+      background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.78));
+      box-shadow: 0 30px 120px rgba(11,18,32,.20);
+
+      transform: translateX(104%);
+      transition: transform .22s ease;
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+      display:block; /* même si hidden est togglé */
+    }
+    #mobileNav.mobile.open{ transform: translateX(0); }
+
+    .mobile-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:6px 4px 10px;
+      border-bottom:1px solid rgba(11,18,32,.10);
+      margin-bottom:10px;
+    }
+    .mobile-title{
+      font-weight:1000;
+      letter-spacing:.2px;
+    }
+
+    .mobile a{
+      display:flex;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(11,18,32,.12);
+      background: rgba(255,255,255,.75);
+      margin-top:10px;
+      font-weight:900;
+      letter-spacing:.1px;
+    }
+
+    /* Scroll lock quand menu ouvert */
+    body.no-scroll{ overflow:hidden; }
+
+    /* HERO : sécurise la grille responsive */
+    .hero-wrap{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:18px;
+      align-items:stretch;
+    }
+
+    /* Photo hero : overlay + texte propre */
+    .hero-side--bleed{
+      position:relative;
+      overflow:hidden;
+      padding:0;
+      min-height: 460px;
+    }
+    .hero-side--bleed img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .hero-side--bleed .overlay{
+      position:absolute; inset:0;
+      background:
+        radial-gradient(800px 420px at 10% 10%, rgba(31,94,255,.18), transparent 60%),
+        linear-gradient(180deg, rgba(11,37,69,.00), rgba(11,37,69,.55));
+      pointer-events:none;
+    }
+    .hero-photo-text{
+      position:absolute;
+      left:18px;
+      right:18px;
+      bottom:18px;
+      color:#fff;
+      display:grid;
+      gap:8px;
+    }
+    .hero-photo-badge{
+      display:inline-flex;
+      width:max-content;
+      padding:8px 12px;
+      border-radius:999px;
+      background: rgba(255,255,255,.16);
+      border:1px solid rgba(255,255,255,.22);
+      font-weight:900;
+      letter-spacing:.2px;
+      backdrop-filter: blur(8px);
+    }
+    .hero-photo-title{
+      font-weight:1000;
+      letter-spacing:.2px;
+      font-size:1.5rem;
+      line-height:1.1;
+    }
+    .hero-photo-sub{
+      opacity:.92;
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+
+    /* Grids sections */
+    .grid-2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:18px;
+    }
+    .grid-3{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap:18px;
+    }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .nav-links{ display:none; } /* ton CSS le fait peut-être déjà */
+      .hero-wrap{ grid-template-columns: 1fr; }
+      .hero-side--bleed{ min-height: 340px; }
+      .grid-2{ grid-template-columns: 1fr; }
+      .grid-3{ grid-template-columns: 1fr; }
+      .brand .title, .brand .sub{ max-width: 62vw; }
+    }
+    @media (max-width: 380px){
+      .brand .sub{ display:none; }
+    }
+  </style>
 
   <!-- JSON-LD -->
   <script type="application/ld+json">
@@ -42,20 +254,20 @@
     "description":"Instance lycéenne de débat et d’engagement citoyen au Lycée Jean-Pierre Vernant (Sèvres).",
     "logo":"https://parlementjpv.github.io/parlementjpv/assets/img/logo.png",
     "url":"https://parlementjpv.github.io/parlementjpv/",
-    "sameAs":[
-      "https://instagram.com/parlementjpv"
-    ]
+    "sameAs":[ "https://instagram.com/parlementjpv" ]
   }
   </script>
 </head>
 
 <body>
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+
   <!-- HEADER -->
   <header class="header" role="banner">
     <div class="container">
       <div class="nav">
         <a class="brand" href="index.html" aria-label="Accueil Parlement JPV">
-          <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44" />
+          <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44" decoding="async" />
           <div class="brand-text">
             <div class="title">Parlement JPV</div>
             <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
@@ -73,12 +285,11 @@
         </nav>
 
         <div class="nav-actions">
-          <button class="icon-btn" type="button" onclick="toggleTheme()" aria-label="Basculer le thème" title="Thème">☾</button>
+          <button class="icon-btn" type="button" onclick="toggleTheme?.()" aria-label="Basculer le thème" title="Thème">☾</button>
 
           <button
             class="icon-btn burger"
             type="button"
-            onclick="toggleMobile()"
             aria-label="Ouvrir le menu"
             aria-controls="mobileNav"
             aria-expanded="false"
@@ -87,34 +298,42 @@
           >☰</button>
         </div>
       </div>
-
-      <!-- MOBILE NAV -->
-      <nav id="mobileNav" class="mobile" aria-label="Menu mobile" hidden>
-        <a href="institution.html">L’institution</a>
-        <a href="rapports.html">Rapports</a>
-        <a href="galerie.html">Galerie</a>
-        <a href="media.html">Médias</a>
-        <a href="rejoindre.html">Rejoindre</a>
-        <a href="contact.html">Contact</a>
-        <a href="qui-sommes-nous.html">Qui sommes-nous</a>
-        <a href="charte.html">Charte</a>
-
-        <div class="line" role="separator" aria-hidden="true"></div>
-
-        <a
-          href="https://docs.google.com/forms/d/e/1FAIpQLSdQ86QZ8sMoY7YgOhT6DBMy5KG85yfm65O6BWMmFp7bzuorqg/viewform?usp=header"
-          target="_blank"
-          rel="noopener"
-        >Candidater (Formulaire)</a>
-      </nav>
     </div>
   </header>
+
+  <!-- Overlay + Drawer -->
+  <div id="mobileOverlay" class="mobile-overlay" hidden></div>
+
+  <nav id="mobileNav" class="mobile" aria-label="Menu mobile" hidden>
+    <div class="mobile-head">
+      <div class="mobile-title">Menu</div>
+      <button id="mobileCloseBtn" class="icon-btn" type="button" aria-label="Fermer le menu">✕</button>
+    </div>
+
+    <a href="institution.html">L’institution</a>
+    <a href="rapports.html">Rapports</a>
+    <a href="galerie.html">Galerie</a>
+    <a href="media.html">Médias</a>
+    <a href="rejoindre.html">Rejoindre</a>
+    <a href="contact.html">Contact</a>
+    <a href="qui-sommes-nous.html">Qui sommes-nous</a>
+    <a href="charte.html">Charte</a>
+
+    <div class="line" role="separator" aria-hidden="true" style="margin:12px 0;"></div>
+
+    <a
+      href="https://docs.google.com/forms/d/e/1FAIpQLSdQ86QZ8sMoY7YgOhT6DBMy5KG85yfm65O6BWMmFp7bzuorqg/viewform?usp=header"
+      target="_blank"
+      rel="noopener"
+    >Candidater (Formulaire)</a>
+  </nav>
 
   <main id="contenu">
     <!-- HERO -->
     <section class="hero" aria-label="Présentation">
       <div class="container">
         <div class="hero-wrap">
+
           <!-- TEXTE -->
           <div class="card hero-card">
             <span class="badge">Instance lycéenne — Débat, éloquence, initiatives</span>
@@ -145,25 +364,25 @@
             </div>
           </div>
 
-         <!-- PHOTO -->
-<figure class="card hero-side hero-side--bleed">
-  <img
-    src="assets/img/hero.jpg"
-    alt="Séance du Parlement JPV"
-    loading="lazy"
-    decoding="async"
-  />
+          <!-- PHOTO -->
+          <figure class="card hero-side hero-side--bleed">
+            <img
+              src="assets/img/hero.jpg"
+              alt="Séance du Parlement JPV"
+              loading="lazy"
+              decoding="async"
+            />
 
-  <div class="overlay" aria-hidden="true"></div>
+            <div class="overlay" aria-hidden="true"></div>
 
-  <div class="hero-photo-text" aria-hidden="true">
-    <div class="hero-photo-badge">Lycée Jean-Pierre Vernant — Sèvres</div>
-    <div class="hero-photo-title">Débattre. Convaincre. Agir.</div>
-    <div class="hero-photo-sub">Respect • Neutralité • Ouverture à tous</div>
-  </div>
+            <div class="hero-photo-text" aria-hidden="true">
+              <div class="hero-photo-badge">Lycée Jean-Pierre Vernant — Sèvres</div>
+              <div class="hero-photo-title">Débattre. Convaincre. Agir.</div>
+              <div class="hero-photo-sub">Respect • Neutralité • Ouverture à tous</div>
+            </div>
 
-  <figcaption class="sr-only">Parlement JPV — photo d’activité</figcaption>
-</figure>
+            <figcaption class="sr-only">Parlement JPV — photo d’activité</figcaption>
+          </figure>
 
         </div>
       </div>
@@ -172,7 +391,7 @@
     <!-- UPCOMING -->
     <section class="section-tight" aria-label="Événements à venir">
       <div class="container">
-        <div class="grid grid-2">
+        <div class="grid-2">
           <article class="card">
             <div class="kicker">À venir</div>
             <h2>Prochains événements</h2>
@@ -204,7 +423,7 @@
         <div class="kicker">Notre méthode</div>
         <h2>Exigence, structure, impact.</h2>
 
-        <div class="grid grid-3" style="margin-top:14px">
+        <div class="grid-3" style="margin-top:14px">
           <article class="card">
             <h3>Débats à haut niveau</h3>
             <p>Format structuré : thèses, preuves, réfutation, synthèse et décisions. Pas de blabla.</p>
@@ -318,34 +537,63 @@
   <script src="js/main.js" defer></script>
   <script>
     // Année
-    document.getElementById("year").textContent = new Date().getFullYear();
+    const y = document.getElementById("year");
+    if (y) y.textContent = new Date().getFullYear();
 
-    // Menu mobile : synchronise aria-expanded + hidden
+    // Drawer mobile (robuste) + overlay + scroll lock
     (function () {
       const btn = document.getElementById("mobileNavBtn");
       const nav = document.getElementById("mobileNav");
-      if (!btn || !nav) return;
+      const overlay = document.getElementById("mobileOverlay");
+      const closeBtn = document.getElementById("mobileCloseBtn");
+      if (!btn || !nav || !overlay || !closeBtn) return;
 
-      if (typeof window.toggleMobile !== "function") {
-        window.toggleMobile = function () {
-          const isOpen = btn.getAttribute("aria-expanded") === "true";
-          btn.setAttribute("aria-expanded", String(!isOpen));
-          nav.hidden = isOpen;
-        };
+      function openMenu(){
+        btn.setAttribute("aria-expanded","true");
+        nav.hidden = false;
+        overlay.hidden = false;
+        requestAnimationFrame(() => {
+          nav.classList.add("open");
+          overlay.classList.add("open");
+          document.body.classList.add("no-scroll");
+        });
       }
+      function closeMenu(){
+        btn.setAttribute("aria-expanded","false");
+        nav.classList.remove("open");
+        overlay.classList.remove("open");
+        document.body.classList.remove("no-scroll");
+        setTimeout(() => {
+          nav.hidden = true;
+          overlay.hidden = true;
+        }, 220);
+      }
+
+      btn.addEventListener("click", () => {
+        const isOpen = btn.getAttribute("aria-expanded") === "true";
+        isOpen ? closeMenu() : openMenu();
+      });
+      closeBtn.addEventListener("click", closeMenu);
+      overlay.addEventListener("click", closeMenu);
 
       nav.addEventListener("click", (e) => {
         const a = e.target.closest("a");
-        if (!a) return;
-        btn.setAttribute("aria-expanded", "false");
-        nav.hidden = true;
+        if (a) closeMenu();
       });
 
       document.addEventListener("keydown", (e) => {
-        if (e.key !== "Escape") return;
-        btn.setAttribute("aria-expanded", "false");
-        nav.hidden = true;
+        if (e.key === "Escape") closeMenu();
       });
+
+      const mq = window.matchMedia("(min-width: 981px)");
+      mq.addEventListener?.("change", () => {
+        if (mq.matches) closeMenu();
+      });
+
+      // état initial
+      btn.setAttribute("aria-expanded","false");
+      nav.hidden = true;
+      overlay.hidden = true;
     })();
   </script>
 </body>
