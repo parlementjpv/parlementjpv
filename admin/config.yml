@@ -2,26 +2,27 @@ backend:
   name: git-gateway
   branch: main
 
-media_folder: "assets/uploads"
-public_folder: "/assets/uploads"
+local_backend: false
+
+media_folder: "uploads"
+public_folder: "/uploads"
+
+publish_mode: editorial_workflow
 
 collections:
-  - name: "bureau"
-    label: "Articles Bureau"
-    folder: "bureau/articles"
+  - name: "posts"
+    label: "Posts internes"
+    folder: "posts"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    format: "frontmatter"
+    extension: "md"
     fields:
       - { label: "Titre", name: "title", widget: "string" }
       - { label: "Date", name: "date", widget: "datetime" }
-      - { label: "Contenu", name: "body", widget: "markdown" }
-
-  - name: "actu"
-    label: "Actualités publiques"
-    folder: "actu"
-    create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
-    fields:
-      - { label: "Titre", name: "title", widget: "string" }
-      - { label: "Date", name: "date", widget: "datetime" }
+      - { label: "Auteur", name: "author", widget: "string" }
+      - { label: "Tags", name: "tags", widget: "list" }
+      - { label: "Liens", name: "links", widget: "list", required: false }
+      - { label: "Fichiers (PDF)", name: "attachments", widget: "list", required: false }
+      - { label: "Image principale", name: "featured_image", widget: "image", required: false }
       - { label: "Contenu", name: "body", widget: "markdown" }
