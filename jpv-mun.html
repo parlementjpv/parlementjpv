@@ -1,90 +1,578 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>JPV MUN — Conférence diplomatique annuelle</title>
-<meta name="description" content="JPV MUN : conférence annuelle de simulation des Nations Unies organisée par le Parlement JPV.">
-<link rel="stylesheet" href="css/styles.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JPV MUN 2026 — Conférence diplomatique annuelle</title>
+  <meta name="description" content="JPV MUN : conférence annuelle de simulation des Nations Unies organisée par le Parlement JPV. Trois jours de débats, négociations et rédaction de résolution." />
 
-<style>
-.mun-hero{
-  background:radial-gradient(circle at top,#0b2545,#091b33);
-  color:white;
-  padding:120px 20px;
-  text-align:center;
-}
+  <link rel="stylesheet" href="css/styles.css" />
 
-.mun-hero h1{
-  font-size:56px;
-  letter-spacing:3px;
-}
+  <!-- Open Graph -->
+  <meta property="og:title" content="JPV MUN 2026 — Conférence diplomatique annuelle" />
+  <meta property="og:description" content="Trois jours de simulation ONU : débats, négociations, amendements et vote final." />
+  <meta property="og:type" content="website" />
 
-.mun-grid{
-  max-width:1100px;
-  margin:100px auto;
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-  gap:30px;
-  padding:0 20px;
-}
+  <style>
+    /* ===========================
+       JPV MUN — PAGE PREMIUM
+       (conserve les variables du site si elles existent)
+       =========================== */
 
-.mun-box{
-  background:var(--card);
-  padding:35px;
-  border-radius:20px;
-  box-shadow:var(--shadow);
-  transition:.3s;
-}
+    :root{
+      --mun-bg: radial-gradient(1200px 600px at 20% 0%, rgba(212,175,55,.20), transparent 55%),
+                radial-gradient(900px 520px at 85% 10%, rgba(80,140,255,.18), transparent 55%),
+                linear-gradient(180deg, #071425 0%, #0b1220 100%);
+      --mun-surface: rgba(255,255,255,.06);
+      --mun-border: rgba(255,255,255,.12);
+      --mun-text: rgba(255,255,255,.92);
+      --mun-muted: rgba(255,255,255,.70);
+      --mun-shadow: 0 22px 70px rgba(0,0,0,.35);
+      --mun-radius: 22px;
 
-.mun-box:hover{
-  transform:translateY(-6px);
-}
+      /* fallback si ton styles.css n'a pas ces variables */
+      --night: var(--night, #0b2545);
+      --gold: var(--gold, #d4af37);
+      --shadow: var(--shadow, 0 14px 40px rgba(10,20,35,.10));
+      --card: var(--card, #ffffff);
+      --text: var(--text, #141414);
+      --muted: var(--muted, #5a5f6a);
+      --border: var(--border, rgba(20,20,20,.10));
+      --max: var(--max, 1120px);
+      --radius: var(--radius, 18px);
+    }
 
-.btn{
-  display:inline-block;
-  margin-top:30px;
-  padding:15px 35px;
-  background:var(--night);
-  color:white;
-  text-decoration:none;
-  border-radius:14px;
-  font-weight:600;
-}
-</style>
+    body{
+      margin:0;
+      background:#0b1220;
+    }
+
+    .mun-wrap{
+      background: var(--mun-bg);
+      color: var(--mun-text);
+      overflow:hidden;
+    }
+
+    .container{
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    /* HERO */
+    .mun-hero{
+      position:relative;
+      padding: 86px 0 46px;
+    }
+
+    .mun-hero::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:
+        radial-gradient(900px 380px at 50% 0%, rgba(255,255,255,.10), transparent 60%),
+        radial-gradient(600px 260px at 20% 20%, rgba(212,175,55,.18), transparent 60%),
+        radial-gradient(640px 300px at 85% 25%, rgba(30,120,255,.14), transparent 60%);
+      pointer-events:none;
+      filter: blur(.2px);
+    }
+
+    .hero-grid{
+      position:relative;
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    @media (max-width: 940px){
+      .hero-grid{ grid-template-columns: 1fr; }
+    }
+
+    .hero-card{
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--mun-border);
+      border-radius: var(--mun-radius);
+      box-shadow: var(--mun-shadow);
+      padding: 30px;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-kicker{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      font-weight:700;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color: rgba(255,255,255,.78);
+      font-size: 12px;
+    }
+
+    .hero-kicker .dot{
+      width:10px;height:10px;border-radius:999px;
+      background: linear-gradient(180deg, var(--gold), rgba(212,175,55,.5));
+      box-shadow: 0 10px 30px rgba(212,175,55,.25);
+    }
+
+    .hero-title{
+      margin: 12px 0 8px;
+      font-size: clamp(40px, 5vw, 62px);
+      line-height: 1.02;
+      letter-spacing: .02em;
+    }
+
+    .hero-sub{
+      margin: 0 0 18px;
+      color: var(--mun-muted);
+      font-size: 16.5px;
+      line-height: 1.6;
+      max-width: 60ch;
+    }
+
+    .badges{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin: 16px 0 0;
+    }
+
+    .badge{
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.84);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      line-height: 1;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+    }
+
+    .badge svg{ width:16px;height:16px; opacity:.9; }
+
+    .cta-row{
+      display:flex;
+      gap: 12px;
+      flex-wrap:wrap;
+      margin-top: 22px;
+    }
+
+    .btn{
+      appearance:none;
+      border:0;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding: 14px 18px;
+      border-radius: 14px;
+      font-weight: 800;
+      letter-spacing: .01em;
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+      user-select:none;
+      white-space:nowrap;
+    }
+
+    .btn:focus{ outline: 3px solid rgba(212,175,55,.35); outline-offset: 2px; }
+
+    .btn-primary{
+      background: linear-gradient(180deg, rgba(212,175,55,.95), rgba(212,175,55,.78));
+      color:#0b1220;
+      box-shadow: 0 18px 40px rgba(212,175,55,.18);
+    }
+    .btn-primary:hover{ transform: translateY(-2px); box-shadow: 0 22px 55px rgba(212,175,55,.22); }
+
+    .btn-ghost{
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.92);
+      border: 1px solid rgba(255,255,255,.16);
+    }
+    .btn-ghost:hover{ transform: translateY(-2px); box-shadow: 0 18px 45px rgba(0,0,0,.18); }
+
+    .btn svg{ width:18px;height:18px; }
+
+    /* SIDE INFO */
+    .info-card{
+      display:flex;
+      flex-direction:column;
+      gap: 14px;
+    }
+
+    .info-item{
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .info-item .label{
+      font-size: 12px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color: rgba(255,255,255,.72);
+      margin-bottom: 6px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
+    .info-item .value{
+      font-size: 15px;
+      line-height: 1.5;
+      color: rgba(255,255,255,.92);
+      font-weight: 650;
+    }
+
+    .note{
+      font-size: 13px;
+      line-height: 1.55;
+      color: rgba(255,255,255,.70);
+    }
+
+    /* SECTION */
+    .mun-section{
+      padding: 34px 0 80px;
+    }
+
+    .section-head{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap: 16px;
+      margin: 10px 0 20px;
+    }
+
+    .section-title{
+      font-size: 26px;
+      letter-spacing:.01em;
+      margin:0;
+    }
+
+    .section-desc{
+      margin:0;
+      color: rgba(255,255,255,.72);
+      max-width: 70ch;
+      line-height: 1.6;
+    }
+
+    /* GRID CARDS */
+    .mun-grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .card{
+      grid-column: span 6;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 20px;
+      padding: 18px 18px 16px;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+      box-shadow: 0 20px 60px rgba(0,0,0,.22);
+    }
+    .card:hover{
+      transform: translateY(-4px);
+      border-color: rgba(212,175,55,.30);
+      background: rgba(255,255,255,.075);
+    }
+
+    @media (max-width: 900px){
+      .card{ grid-column: span 12; }
+    }
+
+    .card h3{
+      margin: 6px 0 8px;
+      font-size: 18px;
+    }
+
+    .card p{
+      margin: 0;
+      color: rgba(255,255,255,.74);
+      line-height: 1.65;
+      font-size: 15px;
+    }
+
+    .icon{
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      display:grid;
+      place-items:center;
+      background: rgba(212,175,55,.14);
+      border: 1px solid rgba(212,175,55,.22);
+      box-shadow: 0 16px 35px rgba(212,175,55,.10);
+    }
+    .icon svg{ width:20px;height:20px; color: rgba(212,175,55,.95); }
+
+    /* TIMELINE */
+    .timeline{
+      margin-top: 16px;
+      display:grid;
+      gap: 12px;
+    }
+
+    .step{
+      display:flex;
+      gap: 14px;
+      align-items:flex-start;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 18px;
+      padding: 14px 14px;
+    }
+
+    .step .num{
+      width: 34px; height: 34px; border-radius: 12px;
+      display:grid; place-items:center;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.14);
+      font-weight: 900;
+      color: rgba(255,255,255,.92);
+      flex: 0 0 auto;
+    }
+
+    .step .txt strong{
+      display:block;
+      font-size: 15px;
+      margin-bottom: 4px;
+      color: rgba(255,255,255,.92);
+    }
+
+    .step .txt span{
+      display:block;
+      color: rgba(255,255,255,.70);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    /* FINAL CTA */
+    .final{
+      margin-top: 26px;
+      background: linear-gradient(180deg, rgba(212,175,55,.12), rgba(255,255,255,.04));
+      border: 1px solid rgba(212,175,55,.18);
+      border-radius: 22px;
+      padding: 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap:wrap;
+    }
+
+    .final .left{
+      max-width: 70ch;
+    }
+    .final .left h4{
+      margin: 0 0 6px;
+      font-size: 18px;
+    }
+    .final .left p{
+      margin: 0;
+      color: rgba(255,255,255,.74);
+      line-height: 1.6;
+      font-size: 14.5px;
+    }
+
+    /* a11y */
+    a{ color: inherit; }
+  </style>
 </head>
 
 <body>
+  <main class="mun-wrap">
 
-<section class="mun-hero">
-<h1>JPV MUN 2026</h1>
-<p>Conférence diplomatique annuelle du Parlement JPV</p>
-<a href="https://forms.gle/Rkm6GwJb6KDjzYUEA" class="btn">Candidater comme délégué</a>
-</section>
+    <section class="mun-hero" aria-label="Présentation JPV MUN 2026">
+      <div class="container">
+        <div class="hero-grid">
 
-<section class="mun-grid">
+          <div class="hero-card">
+            <div class="hero-kicker">
+              <span class="dot" aria-hidden="true"></span>
+              <span>Conférence diplomatique annuelle</span>
+            </div>
 
-<div class="mun-box">
-<h2>Une immersion diplomatique</h2>
-<p>Trois jours de simulation inspirée des Nations Unies pour débattre, négocier et rédiger une résolution internationale.</p>
-</div>
+            <h1 class="hero-title">JPV MUN 2026</h1>
 
-<div class="mun-box">
-<h2>Thématique 2026</h2>
-<p>Intelligence artificielle et régulation mondiale : coopération ou rivalité stratégique ?</p>
-</div>
+            <p class="hero-sub">
+              Trois jours d’immersion inspirée des Nations Unies : débats, négociations, amendements
+              et rédaction d’une résolution — dans un cadre exigeant, structuré et bienveillant.
+            </p>
 
-<div class="mun-box">
-<h2>Excellence oratoire</h2>
-<p>Discours d’ouverture, négociations, amendements et vote final dans un cadre institutionnel.</p>
-</div>
+            <div class="badges" aria-label="Points clés">
+              <span class="badge" title="Format">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 7h10M7 12h10M7 17h7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                Simulation ONU
+              </span>
+              <span class="badge" title="Compétences">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                Négociation & éloquence
+              </span>
+              <span class="badge" title="Organisation">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 8h10M7 12h10M7 16h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M5 6h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2"/></svg>
+                Format institutionnel
+              </span>
+            </div>
 
-<div class="mun-box">
-<h2>Branche annuelle</h2>
-<p>Le JPV MUN devient un pôle permanent du Parlement JPV dédié aux enjeux internationaux.</p>
-</div>
+            <div class="cta-row" role="group" aria-label="Candidatures">
+              <a class="btn btn-primary" href="https://forms.gle/Rkm6GwJb6KDjzYUEA" target="_blank" rel="noopener noreferrer">
+                Candidater comme délégué
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+              <a class="btn btn-ghost" href="https://forms.gle/Rkm6GwJb6KDjzYUEA" target="_blank" rel="noopener noreferrer">
+                Rejoindre l’équipe d’organisation
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </a>
+            </div>
 
-</section>
+            <p class="note" style="margin-top:14px">
+              Neutralité, respect des opinions et cadre scolaire : le JPV MUN est un exercice de débat,
+              pas une tribune politique. :contentReference[oaicite:1]{index=1}
+            </p>
+          </div>
 
+          <aside class="hero-card info-card" aria-label="Informations pratiques">
+            <div class="info-item">
+              <div class="label">
+                <span class="dot" aria-hidden="true" style="width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.35)"></span>
+                Thématique 2026
+              </div>
+              <div class="value">Intelligence artificielle & régulation mondiale : coopération ou rivalité stratégique ?</div>
+            </div>
+
+            <div class="info-item">
+              <div class="label">
+                <span class="dot" aria-hidden="true" style="width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.35)"></span>
+                Format
+              </div>
+              <div class="value">Comités • discours d’ouverture • négociations • amendements • vote final</div>
+            </div>
+
+            <div class="info-item">
+              <div class="label">
+                <span class="dot" aria-hidden="true" style="width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.35)"></span>
+                Public
+              </div>
+              <div class="value">Lycéens • tous niveaux • motivation & sérieux exigés</div>
+            </div>
+
+            <div class="info-item">
+              <div class="label">
+                <span class="dot" aria-hidden="true" style="width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.35)"></span>
+                Candidature
+              </div>
+              <div class="value">Formulaire • attribution des pays • préparation encadrée</div>
+            </div>
+
+            <div class="note">
+              Objectif : former à l’oral, à l’argumentation, et à la méthode — avec une exigence réelle, sans arrogance.
+            </div>
+          </aside>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="mun-section" aria-label="Pourquoi participer">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">Pourquoi participer ?</h2>
+            <p class="section-desc">
+              Le JPV MUN, c’est une expérience intense : préparation, stratégie, diplomatie, puis prise de parole.
+              Tu apprends à penser vite, parler clair, et négocier sans perdre ton calme.
+            </p>
+          </div>
+        </div>
+
+        <div class="mun-grid">
+          <article class="card">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l8 6-8 6-8-6 8-6Z" stroke="currentColor" stroke-width="2"/><path d="M4 9v8l8 4 8-4V9" stroke="currentColor" stroke-width="2"/></svg>
+            </div>
+            <h3>Immersion diplomatique</h3>
+            <p>Tu incarnes un pays, défends ses intérêts, bâtis des alliances et produis une résolution crédible.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 2v20" stroke="currentColor" stroke-width="2"/><path d="M5 7h14M7 12h10M9 17h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <h3>Excellence oratoire</h3>
+            <p>Discours, motions, amendements : tu passes du “je pense” au “je démontre”. Sans blabla.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M20 7l-8 10-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3>Une méthode qui sert partout</h3>
+            <p>Structure, concision, punchlines propres : utile pour le Grand Oral, les concours, les entretiens.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.35-7-10a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 5.65-7 10-7 10Z" stroke="currentColor" stroke-width="2"/></svg>
+            </div>
+            <h3>Branche annuelle du Parlement JPV</h3>
+            <p>Un pôle international permanent : événements, préparation, et montée en niveau sur l’année.</p>
+          </article>
+        </div>
+
+        <div class="section-head" style="margin-top:30px">
+          <div>
+            <h2 class="section-title">Déroulé (simple, clair)</h2>
+            <p class="section-desc">Même si tu n’as jamais fait de MUN : on te donne le cadre et tu progresses vite.</p>
+          </div>
+        </div>
+
+        <div class="timeline" aria-label="Déroulé de la conférence">
+          <div class="step">
+            <div class="num">1</div>
+            <div class="txt">
+              <strong>Candidature</strong>
+              <span>Tu t’inscris. Attribution des délégations + consignes de préparation.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="num">2</div>
+            <div class="txt">
+              <strong>Préparation</strong>
+              <span>Position paper, recherche, stratégie : tu arrives prêt, pas en touriste.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="num">3</div>
+            <div class="txt">
+              <strong>Conférence</strong>
+              <span>Discours, négociations, rédaction, amendements et vote final.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="final" role="region" aria-label="Appel à candidature">
+          <div class="left">
+            <h4>Tu veux une place ? Ne traîne pas.</h4>
+            <p>
+              Les délégations sont limitées : plus tôt tu candidates, plus on peut te placer sur un pays cohérent
+              avec ton profil et ton niveau.
+            </p>
+          </div>
+          <div class="cta-row" style="margin-top:0">
+            <a class="btn btn-primary" href="https://forms.gle/Rkm6GwJb6KDjzYUEA" target="_blank" rel="noopener noreferrer">
+              Candidater maintenant
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
 </body>
 </html>
