@@ -10,3 +10,54 @@
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 </body>
 </html>
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Espace Bureau — Parlement JPV</title>
+<link rel="stylesheet" href="/assets/css/bureau.css" />
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+
+<body>
+
+<div id="app" style="display:none;">
+  <header class="header">
+    <h1>Espace Bureau</h1>
+    <div>
+      Connecté en tant que <strong id="user-name"></strong>
+      <button onclick="logout()">Se déconnecter</button>
+    </div>
+  </header>
+
+  <section class="actions">
+    <a href="/admin/" class="btn">Créer / Modifier un post</a>
+  </section>
+
+  <section>
+    <h2>Publications internes</h2>
+    <div id="posts-container" class="posts-grid"></div>
+  </section>
+</div>
+
+<script src="/assets/js/posts.js"></script>
+
+<script>
+netlifyIdentity.on("init", user => {
+  if (!user) {
+    netlifyIdentity.open();
+  } else {
+    document.getElementById("app").style.display = "block";
+    document.getElementById("user-name").innerText = user.user_metadata?.full_name || user.email;
+  }
+});
+
+function logout(){
+  netlifyIdentity.logout();
+  location.reload();
+}
+</script>
+
+</body>
+</html>
