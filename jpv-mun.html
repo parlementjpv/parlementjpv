@@ -1,370 +1,790 @@
 <!doctype html>
 <html lang="fr" dir="ltr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>JPV MUN 2026 — Conférence diplomatique annuelle</title>
-  <meta name="description" content="JPV MUN : conférence annuelle de simulation des Nations Unies organisée par le Parlement JPV. Trois jours de débats, négociations et rédaction de résolution." />
-  <meta name="theme-color" content="#0b2545" />
+  <meta name="description" content="JPV MUN : conférence annuelle de simulation des Nations Unies organisée par le Parlement JPV. Trois jours de débats, négociations et rédaction de résolution.">
+  <meta name="theme-color" content="#0b2545" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1220" media="(prefers-color-scheme: dark)">
 
   <!-- SEO -->
-  <link rel="canonical" href="https://parlementjpv.github.io/parlementjpv/mun.html" />
-  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="https://parlementjpv.github.io/parlementjpv/mun.html">
+  <meta name="robots" content="index,follow">
+  <meta name="keywords" content="MUN, Model United Nations, débat, diplomatie, lycée, simulation ONU">
 
   <!-- Icons -->
-  <link rel="icon" href="assets/img/favicon.png" sizes="any" />
-  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png" />
+  <link rel="icon" href="assets/img/favicon.png" sizes="any">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
 
   <!-- Social -->
-  <meta property="og:title" content="JPV MUN 2026 — Conférence diplomatique annuelle" />
-  <meta property="og:description" content="Trois jours de simulation ONU : débats, négociations, amendements et vote final." />
-  <meta property="og:image" content="assets/img/og.jpg" />
-  <meta property="og:type" content="website" />
-  <meta property="og:locale" content="fr_FR" />
-  <meta property="og:url" content="https://parlementjpv.github.io/parlementjpv/mun.html" />
-  <meta name="twitter:card" content="summary_large_image" />
+  <meta property="og:title" content="JPV MUN 2026 — Conférence diplomatique annuelle">
+  <meta property="og:description" content="Trois jours de simulation ONU : débats, négociations, amendements et vote final.">
+  <meta property="og:image" content="https://parlementjpv.github.io/parlementjpv/assets/img/og.jpg">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:url" content="https://parlementjpv.github.io/parlementjpv/mun.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="JPV MUN 2026">
+  <meta name="twitter:description" content="Conférence diplomatique de simulation des Nations Unies">
+  <meta name="twitter:image" content="https://parlementjpv.github.io/parlementjpv/assets/img/og.jpg">
 
-  <!-- Perf -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://www.google-analytics.com">
 
-  <!-- CSS global -->
-  <link rel="stylesheet" href="css/styles.css" />
-  <link rel="stylesheet" href="css/cookies.css" />
-
-  <!-- Page CSS (identité Parlement JPV, autonome) -->
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/cookies.css">
+  
+  <!-- Inline critical CSS -->
   <style>
     /* =========================================================
-       JPV MUN — PAGE (IDENTITÉ INDEX, PREMIUM)
+       CRITICAL CSS - Above the fold optimization
        ========================================================= */
-
-    .sr-only{
-      position:absolute!important;
-      width:1px;height:1px;
-      padding:0;margin:-1px;
-      overflow:hidden;clip:rect(0,0,0,0);
-      white-space:nowrap;border:0;
+    
+    :root {
+      /* Colors */
+      --clr-primary: #0b2545;
+      --clr-primary-light: #1f5eff;
+      --clr-gold: #d4af37;
+      --clr-gold-light: rgba(212, 175, 55, 0.14);
+      --clr-gold-border: rgba(212, 175, 55, 0.22);
+      --clr-text: #0b1220;
+      --clr-text-light: #475569;
+      --clr-bg: #ffffff;
+      --clr-surface: rgba(255, 255, 255, 0.70);
+      --clr-border: rgba(11, 18, 32, 0.12);
+      
+      /* Spacing */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2rem;
+      --space-2xl: 3rem;
+      
+      /* Typography */
+      --font-base: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      --font-display: var(--font-base);
+      
+      /* Radius */
+      --radius-sm: 0.75rem;
+      --radius-md: 1rem;
+      --radius-lg: 1.125rem;
+      --radius-full: 999px;
+      
+      /* Transitions */
+      --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+      
+      /* Shadows */
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
     }
-    .skip-link{
-      position:absolute; left:-9999px; top:10px;
-      z-index:999;
-      padding:10px 12px;
-      border-radius:12px;
-      background:rgba(255,255,255,.92);
-      border:1px solid rgba(11,18,32,.12);
-      color:#0b1220;
-    }
-    .skip-link:focus{ left:12px; outline:none; }
 
-    .header{ position:sticky; top:0; z-index:60; backdrop-filter: blur(10px); }
-    .nav{ min-width:0; }
-    .brand{ min-width:0; }
-    .brand-text{ min-width:0; }
-    .brand .title,.brand .sub{
-      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-      max-width:56vw;
+    /* Dark mode */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --clr-text: #f8fafc;
+        --clr-text-light: #cbd5e1;
+        --clr-bg: #0b1220;
+        --clr-surface: rgba(15, 23, 42, 0.70);
+        --clr-border: rgba(255, 255, 255, 0.12);
+      }
     }
 
-    .icon-btn{
-      display:inline-flex;align-items:center;justify-content:center;
-      width:44px;height:44px;border-radius:14px;
-      border:1px solid rgba(11,18,32,.12);
-      background:rgba(255,255,255,.70);
-      cursor:pointer;font-weight:900;line-height:1;
+    /* Reset & Base */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    .mobile-overlay{
-      position:fixed;inset:0;z-index:80;
-      background:rgba(0,0,0,.35);
+    html {
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      scroll-behavior: smooth;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+      
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    body {
+      font-family: var(--font-base);
+      color: var(--clr-text);
+      background-color: var(--clr-bg);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    body.no-scroll {
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    /* Accessibility */
+    .sr-only {
+      position: absolute !important;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: var(--space-md);
+      z-index: 9999;
+      padding: var(--space-md) var(--space-lg);
+      border-radius: var(--radius-md);
+      background: var(--clr-bg);
+      border: 2px solid var(--clr-primary);
+      color: var(--clr-primary);
+      font-weight: 700;
+      text-decoration: none;
+      transition: all var(--transition-fast);
+    }
+
+    .skip-link:focus {
+      left: var(--space-md);
+      outline: 3px solid var(--clr-primary);
+      outline-offset: 2px;
+    }
+
+    /* Focus styles */
+    :focus-visible {
+      outline: 2px solid var(--clr-primary);
+      outline-offset: 2px;
+      border-radius: var(--radius-sm);
+    }
+
+    /* Container */
+    .container {
+      width: 100%;
+      max-width: 1280px;
+      margin-inline: auto;
+      padding-inline: clamp(1rem, 4vw, 2rem);
+    }
+
+    /* Header */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px) saturate(180%);
+      border-bottom: 1px solid var(--clr-border);
+      transition: background var(--transition-base);
+    }
+
+    @supports (backdrop-filter: blur(10px)) {
+      .header {
+        background: rgba(255, 255, 255, 0.70);
+      }
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-lg);
+      padding-block: var(--space-md);
+      min-height: 72px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      text-decoration: none;
+      color: inherit;
+      transition: opacity var(--transition-fast);
+    }
+
+    .brand:hover,
+    .brand:focus-visible {
+      opacity: 0.8;
+    }
+
+    .brand img {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-sm);
+      flex-shrink: 0;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .brand .title {
+      font-weight: 900;
+      font-size: 1.125rem;
+      letter-spacing: 0.01em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .brand .sub {
+      font-size: 0.8125rem;
+      color: var(--clr-text-light);
+      font-weight: 600;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* Navigation links */
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 0.9375rem;
+      text-decoration: none;
+      color: var(--clr-text);
+      transition: all var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover {
+      background: var(--clr-surface);
+      color: var(--clr-primary);
+    }
+
+    /* Icon buttons */
+    .icon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--clr-border);
+      background: var(--clr-surface);
+      color: var(--clr-text);
+      cursor: pointer;
+      font-weight: 900;
+      font-size: 1.25rem;
+      line-height: 1;
+      transition: all var(--transition-fast);
+    }
+
+    .icon-btn:hover {
+      background: var(--clr-bg);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .icon-btn:active {
+      transform: translateY(0);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    /* Mobile Navigation */
+    .mobile-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 150;
+      background: rgba(0, 0, 0, 0.4);
       backdrop-filter: blur(2px);
-      opacity:0;pointer-events:none;
-      transition: opacity .18s ease;
-    }
-    .mobile-overlay.open{ opacity:1; pointer-events:auto; }
-
-    #mobileNav.mobile{
-      position:fixed;top:0;right:0;height:100dvh;
-      width:min(92vw, 380px);
-      padding:14px 14px 18px;
-      z-index:90;
-      border-left:1px solid rgba(11,18,32,.12);
-      background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.78));
-      box-shadow: 0 30px 120px rgba(11,18,32,.20);
-      transform: translateX(104%);
-      transition: transform .22s ease;
-      overflow:auto;
-      -webkit-overflow-scrolling: touch;
-      display:block;
-    }
-    #mobileNav.mobile.open{ transform: translateX(0); }
-    .mobile-head{
-      display:flex;align-items:center;justify-content:space-between;gap:12px;
-      padding:6px 4px 10px;
-      border-bottom:1px solid rgba(11,18,32,.10);
-      margin-bottom:10px;
-    }
-    .mobile-title{ font-weight:1000; letter-spacing:.2px; }
-    .mobile a{
-      display:flex;
-      padding:12px 12px;border-radius:14px;
-      border:1px solid rgba(11,18,32,.12);
-      background:rgba(255,255,255,.75);
-      margin-top:10px;
-      font-weight:900;letter-spacing:.1px;
-    }
-    body.no-scroll{ overflow:hidden; }
-
-    /* --- HERO MUN --- */
-    .mun-hero{
-      position:relative;
-      padding: 44px 0 14px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition-base);
     }
 
-    .mun-hero .hero-wrap{
-      display:grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap:18px;
-      align-items:stretch;
+    .mobile-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
     }
 
-    .mun-hero .mun-badge{
-      display:inline-flex;
-      padding:8px 12px;
-      border-radius:999px;
-      font-weight:900;
-      letter-spacing:.2px;
-      background: rgba(212,175,55,.14);
-      border: 1px solid rgba(212,175,55,.22);
-      width:max-content;
+    #mobileNav.mobile {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: min(90vw, 380px);
+      padding: var(--space-lg);
+      z-index: 200;
+      background: var(--clr-bg);
+      border-left: 1px solid var(--clr-border);
+      box-shadow: var(--shadow-xl);
+      transform: translateX(100%);
+      transition: transform var(--transition-base);
+      overflow-y: auto;
+      overscroll-behavior: contain;
     }
 
-    .mun-hero h1{
-      margin:12px 0 10px;
-      line-height:1.05;
-      font-size: clamp(36px, 4.2vw, 56px);
-      letter-spacing:.2px;
+    #mobileNav.mobile.open {
+      transform: translateX(0);
     }
 
-    .mun-sub{
-      margin:0;
+    .mobile-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      padding-bottom: var(--space-md);
+      border-bottom: 1px solid var(--clr-border);
+      margin-bottom: var(--space-md);
+    }
+
+    .mobile-title {
+      font-weight: 900;
+      font-size: 1.125rem;
+      letter-spacing: 0.01em;
+    }
+
+    .mobile a {
+      display: block;
+      padding: var(--space-md);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--clr-border);
+      background: var(--clr-surface);
+      margin-top: var(--space-sm);
+      font-weight: 700;
+      text-decoration: none;
+      color: var(--clr-text);
+      transition: all var(--transition-fast);
+    }
+
+    .mobile a:hover {
+      background: var(--clr-bg);
+      transform: translateX(-2px);
+    }
+
+    /* Hero Section */
+    .mun-hero {
+      padding-block: clamp(2rem, 5vw, 3.5rem);
+    }
+
+    .hero-wrap {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: var(--space-lg);
+      align-items: stretch;
+    }
+
+    .card {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-lg);
+      padding: clamp(1.25rem, 3vw, 2rem);
+      transition: all var(--transition-base);
+    }
+
+    .hero-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .mun-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--radius-full);
+      font-weight: 800;
+      font-size: 0.875rem;
+      letter-spacing: 0.01em;
+      background: var(--clr-gold-light);
+      border: 1px solid var(--clr-gold-border);
+      color: var(--clr-text);
+      width: max-content;
+    }
+
+    .kicker {
+      font-size: 0.875rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--clr-primary);
+      margin-bottom: var(--space-sm);
+    }
+
+    h1 {
+      margin-block: var(--space-md) var(--space-sm);
+      line-height: 1.05;
+      font-size: clamp(2.25rem, 5vw, 3.5rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: var(--clr-text);
+    }
+
+    h2 {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      margin-bottom: var(--space-md);
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: var(--space-sm);
+    }
+
+    .mun-sub {
+      font-size: 1.0625rem;
+      line-height: 1.7;
+      color: var(--clr-text-light);
       max-width: 68ch;
     }
 
-    .mun-cta{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top:14px;
+    /* Pills */
+    .mun-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-top: var(--space-lg);
     }
 
-    .mun-side{
-      position:relative;
-      overflow:hidden;
-      padding:0;
+    .mun-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--radius-full);
+      border: 1px solid var(--clr-border);
+      background: var(--clr-surface);
+      font-weight: 700;
+      font-size: 0.9375rem;
+      letter-spacing: 0.01em;
+    }
+
+    /* Buttons */
+    .mun-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-top: var(--space-lg);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: var(--space-md) clamp(1rem, 2vw, 1.5rem);
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      font-size: 0.9375rem;
+      text-decoration: none;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .btn:focus-visible {
+      outline: 3px solid currentColor;
+      outline-offset: 2px;
+    }
+
+    .btn-primary {
+      background: var(--clr-primary);
+      color: white;
+      border-color: var(--clr-primary);
+    }
+
+    .btn-primary:hover {
+      background: var(--clr-primary-light);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--clr-gold), #c9a336);
+      color: white;
+      border-color: var(--clr-gold);
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--clr-text);
+      border-color: var(--clr-border);
+    }
+
+    .btn-ghost:hover {
+      background: var(--clr-surface);
+      border-color: var(--clr-primary);
+      color: var(--clr-primary);
+    }
+
+    /* Hero Image */
+    .mun-side {
+      position: relative;
+      overflow: hidden;
       min-height: 420px;
+      padding: 0;
     }
-    .mun-side img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-      filter:saturate(1.03) contrast(1.02);
+
+    .mun-side img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(1.03) contrast(1.02);
     }
-    .mun-side .overlay{
-      position:absolute; inset:0;
+
+    .overlay {
+      position: absolute;
+      inset: 0;
       background:
-        radial-gradient(800px 420px at 10% 10%, rgba(31,94,255,.18), transparent 60%),
-        linear-gradient(180deg, rgba(11,37,69,.00), rgba(11,37,69,.60));
-      pointer-events:none;
+        radial-gradient(800px 420px at 10% 10%, rgba(31, 94, 255, 0.18), transparent 60%),
+        linear-gradient(180deg, rgba(11, 37, 69, 0.00), rgba(11, 37, 69, 0.60));
+      pointer-events: none;
     }
-    .mun-photo-text{
-      position:absolute;
-      left:18px; right:18px; bottom:18px;
-      color:#fff;
-      display:grid;
-      gap:8px;
+
+    .mun-photo-text {
+      position: absolute;
+      left: var(--space-lg);
+      right: var(--space-lg);
+      bottom: var(--space-lg);
+      color: white;
+      display: grid;
+      gap: var(--space-sm);
     }
-    .mun-photo-pill{
-      display:inline-flex;
-      width:max-content;
-      padding:8px 12px;
-      border-radius:999px;
-      background: rgba(255,255,255,.16);
-      border:1px solid rgba(255,255,255,.22);
-      font-weight:900;
-      letter-spacing:.2px;
+
+    .mun-photo-pill {
+      display: inline-flex;
+      width: max-content;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      font-weight: 800;
+      font-size: 0.875rem;
+      letter-spacing: 0.01em;
       backdrop-filter: blur(8px);
     }
-    .mun-photo-title{
-      font-weight:1000;
-      letter-spacing:.2px;
-      font-size:1.35rem;
-      line-height:1.1;
-    }
-    .mun-photo-sub{ opacity:.92; font-weight:800; letter-spacing:.2px; }
 
-    /* --- SECTIONS --- */
-    .grid-2{ display:grid; grid-template-columns: 1fr 1fr; gap:18px; }
-    .grid-3{ display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:18px; }
-
-    .mun-pills{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top:14px;
-    }
-    .mun-pill{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:9px 12px;
-      border-radius:999px;
-      border:1px solid rgba(11,18,32,.12);
-      background: rgba(255,255,255,.70);
-      font-weight:900;
-      letter-spacing:.1px;
-      width:max-content;
+    .mun-photo-title {
+      font-weight: 900;
+      font-size: 1.375rem;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
     }
 
-    .timeline{
-      margin-top: 12px;
-      display:grid;
-      gap:12px;
-    }
-    .step{
-      display:flex;
-      gap:14px;
-      align-items:flex-start;
-      background: rgba(255,255,255,.70);
-      border:1px solid rgba(11,18,32,.12);
-      border-radius: 18px;
-      padding: 14px;
-    }
-    .step .num{
-      width:34px;height:34px;border-radius:12px;
-      display:grid;place-items:center;
-      background: rgba(11,37,69,.10);
-      border:1px solid rgba(11,37,69,.14);
-      font-weight:1000;
-      flex:0 0 auto;
-    }
-    .step strong{ display:block; margin-bottom:4px; }
-    .step span{ display:block; }
-
-    .notice{
-      background: rgba(212,175,55,.10);
-      border:1px solid rgba(212,175,55,.22);
-      border-radius: 18px;
-      padding: 14px;
+    .mun-photo-sub {
+      opacity: 0.92;
+      font-weight: 700;
+      font-size: 0.9375rem;
     }
 
-    @media (max-width: 980px){
-      .nav-links{ display:none; }
-      .mun-hero .hero-wrap{ grid-template-columns: 1fr; }
-      .mun-side{ min-height: 320px; }
-      .grid-2{ grid-template-columns: 1fr; }
-      .grid-3{ grid-template-columns: 1fr; }
-      .brand .title,.brand .sub{ max-width:62vw; }
+    /* Notice */
+    .notice {
+      background: var(--clr-gold-light);
+      border: 1px solid var(--clr-gold-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-md);
+      margin-top: var(--space-lg);
     }
-    @media (max-width: 380px){
-      .brand .sub{ display:none; }
+
+    .notice p {
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    /* Responsive */
+    @media (max-width: 980px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero-wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .mun-side {
+        min-height: 320px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .brand .sub {
+        display: none;
+      }
     }
   </style>
 
-  <!-- JSON-LD -->
+  <!-- JSON-LD Enhanced -->
   <script type="application/ld+json">
   {
-    "@context":"https://schema.org",
-    "@type":"Event",
-    "name":"JPV MUN 2026",
-    "description":"Conférence diplomatique annuelle de simulation des Nations Unies organisée par le Parlement JPV.",
-    "eventStatus":"https://schema.org/EventScheduled",
-    "eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode",
-    "organizer":{
-      "@type":"Organization",
-      "name":"Parlement JPV",
-      "url":"https://parlementjpv.github.io/parlementjpv/"
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": "JPV MUN 2026",
+    "description": "Conférence diplomatique annuelle de simulation des Nations Unies organisée par le Parlement JPV.",
+    "eventStatus": "https://schema.org/EventScheduled",
+    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+    "organizer": {
+      "@type": "Organization",
+      "name": "Parlement JPV",
+      "url": "https://parlementjpv.github.io/parlementjpv/",
+      "logo": "https://parlementjpv.github.io/parlementjpv/assets/img/logo.png",
+      "sameAs": [
+        "https://instagram.com/parlementjpv"
+      ]
     },
-    "url":"https://parlementjpv.github.io/parlementjpv/mun.html"
+    "location": {
+      "@type": "Place",
+      "name": "Lycée Jean-Pierre Vernant",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Sèvres",
+        "addressCountry": "FR"
+      }
+    },
+    "url": "https://parlementjpv.github.io/parlementjpv/mun.html",
+    "image": "https://parlementjpv.github.io/parlementjpv/assets/img/og.jpg"
   }
   </script>
 </head>
 
 <body>
-  <!-- COOKIE CONSENT (analytics) -->
-  <div id="cookieWall" class="cookie-wall" hidden role="dialog" aria-modal="true" aria-label="Préférences de cookies">
+  <!-- COOKIE CONSENT -->
+  <div id="cookieWall" class="cookie-wall" hidden role="dialog" aria-modal="true" aria-labelledby="cookie-title">
     <div class="cookie-wall__card">
-      <div class="cookie-wall__title">Cookies & mesures d’audience</div>
+      <h2 id="cookie-title" class="cookie-wall__title">Cookies & mesures d'audience</h2>
       <p class="cookie-wall__text">
-        Nous utilisons des cookies de mesure d’audience (Google Analytics) pour comprendre la fréquentation du site
-        (pages consultées, durée de visite), améliorer le contenu et mesurer l’impact de nos actions.
+        Nous utilisons des cookies de mesure d'audience (Google Analytics) pour comprendre la fréquentation du site
+        (pages consultées, durée de visite), améliorer le contenu et mesurer l'impact de nos actions.
       </p>
       <div class="cookie-wall__links">
         <a href="politique-confidentialite.html">Politique de confidentialité</a>
         <a href="mentions-legales.html">Mentions légales</a>
       </div>
       <div class="cookie-wall__actions">
-        <button class="cookie-btn cookie-btn--danger" type="button" data-cookie-decline>Continuer sans analytics</button>
-        <button class="cookie-btn cookie-btn--primary" type="button" data-cookie-accept>Accepter</button>
+        <button class="cookie-btn cookie-btn--danger" type="button" data-cookie-decline aria-label="Refuser les cookies analytics">
+          Continuer sans analytics
+        </button>
+        <button class="cookie-btn cookie-btn--primary" type="button" data-cookie-accept aria-label="Accepter les cookies analytics">
+          Accepter
+        </button>
       </div>
       <p class="cookie-wall__note">
-        Tu peux changer d’avis plus tard : supprime le stockage du navigateur (localStorage) ou relance en navigation privée.
+        Tu peux changer d'avis plus tard : supprime le stockage du navigateur (localStorage) ou relance en navigation privée.
       </p>
     </div>
   </div>
 
-  <a class="skip-link" href="#contenu">Aller au contenu</a>
+  <a class="skip-link" href="#contenu">Aller au contenu principal</a>
 
   <!-- HEADER -->
   <header class="header" role="banner">
     <div class="container">
-      <div class="nav">
-        <a class="brand" href="index.html" aria-label="Accueil Parlement JPV">
-          <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44" decoding="async" />
+      <nav class="nav" aria-label="Navigation principale">
+        <a class="brand" href="index.html" aria-label="Retour à l'accueil du Parlement JPV">
+          <img src="assets/img/logo.png" alt="" width="44" height="44" decoding="async">
           <div class="brand-text">
             <div class="title">Parlement JPV</div>
             <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
           </div>
         </a>
 
-        <nav class="nav-links" aria-label="Navigation principale">
-          <a href="institution.html">L’institution</a>
+        <div class="nav-links" role="navigation">
+          <a href="institution.html">L'institution</a>
           <a href="rapports.html">Rapports</a>
           <a href="galerie.html">Galerie</a>
           <a href="media.html">Médias</a>
           <a href="rejoindre.html">Rejoindre</a>
           <a href="contact.html">Contact</a>
           <a href="qui-sommes-nous.html">Qui sommes-nous</a>
-        </nav>
+        </div>
 
         <div class="nav-actions">
-          <button class="icon-btn" type="button" onclick="toggleTheme?.()" aria-label="Basculer le thème" title="Thème">☾</button>
+          <button 
+            class="icon-btn" 
+            type="button" 
+            onclick="toggleTheme?.()" 
+            aria-label="Basculer entre le thème clair et sombre" 
+            title="Changer le thème"
+          >
+            <span aria-hidden="true">☾</span>
+          </button>
 
           <button
             class="icon-btn burger"
             type="button"
-            aria-label="Ouvrir le menu"
+            aria-label="Ouvrir le menu de navigation"
             aria-controls="mobileNav"
             aria-expanded="false"
             id="mobileNavBtn"
             title="Menu"
-          >☰</button>
+          >
+            <span aria-hidden="true">☰</span>
+          </button>
         </div>
-      </div>
+      </nav>
     </div>
   </header>
 
-  <!-- Overlay + Drawer -->
-  <div id="mobileOverlay" class="mobile-overlay" hidden></div>
+  <!-- Mobile Overlay -->
+  <div id="mobileOverlay" class="mobile-overlay" hidden aria-hidden="true"></div>
 
+  <!-- Mobile Navigation -->
   <nav id="mobileNav" class="mobile" aria-label="Menu mobile" hidden>
     <div class="mobile-head">
-      <div class="mobile-title">Menu</div>
-      <button id="mobileCloseBtn" class="icon-btn" type="button" aria-label="Fermer le menu">✕</button>
+      <div class="mobile-title">Navigation</div>
+      <button 
+        id="mobileCloseBtn" 
+        class="icon-btn" 
+        type="button" 
+        aria-label="Fermer le menu de navigation"
+      >
+        <span aria-hidden="true">✕</span>
+      </button>
     </div>
 
-    <a href="institution.html">L’institution</a>
+    <a href="institution.html">L'institution</a>
     <a href="rapports.html">Rapports</a>
     <a href="galerie.html">Galerie</a>
     <a href="media.html">Médias</a>
@@ -373,63 +793,92 @@
     <a href="qui-sommes-nous.html">Qui sommes-nous</a>
     <a href="charte.html">Charte</a>
 
-    <div class="line" role="separator" aria-hidden="true" style="margin:12px 0;"></div>
+    <hr style="margin: var(--space-lg) 0; border: none; border-top: 1px solid var(--clr-border);" aria-hidden="true">
 
-    <a href="https://forms.gle/Rkm6GwJb6KDjzYUEA" target="_blank" rel="noopener">Candidater (Délégué)</a>
+    <a href="https://forms.gle/Rkm6GwJb6KDjzYUEA" target="_blank" rel="noopener noreferrer">
+      Candidater (Délégué)
+      <span class="sr-only">(s'ouvre dans un nouvel onglet)</span>
+    </a>
   </nav>
 
   <main id="contenu">
 
     <!-- HERO -->
-    <section class="hero mun-hero" aria-label="JPV MUN 2026">
+    <section class="hero mun-hero" aria-labelledby="hero-title">
       <div class="container">
         <div class="hero-wrap">
 
           <!-- TEXTE -->
-          <div class="card hero-card">
-            <span class="mun-badge">Conférence diplomatique — Simulation ONU</span>
+          <article class="card hero-card">
+            <span class="mun-badge" role="text">Conférence diplomatique — Simulation ONU</span>
 
-            <div class="kicker" style="margin-top:12px">JPV MUN</div>
-            <h1>JPV MUN 2026</h1>
+            <div class="kicker">JPV MUN</div>
+            <h1 id="hero-title">JPV MUN 2026</h1>
 
             <p class="mun-sub">
-              Trois jours d’immersion inspirée des Nations Unies : débats, négociations, rédaction d’une résolution,
+              Trois jours d'immersion inspirée des Nations Unies : débats, négociations, rédaction d'une résolution,
               amendements et vote final — dans un cadre institutionnel, exigeant et bienveillant.
             </p>
 
-            <div class="mun-pills" aria-label="Points clés">
-              <span class="mun-pill">🌍 Délégations & comités</span>
-              <span class="mun-pill">🗣️ Discours & négociation</span>
-              <span class="mun-pill">📝 Résolution & amendements</span>
-              <span class="mun-pill">✅ Vote final</span>
+            <div class="mun-pills" role="list" aria-label="Caractéristiques principales">
+              <span class="mun-pill" role="listitem">
+                <span aria-hidden="true">🌍</span> Délégations & comités
+              </span>
+              <span class="mun-pill" role="listitem">
+                <span aria-hidden="true">🗣️</span> Discours & négociation
+              </span>
+              <span class="mun-pill" role="listitem">
+                <span aria-hidden="true">📝</span> Résolution & amendements
+              </span>
+              <span class="mun-pill" role="listitem">
+                <span aria-hidden="true">✅</span> Vote final
+              </span>
             </div>
 
             <div class="mun-cta">
-              <a class="btn btn-gold" href="https://forms.gle/Rkm6GwJb6KDjzYUEA" target="_blank" rel="noopener">📝 Candidater comme délégué</a>
-              <a class="btn btn-ghost" href="contact.html">📩 Devenir staff / organisation</a>
-              <a class="btn btn-primary" href="charte.html">📌 Cadre & charte</a>
+              <a 
+                class="btn btn-gold" 
+                href="https://forms.gle/Rkm6GwJb6KDjzYUEA" 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                <span aria-hidden="true">📝</span> Candidater comme délégué
+                <span class="sr-only">(s'ouvre dans un nouvel onglet)</span>
+              </a>
+              <a class="btn btn-ghost" href="contact.html">
+                <span aria-hidden="true">📩</span> Devenir staff / organisation
+              </a>
+              <a class="btn btn-primary" href="charte.html">
+                <span aria-hidden="true">📌</span> Cadre & charte
+              </a>
             </div>
 
-            <div class="notice" style="margin-top:14px">
-              <p class="small" style="margin:0">
-                Neutralité, respect des opinions et cadre scolaire : le JPV MUN est un exercice de débat,
-                pas une tribune politique. :contentReference[oaicite:1]{index=1}
+            <aside class="notice" role="note">
+              <p>
+                <strong>Neutralité, respect des opinions et cadre scolaire :</strong> le JPV MUN est un exercice de débat,
+                pas une tribune politique.
               </p>
-            </div>
-          </div>
+            </aside>
+          </article>
 
           <!-- VISUEL -->
           <figure class="card hero-side mun-side">
-            <img src="assets/img/hero.jpg" alt="Séance du Parlement JPV" loading="lazy" decoding="async" />
+            <img 
+              src="assets/img/hero.jpg" 
+              alt="Vue d'ensemble d'une séance du Parlement JPV avec les délégués en débat" 
+              loading="eager" 
+              fetchpriority="high"
+              decoding="async"
+              width="1200"
+              height="800"
+            >
             <div class="overlay" aria-hidden="true"></div>
 
-            <div class="mun-photo-text" aria-hidden="true">
+            <figcaption class="mun-photo-text">
               <div class="mun-photo-pill">Lycée Jean-Pierre Vernant — Sèvres</div>
               <div class="mun-photo-title">Diplomatie. Stratégie. Éloquence.</div>
               <div class="mun-photo-sub">Respect • Neutralité • Ouverture à tous</div>
-            </div>
-
-            <figcaption class="sr-only">JPV MUN — visuel institutionnel</figcaption>
+            </figcaption>
           </figure>
 
         </div>
@@ -437,19 +886,19 @@
     </section>
 
     <!-- THEME + FORMAT -->
-    <section class="section-tight" aria-label="Thématique et format">
+    <section class="section-tight" aria-labelledby="theme-title">
       <div class="container">
         <div class="grid-2">
 
           <article class="card">
             <div class="kicker">Thématique 2026</div>
-            <h2>IA & régulation mondiale</h2>
+            <h2 id="theme-title">IA & régulation mondiale</h2>
             <p>
-              <strong>« Coopération ou rivalité stratégique ? »</strong><br />
+              <strong>« Coopération ou rivalité stratégique ? »</strong><br>
               Sécurité, innovation, souveraineté, éthique, gouvernance : un sujet actuel, complexe, parfait pour tester
               la diplomatie et la rigueur.
             </p>
-            <div class="btns" style="margin-top:14px">
+            <div class="btns" style="margin-top: var(--space-lg)">
               <a class="btn btn-primary" href="media.html">Voir nos contenus</a>
               <a class="btn btn-ghost" href="institution.html">Notre méthode</a>
             </div>
@@ -458,34 +907,34 @@
           <article class="card">
             <div class="kicker">Format</div>
             <h2>Immersion structurée</h2>
-            <p class="small">
-              Discours d’ouverture, temps de débat, caucus, rédaction, amendements, vote final : un cadre exigeant,
+            <p>
+              Discours d'ouverture, temps de débat, caucus, rédaction, amendements, vote final : un cadre exigeant,
               mais accessible même si tu débutes (si tu prépares sérieusement).
             </p>
 
-            <div class="timeline" aria-label="Déroulé">
-              <div class="step">
-                <div class="num">1</div>
+            <ol class="timeline" aria-label="Étapes de participation">
+              <li class="step">
+                <div class="num" aria-hidden="true">1</div>
                 <div>
                   <strong>Candidature</strong>
-                  <span class="small">Inscription + attribution d’une délégation + consignes.</span>
+                  <span>Inscription + attribution d'une délégation + consignes.</span>
                 </div>
-              </div>
-              <div class="step">
-                <div class="num">2</div>
+              </li>
+              <li class="step">
+                <div class="num" aria-hidden="true">2</div>
                 <div>
                   <strong>Préparation</strong>
-                  <span class="small">Recherche + position paper + stratégie.</span>
+                  <span>Recherche + position paper + stratégie.</span>
                 </div>
-              </div>
-              <div class="step">
-                <div class="num">3</div>
+              </li>
+              <li class="step">
+                <div class="num" aria-hidden="true">3</div>
                 <div>
                   <strong>Conférence</strong>
-                  <span class="small">Débat, négociation, rédaction, amendements, vote final.</span>
+                  <span>Débat, négociation, rédaction, amendements, vote final.</span>
                 </div>
-              </div>
-            </div>
+              </li>
+            </ol>
           </article>
 
         </div>
@@ -493,12 +942,12 @@
     </section>
 
     <!-- PILLARS -->
-    <section class="section" aria-label="Pourquoi participer">
+    <section class="section" aria-labelledby="benefits-title">
       <div class="container">
         <div class="kicker">Pourquoi participer</div>
-        <h2>Exigence, éloquence, impact.</h2>
+        <h2 id="benefits-title">Exigence, éloquence, impact.</h2>
 
-        <div class="grid-3" style="margin-top:14px">
+        <div class="grid-3" style="margin-top: var(--space-lg)">
           <article class="card">
             <h3>Immersion diplomatique</h3>
             <p>Tu incarnes un pays, défends ses intérêts, construis des coalitions et proposes une solution réaliste.</p>
@@ -506,7 +955,7 @@
 
           <article class="card">
             <h3>Oral de haut niveau</h3>
-            <p>Prise de parole, réfutation, synthèse : tu apprends à convaincre sans t’éparpiller.</p>
+            <p>Prise de parole, réfutation, synthèse : tu apprends à convaincre sans t'éparpiller.</p>
           </article>
 
           <article class="card">
@@ -515,28 +964,44 @@
           </article>
         </div>
 
-        <div class="btns" style="margin-top:14px">
-          <a class="btn btn-gold" href="https://forms.gle/Rkm6GwJb6KDjzYUEA" target="_blank" rel="noopener">📝 Candidate maintenant</a>
-          <a class="btn btn-ghost" href="contact.html">📩 Questions / organisation</a>
+        <div class="btns" style="margin-top: var(--space-xl)">
+          <a 
+            class="btn btn-gold" 
+            href="https://forms.gle/Rkm6GwJb6KDjzYUEA" 
+            target="_blank" 
+            rel="noopener noreferrer"
+          >
+            <span aria-hidden="true">📝</span> Candidate maintenant
+          </a>
+          <a class="btn btn-ghost" href="contact.html">
+            <span aria-hidden="true">📩</span> Questions / organisation
+          </a>
         </div>
       </div>
     </section>
 
     <!-- FINAL CTA -->
-    <section class="section-tight" aria-label="Candidature">
+    <section class="section-tight" aria-labelledby="apply-title">
       <div class="container">
-        <div class="card">
+        <article class="card">
           <div class="kicker">Candidature</div>
-          <h2>Obtenir une délégation</h2>
-          <p class="small">
+          <h2 id="apply-title">Obtenir une délégation</h2>
+          <p>
             Les délégations sont limitées : plus tôt tu candidates, plus on peut te placer sur un pays cohérent
             avec ton profil et ton niveau.
           </p>
           <div class="btns">
-            <a class="btn btn-primary" href="https://forms.gle/Rkm6GwJb6KDjzYUEA" target="_blank" rel="noopener">📝 Candidater</a>
+            <a 
+              class="btn btn-primary" 
+              href="https://forms.gle/Rkm6GwJb6KDjzYUEA" 
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
+              <span aria-hidden="true">📝</span> Candidater
+            </a>
             <a class="btn btn-ghost" href="rejoindre.html">Rejoindre le Parlement JPV</a>
           </div>
-        </div>
+        </article>
       </div>
     </section>
 
@@ -547,115 +1012,211 @@
     <div class="container">
       <div class="footer-grid">
         <div>
-          <div class="brand" style="gap:10px">
-            <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44" loading="lazy" decoding="async" />
+          <div class="brand" style="gap: var(--space-sm)">
+            <img 
+              src="assets/img/logo.png" 
+              alt="" 
+              width="44" 
+              height="44" 
+              loading="lazy" 
+              decoding="async"
+            >
             <div>
               <div class="title">Parlement JPV</div>
               <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
             </div>
           </div>
 
-          <p class="small" style="margin-top:10px">
-            Instance lycéenne de débat, d’engagement citoyen et d’initiatives structurées.
+          <p style="margin-top: var(--space-md); font-size: 0.9375rem; color: var(--clr-text-light);">
+            Instance lycéenne de débat, d'engagement citoyen et d'initiatives structurées.
           </p>
         </div>
 
-        <div>
+        <nav aria-label="Liens footer - Pages">
           <div class="kicker">Pages</div>
           <div class="list">
-            <a href="institution.html">L’institution</a>
+            <a href="institution.html">L'institution</a>
             <a href="rapports.html">Rapports</a>
             <a href="galerie.html">Galerie</a>
             <a href="media.html">Médias</a>
             <a href="charte.html">Charte</a>
             <a href="qui-sommes-nous.html">Qui sommes-nous</a>
-            <a href="politique-confidentialite.html">Politique de confidenttialité</a>
+            <a href="politique-confidentialite.html">Politique de confidentialité</a>
             <a href="mentions-legales.html">Mentions légales</a>
           </div>
-        </div>
+        </nav>
 
-        <div>
+        <nav aria-label="Liens footer - Contact">
           <div class="kicker">Contact</div>
           <div class="list">
             <a href="rejoindre.html">Rejoindre</a>
             <a href="contact.html">Contact</a>
-            <a href="https://instagram.com/parlementjpv" target="_blank" rel="noopener">Instagram</a>
+            <a href="https://instagram.com/parlementjpv" target="_blank" rel="noopener noreferrer">
+              Instagram
+              <span class="sr-only">(s'ouvre dans un nouvel onglet)</span>
+            </a>
           </div>
-          <div class="small" style="margin-top:10px">© <span id="year"></span> Parlement JPV</div>
-        </div>
+          <p style="margin-top: var(--space-md); font-size: 0.875rem; color: var(--clr-text-light);">
+            © <span id="year">2026</span> Parlement JPV
+          </p>
+        </nav>
       </div>
     </div>
   </footer>
 
+  <!-- No JavaScript fallback -->
   <noscript>
-    <div class="container" style="padding: 12px 0;">
-      <p class="small">Certaines fonctionnalités (menu, thème, événements) nécessitent JavaScript.</p>
+    <div class="container" style="padding-block: var(--space-lg);">
+      <div class="notice">
+        <p>
+          <strong>JavaScript désactivé :</strong> Certaines fonctionnalités (menu mobile, basculement de thème) 
+          nécessitent JavaScript pour fonctionner correctement. Le contenu reste accessible.
+        </p>
+      </div>
     </div>
   </noscript>
 
-  <!-- Consent analytics + main -->
+  <!-- Scripts -->
   <script src="js/analytics-consent.js" defer></script>
   <script src="js/main.js" defer></script>
 
+  <!-- Inline essential scripts -->
   <script>
-    // Année
-    const y = document.getElementById("year");
-    if (y) y.textContent = new Date().getFullYear();
+    // Set current year
+    (function() {
+      const yearEl = document.getElementById('year');
+      if (yearEl) {
+        yearEl.textContent = new Date().getFullYear();
+      }
+    })();
 
-    // Drawer mobile (identique index)
-    (function () {
-      const btn = document.getElementById("mobileNavBtn");
-      const nav = document.getElementById("mobileNav");
-      const overlay = document.getElementById("mobileOverlay");
-      const closeBtn = document.getElementById("mobileCloseBtn");
+    // Mobile navigation with improved accessibility
+    (function() {
+      const btn = document.getElementById('mobileNavBtn');
+      const nav = document.getElementById('mobileNav');
+      const overlay = document.getElementById('mobileOverlay');
+      const closeBtn = document.getElementById('mobileCloseBtn');
+      
       if (!btn || !nav || !overlay || !closeBtn) return;
 
-      function openMenu(){
-        btn.setAttribute("aria-expanded","true");
+      let focusableElements = [];
+      let firstFocusable = null;
+      let lastFocusable = null;
+
+      function updateFocusableElements() {
+        focusableElements = Array.from(
+          nav.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])')
+        );
+        firstFocusable = focusableElements[0];
+        lastFocusable = focusableElements[focusableElements.length - 1];
+      }
+
+      function openMenu() {
+        btn.setAttribute('aria-expanded', 'true');
         nav.hidden = false;
         overlay.hidden = false;
+        
         requestAnimationFrame(() => {
-          nav.classList.add("open");
-          overlay.classList.add("open");
-          document.body.classList.add("no-scroll");
+          nav.classList.add('open');
+          overlay.classList.add('open');
+          document.body.classList.add('no-scroll');
+          
+          updateFocusableElements();
+          closeBtn.focus();
         });
       }
-      function closeMenu(){
-        btn.setAttribute("aria-expanded","false");
-        nav.classList.remove("open");
-        overlay.classList.remove("open");
-        document.body.classList.remove("no-scroll");
+
+      function closeMenu() {
+        btn.setAttribute('aria-expanded', 'false');
+        nav.classList.remove('open');
+        overlay.classList.remove('open');
+        document.body.classList.remove('no-scroll');
+        
         setTimeout(() => {
           nav.hidden = true;
           overlay.hidden = true;
-        }, 220);
+          btn.focus();
+        }, 250);
       }
 
-      btn.addEventListener("click", () => {
-        const isOpen = btn.getAttribute("aria-expanded") === "true";
+      // Trap focus within menu
+      function trapFocus(e) {
+        if (e.key !== 'Tab') return;
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstFocusable) {
+            lastFocusable.focus();
+            e.preventDefault();
+          }
+        } else {
+          if (document.activeElement === lastFocusable) {
+            firstFocusable.focus();
+            e.preventDefault();
+          }
+        }
+      }
+
+      btn.addEventListener('click', () => {
+        const isOpen = btn.getAttribute('aria-expanded') === 'true';
         isOpen ? closeMenu() : openMenu();
       });
-      closeBtn.addEventListener("click", closeMenu);
-      overlay.addEventListener("click", closeMenu);
 
-      nav.addEventListener("click", (e) => {
-        const a = e.target.closest("a");
-        if (a) closeMenu();
+      closeBtn.addEventListener('click', closeMenu);
+      overlay.addEventListener('click', closeMenu);
+
+      nav.addEventListener('click', (e) => {
+        const link = e.target.closest('a');
+        if (link && !link.hasAttribute('target')) {
+          closeMenu();
+        }
       });
 
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") closeMenu();
+      document.addEventListener('keydown', (e) => {
+        const isOpen = btn.getAttribute('aria-expanded') === 'true';
+        
+        if (e.key === 'Escape' && isOpen) {
+          closeMenu();
+        }
+        
+        if (isOpen) {
+          trapFocus(e);
+        }
       });
 
-      const mq = window.matchMedia("(min-width: 981px)");
-      mq.addEventListener?.("change", () => {
-        if (mq.matches) closeMenu();
-      });
+      // Close menu on desktop breakpoint
+      const mediaQuery = window.matchMedia('(min-width: 981px)');
+      const handleBreakpointChange = (e) => {
+        if (e.matches) closeMenu();
+      };
+      
+      if (mediaQuery.addEventListener) {
+        mediaQuery.addEventListener('change', handleBreakpointChange);
+      } else {
+        // Fallback for older browsers
+        mediaQuery.addListener(handleBreakpointChange);
+      }
 
-      btn.setAttribute("aria-expanded","false");
+      // Initialize
+      btn.setAttribute('aria-expanded', 'false');
       nav.hidden = true;
       overlay.hidden = true;
     })();
+
+    // Performance: Lazy load images below the fold
+    if ('loading' in HTMLImageElement.prototype) {
+      const images = document.querySelectorAll('img[loading="lazy"]');
+      images.forEach(img => {
+        if (img.dataset.src) {
+          img.src = img.dataset.src;
+        }
+      });
+    } else {
+      // Fallback for browsers that don't support lazy loading
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js';
+      script.async = true;
+      document.body.appendChild(script);
+    }
   </script>
 </body>
 </html>
