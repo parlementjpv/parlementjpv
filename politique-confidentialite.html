@@ -1,45 +1,953 @@
 <!doctype html>
 <html lang="fr" id="top">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Politique de confidentialité — Parlement JPV</title>
-  <meta name="description" content="Politique de confidentialité du site Parlement JPV : données, cookies et droits (RGPD)." />
-  <meta name="theme-color" content="#0b2545" />
+  <meta name="description" content="Politique de confidentialité du site Parlement JPV : données, cookies et droits (RGPD). Transparence totale sur l'utilisation de vos données personnelles.">
+  <meta name="theme-color" content="#0b2545" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1220" media="(prefers-color-scheme: dark)">
 
-  <!-- SEO (optionnel mais propre) -->
-  <meta name="robots" content="index,follow" />
-  <link rel="canonical" href="https://parlementjpv.github.io/parlementjpv/politique-confidentialite.html" />
+  <!-- SEO -->
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://parlementjpv.github.io/parlementjpv/politique-confidentialite.html">
+  <meta name="keywords" content="RGPD, confidentialité, données personnelles, cookies, vie privée">
+
+  <!-- Icons -->
+  <link rel="icon" href="assets/img/favicon.png" sizes="any">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+
+  <!-- Social -->
+  <meta property="og:title" content="Politique de confidentialité — Parlement JPV">
+  <meta property="og:description" content="Transparence sur les données, les cookies et vos droits — conformément au RGPD.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://parlementjpv.github.io/parlementjpv/politique-confidentialite.html">
+  <meta property="og:locale" content="fr_FR">
+
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
   <!-- Styles -->
-  <link rel="stylesheet" href="css/styles.css" />
-  <link rel="stylesheet" href="css/cookies.css" />
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/cookies.css">
 
-  <!-- Petites améliorations UX/accessibilité -->
+  <!-- Critical CSS -->
   <style>
-    .skip-link{
-      position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;
+    /* =========================================================
+       CRITICAL CSS - Legal Pages Enhanced
+       ========================================================= */
+
+    :root {
+      /* Colors - Legal Theme */
+      --clr-primary: #0b2545;
+      --clr-primary-light: #1f5eff;
+      --clr-accent: #d4af37;
+      --clr-success: #10b981;
+      --clr-info: #3b82f6;
+      --clr-warning: #f59e0b;
+      --clr-text: #0b1220;
+      --clr-text-muted: #64748b;
+      --clr-text-light: #94a3b8;
+      --clr-bg: #ffffff;
+      --clr-surface: #f8fafc;
+      --clr-surface-elevated: #ffffff;
+      --clr-border: #e2e8f0;
+      --clr-border-light: #f1f5f9;
+      
+      /* Spacing */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2rem;
+      --space-2xl: 3rem;
+      --space-3xl: 4rem;
+      
+      /* Typography */
+      --font-base: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      --font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+      
+      /* Radius */
+      --radius-sm: 0.5rem;
+      --radius-md: 0.75rem;
+      --radius-lg: 1rem;
+      --radius-xl: 1.25rem;
+      --radius-full: 999px;
+      
+      /* Transitions */
+      --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+      
+      /* Shadows */
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      
+      /* Legal-specific */
+      --toc-width: 280px;
+      --content-max-width: 720px;
     }
-    .skip-link:focus{
-      left:16px;top:16px;width:auto;height:auto;z-index:9999;
-      background:var(--card,#fff);color:var(--text,#111);
-      padding:10px 12px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.15);
-      border:1px solid var(--border,rgba(0,0,0,.12));
+
+    /* Dark mode */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --clr-text: #f8fafc;
+        --clr-text-muted: #94a3b8;
+        --clr-text-light: #64748b;
+        --clr-bg: #0f172a;
+        --clr-surface: #1e293b;
+        --clr-surface-elevated: #334155;
+        --clr-border: #334155;
+        --clr-border-light: #1e293b;
+      }
+    }
+
+    /* Reset & Base */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      scroll-behavior: smooth;
+      scroll-padding-top: 100px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+      
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    body {
+      font-family: var(--font-base);
+      color: var(--clr-text);
+      background-color: var(--clr-bg);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    body.no-scroll {
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    /* Accessibility */
+    .sr-only {
+      position: absolute !important;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: var(--space-md);
+      z-index: 9999;
+      padding: var(--space-md) var(--space-lg);
+      border-radius: var(--radius-md);
+      background: var(--clr-surface-elevated);
+      border: 2px solid var(--clr-primary);
+      color: var(--clr-primary);
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: var(--shadow-xl);
+      transition: all var(--transition-fast);
+    }
+
+    .skip-link:focus {
+      left: var(--space-md);
+      outline: 3px solid var(--clr-primary);
+      outline-offset: 2px;
+    }
+
+    /* Focus styles */
+    :focus-visible {
+      outline: 2px solid var(--clr-primary);
+      outline-offset: 2px;
+      border-radius: var(--radius-sm);
+    }
+
+    /* Container */
+    .container {
+      width: 100%;
+      max-width: 1280px;
+      margin-inline: auto;
+      padding-inline: clamp(1rem, 4vw, 2rem);
+    }
+
+    /* Header - reused from MUN */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px) saturate(180%);
+      border-bottom: 1px solid var(--clr-border);
+      transition: all var(--transition-base);
+    }
+
+    @supports (backdrop-filter: blur(12px)) {
+      .header {
+        background: rgba(255, 255, 255, 0.70);
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .header {
+        background: rgba(15, 23, 42, 0.85);
+      }
+      
+      @supports (backdrop-filter: blur(12px)) {
+        .header {
+          background: rgba(15, 23, 42, 0.70);
+        }
+      }
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-lg);
+      padding-block: var(--space-md);
+      min-height: 72px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      text-decoration: none;
+      color: inherit;
+      transition: opacity var(--transition-fast);
+      min-width: 0;
+    }
+
+    .brand:hover {
+      opacity: 0.8;
+    }
+
+    .brand img {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-sm);
+      flex-shrink: 0;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .brand .title {
+      font-weight: 900;
+      font-size: 1.125rem;
+      letter-spacing: 0.01em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .brand .sub {
+      font-size: 0.8125rem;
+      color: var(--clr-text-muted);
+      font-weight: 600;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 0.9375rem;
+      text-decoration: none;
+      color: var(--clr-text);
+      transition: all var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover {
+      background: var(--clr-surface);
+      color: var(--clr-primary);
+    }
+
+    .icon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--clr-border);
+      background: var(--clr-surface);
+      color: var(--clr-text);
+      cursor: pointer;
+      font-weight: 900;
+      font-size: 1.25rem;
+      line-height: 1;
+      transition: all var(--transition-fast);
+    }
+
+    .icon-btn:hover {
+      background: var(--clr-surface-elevated);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    /* Mobile Navigation */
+    .mobile-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 150;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(2px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition-base);
+    }
+
+    .mobile-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #mobileNav.mobile {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: min(90vw, 380px);
+      padding: var(--space-lg);
+      z-index: 200;
+      background: var(--clr-bg);
+      border-left: 1px solid var(--clr-border);
+      box-shadow: var(--shadow-xl);
+      transform: translateX(100%);
+      transition: transform var(--transition-base);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+
+    #mobileNav.mobile.open {
+      transform: translateX(0);
+    }
+
+    .mobile-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      padding-bottom: var(--space-md);
+      border-bottom: 1px solid var(--clr-border);
+      margin-bottom: var(--space-md);
+    }
+
+    .mobile-title {
+      font-weight: 900;
+      font-size: 1.125rem;
+    }
+
+    .mobile a {
+      display: block;
+      padding: var(--space-md);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--clr-border);
+      background: var(--clr-surface);
+      margin-top: var(--space-sm);
+      font-weight: 700;
+      text-decoration: none;
+      color: var(--clr-text);
+      transition: all var(--transition-fast);
+    }
+
+    .mobile a:hover {
+      background: var(--clr-surface-elevated);
+      transform: translateX(-2px);
+    }
+
+    /* Legal Hero */
+    .legal-hero {
+      background: linear-gradient(180deg, var(--clr-surface) 0%, var(--clr-bg) 100%);
+      border-bottom: 1px solid var(--clr-border);
+      padding-block: clamp(2.5rem, 6vw, 4rem) clamp(2rem, 5vw, 3rem);
+    }
+
+    .legal-hero__inner {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-2xl);
+      max-width: 1000px;
+    }
+
+    .legal-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-size: 0.875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--clr-primary);
+      margin-bottom: var(--space-md);
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: var(--clr-primary);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .legal-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: var(--space-md);
+      color: var(--clr-text);
+    }
+
+    .legal-subtitle {
+      font-size: 1.125rem;
+      line-height: 1.7;
+      color: var(--clr-text-muted);
+      max-width: 65ch;
+      margin-bottom: var(--space-lg);
+    }
+
+    .legal-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.4rem 0.75rem;
+      border-radius: var(--radius-full);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      background: var(--clr-primary);
+      color: white;
+      border: 1px solid var(--clr-primary);
+    }
+
+    .badge--soft {
+      background: var(--clr-surface);
+      color: var(--clr-text);
+      border-color: var(--clr-border);
+    }
+
+    /* Legal Card Highlight */
+    .legal-card {
+      background: var(--clr-surface-elevated);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+    }
+
+    .legal-card--highlight {
+      background: linear-gradient(135deg, rgba(11, 37, 69, 0.03), rgba(31, 94, 255, 0.03));
+      border-color: rgba(11, 37, 69, 0.15);
+    }
+
+    .legal-card__kicker {
+      font-size: 0.875rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--clr-primary);
+      margin-bottom: var(--space-md);
+    }
+
+    .legal-bullets {
+      list-style: none;
+      display: grid;
+      gap: var(--space-sm);
+    }
+
+    .legal-bullets li {
+      display: flex;
+      gap: var(--space-sm);
+      align-items: flex-start;
+    }
+
+    .legal-bullets li::before {
+      content: "✓";
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      background: var(--clr-success);
+      color: white;
+      border-radius: 50%;
+      font-weight: 900;
+      font-size: 0.75rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .legal-card__note {
+      margin-top: var(--space-lg);
+      padding-top: var(--space-lg);
+      border-top: 1px solid var(--clr-border-light);
+      font-size: 0.9375rem;
+      color: var(--clr-text-muted);
+    }
+
+    .muted {
+      color: var(--clr-primary);
+      text-decoration: none;
+      font-weight: 700;
+      transition: opacity var(--transition-fast);
+    }
+
+    .muted:hover {
+      opacity: 0.7;
+    }
+
+    /* Legal Body */
+    .legal-body {
+      padding-block: clamp(2rem, 5vw, 4rem);
+    }
+
+    .legal-grid {
+      display: grid;
+      grid-template-columns: var(--toc-width) 1fr;
+      gap: clamp(2rem, 5vw, 4rem);
+      align-items: start;
+    }
+
+    /* Table of Contents */
+    .legal-toc {
+      position: sticky;
+      top: 100px;
+      background: var(--clr-surface-elevated);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+
+    .legal-toc__title {
+      font-weight: 900;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--clr-text-muted);
+      margin-bottom: var(--space-sm);
+    }
+
+    .legal-toc a {
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--radius-sm);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      text-decoration: none;
+      color: var(--clr-text);
+      transition: all var(--transition-fast);
+      display: block;
+    }
+
+    .legal-toc a:hover,
+    .legal-toc a:focus-visible {
+      background: var(--clr-surface);
+      color: var(--clr-primary);
+      transform: translateX(2px);
+    }
+
+    .legal-toc a.active {
+      background: var(--clr-primary);
+      color: white;
+      font-weight: 700;
+    }
+
+    .legal-toc__actions {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      margin-top: var(--space-lg);
+      padding-top: var(--space-lg);
+      border-top: 1px solid var(--clr-border-light);
+    }
+
+    .toc-btn {
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      font-weight: 700;
+      text-align: center;
+      text-decoration: none;
+      border: 1px solid var(--clr-border);
+      background: transparent;
+      color: var(--clr-text);
+      transition: all var(--transition-fast);
+      display: block;
+    }
+
+    .toc-btn:hover {
+      background: var(--clr-surface);
+      border-color: var(--clr-primary);
+      color: var(--clr-primary);
+    }
+
+    .toc-btn--primary {
+      background: var(--clr-primary);
+      color: white;
+      border-color: var(--clr-primary);
+    }
+
+    .toc-btn--primary:hover {
+      background: var(--clr-primary-light);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Legal Content */
+    .legal-content {
+      max-width: var(--content-max-width);
+    }
+
+    .legal-section {
+      margin-bottom: clamp(2rem, 5vw, 3rem);
+      scroll-margin-top: 120px;
+    }
+
+    .legal-section h2 {
+      font-size: 1.75rem;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: var(--space-lg);
+      color: var(--clr-text);
+    }
+
+    .legal-section p {
+      margin-bottom: var(--space-lg);
+      line-height: 1.8;
+      color: var(--clr-text);
+    }
+
+    .legal-section ul,
+    .legal-section ol {
+      margin-bottom: var(--space-lg);
+      padding-left: var(--space-xl);
+    }
+
+    .legal-section li {
+      margin-bottom: var(--space-sm);
+      line-height: 1.7;
+    }
+
+    .legal-section a {
+      color: var(--clr-primary);
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: all var(--transition-fast);
+    }
+
+    .legal-section a:hover {
+      border-bottom-color: var(--clr-primary);
+    }
+
+    .legal-section strong {
+      font-weight: 700;
+      color: var(--clr-text);
+    }
+
+    /* Callout */
+    .legal-callout {
+      background: linear-gradient(135deg, rgba(11, 37, 69, 0.05), rgba(31, 94, 255, 0.05));
+      border: 1px solid rgba(11, 37, 69, 0.15);
+      border-left: 4px solid var(--clr-primary);
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      margin-block: var(--space-xl);
+    }
+
+    .legal-callout__title {
+      font-weight: 900;
+      font-size: 1.125rem;
+      margin-bottom: var(--space-sm);
+      color: var(--clr-primary);
+    }
+
+    .legal-callout__text {
+      margin: 0;
+      line-height: 1.7;
+    }
+
+    /* FAQ */
+    .legal-faq {
+      background: var(--clr-surface-elevated);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      margin-bottom: var(--space-lg);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .legal-faq:hover {
+      border-color: var(--clr-primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .legal-faq[open] {
+      background: var(--clr-surface);
+    }
+
+    .legal-faq summary {
+      font-weight: 700;
+      font-size: 1.0625rem;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .legal-faq summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .legal-faq summary::after {
+      content: "+";
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: var(--clr-surface);
+      border-radius: 50%;
+      font-weight: 900;
+      font-size: 1.25rem;
+      transition: transform var(--transition-fast);
+      flex-shrink: 0;
+    }
+
+    .legal-faq[open] summary::after {
+      content: "−";
+      transform: rotate(180deg);
+    }
+
+    .legal-faq p {
+      margin-top: var(--space-lg);
+      padding-top: var(--space-lg);
+      border-top: 1px solid var(--clr-border-light);
+      margin-bottom: 0;
+    }
+
+    /* Footer line */
+    .legal-footerline {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding-top: var(--space-2xl);
+      margin-top: var(--space-3xl);
+      border-top: 1px solid var(--clr-border);
+      font-size: 0.875rem;
+      color: var(--clr-text-muted);
+      flex-wrap: wrap;
+    }
+
+    .sep {
+      opacity: 0.5;
+    }
+
+    .backtop {
+      color: var(--clr-primary);
+      text-decoration: none;
+      font-weight: 700;
+      transition: all var(--transition-fast);
+      margin-left: auto;
+    }
+
+    .backtop:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--clr-surface);
+      border-top: 1px solid var(--clr-border);
+      padding-block: var(--space-2xl);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: var(--space-2xl);
+    }
+
+    .footer .kicker {
+      font-size: 0.875rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--clr-text-muted);
+      margin-bottom: var(--space-md);
+    }
+
+    .footer .list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .footer .list a {
+      font-size: 0.9375rem;
+      color: var(--clr-text);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all var(--transition-fast);
+    }
+
+    .footer .list a:hover {
+      color: var(--clr-primary);
+      transform: translateX(2px);
+    }
+
+    /* Responsive */
+    @media (max-width: 980px) {
+      .nav-links {
+        display: none;
+      }
+
+      .legal-hero__inner {
+        grid-template-columns: 1fr;
+      }
+
+      .legal-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .legal-toc {
+        position: relative;
+        top: 0;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .legal-meta {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+      }
+    }
+
+    /* Print styles */
+    @media print {
+      .header,
+      .mobile-overlay,
+      #mobileNav,
+      .legal-toc,
+      .footer,
+      .backtop,
+      #cookieWall {
+        display: none !important;
+      }
+
+      body {
+        background: white;
+        color: black;
+      }
+
+      .legal-content {
+        max-width: 100%;
+      }
     }
   </style>
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Politique de confidentialité",
+    "description": "Politique de confidentialité du Parlement JPV : transparence sur les données, cookies et droits RGPD",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Parlement JPV",
+      "url": "https://parlementjpv.github.io/parlementjpv/",
+      "logo": "https://parlementjpv.github.io/parlementjpv/assets/img/logo.png"
+    },
+    "url": "https://parlementjpv.github.io/parlementjpv/politique-confidentialite.html"
+  }
+  </script>
 </head>
 
 <body>
-  <a class="skip-link" href="#content">Aller au contenu</a>
+  <a class="skip-link" href="#content">Aller au contenu principal</a>
 
-  <!-- COOKIE CONSENT (analytics) -->
-  <div id="cookieWall" class="cookie-wall" hidden role="dialog" aria-modal="true" aria-label="Préférences de cookies">
+  <!-- COOKIE CONSENT -->
+  <div id="cookieWall" class="cookie-wall" hidden role="dialog" aria-modal="true" aria-labelledby="cookie-title">
     <div class="cookie-wall__card" role="document">
-      <div class="cookie-wall__title">Cookies & mesures d’audience</div>
+      <h2 id="cookie-title" class="cookie-wall__title">Cookies & mesures d'audience</h2>
       <p class="cookie-wall__text">
-        Nous utilisons des cookies de mesure d’audience (Google Analytics) pour comprendre la fréquentation du site
-        (pages consultées, durée de visite), améliorer le contenu et mesurer l’impact de nos actions.
+        Nous utilisons des cookies de mesure d'audience (Google Analytics) pour comprendre la fréquentation du site
+        (pages consultées, durée de visite), améliorer le contenu et mesurer l'impact de nos actions.
       </p>
 
       <div class="cookie-wall__links">
@@ -48,16 +956,26 @@
       </div>
 
       <div class="cookie-wall__actions">
-        <button class="cookie-btn cookie-btn--danger" type="button" data-cookie-decline>
+        <button 
+          class="cookie-btn cookie-btn--danger" 
+          type="button" 
+          data-cookie-decline
+          aria-label="Refuser les cookies analytics"
+        >
           Continuer sans analytics
         </button>
-        <button class="cookie-btn cookie-btn--primary" type="button" data-cookie-accept>
+        <button 
+          class="cookie-btn cookie-btn--primary" 
+          type="button" 
+          data-cookie-accept
+          aria-label="Accepter les cookies analytics"
+        >
           Accepter
         </button>
       </div>
 
       <p class="cookie-wall__note">
-        Tu peux changer d’avis plus tard : supprime le stockage du navigateur (localStorage) ou relance en navigation privée.
+        Tu peux changer d'avis plus tard : supprime le stockage du navigateur (localStorage) ou relance en navigation privée.
       </p>
     </div>
   </div>
@@ -65,52 +983,70 @@
   <!-- HEADER -->
   <header class="header" role="banner">
     <div class="container">
-      <div class="nav">
-        <a class="brand" href="index.html" aria-label="Accueil Parlement JPV">
-          <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44" decoding="async" />
+      <nav class="nav" aria-label="Navigation principale">
+        <a class="brand" href="index.html" aria-label="Retour à l'accueil du Parlement JPV">
+          <img src="assets/img/logo.png" alt="" width="44" height="44" decoding="async">
           <div class="brand-text">
             <div class="title">Parlement JPV</div>
             <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
           </div>
         </a>
 
-        <nav class="nav-links" aria-label="Navigation principale">
-          <a href="institution.html">L’institution</a>
+        <div class="nav-links" role="navigation">
+          <a href="institution.html">L'institution</a>
           <a href="rapports.html">Rapports</a>
           <a href="galerie.html">Galerie</a>
           <a href="media.html">Médias</a>
           <a href="rejoindre.html">Rejoindre</a>
           <a href="contact.html">Contact</a>
           <a href="qui-sommes-nous.html">Qui sommes-nous</a>
-        </nav>
+        </div>
 
         <div class="nav-actions">
-          <button class="icon-btn" type="button" id="themeBtn" aria-label="Basculer le thème" title="Thème">☾</button>
+          <button 
+            class="icon-btn" 
+            type="button" 
+            id="themeBtn" 
+            aria-label="Basculer entre le thème clair et sombre" 
+            title="Changer le thème"
+          >
+            <span aria-hidden="true">☾</span>
+          </button>
 
           <button
             class="icon-btn burger"
             type="button"
-            aria-label="Ouvrir le menu"
+            aria-label="Ouvrir le menu de navigation"
             aria-controls="mobileNav"
             aria-expanded="false"
             id="mobileNavBtn"
             title="Menu"
-          >☰</button>
+          >
+            <span aria-hidden="true">☰</span>
+          </button>
         </div>
-      </div>
+      </nav>
     </div>
   </header>
 
-  <!-- MOBILE NAV -->
-  <div id="mobileOverlay" class="mobile-overlay" hidden></div>
+  <!-- Mobile Overlay -->
+  <div id="mobileOverlay" class="mobile-overlay" hidden aria-hidden="true"></div>
 
+  <!-- Mobile Navigation -->
   <nav id="mobileNav" class="mobile" aria-label="Menu mobile" hidden>
     <div class="mobile-head">
-      <div class="mobile-title">Menu</div>
-      <button id="mobileCloseBtn" class="icon-btn" type="button" aria-label="Fermer le menu">✕</button>
+      <div class="mobile-title">Navigation</div>
+      <button 
+        id="mobileCloseBtn" 
+        class="icon-btn" 
+        type="button" 
+        aria-label="Fermer le menu de navigation"
+      >
+        <span aria-hidden="true">✕</span>
+      </button>
     </div>
 
-    <a href="institution.html">L’institution</a>
+    <a href="institution.html">L'institution</a>
     <a href="rapports.html">Rapports</a>
     <a href="galerie.html">Galerie</a>
     <a href="media.html">Médias</a>
@@ -119,13 +1055,16 @@
     <a href="qui-sommes-nous.html">Qui sommes-nous</a>
     <a href="charte.html">Charte</a>
 
-    <div class="line" role="separator" aria-hidden="true" style="margin:12px 0;"></div>
+    <hr style="margin: var(--space-lg) 0; border: none; border-top: 1px solid var(--clr-border);" aria-hidden="true">
 
-    <a
+    <a 
       href="https://docs.google.com/forms/d/e/1FAIpQLSdQ86QZ8sMoY7YgOhT6DBMy5KG85yfm65O6BWMmFp7bzuorqg/viewform?usp=header"
       target="_blank"
-      rel="noopener"
-    >Candidater (Formulaire)</a>
+      rel="noopener noreferrer"
+    >
+      Candidater (Formulaire)
+      <span class="sr-only">(s'ouvre dans un nouvel onglet)</span>
+    </a>
   </nav>
 
   <!-- MAIN -->
@@ -135,22 +1074,23 @@
         <div class="legal-hero__inner">
           <div>
             <div class="legal-eyebrow">
-              <span class="dot"></span> Documents officiels
+              <span class="dot" aria-hidden="true"></span>
+              <span>Documents officiels</span>
             </div>
             <h1 class="legal-title">Politique de confidentialité</h1>
             <p class="legal-subtitle">
               Transparence sur les données, les cookies et tes droits — conformément au RGPD.
             </p>
 
-            <div class="legal-meta">
-              <span class="badge">RGPD</span>
-              <span class="badge badge--soft">Cookies</span>
-              <span class="badge badge--soft">Mesure d’audience</span>
+            <div class="legal-meta" role="list" aria-label="Catégories">
+              <span class="badge" role="listitem">RGPD</span>
+              <span class="badge badge--soft" role="listitem">Cookies</span>
+              <span class="badge badge--soft" role="listitem">Mesure d'audience</span>
             </div>
           </div>
 
-          <aside class="legal-card legal-card--highlight">
-            <div class="legal-card__kicker">Résumé</div>
+          <aside class="legal-card legal-card--highlight" aria-labelledby="summary-title">
+            <div class="legal-card__kicker" id="summary-title">Résumé</div>
             <ul class="legal-bullets">
               <li>Pas de collecte sans consentement explicite.</li>
               <li>Audience : uniquement si tu acceptes.</li>
@@ -167,7 +1107,7 @@
     <section class="legal-body">
       <div class="container legal-grid">
         <!-- TOC -->
-        <nav class="legal-toc" aria-label="Sommaire">
+        <nav class="legal-toc" aria-label="Sommaire de la politique de confidentialité">
           <div class="legal-toc__title">Sommaire</div>
           <a href="#donnees">1. Données collectées</a>
           <a href="#finalite">2. Finalité du traitement</a>
@@ -187,74 +1127,169 @@
           <article class="legal-section" id="donnees">
             <h2>1. Données collectées</h2>
             <p>
-              Le site Parlement JPV ne collecte aucune donnée personnelle sans votre consentement explicite.
+              Le site Parlement JPV ne collecte <strong>aucune donnée personnelle</strong> sans votre consentement explicite.
             </p>
             <p>
-              Les données éventuellement collectées via des formulaires (ex. Google Forms) sont limitées aux informations nécessaires
-              à l’organisation des activités du Parlement JPV.
+              Les données éventuellement collectées via des formulaires (ex. Google Forms) sont limitées aux informations 
+              strictement nécessaires à l'organisation des activités du Parlement JPV. Ces données incluent uniquement :
+            </p>
+            <ul>
+              <li>Nom et prénom (pour identification)</li>
+              <li>Adresse email (pour communication)</li>
+              <li>Classe (pour organisation logistique)</li>
+            </ul>
+            <p>
+              <strong>Aucune donnée sensible</strong> (origine ethnique, opinions politiques, santé, etc.) n'est collectée.
             </p>
           </article>
 
           <article class="legal-section" id="finalite">
             <h2>2. Finalité du traitement</h2>
-            <p>Les données sont utilisées uniquement pour :</p>
+            <p>Les données personnelles collectées sont utilisées exclusivement pour :</p>
             <ul>
-              <li>L’organisation des débats</li>
-              <li>La gestion des inscriptions</li>
-              <li>La communication interne liée aux activités</li>
+              <li><strong>L'organisation des débats</strong> : attribution des rôles, planification des sessions</li>
+              <li><strong>La gestion des inscriptions</strong> : confirmation de participation, communication logistique</li>
+              <li><strong>La communication interne</strong> : informations liées aux activités du Parlement JPV</li>
             </ul>
+            <p>
+              Vos données ne seront <strong>jamais</strong> utilisées à des fins commerciales, publicitaires ou transmises à des tiers 
+              sans votre consentement explicite.
+            </p>
           </article>
 
           <article class="legal-section" id="base-legale">
             <h2>3. Base légale</h2>
             <p>
-              Le traitement repose sur le consentement des personnes concernées, conformément au Règlement Général sur la Protection des Données (RGPD).
+              Le traitement de vos données personnelles repose sur votre <strong>consentement explicite</strong>, conformément 
+              à l'article 6.1.a du Règlement Général sur la Protection des Données (RGPD - Règlement UE 2016/679).
+            </p>
+            <p>
+              Vous pouvez retirer votre consentement à tout moment en nous contactant à l'adresse 
+              <a href="mailto:contact@parlementjpv.fr">contact@parlementjpv.fr</a>.
             </p>
           </article>
 
           <article class="legal-section" id="duree">
             <h2>4. Durée de conservation</h2>
             <p>
-              Les données sont conservées pour la durée strictement nécessaire à l’organisation des activités, puis supprimées.
+              Les données personnelles sont conservées pour la durée <strong>strictement nécessaire</strong> à l'accomplissement 
+              des finalités décrites ci-dessus.
+            </p>
+            <p>
+              En pratique :
+            </p>
+            <ul>
+              <li><strong>Données d'inscription</strong> : conservées pendant la durée de l'année scolaire en cours</li>
+              <li><strong>Données de participation</strong> : supprimées dans les 3 mois suivant la fin de l'événement</li>
+              <li><strong>Communications</strong> : archivées pendant 1 an maximum pour suivi administratif</li>
+            </ul>
+            <p>
+              À l'issue de ces périodes, vos données sont automatiquement supprimées de nos systèmes.
             </p>
           </article>
 
           <article class="legal-section" id="droits">
             <h2>5. Droits des utilisateurs</h2>
             <p>
-              Conformément au RGPD, vous disposez d’un droit d’accès, de rectification, d’effacement et d’opposition concernant vos données personnelles.
+              Conformément au RGPD, vous disposez des droits suivants concernant vos données personnelles :
             </p>
+            <ul>
+              <li><strong>Droit d'accès</strong> : obtenir la confirmation que vos données sont traitées et en obtenir une copie</li>
+              <li><strong>Droit de rectification</strong> : corriger des données inexactes ou incomplètes</li>
+              <li><strong>Droit à l'effacement</strong> : demander la suppression de vos données (« droit à l'oubli »)</li>
+              <li><strong>Droit d'opposition</strong> : vous opposer au traitement de vos données</li>
+              <li><strong>Droit à la limitation</strong> : limiter le traitement dans certaines circonstances</li>
+              <li><strong>Droit à la portabilité</strong> : récupérer vos données dans un format structuré</li>
+            </ul>
 
-            <div class="legal-callout">
+            <div class="legal-callout" role="complementary">
               <div class="legal-callout__title">Exercer vos droits</div>
               <p class="legal-callout__text">
-                Pour exercer ces droits, contactez : <strong><a href="mailto:contact@parlementjpv.fr">contact@parlementjpv.fr</a></strong>
+                Pour exercer l'un de ces droits, contactez-nous par email à 
+                <strong><a href="mailto:contact@parlementjpv.fr">contact@parlementjpv.fr</a></strong> en précisant 
+                votre demande. Nous vous répondrons dans un délai maximum d'<strong>un mois</strong>.
               </p>
             </div>
+
+            <p>
+              Vous disposez également du droit d'introduire une réclamation auprès de la 
+              <a href="https://www.cnil.fr/" target="_blank" rel="noopener noreferrer">
+                Commission Nationale de l'Informatique et des Libertés (CNIL)
+                <span class="sr-only">(s'ouvre dans un nouvel onglet)</span>
+              </a> 
+              si vous estimez que vos droits ne sont pas respectés.
+            </p>
           </article>
 
           <article class="legal-section" id="cookies">
             <h2>6. Cookies</h2>
             <p>
-              Le site peut utiliser des cookies techniques nécessaires au bon fonctionnement.
-              Aucun cookie publicitaire n’est utilisé.
+              Le site Parlement JPV utilise des cookies pour améliorer votre expérience de navigation et mesurer l'audience 
+              du site.
+            </p>
+
+            <h3 style="font-size: 1.25rem; font-weight: 800; margin-top: var(--space-xl); margin-bottom: var(--space-md);">
+              Types de cookies utilisés
+            </h3>
+
+            <p><strong>Cookies strictement nécessaires :</strong></p>
+            <ul>
+              <li>Stockage des préférences de thème (clair/sombre)</li>
+              <li>Mémorisation de votre choix concernant les cookies analytics</li>
+            </ul>
+
+            <p><strong>Cookies analytics (avec consentement uniquement) :</strong></p>
+            <ul>
+              <li>Google Analytics : mesure de fréquentation, pages visitées, durée des sessions</li>
+              <li>Ces cookies sont anonymisés et ne permettent pas de vous identifier personnellement</li>
+            </ul>
+
+            <p>
+              <strong>Aucun cookie publicitaire ou de tracking tiers</strong> n'est utilisé sur ce site.
             </p>
 
             <details class="legal-faq">
               <summary>Que se passe-t-il si je refuse les analytics ?</summary>
-              <p>Le site fonctionne pareil. On ne mesure simplement pas la fréquentation.</p>
+              <p>
+                Le site fonctionne exactement de la même manière. Nous ne mesurons simplement pas votre visite dans nos 
+                statistiques. Toutes les fonctionnalités restent accessibles.
+              </p>
             </details>
 
             <details class="legal-faq">
-              <summary>Comment changer d’avis ?</summary>
-              <p>Tu peux supprimer la clé de consentement dans le stockage du navigateur (localStorage) ou relancer en navigation privée.</p>
+              <summary>Comment changer d'avis sur les cookies ?</summary>
+              <p>
+                Vous pouvez modifier votre choix à tout moment en :
+              </p>
+              <ul style="margin-top: var(--space-md);">
+                <li>Supprimant la clé <code style="background: var(--clr-surface); padding: 2px 6px; border-radius: 4px;">analytics_consent</code> 
+                dans le stockage local (localStorage) de votre navigateur</li>
+                <li>Utilisant la navigation privée (le bandeau réapparaîtra)</li>
+                <li>Supprimant les cookies depuis les paramètres de votre navigateur</li>
+              </ul>
+            </details>
+
+            <details class="legal-faq">
+              <summary>Comment désactiver tous les cookies ?</summary>
+              <p>
+                Vous pouvez configurer votre navigateur pour refuser tous les cookies. Consultez l'aide de votre navigateur :
+              </p>
+              <ul style="margin-top: var(--space-md);">
+                <li><a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener noreferrer">Google Chrome</a></li>
+                <li><a href="https://support.mozilla.org/fr/kb/activer-desactiver-cookies" target="_blank" rel="noopener noreferrer">Mozilla Firefox</a></li>
+                <li><a href="https://support.apple.com/fr-fr/guide/safari/sfri11471/mac" target="_blank" rel="noopener noreferrer">Safari</a></li>
+                <li><a href="https://support.microsoft.com/fr-fr/microsoft-edge/supprimer-les-cookies-dans-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09" target="_blank" rel="noopener noreferrer">Microsoft Edge</a></li>
+              </ul>
             </details>
           </article>
 
           <div class="legal-footerline">
-            <span>© <span id="yearInline"></span> Parlement JPV</span>
-            <span class="sep">•</span>
-            <a href="#top" class="backtop" id="backTopLink">Retour en haut ↑</a>
+            <span>© <span id="yearInline" aria-label="Année en cours">2026</span> Parlement JPV</span>
+            <span class="sep" aria-hidden="true">•</span>
+            <span>Dernière mise à jour : <time datetime="2026-02-15">15 février 2026</time></span>
+            <a href="#top" class="backtop" id="backTopLink" aria-label="Retour en haut de page">
+              Retour en haut ↑
+            </a>
           </div>
         </div>
       </div>
@@ -266,154 +1301,306 @@
     <div class="container">
       <div class="footer-grid">
         <div>
-          <div class="brand" style="gap:10px">
-            <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44" loading="lazy" decoding="async" />
+          <div class="brand" style="gap: var(--space-sm)">
+            <img 
+              src="assets/img/logo.png" 
+              alt="" 
+              width="44" 
+              height="44" 
+              loading="lazy" 
+              decoding="async"
+            >
             <div>
               <div class="title">Parlement JPV</div>
               <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
             </div>
           </div>
-          <p class="small" style="margin-top:10px">
-            Instance lycéenne de débat, d’engagement citoyen et d’initiatives structurées.
+          <p style="margin-top: var(--space-md); font-size: 0.9375rem; color: var(--clr-text-muted);">
+            Instance lycéenne de débat, d'engagement citoyen et d'initiatives structurées.
           </p>
         </div>
 
-        <div>
+        <nav aria-label="Liens footer - Pages">
           <div class="kicker">Pages</div>
           <div class="list">
-            <a href="institution.html">L’institution</a>
+            <a href="institution.html">L'institution</a>
             <a href="rapports.html">Rapports</a>
             <a href="galerie.html">Galerie</a>
             <a href="media.html">Médias</a>
             <a href="charte.html">Charte</a>
             <a href="qui-sommes-nous.html">Qui sommes-nous</a>
+            <a href="politique-confidentialite.html" aria-current="page">Politique de confidentialité</a>
+            <a href="mentions-legales.html">Mentions légales</a>
           </div>
-        </div>
+        </nav>
 
-        <div>
+        <nav aria-label="Liens footer - Contact">
           <div class="kicker">Contact</div>
           <div class="list">
             <a href="rejoindre.html">Rejoindre</a>
             <a href="contact.html">Contact</a>
-            <a href="https://instagram.com/parlementjpv" rel="noopener" target="_blank">Instagram</a>
+            <a 
+              href="https://instagram.com/parlementjpv" 
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
+              Instagram
+              <span class="sr-only">(s'ouvre dans un nouvel onglet)</span>
+            </a>
           </div>
-          <div class="small" style="margin-top:10px">© <span id="year"></span> Parlement JPV</div>
-        </div>
+          <p style="margin-top: var(--space-md); font-size: 0.875rem; color: var(--clr-text-muted);">
+            © <span id="year" aria-label="Année en cours">2026</span> Parlement JPV
+          </p>
+        </nav>
       </div>
     </div>
   </footer>
 
+  <!-- No JavaScript fallback -->
   <noscript>
-    <div style="padding:14px;margin:16px;border-radius:12px;border:1px solid rgba(0,0,0,.12);background:#fff;color:#111;max-width:920px">
-      Pour une expérience complète (menu, thème, cookies), active JavaScript.
+    <div style="padding: var(--space-lg); margin: var(--space-lg); border-radius: var(--radius-md); border: 1px solid var(--clr-border); background: var(--clr-surface); max-width: 920px;">
+      <p style="margin: 0; color: var(--clr-text);">
+        <strong>JavaScript désactivé :</strong> Pour une expérience complète (menu mobile, basculement de thème, gestion des cookies), 
+        veuillez activer JavaScript dans votre navigateur. Le contenu reste accessible.
+      </p>
     </div>
   </noscript>
 
-  <!-- JS minimal “anti-bug” (ne casse pas tes fichiers existants) -->
-  <script>
-    (function () {
-      // Année (footer + inline)
-      const y = new Date().getFullYear();
-      const a = document.getElementById("year");
-      const b = document.getElementById("yearInline");
-      if (a) a.textContent = y;
-      if (b) b.textContent = y;
-
-      // Retour en haut (smooth)
-      const back = document.getElementById("backTopLink");
-      if (back) {
-        back.addEventListener("click", function (e) {
-          e.preventDefault();
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        });
-      }
-
-      // Thème (fallback si main.js n’existe pas)
-      const themeBtn = document.getElementById("themeBtn");
-      function applyTheme(mode) {
-        if (!mode) return;
-        document.documentElement.setAttribute("data-theme", mode);
-        try { localStorage.setItem("theme", mode); } catch(e) {}
-      }
-      function toggleThemeFallback() {
-        const current = document.documentElement.getAttribute("data-theme") || "light";
-        applyTheme(current === "dark" ? "light" : "dark");
-      }
-      // Init thème
-      try {
-        const saved = localStorage.getItem("theme");
-        if (saved) applyTheme(saved);
-      } catch(e) {}
-      if (themeBtn) {
-        themeBtn.addEventListener("click", function(){
-          // si tu as déjà toggleTheme() dans main.js, on l’utilise, sinon fallback
-          if (typeof window.toggleTheme === "function") window.toggleTheme();
-          else toggleThemeFallback();
-        });
-      }
-
-      // Menu mobile (robuste, overlay, ESC, clic dehors, focus safe)
-      const btn = document.getElementById("mobileNavBtn");
-      const closeBtn = document.getElementById("mobileCloseBtn");
-      const nav = document.getElementById("mobileNav");
-      const overlay = document.getElementById("mobileOverlay");
-
-      function setOpen(open) {
-        if (!btn || !nav || !overlay) return;
-        btn.setAttribute("aria-expanded", open ? "true" : "false");
-        nav.hidden = !open;
-        overlay.hidden = !open;
-        document.body.style.overflow = open ? "hidden" : "";
-        if (open) {
-          // focus sur le 1er lien du menu
-          const first = nav.querySelector("a,button");
-          if (first) first.focus({ preventScroll: true });
-        } else {
-          btn.focus({ preventScroll: true });
-        }
-      }
-
-      if (btn) btn.addEventListener("click", function(){ setOpen(nav.hidden); });
-      if (closeBtn) closeBtn.addEventListener("click", function(){ setOpen(false); });
-      if (overlay) overlay.addEventListener("click", function(){ setOpen(false); });
-
-      document.addEventListener("keydown", function(e){
-        if (e.key === "Escape" && nav && !nav.hidden) setOpen(false);
-      });
-
-      // Fermer le menu quand on clique un lien (UX propre)
-      if (nav) {
-        nav.addEventListener("click", function(e){
-          const t = e.target;
-          if (t && t.tagName === "A") setOpen(false);
-        });
-      }
-
-      // Cookie wall fallback (si ton analytics-consent.js ne s’exécute pas)
-      const wall = document.getElementById("cookieWall");
-      const hasChoice = () => {
-        try { return localStorage.getItem("analytics_consent") !== null; } catch(e) { return false; }
-      };
-      if (wall && !hasChoice()) {
-        wall.hidden = false;
-      }
-      document.addEventListener("click", function(e){
-        const t = e.target;
-        if (!t) return;
-        if (t.matches("[data-cookie-accept]")) {
-          try { localStorage.setItem("analytics_consent", "accepted"); } catch(err) {}
-          if (wall) wall.hidden = true;
-        }
-        if (t.matches("[data-cookie-decline]")) {
-          try { localStorage.setItem("analytics_consent", "declined"); } catch(err) {}
-          if (wall) wall.hidden = true;
-        }
-      });
-    })();
-  </script>
-
-  <!-- Tes scripts (gardés) -->
+  <!-- Scripts -->
   <script src="js/analytics-consent.js" defer></script>
   <script src="js/main.js" defer></script>
+
+  <!-- Inline essential scripts -->
+  <script>
+    (function() {
+      'use strict';
+
+      // Set current year
+      const currentYear = new Date().getFullYear();
+      const yearElements = document.querySelectorAll('#year, #yearInline');
+      yearElements.forEach(el => {
+        if (el) el.textContent = currentYear;
+      });
+
+      // Smooth scroll to top
+      const backToTop = document.getElementById('backTopLink');
+      if (backToTop) {
+        backToTop.addEventListener('click', function(e) {
+          e.preventDefault();
+          window.scrollTo({ 
+            top: 0, 
+            behavior: 'smooth' 
+          });
+        });
+      }
+
+      // Active section highlighting in TOC
+      const observerOptions = {
+        root: null,
+        rootMargin: '-20% 0px -75% 0px',
+        threshold: 0
+      };
+
+      const observerCallback = (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const id = entry.target.id;
+            const tocLinks = document.querySelectorAll('.legal-toc a');
+            tocLinks.forEach(link => {
+              link.classList.remove('active');
+              if (link.getAttribute('href') === `#${id}`) {
+                link.classList.add('active');
+              }
+            });
+          }
+        });
+      };
+
+      const observer = new IntersectionObserver(observerCallback, observerOptions);
+      const sections = document.querySelectorAll('.legal-section[id]');
+      sections.forEach(section => observer.observe(section));
+
+      // Theme toggle fallback
+      const themeBtn = document.getElementById('themeBtn');
+      
+      function applyTheme(mode) {
+        if (!mode) return;
+        document.documentElement.setAttribute('data-theme', mode);
+        try {
+          localStorage.setItem('theme', mode);
+        } catch(e) {
+          console.warn('localStorage not available');
+        }
+      }
+
+      function toggleThemeFallback() {
+        const current = document.documentElement.getAttribute('data-theme') || 'light';
+        applyTheme(current === 'dark' ? 'light' : 'dark');
+      }
+
+      // Initialize theme from localStorage
+      try {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+          applyTheme(savedTheme);
+        }
+      } catch(e) {
+        console.warn('localStorage not available');
+      }
+
+      if (themeBtn) {
+        themeBtn.addEventListener('click', function() {
+          if (typeof window.toggleTheme === 'function') {
+            window.toggleTheme();
+          } else {
+            toggleThemeFallback();
+          }
+        });
+      }
+
+      // Mobile navigation with accessibility
+      const mobileNavBtn = document.getElementById('mobileNavBtn');
+      const mobileCloseBtn = document.getElementById('mobileCloseBtn');
+      const mobileNav = document.getElementById('mobileNav');
+      const mobileOverlay = document.getElementById('mobileOverlay');
+
+      if (!mobileNavBtn || !mobileNav || !mobileOverlay || !mobileCloseBtn) return;
+
+      let focusableElements = [];
+      let firstFocusable = null;
+      let lastFocusable = null;
+
+      function updateFocusableElements() {
+        focusableElements = Array.from(
+          mobileNav.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])')
+        );
+        firstFocusable = focusableElements[0];
+        lastFocusable = focusableElements[focusableElements.length - 1];
+      }
+
+      function setOpen(open) {
+        mobileNavBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        mobileNav.hidden = !open;
+        mobileOverlay.hidden = !open;
+        
+        if (open) {
+          document.body.classList.add('no-scroll');
+          requestAnimationFrame(() => {
+            mobileNav.classList.add('open');
+            mobileOverlay.classList.add('open');
+            updateFocusableElements();
+            if (mobileCloseBtn) {
+              mobileCloseBtn.focus({ preventScroll: true });
+            }
+          });
+        } else {
+          mobileNav.classList.remove('open');
+          mobileOverlay.classList.remove('open');
+          document.body.classList.remove('no-scroll');
+          setTimeout(() => {
+            mobileNavBtn.focus({ preventScroll: true });
+          }, 250);
+        }
+      }
+
+      // Trap focus within menu
+      function trapFocus(e) {
+        if (e.key !== 'Tab') return;
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstFocusable) {
+            lastFocusable.focus();
+            e.preventDefault();
+          }
+        } else {
+          if (document.activeElement === lastFocusable) {
+            firstFocusable.focus();
+            e.preventDefault();
+          }
+        }
+      }
+
+      mobileNavBtn.addEventListener('click', () => {
+        const isOpen = mobileNavBtn.getAttribute('aria-expanded') === 'true';
+        setOpen(!isOpen);
+      });
+
+      mobileCloseBtn.addEventListener('click', () => setOpen(false));
+      mobileOverlay.addEventListener('click', () => setOpen(false));
+
+      mobileNav.addEventListener('click', (e) => {
+        const link = e.target.closest('a');
+        if (link && !link.hasAttribute('target')) {
+          setOpen(false);
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        const isOpen = mobileNavBtn.getAttribute('aria-expanded') === 'true';
+        
+        if (e.key === 'Escape' && isOpen) {
+          setOpen(false);
+        }
+        
+        if (isOpen) {
+          trapFocus(e);
+        }
+      });
+
+      // Close menu on desktop breakpoint
+      const mediaQuery = window.matchMedia('(min-width: 981px)');
+      const handleBreakpointChange = (e) => {
+        if (e.matches) setOpen(false);
+      };
+      
+      if (mediaQuery.addEventListener) {
+        mediaQuery.addEventListener('change', handleBreakpointChange);
+      } else {
+        mediaQuery.addListener(handleBreakpointChange);
+      }
+
+      // Initialize menu state
+      setOpen(false);
+
+      // Cookie wall fallback
+      const cookieWall = document.getElementById('cookieWall');
+      
+      function hasConsent() {
+        try {
+          return localStorage.getItem('analytics_consent') !== null;
+        } catch(e) {
+          return false;
+        }
+      }
+
+      if (cookieWall && !hasConsent()) {
+        cookieWall.hidden = false;
+      }
+
+      document.addEventListener('click', function(e) {
+        const target = e.target;
+        if (!target) return;
+
+        if (target.matches('[data-cookie-accept]')) {
+          try {
+            localStorage.setItem('analytics_consent', 'accepted');
+          } catch(err) {
+            console.warn('localStorage not available');
+          }
+          if (cookieWall) cookieWall.hidden = true;
+        }
+
+        if (target.matches('[data-cookie-decline]')) {
+          try {
+            localStorage.setItem('analytics_consent', 'declined');
+          } catch(err) {
+            console.warn('localStorage not available');
+          }
+          if (cookieWall) cookieWall.hidden = true;
+        }
+      });
+
+    })();
+  </script>
 </body>
 </html>
