@@ -1,1071 +1,351 @@
+
 <!doctype html>
 <html lang="fr" dir="ltr">
 <head>
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJZ6CRDLPS"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-SJZ6CRDLPS');
-  </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SJZ6CRDLPS"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-
+  gtag('config', 'G-SJZ6CRDLPS');
+</script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Parlement JPV — Lycée Jean-Pierre Vernant</title>
-  <meta name="description" content="Instance lycéenne de débat, d'engagement citoyen et d'initiative institutionnelle au Lycée Jean-Pierre Vernant (Sèvres).">
-  <meta name="theme-color" content="#0a0e1a" media="(prefers-color-scheme: dark)">
-  <meta name="theme-color" content="#fafbfc" media="(prefers-color-scheme: light)">
+  <meta name="description" content="Instance lycéenne de débat, d’engagement citoyen et d’initiative institutionnelle au Lycée Jean-Pierre Vernant (Sèvres)." />
+  <meta name="theme-color" content="#0b2545" />
 
   <!-- SEO -->
-  <link rel="canonical" href="https://parlementjpv.github.io/parlementjpv/">
-  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://parlementjpv.github.io/parlementjpv/" />
+  <meta name="robots" content="index,follow" />
 
   <!-- Icons -->
-  <link rel="icon" href="assets/img/favicon.png" sizes="any">
-  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <link rel="icon" href="assets/img/favicon.png" sizes="any" />
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png" />
 
   <!-- Social -->
-  <meta property="og:title" content="Parlement JPV — Lycée Jean-Pierre Vernant">
-  <meta property="og:description" content="Débats, éloquence, conférences, initiatives citoyennes. Une instance lycéenne ambitieuse et structurée.">
-  <meta property="og:image" content="https://parlementjpv.github.io/parlementjpv/assets/img/og.jpg">
-  <meta property="og:type" content="website">
-  <meta property="og:locale" content="fr_FR">
-  <meta property="og:url" content="https://parlementjpv.github.io/parlementjpv/">
-  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:title" content="Parlement JPV — Lycée Jean-Pierre Vernant" />
+  <meta property="og:description" content="Débats, éloquence, conférences, initiatives citoyennes. Une instance lycéenne ambitieuse et structurée." />
+  <meta property="og:image" content="assets/img/og.jpg" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:url" content="https://parlementjpv.github.io/parlementjpv/" />
+  <meta name="twitter:card" content="summary_large_image" />
 
-  <!-- Premium Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,300&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Perf -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/cookies.css">
+  <!-- CSS global -->
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/cookies.css" />
 
-  <!-- Critical Premium CSS -->
+  <!-- Page CSS (même identité, autonome, sans casser ton styles.css) -->
   <style>
     /* =========================================================
-       ULTRA PREMIUM HOMEPAGE — 10K€ DESIGN
-       Refined minimalism with sophisticated typography
+       INDEX — PARLEMENT JPV (CLAIR + INSTITUTIONNEL)
        ========================================================= */
 
-    :root {
-      /* Premium Color Palette */
-      --clr-ink: #0a0e1a;
-      --clr-ink-light: #1a202e;
-      --clr-slate: #475569;
-      --clr-slate-light: #64748b;
-      --clr-mist: #94a3b8;
-      --clr-fog: #cbd5e1;
-      --clr-cloud: #e2e8f0;
-      --clr-snow: #f1f5f9;
-      --clr-paper: #fafbfc;
-      --clr-white: #ffffff;
-      
-      --clr-gold: #c9a050;
-      --clr-gold-light: #d4af64;
-      --clr-gold-dim: #f5e6cc;
-      
-      --clr-navy: #0b2545;
-      --clr-navy-light: #1a4d7a;
-      --clr-navy-dim: #e6ecf2;
-      
-      --clr-success: #059669;
-      --clr-info: #0ea5e9;
-      
-      --clr-text-primary: var(--clr-ink);
-      --clr-text-secondary: var(--clr-slate);
-      --clr-text-tertiary: var(--clr-mist);
-      --clr-bg-primary: var(--clr-paper);
-      --clr-bg-secondary: var(--clr-white);
-      --clr-bg-elevated: var(--clr-white);
-      --clr-border-subtle: var(--clr-cloud);
-      --clr-border-muted: var(--clr-fog);
-      
-      --font-display: 'Fraunces', 'Georgia', serif;
-      --font-body: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-      --font-mono: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
-      
-      --space-3xs: 0.125rem;
-      --space-2xs: 0.25rem;
-      --space-xs: 0.5rem;
-      --space-sm: 0.75rem;
-      --space-md: 1rem;
-      --space-lg: 1.5rem;
-      --space-xl: 2rem;
-      --space-2xl: 3rem;
-      --space-3xl: 4rem;
-      --space-4xl: 6rem;
-      
-      --radius-xs: 0.25rem;
-      --radius-sm: 0.375rem;
-      --radius-md: 0.5rem;
-      --radius-lg: 0.75rem;
-      --radius-xl: 1rem;
-      --radius-2xl: 1.5rem;
-      --radius-full: 624.9375rem;
-      
-      --ease-smooth: cubic-bezier(0.4, 0.0, 0.2, 1);
-      --ease-elegant: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      --transition-swift: 150ms var(--ease-smooth);
-      --transition-base: 250ms var(--ease-smooth);
-      --transition-slow: 400ms var(--ease-elegant);
-      
-      --shadow-xs: 0 1px 2px rgba(10, 14, 26, 0.04);
-      --shadow-sm: 0 1px 3px rgba(10, 14, 26, 0.06), 0 1px 2px rgba(10, 14, 26, 0.03);
-      --shadow-md: 0 4px 6px -1px rgba(10, 14, 26, 0.08), 0 2px 4px -1px rgba(10, 14, 26, 0.04);
-      --shadow-lg: 0 10px 15px -3px rgba(10, 14, 26, 0.10), 0 4px 6px -2px rgba(10, 14, 26, 0.03);
-      --shadow-xl: 0 20px 25px -5px rgba(10, 14, 26, 0.10), 0 10px 10px -5px rgba(10, 14, 26, 0.02);
-      --shadow-2xl: 0 25px 50px -12px rgba(10, 14, 26, 0.25);
-      
-      --header-height: 72px;
+    /* Micro utilitaires */
+    .sr-only{
+      position:absolute!important;
+      width:1px;height:1px;
+      padding:0;margin:-1px;
+      overflow:hidden;clip:rect(0,0,0,0);
+      white-space:nowrap;border:0;
     }
 
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --clr-text-primary: var(--clr-paper);
-        --clr-text-secondary: var(--clr-fog);
-        --clr-text-tertiary: var(--clr-slate-light);
-        --clr-bg-primary: var(--clr-ink);
-        --clr-bg-secondary: var(--clr-ink-light);
-        --clr-bg-elevated: #1e2533;
-        --clr-border-subtle: #2d3748;
-        --clr-border-muted: #374151;
-        
-        --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.5);
-        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.6), 0 1px 2px rgba(0, 0, 0, 0.4);
-        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.7), 0 2px 4px -1px rgba(0, 0, 0, 0.5);
-        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.8), 0 4px 6px -2px rgba(0, 0, 0, 0.6);
-        --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.9), 0 10px 10px -5px rgba(0, 0, 0, 0.7);
-        --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 1);
-      }
+    /* On suppose que styles.css définit déjà :root + .container etc.
+       Ici on renforce la robustesse mobile sans “fight” ton CSS. */
+    .skip-link{
+      position:absolute; left:-9999px; top:10px;
+      z-index:999;
+      padding:10px 12px;
+      border-radius:12px;
+      background:rgba(255,255,255,.92);
+      border:1px solid rgba(11,18,32,.12);
+      color:#0b1220;
+    }
+    .skip-link:focus{ left:12px; outline:none; }
+
+    /* Header : on garde ta structure mais on stabilise */
+    .header{
+      position:sticky;
+      top:0;
+      z-index:60;
+      backdrop-filter: blur(10px);
     }
 
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    /* Fix overflow brand sur mobile */
+    .nav{ min-width:0; }
+    .brand{ min-width:0; }
+    .brand-text{ min-width:0; }
+    .brand .title,
+    .brand .sub{
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      max-width: 56vw;
     }
 
-    html {
-      font-size: 16px;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      text-rendering: optimizeLegibility;
-      -webkit-text-size-adjust: 100%;
-      scroll-behavior: smooth;
-      scroll-padding-top: calc(var(--header-height) + var(--space-lg));
+    /* Boutons icônes (si pas déjà dans ton CSS) */
+    .icon-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:44px;height:44px;
+      border-radius:14px;
+      border:1px solid rgba(11,18,32,.12);
+      background: rgba(255,255,255,.70);
+      cursor:pointer;
+      font-weight:900;
+      line-height:1;
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-      }
+    /* Drawer mobile + overlay (remplace le menu “simple” hidden) */
+    .mobile-overlay{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.35);
+      backdrop-filter: blur(2px);
+      z-index:80;
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .18s ease;
+    }
+    .mobile-overlay.open{
+      opacity:1;
+      pointer-events:auto;
     }
 
-    body {
-      font-family: var(--font-body);
-      font-size: 1rem;
-      line-height: 1.7;
-      color: var(--clr-text-primary);
-      background: var(--clr-bg-primary);
-      overflow-x: hidden;
-      position: relative;
-    }
+    /* IMPORTANT : on retarget ton nav#mobileNav.mobile */
+    #mobileNav.mobile{
+      position:fixed;
+      top:0;
+      right:0;
+      height:100dvh;
+      width:min(92vw, 380px);
+      padding:14px 14px 18px;
+      z-index:90;
 
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: 
-        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.02) 2px, rgba(0,0,0,.02) 4px),
-        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,.02) 2px, rgba(0,0,0,.02) 4px);
-      pointer-events: none;
-      opacity: 0.3;
-      z-index: 1;
-    }
+      border-left:1px solid rgba(11,18,32,.12);
+      background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.78));
+      box-shadow: 0 30px 120px rgba(11,18,32,.20);
 
-    body.no-scroll {
-      overflow: hidden;
-      touch-action: none;
-    }
-
-    .sr-only {
-      position: absolute !important;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
-
-    .skip-link {
-      position: fixed;
-      left: -9999px;
-      top: var(--space-md);
-      z-index: 10000;
-      padding: var(--space-md) var(--space-xl);
-      border-radius: var(--radius-lg);
-      background: var(--clr-bg-elevated);
-      border: 2px solid var(--clr-navy);
-      color: var(--clr-navy);
-      font-family: var(--font-body);
-      font-weight: 700;
-      font-size: 0.9375rem;
-      text-decoration: none;
-      box-shadow: var(--shadow-2xl);
-      transition: all var(--transition-base);
-    }
-
-    .skip-link:focus {
-      left: var(--space-md);
-      outline: 3px solid var(--clr-gold);
-      outline-offset: 3px;
-    }
-
-    :focus-visible {
-      outline: 2px solid var(--clr-gold);
-      outline-offset: 3px;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 1320px;
-      margin-inline: auto;
-      padding-inline: clamp(1.25rem, 5vw, 2.5rem);
-      position: relative;
-      z-index: 2;
-    }
-
-    .header {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      background: rgba(250, 251, 252, 0.92);
-      backdrop-filter: blur(20px) saturate(180%);
-      border-bottom: 1px solid var(--clr-border-subtle);
-      transition: all var(--transition-base);
-      height: var(--header-height);
-    }
-
-    @supports (backdrop-filter: blur(20px)) {
-      .header {
-        background: rgba(250, 251, 252, 0.85);
-      }
-    }
-
-    @media (prefers-color-scheme: dark) {
-      .header {
-        background: rgba(10, 14, 26, 0.92);
-      }
-      
-      @supports (backdrop-filter: blur(20px)) {
-        .header {
-          background: rgba(10, 14, 26, 0.85);
-        }
-      }
-    }
-
-    .nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--space-2xl);
-      height: var(--header-height);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: var(--space-md);
-      text-decoration: none;
-      color: inherit;
-      transition: opacity var(--transition-swift);
-      min-width: 0;
-      flex-shrink: 0;
-    }
-
-    .brand:hover {
-      opacity: 0.75;
-    }
-
-    .brand img {
-      width: 44px;
-      height: 44px;
-      border-radius: var(--radius-md);
-      flex-shrink: 0;
-    }
-
-    .brand-text {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-3xs);
-      min-width: 0;
-    }
-
-    .brand .title {
-      font-family: var(--font-display);
-      font-weight: 700;
-      font-size: 1.125rem;
-      letter-spacing: -0.01em;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .brand .sub {
-      font-size: 0.8125rem;
-      color: var(--clr-text-tertiary);
-      font-weight: 500;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      letter-spacing: 0.005em;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: var(--space-2xs);
-    }
-
-    .nav-links a {
-      padding: var(--space-sm) var(--space-md);
-      border-radius: var(--radius-md);
-      font-weight: 600;
-      font-size: 0.9375rem;
-      text-decoration: none;
-      color: var(--clr-text-secondary);
-      transition: all var(--transition-swift);
-      white-space: nowrap;
-      position: relative;
-    }
-
-    .nav-links a::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--clr-bg-elevated);
-      border-radius: var(--radius-md);
-      opacity: 0;
-      transition: opacity var(--transition-swift);
-      z-index: -1;
-    }
-
-    .nav-links a:hover::before {
-      opacity: 1;
-    }
-
-    .nav-links a:hover {
-      color: var(--clr-navy);
-    }
-
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: var(--space-sm);
-    }
-
-    .icon-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 44px;
-      height: 44px;
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--clr-border-subtle);
-      background: var(--clr-bg-elevated);
-      color: var(--clr-text-primary);
-      cursor: pointer;
-      font-size: 1.125rem;
-      line-height: 1;
-      transition: all var(--transition-swift);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .icon-btn::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, var(--clr-gold-dim), var(--clr-navy-dim));
-      opacity: 0;
-      transition: opacity var(--transition-swift);
-    }
-
-    .icon-btn:hover::before {
-      opacity: 0.4;
-    }
-
-    .icon-btn:hover {
-      border-color: var(--clr-gold);
-      transform: translateY(-1px);
-      box-shadow: var(--shadow-md);
-    }
-
-    .mobile-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 1500;
-      background: rgba(10, 14, 26, 0.6);
-      backdrop-filter: blur(8px);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity var(--transition-slow);
-    }
-
-    .mobile-overlay.open {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    #mobileNav.mobile {
-      position: fixed;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      width: min(85vw, 360px);
-      padding: var(--space-xl);
-      z-index: 2000;
-      background: var(--clr-bg-elevated);
-      border-left: 1px solid var(--clr-border-subtle);
-      box-shadow: var(--shadow-2xl);
-      transform: translateX(100%);
-      transition: transform var(--transition-slow);
-      overflow-y: auto;
-      overscroll-behavior: contain;
+      transform: translateX(104%);
+      transition: transform .22s ease;
+      overflow:auto;
       -webkit-overflow-scrolling: touch;
+      display:block; /* même si hidden est togglé */
+    }
+    #mobileNav.mobile.open{ transform: translateX(0); }
+
+    .mobile-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:6px 4px 10px;
+      border-bottom:1px solid rgba(11,18,32,.10);
+      margin-bottom:10px;
+    }
+    .mobile-title{
+      font-weight:1000;
+      letter-spacing:.2px;
     }
 
-    #mobileNav.mobile.open {
-      transform: translateX(0);
+    .mobile a{
+      display:flex;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(11,18,32,.12);
+      background: rgba(255,255,255,.75);
+      margin-top:10px;
+      font-weight:900;
+      letter-spacing:.1px;
     }
 
-    .mobile-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--space-md);
-      padding-bottom: var(--space-lg);
-      border-bottom: 1px solid var(--clr-border-subtle);
-      margin-bottom: var(--space-lg);
+    /* Scroll lock quand menu ouvert */
+    body.no-scroll{ overflow:hidden; }
+
+    /* HERO : sécurise la grille responsive */
+    .hero-wrap{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:18px;
+      align-items:stretch;
     }
 
-    .mobile-title {
-      font-family: var(--font-display);
-      font-weight: 700;
-      font-size: 1.25rem;
-      letter-spacing: -0.01em;
+    /* Photo hero : overlay + texte propre */
+    .hero-side--bleed{
+      position:relative;
+      overflow:hidden;
+      padding:0;
+      min-height: 460px;
     }
-
-    .mobile a {
-      display: flex;
-      align-items: center;
-      padding: var(--space-md) var(--space-lg);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--clr-border-subtle);
-      background: var(--clr-bg-secondary);
-      margin-top: var(--space-sm);
-      font-weight: 600;
-      font-size: 0.9375rem;
-      text-decoration: none;
-      color: var(--clr-text-primary);
-      transition: all var(--transition-swift);
-      position: relative;
-      overflow: hidden;
+    .hero-side--bleed img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
     }
-
-    .mobile a::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 3px;
-      background: var(--clr-gold);
-      transform: scaleY(0);
-      transition: transform var(--transition-base);
-    }
-
-    .mobile a:hover::before,
-    .mobile a:focus::before {
-      transform: scaleY(1);
-    }
-
-    .mobile a:hover {
-      border-color: var(--clr-gold);
-      background: var(--clr-bg-elevated);
-      transform: translateX(4px);
-      box-shadow: var(--shadow-sm);
-    }
-
-    /* Hero Section */
-    .hero {
-      padding-block: clamp(3rem, 8vw, 5rem);
-      position: relative;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: -100px;
-      left: -100px;
-      width: 800px;
-      height: 800px;
-      background: radial-gradient(circle at center, var(--clr-navy-dim) 0%, transparent 70%);
-      opacity: 0.4;
-      pointer-events: none;
-      animation: float 25s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translate(0, 0) rotate(0deg); }
-      25% { transform: translate(30px, -30px) rotate(5deg); }
-      50% { transform: translate(0, -50px) rotate(-5deg); }
-      75% { transform: translate(-30px, -30px) rotate(5deg); }
-    }
-
-    .hero-wrap {
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: var(--space-2xl);
-      align-items: stretch;
-      position: relative;
-      z-index: 2;
-    }
-
-    .card {
-      background: var(--clr-bg-elevated);
-      border: 1px solid var(--clr-border-subtle);
-      border-radius: var(--radius-2xl);
-      padding: clamp(1.5rem, 4vw, 2.5rem);
-      box-shadow: var(--shadow-sm);
-      transition: all var(--transition-base);
-    }
-
-    .card:hover {
-      box-shadow: var(--shadow-md);
-    }
-
-    .hero-card {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      animation: slideInFromLeft 0.8s var(--ease-elegant) backwards;
-    }
-
-    @keyframes slideInFromLeft {
-      from {
-        opacity: 0;
-        transform: translateX(-30px);
-      }
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 0.5rem 1rem;
-      border-radius: var(--radius-full);
-      font-size: 0.8125rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      background: linear-gradient(135deg, var(--clr-gold-dim), var(--clr-navy-dim));
-      color: var(--clr-navy);
-      border: 1px solid var(--clr-border-muted);
-      width: max-content;
-      margin-bottom: var(--space-md);
-    }
-
-    .kicker {
-      font-family: var(--font-mono);
-      font-size: 0.8125rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--clr-gold);
-      margin-bottom: var(--space-sm);
-    }
-
-    h1 {
-      font-family: var(--font-display);
-      font-size: clamp(2.25rem, 5vw, 3.5rem);
-      font-weight: 900;
-      line-height: 1.1;
-      letter-spacing: -0.025em;
-      margin-bottom: var(--space-xl);
-      color: var(--clr-text-primary);
-    }
-
-    h2 {
-      font-family: var(--font-display);
-      font-size: clamp(1.75rem, 4vw, 2.5rem);
-      font-weight: 900;
-      line-height: 1.15;
-      letter-spacing: -0.02em;
-      margin-bottom: var(--space-lg);
-      color: var(--clr-text-primary);
-    }
-
-    h3 {
-      font-family: var(--font-display);
-      font-size: 1.25rem;
-      font-weight: 800;
-      margin-bottom: var(--space-sm);
-      letter-spacing: -0.01em;
-    }
-
-    p {
-      line-height: 1.7;
-      color: var(--clr-text-primary);
-      margin-bottom: var(--space-lg);
-    }
-
-    .small {
-      font-size: 0.9375rem;
-      color: var(--clr-text-secondary);
-    }
-
-    /* Buttons */
-    .btns {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-sm);
-      margin-top: var(--space-xl);
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--space-xs);
-      padding: var(--space-md) clamp(1rem, 2vw, 1.5rem);
-      border-radius: var(--radius-lg);
-      font-weight: 700;
-      font-size: 0.9375rem;
-      text-decoration: none;
-      border: 1px solid transparent;
-      cursor: pointer;
-      transition: all var(--transition-swift);
-      white-space: nowrap;
-    }
-
-    .btn-primary {
-      background: var(--clr-navy);
-      color: white;
-      border-color: var(--clr-navy);
-    }
-
-    .btn-primary:hover {
-      background: var(--clr-navy-light);
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .btn-gold {
-      background: linear-gradient(135deg, var(--clr-gold), #c19940);
-      color: white;
-      border-color: var(--clr-gold);
-    }
-
-    .btn-gold:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(201, 160, 80, 0.3);
-    }
-
-    .btn-ghost {
-      background: transparent;
-      color: var(--clr-text-primary);
-      border-color: var(--clr-border-muted);
-    }
-
-    .btn-ghost:hover {
-      background: var(--clr-bg-secondary);
-      border-color: var(--clr-navy);
-      color: var(--clr-navy);
-    }
-
-    /* Stats */
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-      gap: var(--space-lg);
-      margin-top: var(--space-2xl);
-      padding-top: var(--space-xl);
-      border-top: 1px solid var(--clr-border-subtle);
-    }
-
-    .stat {
-      text-align: center;
-    }
-
-    .stat .n {
-      font-family: var(--font-display);
-      font-size: clamp(1.75rem, 4vw, 2.5rem);
-      font-weight: 900;
-      line-height: 1;
-      color: var(--clr-gold);
-      margin-bottom: var(--space-xs);
-      letter-spacing: -0.02em;
-    }
-
-    .stat .l {
-      font-size: 0.8125rem;
-      font-weight: 600;
-      color: var(--clr-text-tertiary);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    /* Hero Image */
-    .hero-side {
-      position: relative;
-      overflow: hidden;
-      min-height: 500px;
-      padding: 0;
-      animation: slideInFromRight 0.8s var(--ease-elegant) 0.2s backwards;
-    }
-
-    @keyframes slideInFromRight {
-      from {
-        opacity: 0;
-        transform: translateX(30px);
-      }
-    }
-
-    .hero-side img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      filter: saturate(1.05) contrast(1.03);
-    }
-
-    .overlay {
-      position: absolute;
-      inset: 0;
+    .hero-side--bleed .overlay{
+      position:absolute; inset:0;
       background:
-        radial-gradient(800px 500px at 20% 20%, rgba(31, 94, 255, 0.15), transparent 65%),
-        linear-gradient(180deg, rgba(11, 37, 69, 0.00), rgba(11, 37, 69, 0.65));
-      pointer-events: none;
+        radial-gradient(800px 420px at 10% 10%, rgba(31,94,255,.18), transparent 60%),
+        linear-gradient(180deg, rgba(11,37,69,.00), rgba(11,37,69,.55));
+      pointer-events:none;
+    }
+    .hero-photo-text{
+      position:absolute;
+      left:18px;
+      right:18px;
+      bottom:18px;
+      color:#fff;
+      display:grid;
+      gap:8px;
+    }
+    .hero-photo-badge{
+      display:inline-flex;
+      width:max-content;
+      padding:8px 12px;
+      border-radius:999px;
+      background: rgba(255,255,255,.16);
+      border:1px solid rgba(255,255,255,.22);
+      font-weight:900;
+      letter-spacing:.2px;
+      backdrop-filter: blur(8px);
+    }
+    .hero-photo-title{
+      font-weight:1000;
+      letter-spacing:.2px;
+      font-size:1.5rem;
+      line-height:1.1;
+    }
+    .hero-photo-sub{
+      opacity:.92;
+      font-weight:800;
+      letter-spacing:.2px;
     }
 
-    .hero-photo-text {
-      position: absolute;
-      left: var(--space-xl);
-      right: var(--space-xl);
-      bottom: var(--space-xl);
-      color: white;
-      display: grid;
-      gap: var(--space-sm);
+    /* Grids sections */
+    .grid-2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:18px;
     }
-
-    .hero-photo-badge {
-      display: inline-flex;
-      width: max-content;
-      padding: var(--space-sm) var(--space-md);
-      border-radius: var(--radius-full);
-      background: rgba(255, 255, 255, 0.18);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      font-weight: 800;
-      font-size: 0.8125rem;
-      letter-spacing: 0.02em;
-      backdrop-filter: blur(12px);
-    }
-
-    .hero-photo-title {
-      font-family: var(--font-display);
-      font-weight: 900;
-      font-size: clamp(1.25rem, 3vw, 1.75rem);
-      line-height: 1.1;
-      letter-spacing: -0.01em;
-    }
-
-    .hero-photo-sub {
-      opacity: 0.94;
-      font-weight: 700;
-      font-size: 0.9375rem;
-      letter-spacing: 0.02em;
-    }
-
-    /* Sections */
-    .section {
-      padding-block: clamp(3rem, 8vw, 5rem);
-    }
-
-    .section-tight {
-      padding-block: clamp(2rem, 5vw, 3.5rem);
-    }
-
-    /* Grids */
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--space-xl);
-    }
-
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: var(--space-xl);
-    }
-
-    /* List styling */
-    .list {
-      display: grid;
-      gap: var(--space-sm);
-    }
-
-    .list a {
-      padding: var(--space-sm);
-      border-radius: var(--radius-md);
-      color: var(--clr-text-primary);
-      text-decoration: none;
-      font-weight: 600;
-      transition: all var(--transition-swift);
-      display: flex;
-      align-items: center;
-      gap: var(--space-xs);
-    }
-
-    .list a::before {
-      content: "→";
-      color: var(--clr-gold);
-      font-weight: 900;
-    }
-
-    .list a:hover {
-      background: var(--clr-bg-secondary);
-      color: var(--clr-navy);
-      transform: translateX(4px);
-    }
-
-    /* Footer */
-    .footer {
-      background: var(--clr-bg-secondary);
-      border-top: 1px solid var(--clr-border-subtle);
-      padding-block: var(--space-3xl);
-      margin-top: var(--space-4xl);
-    }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: var(--space-3xl);
-    }
-
-    .footer .kicker {
-      margin-bottom: var(--space-lg);
-    }
-
-    .footer .list {
-      gap: var(--space-xs);
-    }
-
-    .footer .list a::before {
-      display: none;
-    }
-
-    .footer .list a {
-      padding: var(--space-2xs) 0;
-      font-size: 0.9375rem;
-      color: var(--clr-text-secondary);
-    }
-
-    .footer .list a:hover {
-      background: transparent;
-      color: var(--clr-navy);
-      transform: translateX(4px);
+    .grid-3{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap:18px;
     }
 
     /* Responsive */
-    @media (max-width: 1024px) {
-      .grid-3 {
-        grid-template-columns: 1fr;
-      }
+    @media (max-width: 980px){
+      .nav-links{ display:none; } /* ton CSS le fait peut-être déjà */
+      .hero-wrap{ grid-template-columns: 1fr; }
+      .hero-side--bleed{ min-height: 340px; }
+      .grid-2{ grid-template-columns: 1fr; }
+      .grid-3{ grid-template-columns: 1fr; }
+      .brand .title, .brand .sub{ max-width: 62vw; }
     }
-
-    @media (max-width: 980px) {
-      .nav-links {
-        display: none;
-      }
-
-      .hero-wrap {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-side {
-        min-height: 400px;
-      }
-
-      .grid-2 {
-        grid-template-columns: 1fr;
-      }
-
-      .stats {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 640px) {
-      :root {
-        --header-height: 64px;
-      }
-
-      .footer-grid {
-        grid-template-columns: 1fr;
-        gap: var(--space-2xl);
-      }
-
-      .stats {
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--space-md);
-      }
-
-      .hero-photo-text {
-        left: var(--space-lg);
-        right: var(--space-lg);
-        bottom: var(--space-lg);
-      }
-    }
-
-    @media (max-width: 380px) {
-      .brand .sub {
-        display: none;
-      }
-
-      .stats {
-        grid-template-columns: 1fr;
-      }
+    @media (max-width: 380px){
+      .brand .sub{ display:none; }
     }
   </style>
 
+  <!-- JSON-LD -->
   <script type="application/ld+json">
   {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Parlement JPV",
-    "description": "Instance lycéenne de débat et d'engagement citoyen au Lycée Jean-Pierre Vernant (Sèvres).",
-    "logo": "https://parlementjpv.github.io/parlementjpv/assets/img/logo.png",
-    "url": "https://parlementjpv.github.io/parlementjpv/",
-    "sameAs": ["https://instagram.com/parlementjpv"]
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"Parlement JPV",
+    "description":"Instance lycéenne de débat et d’engagement citoyen au Lycée Jean-Pierre Vernant (Sèvres).",
+    "logo":"https://parlementjpv.github.io/parlementjpv/assets/img/logo.png",
+    "url":"https://parlementjpv.github.io/parlementjpv/",
+    "sameAs":[ "https://instagram.com/parlementjpv" ]
   }
   </script>
 </head>
 
 <body>
-  <!-- COOKIE CONSENT -->
-  <div id="cookieWall" class="cookie-wall" hidden role="dialog" aria-modal="true" aria-labelledby="cookie-title">
-    <div class="cookie-wall__card" role="document">
-      <h2 id="cookie-title" class="cookie-wall__title">Cookies & mesures d'audience</h2>
+
+  <!-- COOKIE CONSENT (analytics) -->
+  <div id="cookieWall" class="cookie-wall" hidden role="dialog" aria-modal="true" aria-label="Préférences de cookies">
+    <div class="cookie-wall__card">
+      <div class="cookie-wall__title">Cookies & mesures d’audience</div>
       <p class="cookie-wall__text">
-        Nous utilisons des cookies de mesure d'audience (Google Analytics) pour comprendre la fréquentation du site
-        (pages consultées, durée de visite), améliorer le contenu et mesurer l'impact de nos actions.
+        Nous utilisons des cookies de mesure d’audience (Google Analytics) pour comprendre la fréquentation du site
+        (pages consultées, durée de visite), améliorer le contenu et mesurer l’impact de nos actions.
       </p>
       <div class="cookie-wall__links">
         <a href="politique-confidentialite.html">Politique de confidentialité</a>
         <a href="mentions-legales.html">Mentions légales</a>
       </div>
       <div class="cookie-wall__actions">
-        <button 
-          class="cookie-btn cookie-btn--danger" 
-          type="button" 
-          data-cookie-decline
-          aria-label="Refuser les cookies analytics"
-        >
-          Continuer sans analytics
-        </button>
-        <button 
-          class="cookie-btn cookie-btn--primary" 
-          type="button" 
-          data-cookie-accept
-          aria-label="Accepter les cookies analytics"
-        >
-          Accepter
-        </button>
+        <button class="cookie-btn cookie-btn--danger" type="button" data-cookie-decline>Continuer sans analytics</button>
+        <button class="cookie-btn cookie-btn--primary" type="button" data-cookie-accept>Accepter</button>
       </div>
       <p class="cookie-wall__note">
-        Tu peux changer d'avis plus tard : supprime le stockage du navigateur (localStorage) ou relance en navigation privée.
+        Tu peux changer d’avis plus tard : supprime le stockage du navigateur (localStorage) ou relance en navigation privée.
       </p>
     </div>
   </div>
 
-  <a class="skip-link" href="#contenu">Aller au contenu principal</a>
+
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
 
   <!-- HEADER -->
   <header class="header" role="banner">
     <div class="container">
-      <nav class="nav" aria-label="Navigation principale">
+      <div class="nav">
         <a class="brand" href="index.html" aria-label="Accueil Parlement JPV">
-          <img src="assets/img/logo.png" alt="" width="44" height="44" decoding="async">
+          <img src="assets/img/logo.png" alt="Logo Parlement JPV" width="44" height="44" decoding="async" />
           <div class="brand-text">
             <div class="title">Parlement JPV</div>
             <div class="sub">Lycée Jean-Pierre Vernant — Sèvres</div>
           </div>
         </a>
 
-        <div class="nav-links" role="navigation">
-          <a href="institution.html">L'institution</a>
+        <nav class="nav-links" aria-label="Navigation principale">
+          <a href="institution.html">L’institution</a>
           <a href="rapports.html">Rapports</a>
           <a href="galerie.html">Galerie</a>
           <a href="media.html">Médias</a>
           <a href="rejoindre.html">Rejoindre</a>
           <a href="contact.html">Contact</a>
           <a href="qui-sommes-nous.html">Qui sommes-nous</a>
-        </div>
+        </nav>
 
         <div class="nav-actions">
-          <button 
-            class="icon-btn" 
-            type="button" 
-            id="themeBtn" 
-            aria-label="Basculer entre le thème clair et sombre" 
-            title="Changer le thème"
-          >
-            <span aria-hidden="true">☾</span>
-          </button>
+          <button class="icon-btn" type="button" onclick="toggleTheme?.()" aria-label="Basculer le thème" title="Thème">☾</button>
 
           <button
             class="icon-btn burger"
             type="button"
-            aria-label="Ouvrir le menu de navigation"
+            aria-label="Ouvrir le menu"
             aria-controls="mobileNav"
             aria-expanded="false"
             id="mobileNavBtn"
             title="Menu"
-          >
-            <span aria-hidden="true">☰</span>
-          </button>
+          >☰</button>
         </div>
-      </nav>
+      </div>
     </div>
   </header>
 
-  <!-- Mobile Overlay -->
-  <div id="mobileOverlay" class="mobile-overlay" hidden aria-hidden="true"></div>
+  <!-- Overlay + Drawer -->
+  <div id="mobileOverlay" class="mobile-overlay" hidden></div>
 
-  <!-- Mobile Navigation -->
   <nav id="mobileNav" class="mobile" aria-label="Menu mobile" hidden>
     <div class="mobile-head">
-      <div class="mobile-title">Navigation</div>
-      <button 
-        id="mobileCloseBtn" 
-        class="icon-btn" 
-        type="button" 
-        aria-label="Fermer le menu de navigation"
-      >
-        <span aria-hidden="true">✕</span>
-      </button>
+      <div class="mobile-title">Menu</div>
+      <button id="mobileCloseBtn" class="icon-btn" type="button" aria-label="Fermer le menu">✕</button>
     </div>
 
-    <a href="institution.html">L'institution</a>
+    <a href="institution.html">L’institution</a>
     <a href="rapports.html">Rapports</a>
     <a href="galerie.html">Galerie</a>
     <a href="media.html">Médias</a>
@@ -1073,36 +353,33 @@
     <a href="contact.html">Contact</a>
     <a href="qui-sommes-nous.html">Qui sommes-nous</a>
     <a href="charte.html">Charte</a>
-    <a href="jpv-mun.html">Projet MUN</a>
+    <a href="jpv-mun.html">projet MUN</a>
 
-    <hr style="margin: var(--space-xl) 0; border: none; border-top: 1px solid var(--clr-border-subtle);" aria-hidden="true">
+    <div class="line" role="separator" aria-hidden="true" style="margin:12px 0;"></div>
 
-    <a 
+    <a
       href="https://docs.google.com/forms/d/e/1FAIpQLSdQ86QZ8sMoY7YgOhT6DBMy5KG85yfm65O6BWMmFp7bzuorqg/viewform?usp=header"
       target="_blank"
-      rel="noopener noreferrer"
-    >
-      Candidater (Formulaire)
-      <span class="sr-only">(s'ouvre dans un nouvel onglet)</span>
-    </a>
+      rel="noopener"
+    >Candidater (Formulaire)</a>
   </nav>
 
   <main id="contenu">
     <!-- HERO -->
-    <section class="hero" aria-labelledby="hero-title">
+    <section class="hero" aria-label="Présentation">
       <div class="container">
         <div class="hero-wrap">
 
           <!-- TEXTE -->
-          <article class="card hero-card">
+          <div class="card hero-card">
             <span class="badge">Instance lycéenne — Débat, éloquence, initiatives</span>
 
-            <div class="kicker">Parlement JPV</div>
-            <h1 id="hero-title">Une institution lycéenne structurée, exigeante et tournée vers l'action.</h1>
+            <div class="kicker" style="margin-top:12px">Parlement JPV</div>
+            <h1>Une institution lycéenne structurée, exigeante et tournée vers l’action.</h1>
 
             <p>
-              Le Parlement JPV organise des débats, des conférences et des exercices d'éloquence
-              pour former des élèves capables d'argumenter, décider et agir — avec rigueur, méthode et ambition.
+              Le Parlement JPV organise des débats, des conférences et des exercices d’éloquence
+              pour former des élèves capables d’argumenter, décider et agir — avec rigueur, méthode et ambition.
             </p>
 
             <p class="small">
@@ -1115,43 +392,32 @@
               <a class="btn btn-ghost" href="charte.html">📌 Lire la charte</a>
             </div>
 
-            <div class="stats" aria-label="Indicateurs d'impact">
-              <div class="stat">
-                <div class="n" id="statParticipants">145</div>
-                <div class="l">inscrits</div>
-              </div>
-              <div class="stat">
-                <div class="n" id="statDebates">28</div>
-                <div class="l">débats</div>
-              </div>
-              <div class="stat">
-                <div class="n" id="statConfs">5</div>
-                <div class="l">conférences</div>
-              </div>
-              <div class="stat">
-                <div class="n" id="statActions">12</div>
-                <div class="l">actions</div>
-              </div>
+            <div class="stats" aria-label="Indicateurs d’impact">
+              <div class="stat"><div class="n" id="statParticipants">—</div><div class="l">inscrits</div></div>
+              <div class="stat"><div class="n" id="statDebates">—</div><div class="l">débats</div></div>
+              <div class="stat"><div class="n" id="statConfs">—</div><div class="l">conférences à venir</div></div>
+              <div class="stat"><div class="n" id="statActions">—</div><div class="l">actions</div></div>
             </div>
-          </article>
+          </div>
 
           <!-- PHOTO -->
-          <figure class="card hero-side">
+          <figure class="card hero-side hero-side--bleed">
             <img
               src="assets/img/hero.jpg"
-              alt="Vue d'ensemble d'une séance du Parlement JPV avec les délégués en débat"
-              loading="eager"
-              fetchpriority="high"
+              alt="Séance du Parlement JPV"
+              loading="lazy"
               decoding="async"
-            >
+            />
 
             <div class="overlay" aria-hidden="true"></div>
 
-            <figcaption class="hero-photo-text">
+            <div class="hero-photo-text" aria-hidden="true">
               <div class="hero-photo-badge">Lycée Jean-Pierre Vernant — Sèvres</div>
               <div class="hero-photo-title">Débattre. Convaincre. Agir.</div>
               <div class="hero-photo-sub">Respect • Neutralité • Ouverture à tous</div>
-            </figcaption>
+            </div>
+
+            <figcaption class="sr-only">Parlement JPV — photo d’activité</figcaption>
           </figure>
 
         </div>
@@ -1159,18 +425,14 @@
     </section>
 
     <!-- UPCOMING -->
-    <section class="section-tight" aria-labelledby="events-title">
+    <section class="section-tight" aria-label="Événements à venir">
       <div class="container">
         <div class="grid-2">
           <article class="card">
             <div class="kicker">À venir</div>
-            <h2 id="events-title">Prochains événements</h2>
-            <div id="upcomingEvents" class="list" aria-live="polite">
-              <a href="#">Débat sur l'intelligence artificielle</a>
-              <a href="#">Conférence : éloquence et rhétorique</a>
-              <a href="#">Session de formation parlementaire</a>
-            </div>
-            <div class="btns">
+            <h2>Prochains événements</h2>
+            <div id="upcomingEvents" class="list" aria-live="polite"></div>
+            <div class="btns" style="margin-top:14px">
               <a class="btn btn-ghost" href="media.html">Voir les médias</a>
               <a class="btn btn-primary" href="rejoindre.html">Participer</a>
             </div>
@@ -1180,9 +442,9 @@
             <div class="kicker">Accès rapide</div>
             <h2>Documents & transparence</h2>
             <p class="small">
-              Ordres du jour, comptes rendus, suivis d'actions : tout est centralisé et consultable.
+              Ordres du jour, comptes rendus, suivis d’actions : tout est centralisé et consultable.
             </p>
-            <div class="btns">
+            <div class="btns" style="margin-top:14px">
               <a class="btn btn-primary" href="rapports.html">📄 Tous les rapports</a>
               <a class="btn btn-ghost" href="institution.html">🏛 Fonctionnement</a>
             </div>
@@ -1192,12 +454,12 @@
     </section>
 
     <!-- PILLARS -->
-    <section class="section" aria-labelledby="method-title">
+    <section class="section" aria-label="Méthode">
       <div class="container">
         <div class="kicker">Notre méthode</div>
-        <h2 id="method-title">Exigence, structure, impact.</h2>
+        <h2>Exigence, structure, impact.</h2>
 
-        <div class="grid-3">
+        <div class="grid-3" style="margin-top:14px">
           <article class="card">
             <h3>Débats à haut niveau</h3>
             <p>Format structuré : thèses, preuves, réfutation, synthèse et décisions. Pas de blabla.</p>
@@ -1210,37 +472,37 @@
 
           <article class="card">
             <h3>Traçabilité institutionnelle</h3>
-            <p>Rapports, suivi d'actions, comptes rendus : tout est archivé et public.</p>
+            <p>Rapports, suivi d’actions, comptes rendus : tout est archivé et public.</p>
           </article>
         </div>
 
-        <div class="btns">
-          <a class="btn btn-primary" href="institution.html">🏛 Comprendre l'institution</a>
+        <div class="btns" style="margin-top:14px">
+          <a class="btn btn-primary" href="institution.html">🏛 Comprendre l’institution</a>
           <a class="btn btn-ghost" href="galerie.html">📸 Voir la galerie</a>
         </div>
       </div>
     </section>
 
     <!-- REPORTS PREVIEW -->
-    <section class="section-tight" aria-labelledby="reports-title">
+    <section class="section-tight" aria-label="Rapports">
       <div class="container">
-        <article class="card">
+        <div class="card">
           <div class="kicker">Transparence</div>
-          <h2 id="reports-title">Rapports officiels</h2>
+          <h2>Rapports officiels</h2>
           <p class="small">Accédez aux rapports et comptes rendus publiés.</p>
           <div class="btns">
             <a class="btn btn-primary" href="rapports.html">📄 Voir tous les rapports</a>
           </div>
-        </article>
+        </div>
       </div>
     </section>
 
     <!-- JOIN CTA -->
-    <section class="section" aria-labelledby="join-title">
+    <section class="section" aria-label="Candidature">
       <div class="container">
-        <article class="card">
+        <div class="card">
           <div class="kicker">Candidature</div>
-          <h2 id="join-title">Rejoindre le Parlement JPV</h2>
+          <h2>Rejoindre le Parlement JPV</h2>
           <p>
             Toute candidature est étudiée par le bureau.
             Vous serez recontacté par courriel.
@@ -1251,16 +513,15 @@
               class="btn btn-ghost"
               href="https://docs.google.com/forms/d/e/1FAIpQLSdQ86QZ8sMoY7YgOhT6DBMy5KG85yfm65O6BWMmFp7bzuorqg/viewform?usp=header"
               target="_blank"
-              rel="noopener noreferrer"
-            >
-              Ouvrir le formulaire
-              <span class="sr-only">(s'ouvre dans un nouvel onglet)</span>
-            </a>
+              rel="noopener"
+            >Ouvrir le formulaire</a>
           </div>
-        </article>
+        </div>
       </div>
     </section>
   </main>
+
+  <!-- FOOTER -->
 
   <!-- FOOTER -->
   <footer class="footer" role="contentinfo">
@@ -1511,3 +772,4 @@
   </script>
 </body>
 </html>
+
