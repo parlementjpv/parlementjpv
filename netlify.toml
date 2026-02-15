@@ -1,0 +1,10 @@
+[[redirects]]
+  from = "/bureau/*"
+  to = "/bureau/index.html"
+  status = 200
+  force = true
+
+[[headers]]
+  for = "/bureau/*"
+  [headers.values]
+  X-Frame-Options = "DENY"
