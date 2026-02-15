@@ -1,32 +1,61 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr" id="top">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Politique de confidentialité — Parlement JPV</title>
-  <meta name="description" content="Politique de confidentialité du site Parlement JPV." />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+  <title>Politique de confidentialité — Parlement JPV</title>
+  <meta name="description" content="Politique de confidentialité du site Parlement JPV : données, cookies et droits (RGPD)." />
+  <meta name="theme-color" content="#0b2545" />
+
+  <!-- SEO (optionnel mais propre) -->
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="https://parlementjpv.github.io/parlementjpv/politique-confidentialite.html" />
+
+  <!-- Styles -->
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/cookies.css" />
+
+  <!-- Petites améliorations UX/accessibilité -->
+  <style>
+    .skip-link{
+      position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;
+    }
+    .skip-link:focus{
+      left:16px;top:16px;width:auto;height:auto;z-index:9999;
+      background:var(--card,#fff);color:var(--text,#111);
+      padding:10px 12px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.15);
+      border:1px solid var(--border,rgba(0,0,0,.12));
+    }
+  </style>
 </head>
+
 <body>
+  <a class="skip-link" href="#content">Aller au contenu</a>
 
   <!-- COOKIE CONSENT (analytics) -->
   <div id="cookieWall" class="cookie-wall" hidden role="dialog" aria-modal="true" aria-label="Préférences de cookies">
-    <div class="cookie-wall__card">
+    <div class="cookie-wall__card" role="document">
       <div class="cookie-wall__title">Cookies & mesures d’audience</div>
       <p class="cookie-wall__text">
         Nous utilisons des cookies de mesure d’audience (Google Analytics) pour comprendre la fréquentation du site
         (pages consultées, durée de visite), améliorer le contenu et mesurer l’impact de nos actions.
       </p>
+
       <div class="cookie-wall__links">
-        <a href="politique-confidentialite.html">Politique de confidentialité</a>
+        <a href="politique-confidentialite.html" aria-current="page">Politique de confidentialité</a>
         <a href="mentions-legales.html">Mentions légales</a>
       </div>
+
       <div class="cookie-wall__actions">
-        <button class="cookie-btn cookie-btn--danger" type="button" data-cookie-decline>Continuer sans analytics</button>
-        <button class="cookie-btn cookie-btn--primary" type="button" data-cookie-accept>Accepter</button>
+        <button class="cookie-btn cookie-btn--danger" type="button" data-cookie-decline>
+          Continuer sans analytics
+        </button>
+        <button class="cookie-btn cookie-btn--primary" type="button" data-cookie-accept>
+          Accepter
+        </button>
       </div>
+
       <p class="cookie-wall__note">
         Tu peux changer d’avis plus tard : supprime le stockage du navigateur (localStorage) ou relance en navigation privée.
       </p>
@@ -56,7 +85,7 @@
         </nav>
 
         <div class="nav-actions">
-          <button class="icon-btn" type="button" onclick="toggleTheme?.()" aria-label="Basculer le thème" title="Thème">☾</button>
+          <button class="icon-btn" type="button" id="themeBtn" aria-label="Basculer le thème" title="Thème">☾</button>
 
           <button
             class="icon-btn burger"
@@ -99,8 +128,8 @@
     >Candidater (Formulaire)</a>
   </nav>
 
-  <!-- MAIN (DESIGN PREMIUM) -->
-  <main class="legal">
+  <!-- MAIN -->
+  <main id="content" class="legal">
     <header class="legal-hero">
       <div class="container">
         <div class="legal-hero__inner">
@@ -128,7 +157,7 @@
               <li>Droits : accès, rectification, effacement, opposition.</li>
             </ul>
             <div class="legal-card__note">
-              Contact : <span class="muted">[email officiel]</span>
+              Contact : <a href="mailto:contact@parlementjpv.fr" class="muted">contact@parlementjpv.fr</a>
             </div>
           </aside>
         </div>
@@ -161,7 +190,7 @@
               Le site Parlement JPV ne collecte aucune donnée personnelle sans votre consentement explicite.
             </p>
             <p>
-              Les données éventuellement collectées via les formulaires (ex : Google Forms) sont limitées aux informations nécessaires
+              Les données éventuellement collectées via des formulaires (ex. Google Forms) sont limitées aux informations nécessaires
               à l’organisation des activités du Parlement JPV.
             </p>
           </article>
@@ -179,29 +208,27 @@
           <article class="legal-section" id="base-legale">
             <h2>3. Base légale</h2>
             <p>
-              Le traitement repose sur le consentement des personnes concernées conformément au Règlement Général sur la Protection des Données (RGPD).
+              Le traitement repose sur le consentement des personnes concernées, conformément au Règlement Général sur la Protection des Données (RGPD).
             </p>
           </article>
 
           <article class="legal-section" id="duree">
             <h2>4. Durée de conservation</h2>
             <p>
-              Les données sont conservées pour la durée nécessaire à l’organisation des activités, puis supprimées.
+              Les données sont conservées pour la durée strictement nécessaire à l’organisation des activités, puis supprimées.
             </p>
           </article>
 
           <article class="legal-section" id="droits">
             <h2>5. Droits des utilisateurs</h2>
             <p>
-              Conformément au RGPD, vous disposez d’un droit d’accès,
-              de rectification, d’effacement et d’opposition
-              concernant vos données personnelles.
+              Conformément au RGPD, vous disposez d’un droit d’accès, de rectification, d’effacement et d’opposition concernant vos données personnelles.
             </p>
 
             <div class="legal-callout">
               <div class="legal-callout__title">Exercer vos droits</div>
               <p class="legal-callout__text">
-                Pour exercer ces droits, contactez : <strong>[email officiel]</strong>
+                Pour exercer ces droits, contactez : <strong><a href="mailto:contact@parlementjpv.fr">contact@parlementjpv.fr</a></strong>
               </p>
             </div>
           </article>
@@ -220,14 +247,14 @@
 
             <details class="legal-faq">
               <summary>Comment changer d’avis ?</summary>
-              <p>Supprime le stockage du navigateur (localStorage) ou relance en navigation privée.</p>
+              <p>Tu peux supprimer la clé de consentement dans le stockage du navigateur (localStorage) ou relancer en navigation privée.</p>
             </details>
           </article>
 
           <div class="legal-footerline">
             <span>© <span id="yearInline"></span> Parlement JPV</span>
             <span class="sep">•</span>
-            <a href="#top" class="backtop" onclick="window.scrollTo({top:0,behavior:'smooth'}); return false;">Retour en haut ↑</a>
+            <a href="#top" class="backtop" id="backTopLink">Retour en haut ↑</a>
           </div>
         </div>
       </div>
@@ -276,17 +303,116 @@
     </div>
   </footer>
 
+  <noscript>
+    <div style="padding:14px;margin:16px;border-radius:12px;border:1px solid rgba(0,0,0,.12);background:#fff;color:#111;max-width:920px">
+      Pour une expérience complète (menu, thème, cookies), active JavaScript.
+    </div>
+  </noscript>
+
+  <!-- JS minimal “anti-bug” (ne casse pas tes fichiers existants) -->
   <script>
-    // Année (footer + inline)
-    (function(){
+    (function () {
+      // Année (footer + inline)
       const y = new Date().getFullYear();
       const a = document.getElementById("year");
       const b = document.getElementById("yearInline");
       if (a) a.textContent = y;
       if (b) b.textContent = y;
+
+      // Retour en haut (smooth)
+      const back = document.getElementById("backTopLink");
+      if (back) {
+        back.addEventListener("click", function (e) {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      }
+
+      // Thème (fallback si main.js n’existe pas)
+      const themeBtn = document.getElementById("themeBtn");
+      function applyTheme(mode) {
+        if (!mode) return;
+        document.documentElement.setAttribute("data-theme", mode);
+        try { localStorage.setItem("theme", mode); } catch(e) {}
+      }
+      function toggleThemeFallback() {
+        const current = document.documentElement.getAttribute("data-theme") || "light";
+        applyTheme(current === "dark" ? "light" : "dark");
+      }
+      // Init thème
+      try {
+        const saved = localStorage.getItem("theme");
+        if (saved) applyTheme(saved);
+      } catch(e) {}
+      if (themeBtn) {
+        themeBtn.addEventListener("click", function(){
+          // si tu as déjà toggleTheme() dans main.js, on l’utilise, sinon fallback
+          if (typeof window.toggleTheme === "function") window.toggleTheme();
+          else toggleThemeFallback();
+        });
+      }
+
+      // Menu mobile (robuste, overlay, ESC, clic dehors, focus safe)
+      const btn = document.getElementById("mobileNavBtn");
+      const closeBtn = document.getElementById("mobileCloseBtn");
+      const nav = document.getElementById("mobileNav");
+      const overlay = document.getElementById("mobileOverlay");
+
+      function setOpen(open) {
+        if (!btn || !nav || !overlay) return;
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+        nav.hidden = !open;
+        overlay.hidden = !open;
+        document.body.style.overflow = open ? "hidden" : "";
+        if (open) {
+          // focus sur le 1er lien du menu
+          const first = nav.querySelector("a,button");
+          if (first) first.focus({ preventScroll: true });
+        } else {
+          btn.focus({ preventScroll: true });
+        }
+      }
+
+      if (btn) btn.addEventListener("click", function(){ setOpen(nav.hidden); });
+      if (closeBtn) closeBtn.addEventListener("click", function(){ setOpen(false); });
+      if (overlay) overlay.addEventListener("click", function(){ setOpen(false); });
+
+      document.addEventListener("keydown", function(e){
+        if (e.key === "Escape" && nav && !nav.hidden) setOpen(false);
+      });
+
+      // Fermer le menu quand on clique un lien (UX propre)
+      if (nav) {
+        nav.addEventListener("click", function(e){
+          const t = e.target;
+          if (t && t.tagName === "A") setOpen(false);
+        });
+      }
+
+      // Cookie wall fallback (si ton analytics-consent.js ne s’exécute pas)
+      const wall = document.getElementById("cookieWall");
+      const hasChoice = () => {
+        try { return localStorage.getItem("analytics_consent") !== null; } catch(e) { return false; }
+      };
+      if (wall && !hasChoice()) {
+        wall.hidden = false;
+      }
+      document.addEventListener("click", function(e){
+        const t = e.target;
+        if (!t) return;
+        if (t.matches("[data-cookie-accept]")) {
+          try { localStorage.setItem("analytics_consent", "accepted"); } catch(err) {}
+          if (wall) wall.hidden = true;
+        }
+        if (t.matches("[data-cookie-decline]")) {
+          try { localStorage.setItem("analytics_consent", "declined"); } catch(err) {}
+          if (wall) wall.hidden = true;
+        }
+      });
     })();
   </script>
 
+  <!-- Tes scripts (gardés) -->
   <script src="js/analytics-consent.js" defer></script>
   <script src="js/main.js" defer></script>
 </body>
