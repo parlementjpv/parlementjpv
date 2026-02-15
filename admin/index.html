@@ -1,3 +1,15 @@
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+  if (!window.netlifyIdentity) {
+    window.location.href = "/";
+  }
+  netlifyIdentity.on("init", user => {
+    if (!user) {
+      netlifyIdentity.open();
+    }
+  });
+</script>
+
 <!doctype html>
 <html>
 <head>
