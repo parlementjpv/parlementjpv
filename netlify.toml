@@ -1,10 +1,11 @@
-[[redirects]]
-  from = "/bureau/*"
-  to = "/bureau/index.html"
-  status = 200
-  force = true
+[build]
+  functions = "netlify/functions"
+  publish = "."
 
-[[headers]]
-  for = "/bureau/*"
-  [headers.values]
-  X-Frame-Options = "DENY"
+[[redirects]]
+  from = "/admin/*"
+  to = "/admin/bureau.html"
+  status = 200
+
+# (Optionnel) Bloque l'accès direct à /admin si pas loggé via Identity.
+# La vraie protection se fait côté JS + Functions (JWT), mais ça évite les erreurs.
