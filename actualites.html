@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <title>Actualités — Parlement JPV</title>
+  <meta name="description" content="Articles et actualités publiés par le bureau du Parlement JPV">
+  <meta name="theme-color" content="#0a0e1a" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#fafbfc" media="(prefers-color-scheme: light)">
+
+  <!-- Icons -->
+  <link rel="icon" href="assets/img/favicon.png">
+
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --clr-ink: #0a0e1a;
+      --clr-slate: #475569;
+      --clr-mist: #94a3b8;
+      --clr-cloud: #e2e8f0;
+      --clr-paper: #fafbfc;
+      --clr-white: #ffffff;
+      --clr-gold: #c9a050;
+      --clr-navy: #0b2545;
+      
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body: 'Instrument Sans', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: var(--font-body);
+      line-height: 1.7;
+      color: var(--clr-ink);
+      background: var(--clr-paper);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 clamp(1rem,4vw,2rem); }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(250,251,252,0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--clr-cloud);
+      padding: 1rem 0;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand img { width: 44px; border-radius: 0.5rem; }
+    .brand .title { font-family: var(--font-display); font-weight: 700; font-size: 1.125rem; }
+    .brand .sub { font-size: 0.8125rem; color: var(--clr-slate); }
+
+    .hero {
+      padding: 4rem 0 3rem;
+      background: linear-gradient(180deg, var(--clr-white) 0%, var(--clr-paper) 100%);
+      border-bottom: 1px solid var(--clr-cloud);
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 1.125rem;
+      color: var(--clr-slate);
+      max-width: 68ch;
+    }
+
+    .filters {
+      display: flex;
+      gap: 0.5rem;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--clr-cloud);
+      background: var(--clr-white);
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--clr-navy);
+      color: white;
+      border-color: var(--clr-navy);
+    }
+
+    .articles {
+      display: grid;
+      gap: 2rem;
+      padding: 3rem 0;
+    }
+
+    .article-card {
+      background: var(--clr-white);
+      border: 1px solid var(--clr-cloud);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      transition: all 0.2s;
+    }
+
+    .article-card:hover {
+      box-shadow: 0 10px 30px rgba(10,14,26,0.1);
+      transform: translateY(-2px);
+    }
+
+    .article-category {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: linear-gradient(135deg, #f5e6cc, rgba(11,37,69,0.05));
+      border: 1px solid var(--clr-gold);
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+
+    .article-title {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+    }
+
+    .article-meta {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.875rem;
+      color: var(--clr-mist);
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .article-content {
+      font-size: 1.0625rem;
+      line-height: 1.8;
+      color: var(--clr-slate);
+    }
+
+    .article-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--clr-cloud);
+    }
+
+    .article-stats {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.875rem;
+      color: var(--clr-slate);
+    }
+
+    .empty {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--clr-slate);
+    }
+
+    .empty-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2rem; }
+      .article-card { padding: 1.5rem; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <nav class="nav">
+        <a class="brand" href="index.html">
+          <img src="assets/img/logo.png" alt="Parlement JPV">
+          <div>
+            <div class="title">Parlement JPV</div>
+            <div class="sub">Lycée Jean-Pierre Vernant</div>
+          </div>
+        </a>
+        <a href="index.html" style="text-decoration: none; color: var(--clr-slate); font-weight: 600;">← Retour à l'accueil</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <h1>Actualités du Bureau</h1>
+      <p>
+        Articles et publications officielles du bureau du Parlement JPV. 
+        Découvrez nos débats, projets et initiatives.
+      </p>
+    </div>
+  </section>
+
+  <!-- Filters -->
+  <div class="container">
+    <div class="filters">
+      <button class="filter-btn active" onclick="filterArticles('all')">Tous</button>
+      <button class="filter-btn" onclick="filterArticles('actualites')">Actualités</button>
+      <button class="filter-btn" onclick="filterArticles('debats')">Débats</button>
+      <button class="filter-btn" onclick="filterArticles('projets')">Projets</button>
+      <button class="filter-btn" onclick="filterArticles('evenements')">Événements</button>
+      <button class="filter-btn" onclick="filterArticles('tribune')">Tribune libre</button>
+    </div>
+  </div>
+
+  <!-- Articles -->
+  <div class="container">
+    <div id="articlesList" class="articles"></div>
+  </div>
+
+  <script>
+    let currentFilter = 'all';
+
+    function loadArticles() {
+      try {
+        const articles = JSON.parse(localStorage.getItem('bureau_articles_v2')) || [];
+        const publicArticles = articles.filter(a => a.isPublic);
+
+        displayArticles(publicArticles);
+      } catch (e) {
+        console.error('Error loading articles:', e);
+        document.getElementById('articlesList').innerHTML = `
+          <div class="empty">
+            <div class="empty-icon">📝</div>
+            <h2 style="font-family: var(--font-display); margin-bottom: 0.5rem;">Aucun article disponible</h2>
+            <p>Les articles publiés par le bureau apparaîtront ici.</p>
+          </div>
+        `;
+      }
+    }
+
+    function displayArticles(articles) {
+      const container = document.getElementById('articlesList');
+
+      let filtered = articles;
+      if (currentFilter !== 'all') {
+        filtered = articles.filter(a => a.category === currentFilter);
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="empty">
+            <div class="empty-icon">🔍</div>
+            <h2 style="font-family: var(--font-display); margin-bottom: 0.5rem;">Aucun article dans cette catégorie</h2>
+            <p>Essayez un autre filtre</p>
+          </div>
+        `;
+        return;
+      }
+
+      const categoryNames = {
+        'actualites': 'Actualités',
+        'debats': 'Débats',
+        'projets': 'Projets',
+        'evenements': 'Événements',
+        'tribune': 'Tribune'
+      };
+
+      container.innerHTML = filtered.map(article => `
+        <article class="article-card">
+          <div class="article-category">${categoryNames[article.category] || article.category}</div>
+          <h2 class="article-title">${article.title}</h2>
+          
+          <div class="article-meta">
+            <span>✍️ ${article.author}</span>
+            <span>📅 ${new Date(article.createdAt).toLocaleDateString('fr-FR', { 
+              day: 'numeric', 
+              month: 'long', 
+              year: 'numeric' 
+            })}</span>
+            <span>🕐 ${new Date(article.createdAt).toLocaleTimeString('fr-FR', { 
+              hour: '2-digit', 
+              minute: '2-digit' 
+            })}</span>
+          </div>
+
+          <div class="article-content">
+            ${article.content}
+          </div>
+
+          <div class="article-footer">
+            <div class="article-stats">
+              <span>👁️ ${article.views || 0} vues</span>
+              <span>❤️ ${article.likes || 0} j'aime</span>
+            </div>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function filterArticles(category) {
+      currentFilter = category;
+      
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+
+      loadArticles();
+    }
+
+    // Load on page load
+    document.addEventListener('DOMContentLoaded', loadArticles);
+
+    // Reload every 30 seconds to get new articles
+    setInterval(loadArticles, 30000);
+  </script>
+</body>
+</html>
