@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="robots" content="noindex, nofollow" />
+
+  <title>Espace Bureau Pro — Parlement JPV</title>
+  <link rel="icon" href="/assets/img/favicon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+
+  <!-- ✅ Netlify Identity (vraie auth) -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+  <style>
+    :root {
+      --clr-ink: #0a0e1a; --clr-slate: #475569; --clr-mist: #94a3b8; --clr-cloud: #e2e8f0;
+      --clr-paper: #fafbfc; --clr-white: #ffffff; --clr-gold: #c9a050; --clr-navy: #0b2545;
+      --clr-success: #059669; --clr-danger: #dc2626; --clr-info: #0ea5e9; --clr-warning: #d97706;
+      --font-display: 'Fraunces', Georgia, serif; --font-body: 'Instrument Sans', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-body); line-height: 1.7; color: var(--clr-ink); background: var(--clr-paper); -webkit-font-smoothing: antialiased; }
+    .container { max-width: 1600px; margin: 0 auto; padding: 0 clamp(1rem,4vw,2rem); }
+    .hidden { display: none !important; }
+
+    /* Login */
+    #loginScreen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--clr-navy) 0%, #1a4d7a 100%); position: relative; }
+    #loginScreen::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,255,255,.02) 2px 4px); pointer-events: none; }
+    .login-box { background: var(--clr-white); border-radius: 1.5rem; padding: 3rem; box-shadow: 0 20px 60px rgba(0,0,0,0.3); width: 100%; max-width: 440px; z-index: 1; animation: fadeInUp 0.6s ease-out; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } }
+    .login-logo { text-align: center; margin-bottom: 2rem; }
+    .login-logo img { width: 64px; border-radius: 0.75rem; margin-bottom: 1rem; }
+    .login-logo h1 { font-family: var(--font-display); font-size: 1.75rem; font-weight: 900; margin-bottom: 0.5rem; }
+
+    /* Forms */
+    .form-group { margin-bottom: 1.25rem; }
+    .form-label { display: block; font-weight: 700; font-size: 0.875rem; margin-bottom: 0.5rem; }
+    .form-input, .form-select, .form-textarea {
+      width: 100%; padding: 0.875rem 1rem; border: 1px solid var(--clr-cloud); border-radius: 0.75rem;
+      font-family: var(--font-body); font-size: 1rem; transition: all 0.2s;
+      background: #fff;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--clr-gold); box-shadow: 0 0 0 3px rgba(201,160,80,0.1); }
+    .form-textarea { min-height: 150px; resize: vertical; }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      padding: 0.875rem 1.5rem; border-radius: 0.75rem; font-weight: 700;
+      font-size: 0.9375rem; border: none; cursor: pointer; transition: all 0.2s;
+      text-decoration: none; white-space: nowrap;
+    }
+    .btn-primary { background: var(--clr-navy); color: white; }
+    .btn-primary:hover { background: #1a4d7a; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(11,37,69,0.2); }
+    .btn-gold { background: linear-gradient(135deg, var(--clr-gold), #c19940); color: white; }
+    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(201,160,80,0.3); }
+    .btn-success { background: var(--clr-success); color: white; }
+    .btn-danger { background: var(--clr-danger); color: white; }
+    .btn-ghost { background: transparent; border: 1px solid var(--clr-cloud); color: var(--clr-ink); }
+    .btn-ghost:hover { background: var(--clr-paper); border-color: var(--clr-navy); }
+    .btn-sm { padding: 0.5rem 1rem; font-size: 0.8125rem; }
+    .btn-block { width: 100%; }
+
+    /* Alerts */
+    .alert { padding: 1rem; border-radius: 0.75rem; margin-bottom: 1rem; font-size: 0.875rem; border-left: 4px solid; }
+    .alert-error { background: rgba(220,38,38,0.1); border-color: var(--clr-danger); color: #991b1b; }
+    .alert-success { background: rgba(5,150,105,0.1); border-color: var(--clr-success); color: #065f46; }
+    .alert-info { background: rgba(14,165,233,0.1); border-color: var(--clr-info); color: #075985; }
+
+    /* Dashboard */
+    #dashboard { min-height: 100vh; padding: 2rem 0 3rem; }
+    .dashboard-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+    .dashboard-title { display: flex; align-items: center; gap: 1rem; }
+    .dashboard-title img { width: 48px; border-radius: 0.75rem; }
+    .dashboard-title h1 { font-family: var(--font-display); font-size: clamp(1.75rem,4vw,2.5rem); font-weight: 900; }
+    .user-info { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .user-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: linear-gradient(135deg, #f5e6cc, rgba(11,37,69,0.05)); border: 1px solid var(--clr-gold); border-radius: 999px; font-weight: 700; font-size: 0.875rem; }
+
+    /* Tabs */
+    .tabs { display: flex; gap: 0.25rem; margin-bottom: 2rem; border-bottom: 2px solid var(--clr-cloud); overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .tab { padding: 0.875rem 1.25rem; background: transparent; border: none; border-bottom: 3px solid transparent; font-weight: 700; font-size: 0.9375rem; color: var(--clr-slate); cursor: pointer; transition: all 0.2s; white-space: nowrap; margin-bottom: -2px; }
+    .tab:hover { color: var(--clr-navy); }
+    .tab.active { color: var(--clr-navy); border-bottom-color: var(--clr-gold); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.25s; }
+    @keyframes fadeIn { from { opacity: 0; } }
+
+    /* Grid */
+    .grid { display: grid; gap: 1.5rem; margin-bottom: 2rem; }
+    .grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+    /* Cards */
+    .card { background: var(--clr-white); border: 1px solid var(--clr-cloud); border-radius: 1.5rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(10,14,26,0.06); transition: all 0.2s; }
+    .card:hover { box-shadow: 0 4px 12px rgba(10,14,26,0.08); }
+    .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; gap: 1rem; flex-wrap: wrap; }
+    .card-title { font-family: var(--font-display); font-size: 1.25rem; font-weight: 800; }
+
+    /* Stats */
+    .stat-card { text-align: center; }
+    .stat-value { font-family: var(--font-display); font-size: clamp(2rem,5vw,3rem); font-weight: 900; color: var(--clr-gold); line-height: 1; margin-bottom: 0.5rem; }
+    .stat-label { font-size: 0.875rem; font-weight: 600; color: var(--clr-slate); text-transform: uppercase; letter-spacing: 0.05em; }
+
+    /* Members */
+    .member-card { display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--clr-paper); border: 1px solid var(--clr-cloud); border-radius: 1rem; transition: all 0.2s; }
+    .member-card:hover { box-shadow: 0 2px 8px rgba(10,14,26,0.06); }
+    .member-avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--clr-gold), var(--clr-navy)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 1.25rem; flex-shrink: 0; }
+    .member-info { flex: 1; }
+    .member-name { font-weight: 700; margin-bottom: 0.25rem; }
+    .member-role { font-size: 0.875rem; color: var(--clr-slate); }
+    .member-meta { font-size: 0.8125rem; color: var(--clr-mist); margin-top: 0.25rem; }
+
+    /* Chat */
+    .chat-messages { max-height: 420px; overflow-y: auto; padding: 1rem; background: var(--clr-paper); border-radius: 0.75rem; margin-bottom: 1rem; border: 1px solid var(--clr-cloud); }
+    .chat-message { margin-bottom: 1rem; }
+    .chat-message.own { text-align: right; }
+    .chat-bubble { display: inline-block; padding: 0.75rem 1rem; border-radius: 1rem; max-width: 72%; }
+    .chat-message.own .chat-bubble { background: var(--clr-navy); color: white; border-bottom-right-radius: 0.25rem; }
+    .chat-message:not(.own) .chat-bubble { background: var(--clr-white); border: 1px solid var(--clr-cloud); border-bottom-left-radius: 0.25rem; }
+    .chat-author { font-size: 0.75rem; font-weight: 700; margin-bottom: 0.25rem; color: var(--clr-slate); }
+    .chat-time { font-size: 0.6875rem; color: var(--clr-mist); margin-top: 0.25rem; }
+
+    /* Responsive */
+    @media (max-width: 1024px) { .grid-4, .grid-3 { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 768px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
+  </style>
+</head>
+
+<body>
+  <!-- Login Screen -->
+  <div id="loginScreen">
+    <div class="login-box">
+      <div class="login-logo">
+        <img src="/assets/img/logo.png" alt="Parlement JPV" />
+        <h1>Espace Bureau Pro</h1>
+        <p style="color: var(--clr-slate); font-size: 0.9375rem;">Accès réservé (Netlify Identity)</p>
+      </div>
+
+      <div id="loginAlert"></div>
+
+      <!-- ✅ On garde une UI "form", mais c’est Identity qui fait le login -->
+      <form id="loginForm">
+        <button type="submit" class="btn btn-primary btn-block">🔓 Se connecter</button>
+      </form>
+
+      <div style="margin-top: 1rem; text-align: center;">
+        <button class="btn btn-ghost btn-sm" id="btnOpenRecovery" type="button">🔑 Mot de passe oublié</button>
+      </div>
+
+      <div class="alert alert-info" style="margin-top: 1.25rem;">
+        <strong>Invite-only</strong> : seul le bureau invité peut accéder.
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard" class="hidden">
+    <div class="container">
+      <div class="dashboard-header">
+        <div class="dashboard-title">
+          <img src="/assets/img/logo.png" alt="" />
+          <div>
+            <h1>Bureau Pro</h1>
+            <p style="color: var(--clr-slate); font-size: 0.9375rem;">Gestion collaborative</p>
+          </div>
+        </div>
+        <div class="user-info">
+          <span class="user-badge"><span id="userAvatar"></span><span id="userName"></span></span>
+          <button class="btn btn-ghost btn-sm" id="btnLogout" type="button">Déconnexion</button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-4">
+        <div class="card stat-card"><div class="stat-value" id="statArticles">0</div><div class="stat-label">Articles</div></div>
+        <div class="card stat-card"><div class="stat-value" id="statEvents">0</div><div class="stat-label">Événements</div></div>
+        <div class="card stat-card"><div class="stat-value" id="statTasks">0</div><div class="stat-label">Tâches</div></div>
+        <div class="card stat-card"><div class="stat-value" id="statMembers">0</div><div class="stat-label">Membres</div></div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs" id="tabsBar">
+        <button class="tab active" type="button" onclick="switchTab(event,'dashboard')">🏠 Dashboard</button>
+        <button class="tab" type="button" onclick="switchTab(event,'articles')">📝 Articles</button>
+        <button class="tab" type="button" onclick="switchTab(event,'events')">📅 Événements</button>
+        <button class="tab" type="button" onclick="switchTab(event,'tasks')">✅ Tâches</button>
+        <button class="tab" type="button" onclick="switchTab(event,'chat')">💬 Discussion</button>
+        <button class="tab" type="button" onclick="switchTab(event,'members')">👥 Annuaire</button>
+        <button class="tab" type="button" onclick="switchTab(event,'settings')">⚙️ Paramètres</button>
+      </div>
+
+      <div id="tabsContainer"></div>
+    </div>
+  </div>
+
+  <script>
+    // ====== CONFIG APP ======
+    const APP = {
+      version: '3.1',
+      currentUser: null,
+
+      // Interne bureau (local)
+      storage: {
+        articlesLocal: 'bureau_articles_local_v3', // juste pour stats locales si tu veux
+        events: 'bureau_events_v3',
+        tasks: 'bureau_tasks_v3',
+        chat: 'bureau_chat_v3',
+        allMembers: 'bureau_all_members_v3'
+      },
+
+      // Membres (optionnel) via Google Sheets CSV public
+      sheets: {
+        enabled: true,
+        sheetId: '12cQHZ8ip8btocRuOtNqxVuFWbQ5-KSBQI38PsI5_Eg8'
+      }
+    };
+
+    // ====== UTIL ======
+    const $ = (sel) => document.querySelector(sel);
+    function escapeHtml(s){
+      return (s||'')
+        .replaceAll('&','&amp;')
+        .replaceAll('<','&lt;')
+        .replaceAll('>','&gt;')
+        .replaceAll('"','&quot;')
+        .replaceAll("'",'&#039;');
+    }
+
+    function saveData(key, data) {
+      try { localStorage.setItem(key, JSON.stringify(data)); return true; }
+      catch (e) { console.error('Storage error:', e); return false; }
+    }
+
+    function getData(key) {
+      try { const data = localStorage.getItem(key); return data ? JSON.parse(data) : null; }
+      catch (e) { console.error('Retrieval error:', e); return null; }
+    }
+
+    function showLoginAlert(message, type='info') {
+      const container = document.getElementById('loginAlert');
+      container.innerHTML = `<div class="alert alert-${type}">${escapeHtml(message)}</div>`;
+      setTimeout(()=>{ if(container) container.innerHTML = ''; }, 5000);
+    }
+
+    function showInline(containerId, message, type='info') {
+      const el = document.getElementById(containerId);
+      if (!el) return;
+      el.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+      setTimeout(()=>{ if(el) el.innerHTML = ''; }, 6000);
+    }
+
+    function formatDate(d) { return new Date(d).toLocaleDateString('fr-FR', {day:'numeric', month:'long', year:'numeric'}); }
+    function formatTime(d) { return new Date(d).toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'}); }
+    function getAvatar(name) { return (name || '?').charAt(0).toUpperCase(); }
+
+    // ====== AUTH (NETLIFY IDENTITY) ======
+    function requireLogin() {
+      const user = netlifyIdentity.currentUser();
+      if (!user) {
+        document.getElementById('dashboard').classList.add('hidden');
+        document.getElementById('loginScreen').classList.remove('hidden');
+        return;
+      }
+      showDashboard(user);
+    }
+
+    function logout() {
+      netlifyIdentity.logout();
+    }
+
+    function showDashboard(user) {
+      APP.currentUser = user;
+
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('dashboard').classList.remove('hidden');
+
+      const displayName = user.user_metadata?.full_name || user.email || 'Membre';
+      document.getElementById('userName').textContent = displayName;
+      document.getElementById('userAvatar').textContent = getAvatar(displayName);
+
+      renderAllTabs();
+      loadAllData();
+
+      if (APP.sheets.enabled) syncMembersFromSheets().catch(()=>{});
+    }
+
+    // ====== TABS ======
+    function switchTab(evt, tabName) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+      // ✅ event passé proprement (plus de "event is not defined")
+      evt.currentTarget.classList.add('active');
+
+      const content = document.getElementById('tab' + tabName.charAt(0).toUpperCase() + tabName.slice(1));
+      if (content) content.classList.add('active');
+
+      // Lazy loads
+      if (tabName === 'members') loadMembers();
+      if (tabName === 'chat') loadChat();
+      if (tabName === 'articles') refreshPublicArticlesHint();
+    }
+
+    // ====== GOOGLE SHEETS SYNC (OPTIONNEL) ======
+    async function syncMembersFromSheets() {
+      try {
+        const csvUrl = `https://docs.google.com/spreadsheets/d/${APP.sheets.sheetId}/export?format=csv`;
+        const res = await fetch(csvUrl);
+        if (!res.ok) throw new Error('Google Sheet inaccessible');
+        const csvText = await res.text();
+
+        const lines = csvText.split('\n').filter(Boolean);
+        if (lines.length <= 1) throw new Error('Sheet vide');
+
+        // parse CSV "simple" (si tu as des virgules dans les cellules -> à remplacer par un parseur CSV)
+        const rows = lines.slice(1);
+
+        const members = rows.map((row, idx) => {
+          const cols = row.split(',').map(c => (c||'').trim());
+          if (!cols[0]) return null;
+          return {
+            id: 1000 + idx,
+            name: cols[0],
+            classe: cols[1] || '',
+            email: cols[2] || '',
+            phone: cols[3] || '',
+            role: cols[4] || 'Membre',
+            joinedDate: cols[5] || new Date().toISOString(),
+            isActive: true
+          };
+        }).filter(Boolean);
+
+        saveData(APP.storage.allMembers, members);
+        updateStats();
+        loadMembers();
+      } catch (e) {
+        console.warn('Sheets sync failed:', e.message);
+      }
+    }
+
+    // ====== RENDER UI ======
+    function renderAllTabs() {
+      const container = document.getElementById('tabsContainer');
+      container.innerHTML = `
+        ${renderDashboard()}
+        ${renderArticles()}
+        ${renderEvents()}
+        ${renderTasks()}
+        ${renderChat()}
+        ${renderMembers()}
+        ${renderSettings()}
+      `;
+    }
+
+    function renderDashboard() {
+      return `
+        <div id="tabDashboard" class="tab-content active">
+          <div class="grid grid-2">
+            <div class="card">
+              <div class="card-header"><h2 class="card-title">Raccourcis</h2></div>
+              <div class="grid grid-2" style="margin-bottom:0;">
+                <a class="btn btn-primary" href="/articles/" target="_blank" rel="noopener">🌐 Voir articles publics</a>
+                <button class="btn btn-ghost" type="button" onclick="netlifyIdentity.open('user')">👤 Mon compte</button>
+              </div>
+              <div style="margin-top:12px;color:var(--clr-slate);font-size:.95rem;">
+                Les publications d’articles passent par une Netlify Function (sécurisée) et deviennent visibles publiquement.
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header"><h2 class="card-title">Statut</h2></div>
+              <div id="statusBox" class="alert alert-info" style="margin-bottom:0;">
+                Connecté en tant que <strong>${escapeHtml(APP.currentUser?.email || '')}</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderArticles() {
+      return `
+        <div id="tabArticles" class="tab-content">
+          <div class="grid grid-2">
+            <div class="card">
+              <div class="card-header"><h2 class="card-title">Publier un article (public)</h2></div>
+
+              <form id="articleForm">
+                <div class="form-group">
+                  <label class="form-label">Titre</label>
+                  <input class="form-input" id="aTitle" required />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Extrait (optionnel)</label>
+                  <input class="form-input" id="aExcerpt" maxlength="180" placeholder="Résumé en 1 phrase" />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Image de couverture (URL optionnelle)</label>
+                  <input class="form-input" id="aCoverUrl" placeholder="https://..." />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Contenu (HTML simple)</label>
+                  <textarea class="form-textarea" id="aContent" required placeholder="<p>Texte...</p>"></textarea>
+                  <div style="margin-top:6px;color:var(--clr-mist);font-size:.85rem;">
+                    Conseil : utilise <code style="font-family:var(--font-mono)">p, h2, ul, li, a</code>. Pas de scripts.
+                  </div>
+                </div>
+
+                <button class="btn btn-gold btn-block" type="submit">🚀 Publier</button>
+              </form>
+
+              <div id="articlePublishMsg" style="margin-top:12px;"></div>
+            </div>
+
+            <div class="card">
+              <div class="card-header"><h2 class="card-title">Articles publics</h2></div>
+
+              <div class="alert alert-info">
+                <strong>Accès public :</strong><br />
+                <a href="/articles/" target="_blank" rel="noopener">/articles/</a>
+              </div>
+
+              <button class="btn btn-ghost btn-block" type="button" id="btnRefreshPublicIndex">🔄 Rafraîchir l’index public</button>
+              <div id="publicIndexMsg" style="margin-top:12px;"></div>
+
+              <div style="margin-top:16px;">
+                <h3 style="font-family:var(--font-display);font-size:1.1rem;margin-bottom:8px;">Derniers articles</h3>
+                <div id="publicArticlesPreview" style="display:grid;gap:10px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderEvents() {
+      return `
+        <div id="tabEvents" class="tab-content">
+          <div class="card">
+            <div class="card-header"><h2 class="card-title">Événements</h2></div>
+            <div class="alert alert-info" style="margin-bottom:0;">Module événement : à brancher ensuite (localStorage ou functions).</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderTasks() {
+      return `
+        <div id="tabTasks" class="tab-content">
+          <div class="card">
+            <div class="card-header"><h2 class="card-title">Tâches</h2></div>
+            <form id="taskForm" style="display:flex; gap:.5rem; flex-wrap:wrap;">
+              <input class="form-input" id="taskText" required placeholder="Nouvelle tâche..." style="flex:1; min-width:240px;" />
+              <button class="btn btn-primary" type="submit">Ajouter</button>
+            </form>
+            <div id="tasksList" style="margin-top:14px; display:grid; gap:10px;"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderChat() {
+      return `
+        <div id="tabChat" class="tab-content">
+          <div class="card">
+            <div class="card-header"><h2 class="card-title">Discussion du bureau</h2></div>
+            <div class="chat-messages" id="chatMessages"></div>
+            <form id="chatForm" style="display:flex; gap:0.5rem;">
+              <input type="text" id="chatInput" class="form-input" placeholder="Votre message..." required style="flex:1;" />
+              <button type="submit" class="btn btn-primary">Envoyer</button>
+            </form>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderMembers() {
+      return `
+        <div id="tabMembers" class="tab-content">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Annuaire</h2>
+              <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
+                <button class="btn btn-ghost btn-sm" type="button" id="btnSyncMembers">🔄 Sync Google Sheets</button>
+              </div>
+            </div>
+
+            <div class="alert alert-info">
+              Si l’annuaire ne charge pas, vérifie que le Google Sheet est public (export CSV).
+            </div>
+
+            <div id="membersList"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderSettings() {
+      return `
+        <div id="tabSettings" class="tab-content">
+          <div class="grid grid-2">
+            <div class="card">
+              <div class="card-header"><h2 class="card-title">Compte</h2></div>
+              <button class="btn btn-primary btn-block" type="button" onclick="netlifyIdentity.open('user')">👤 Gérer mon compte</button>
+              <div style="margin-top:10px;color:var(--clr-slate);font-size:.95rem;">
+                Gère ton email, ton mot de passe, etc.
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header"><h2 class="card-title">Liens</h2></div>
+              <a class="btn btn-ghost btn-block" href="/" target="_blank" rel="noopener">🏠 Site public</a>
+              <a class="btn btn-ghost btn-block" href="/articles/" target="_blank" rel="noopener">📰 Articles publics</a>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ====== DATA / FEATURES ======
+    function loadAllData() {
+      updateStats();
+      loadChat();
+      loadMembers();
+      loadTasks();
+      refreshPublicArticlesHint();
+    }
+
+    function updateStats() {
+      // Articles publics: on lit l’index public si présent (sinon 0)
+      // Articles internes (local) : optionnel
+      const events = getData(APP.storage.events) || [];
+      const tasks = getData(APP.storage.tasks) || [];
+      const allMembers = getData(APP.storage.allMembers) || [];
+
+      document.getElementById('statEvents').textContent = events.length;
+      document.getElementById('statTasks').textContent = tasks.filter(t => !t.completed).length;
+      document.getElementById('statMembers').textContent = allMembers.length;
+
+      // articles publics (best-effort)
+      fetch('/articles/index.json', { cache: 'no-store' })
+        .then(r => r.ok ? r.json() : [])
+        .then(list => { document.getElementById('statArticles').textContent = (Array.isArray(list) ? list.length : 0); })
+        .catch(() => { document.getElementById('statArticles').textContent = '0'; });
+    }
+
+    // ---- Members
+    function loadMembers() {
+      const allMembers = getData(APP.storage.allMembers) || [];
+      const container = document.getElementById('membersList');
+      if (!container) return;
+
+      if (!allMembers.length) {
+        container.innerHTML = `<p style="text-align:center;color:var(--clr-slate);padding:1.5rem;">Aucun membre chargé. Clique sur “Sync Google Sheets”.</p>`;
+        return;
+      }
+
+      container.innerHTML = `
+        <div>
+          <h3 style="font-family: var(--font-display); font-size: 1.35rem; margin-bottom: 1rem;">👥 Membres (${allMembers.length})</h3>
+          <div class="grid grid-3">
+            ${allMembers.map(m => `
+              <div class="member-card">
+                <div class="member-avatar">${getAvatar(m.name)}</div>
+                <div class="member-info">
+                  <div class="member-name">${escapeHtml(m.name)}</div>
+                  <div class="member-role">${escapeHtml(m.classe || 'Membre')}</div>
+                  <div class="member-meta">${escapeHtml(m.email || 'Pas d’email')}</div>
+                  ${m.phone ? `<div class="member-meta">📱 ${escapeHtml(m.phone)}</div>` : ''}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // ---- Chat
+    function loadChat() {
+      const messages = getData(APP.storage.chat) || [];
+      const container = document.getElementById('chatMessages');
+      if (!container) return;
+
+      const myId = APP.currentUser?.id || APP.currentUser?.email || 'me';
+      container.innerHTML = messages.map(msg => `
+        <div class="chat-message ${msg.userId === myId ? 'own' : ''}">
+          ${msg.userId !== myId ? `<div class="chat-author">${escapeHtml(msg.userName)}</div>` : ''}
+          <div class="chat-bubble">${escapeHtml(msg.text)}</div>
+          <div class="chat-time">${formatTime(msg.createdAt)}</div>
+        </div>
+      `).join('');
+
+      container.scrollTop = container.scrollHeight;
+    }
+
+    // ---- Tasks
+    function loadTasks() {
+      const tasks = getData(APP.storage.tasks) || [];
+      const container = document.getElementById('tasksList');
+      if (!container) return;
+
+      if (!tasks.length) {
+        container.innerHTML = `<div class="alert alert-info" style="margin-bottom:0;">Aucune tâche.</div>`;
+        return;
+      }
+
+      container.innerHTML = tasks
+        .slice()
+        .reverse()
+        .map(t => `
+          <div class="card" style="border-radius:14px;padding:12px 14px;">
+            <div style="display:flex;gap:.75rem;align-items:flex-start;justify-content:space-between;">
+              <div>
+                <div style="font-weight:800;">${escapeHtml(t.text)}</div>
+                <div style="color:var(--clr-mist);font-size:.85rem;">${formatDate(t.createdAt)}</div>
+              </div>
+              <button class="btn btn-ghost btn-sm" type="button" onclick="toggleTask(${t.id})">
+                ${t.completed ? '↩️ Réactiver' : '✅ Terminer'}
+              </button>
+            </div>
+          </div>
+        `).join('');
+    }
+
+    function toggleTask(id) {
+      const tasks = getData(APP.storage.tasks) || [];
+      const t = tasks.find(x => x.id === id);
+      if (!t) return;
+      t.completed = !t.completed;
+      saveData(APP.storage.tasks, tasks);
+      updateStats();
+      loadTasks();
+    }
+
+    // ---- Articles publics preview
+    async function refreshPublicArticlesHint() {
+      const preview = document.getElementById('publicArticlesPreview');
+      if (!preview) return;
+
+      try {
+        const res = await fetch('/articles/index.json', { cache: 'no-store' });
+        if (!res.ok) throw new Error('Index public introuvable');
+
+        const items = await res.json();
+        const top = (Array.isArray(items) ? items.slice(0, 5) : []);
+
+        if (!top.length) {
+          preview.innerHTML = `<div class="alert alert-info" style="margin-bottom:0;">Aucun article public pour l’instant.</div>`;
+          return;
+        }
+
+        preview.innerHTML = top.map(it => `
+          <div style="padding:10px 12px;border:1px solid var(--clr-cloud);border-radius:14px;background:var(--clr-paper);">
+            <div style="font-weight:800;"><a href="${it.url}" target="_blank" rel="noopener" style="color:var(--clr-navy);text-decoration:none;">${escapeHtml(it.title)}</a></div>
+            <div style="color:var(--clr-mist);font-size:.85rem;">Par ${escapeHtml(it.author)} • ${formatDate(it.dateISO)}</div>
+          </div>
+        `).join('');
+
+      } catch (e) {
+        preview.innerHTML = `<div class="alert alert-error" style="margin-bottom:0;">Impossible de lire /articles/index.json</div>`;
+      }
+    }
+
+    // ---- Publish article (Netlify Function)
+    async function publishArticle(payload) {
+      const user = netlifyIdentity.currentUser();
+      if (!user) throw new Error('Non connecté');
+
+      const token = await user.jwt();
+      const res = await fetch('/.netlify/functions/publish-article', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(()=> ({}));
+      if (!res.ok) throw new Error(data.error || 'Erreur publication');
+      return data; // { ok, slug, url }
+    }
+
+    // ====== EVENTS (SINGLE SUBMIT HANDLER, NO BUG) ======
+    document.addEventListener('DOMContentLoaded', () => {
+      // Identity boot
+      netlifyIdentity.init();
+      netlifyIdentity.on('init', requireLogin);
+      netlifyIdentity.on('login', (user) => { netlifyIdentity.close(); showDashboard(user); });
+      netlifyIdentity.on('logout', () => location.reload());
+
+      // Login button
+      document.getElementById('loginForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        netlifyIdentity.open('login');
+      });
+
+      document.getElementById('btnOpenRecovery').addEventListener('click', () => {
+        netlifyIdentity.open('login');
+        setTimeout(()=>netlifyIdentity.open('recovery'), 250);
+      });
+
+      document.getElementById('btnLogout').addEventListener('click', logout);
+
+      // ✅ ONE submit handler, dispatch by form id (no collisions)
+      document.addEventListener('submit', async (e) => {
+        // ---- Article form
+        if (e.target && e.target.id === 'articleForm') {
+          e.preventDefault();
+
+          const title = document.getElementById('aTitle')?.value?.trim();
+          const excerpt = document.getElementById('aExcerpt')?.value?.trim();
+          const coverUrl = document.getElementById('aCoverUrl')?.value?.trim();
+          const contentHTML = document.getElementById('aContent')?.value?.trim();
+
+          if (!title || !contentHTML) {
+            showInline('articlePublishMsg', 'Titre et contenu obligatoires.', 'error');
+            return;
+          }
+
+          try {
+            const user = netlifyIdentity.currentUser();
+            const author = user?.user_metadata?.full_name || user?.email || 'Bureau';
+
+            const data = await publishArticle({ title, excerpt, coverUrl, contentHTML, author });
+
+            showInline('articlePublishMsg', `✅ Publié : <a href="${data.url}" target="_blank" rel="noopener">${data.url}</a>`, 'success');
+            e.target.reset();
+
+            updateStats();
+            refreshPublicArticlesHint();
+          } catch (err) {
+            showInline('articlePublishMsg', `❌ ${escapeHtml(err.message)}`, 'error');
+          }
+          return;
+        }
+
+        // ---- Chat form
+        if (e.target && e.target.id === 'chatForm') {
+          e.preventDefault();
+
+          const input = document.getElementById('chatInput');
+          const text = (input?.value || '').trim();
+          if (!text) return;
+
+          const messages = getData(APP.storage.chat) || [];
+          const myId = APP.currentUser?.id || APP.currentUser?.email || 'me';
+          const myName = APP.currentUser?.user_metadata?.full_name || APP.currentUser?.email || 'Moi';
+
+          messages.push({
+            id: Date.now(),
+            text,
+            userId: myId,
+            userName: myName,
+            createdAt: new Date().toISOString()
+          });
+
+          saveData(APP.storage.chat, messages);
+          input.value = '';
+          loadChat();
+          return;
+        }
+
+        // ---- Task form
+        if (e.target && e.target.id === 'taskForm') {
+          e.preventDefault();
+          const text = document.getElementById('taskText')?.value?.trim();
+          if (!text) return;
+
+          const tasks = getData(APP.storage.tasks) || [];
+          tasks.push({ id: Date.now(), text, completed: false, createdAt: new Date().toISOString() });
+          saveData(APP.storage.tasks, tasks);
+
+          e.target.reset();
+          updateStats();
+          loadTasks();
+          return;
+        }
+      });
+
+      // Buttons created after render: use event delegation
+      document.addEventListener('click', async (e) => {
+        if (e.target && e.target.id === 'btnSyncMembers') {
+          await syncMembersFromSheets();
+          updateStats();
+          loadMembers();
+          return;
+        }
+        if (e.target && e.target.id === 'btnRefreshPublicIndex') {
+          // just refresh preview and stats
+          refreshPublicArticlesHint();
+          updateStats();
+          showInline('publicIndexMsg', '✅ Index public rafraîchi (lecture).', 'success');
+          return;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
