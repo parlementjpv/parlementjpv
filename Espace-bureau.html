@@ -6,91 +6,53 @@
   <meta name="robots" content="noindex, nofollow">
 
   <title>Espace Bureau — Parlement JPV</title>
-  <meta name="description" content="Espace privé réservé au bureau du Parlement JPV pour l'organisation et la gestion des événements.">
+  <meta name="description" content="Espace collaboratif réservé au bureau du Parlement JPV">
 
-  <!-- Icons -->
-  <link rel="icon" href="assets/img/favicon.png" sizes="any">
-
-  <!-- Premium Fonts -->
+  <link rel="icon" href="assets/img/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,900&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 
   <style>
-    /* =========================================================
-       ESPACE BUREAU PREMIUM — AUTHENTICATED DASHBOARD
-       ========================================================= */
-
+    /* Premium Design System */
     :root {
       --clr-ink: #0a0e1a;
       --clr-slate: #475569;
       --clr-mist: #94a3b8;
-      --clr-fog: #cbd5e1;
       --clr-cloud: #e2e8f0;
       --clr-paper: #fafbfc;
       --clr-white: #ffffff;
-      
       --clr-gold: #c9a050;
-      --clr-gold-dim: #f5e6cc;
       --clr-navy: #0b2545;
-      --clr-navy-light: #1a4d7a;
       --clr-success: #059669;
       --clr-danger: #dc2626;
+      --clr-info: #0ea5e9;
       --clr-warning: #d97706;
-      
-      --clr-text-primary: var(--clr-ink);
-      --clr-text-secondary: var(--clr-slate);
-      --clr-text-tertiary: var(--clr-mist);
-      --clr-bg-primary: var(--clr-paper);
-      --clr-bg-elevated: var(--clr-white);
-      --clr-border-subtle: var(--clr-cloud);
       
       --font-display: 'Fraunces', Georgia, serif;
       --font-body: 'Instrument Sans', system-ui, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
       
-      --space-xs: 0.5rem;
-      --space-sm: 0.75rem;
-      --space-md: 1rem;
-      --space-lg: 1.5rem;
-      --space-xl: 2rem;
-      --space-2xl: 3rem;
-      --space-3xl: 4rem;
-      
-      --radius-sm: 0.375rem;
-      --radius-md: 0.5rem;
       --radius-lg: 0.75rem;
       --radius-xl: 1rem;
       --radius-2xl: 1.5rem;
-      --radius-full: 624.9375rem;
-      
-      --shadow-sm: 0 1px 3px rgba(10, 14, 26, 0.06), 0 1px 2px rgba(10, 14, 26, 0.03);
-      --shadow-md: 0 4px 6px -1px rgba(10, 14, 26, 0.08), 0 2px 4px -1px rgba(10, 14, 26, 0.04);
-      --shadow-lg: 0 10px 15px -3px rgba(10, 14, 26, 0.10), 0 4px 6px -2px rgba(10, 14, 26, 0.03);
-      --shadow-xl: 0 20px 25px -5px rgba(10, 14, 26, 0.10);
+      --shadow-sm: 0 1px 3px rgba(10,14,26,0.06);
+      --shadow-md: 0 4px 6px -1px rgba(10,14,26,0.08);
+      --shadow-lg: 0 10px 15px -3px rgba(10,14,26,0.10);
+      --shadow-xl: 0 20px 25px -5px rgba(10,14,26,0.10);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: var(--font-body);
-      font-size: 1rem;
       line-height: 1.7;
-      color: var(--clr-text-primary);
-      background: var(--clr-bg-primary);
+      color: var(--clr-ink);
+      background: var(--clr-paper);
       -webkit-font-smoothing: antialiased;
     }
 
-    .container {
-      width: 100%;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 clamp(1rem, 4vw, 2rem);
-    }
+    .container { max-width: 1400px; margin: 0 auto; padding: 0 clamp(1rem,4vw,2rem); }
+    .hidden { display: none !important; }
 
     /* Login Screen */
     #loginScreen {
@@ -98,25 +60,20 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, var(--clr-navy) 0%, var(--clr-navy-light) 100%);
+      background: linear-gradient(135deg, var(--clr-navy) 0%, #1a4d7a 100%);
       position: relative;
-      overflow: hidden;
     }
-
     #loginScreen::before {
       content: '';
       position: absolute;
       inset: 0;
-      background-image: 
-        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,.02) 2px, rgba(255,255,255,.02) 4px),
-        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,.02) 2px, rgba(255,255,255,.02) 4px);
+      background-image: repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,255,255,.02) 2px 4px);
       pointer-events: none;
     }
-
     .login-box {
-      background: var(--clr-bg-elevated);
+      background: var(--clr-white);
       border-radius: var(--radius-2xl);
-      padding: var(--space-3xl);
+      padding: 3rem;
       box-shadow: var(--shadow-xl);
       width: 100%;
       max-width: 420px;
@@ -124,431 +81,277 @@
       z-index: 1;
       animation: fadeInUp 0.6s ease-out;
     }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } }
 
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-    }
+    .login-logo { text-align: center; margin-bottom: 2rem; }
+    .login-logo img { width: 64px; border-radius: var(--radius-lg); margin-bottom: 1rem; }
+    .login-logo h1 { font-family: var(--font-display); font-size: 1.75rem; font-weight: 900; margin-bottom: 0.5rem; }
+    .login-logo p { font-size: 0.9375rem; color: var(--clr-slate); }
 
-    .login-logo {
-      text-align: center;
-      margin-bottom: var(--space-2xl);
-    }
-
-    .login-logo img {
-      width: 64px;
-      height: 64px;
-      border-radius: var(--radius-lg);
-      margin-bottom: var(--space-md);
-    }
-
-    .login-logo h1 {
-      font-family: var(--font-display);
-      font-size: 1.75rem;
-      font-weight: 900;
-      margin-bottom: var(--space-xs);
-    }
-
-    .login-logo p {
-      font-size: 0.9375rem;
-      color: var(--clr-text-secondary);
-    }
-
-    .form-group {
-      margin-bottom: var(--space-lg);
-    }
-
-    .form-label {
-      display: block;
-      font-weight: 700;
-      font-size: 0.875rem;
-      margin-bottom: var(--space-xs);
-      color: var(--clr-text-primary);
-    }
-
+    .form-group { margin-bottom: 1.25rem; }
+    .form-label { display: block; font-weight: 700; font-size: 0.875rem; margin-bottom: 0.5rem; }
     .form-input {
       width: 100%;
-      padding: var(--space-md);
-      border: 1px solid var(--clr-border-subtle);
+      padding: 0.875rem 1rem;
+      border: 1px solid var(--clr-cloud);
       border-radius: var(--radius-lg);
       font-family: var(--font-body);
       font-size: 1rem;
       transition: all 0.2s;
-      background: var(--clr-bg-primary);
     }
-
-    .form-input:focus {
-      outline: none;
-      border-color: var(--clr-gold);
-      box-shadow: 0 0 0 3px rgba(201, 160, 80, 0.1);
-    }
+    .form-input:focus { outline: none; border-color: var(--clr-gold); box-shadow: 0 0 0 3px rgba(201,160,80,0.1); }
+    textarea.form-input { min-height: 200px; resize: vertical; font-family: var(--font-body); }
 
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: var(--space-xs);
-      padding: var(--space-md) var(--space-xl);
+      gap: 0.5rem;
+      padding: 0.875rem 1.5rem;
       border-radius: var(--radius-lg);
       font-weight: 700;
       font-size: 0.9375rem;
       border: none;
       cursor: pointer;
       transition: all 0.2s;
-      width: 100%;
+      text-decoration: none;
     }
-
-    .btn-primary {
-      background: var(--clr-navy);
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background: var(--clr-navy-light);
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .btn-gold {
-      background: linear-gradient(135deg, var(--clr-gold), #c19940);
-      color: white;
-    }
-
-    .btn-gold:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(201, 160, 80, 0.3);
-    }
-
-    .btn-ghost {
-      background: transparent;
-      border: 1px solid var(--clr-border-subtle);
-      color: var(--clr-text-primary);
-    }
-
-    .btn-ghost:hover {
-      background: var(--clr-bg-primary);
-      border-color: var(--clr-navy);
-    }
-
-    .btn-danger {
-      background: var(--clr-danger);
-      color: white;
-    }
-
-    .btn-danger:hover {
-      background: #b91c1c;
-      transform: translateY(-2px);
-    }
+    .btn-primary { background: var(--clr-navy); color: white; }
+    .btn-primary:hover { background: #1a4d7a; transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+    .btn-gold { background: linear-gradient(135deg, var(--clr-gold), #c19940); color: white; }
+    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(201,160,80,0.3); }
+    .btn-ghost { background: transparent; border: 1px solid var(--clr-cloud); color: var(--clr-ink); }
+    .btn-ghost:hover { background: var(--clr-paper); border-color: var(--clr-navy); }
+    .btn-success { background: var(--clr-success); color: white; }
+    .btn-danger { background: var(--clr-danger); color: white; }
+    .btn-sm { padding: 0.5rem 1rem; font-size: 0.8125rem; }
+    .btn-block { width: 100%; }
 
     .alert {
-      padding: var(--space-md);
+      padding: 1rem;
       border-radius: var(--radius-lg);
-      margin-bottom: var(--space-lg);
+      margin-bottom: 1rem;
       font-size: 0.875rem;
       border-left: 4px solid;
     }
-
-    .alert-error {
-      background: rgba(220, 38, 38, 0.1);
-      border-color: var(--clr-danger);
-      color: #991b1b;
-    }
-
-    .alert-success {
-      background: rgba(5, 150, 105, 0.1);
-      border-color: var(--clr-success);
-      color: #065f46;
-    }
+    .alert-error { background: rgba(220,38,38,0.1); border-color: var(--clr-danger); color: #991b1b; }
+    .alert-success { background: rgba(5,150,105,0.1); border-color: var(--clr-success); color: #065f46; }
+    .alert-info { background: rgba(14,165,233,0.1); border-color: var(--clr-info); color: #075985; }
 
     /* Dashboard */
-    #dashboard {
-      min-height: 100vh;
-      padding-top: var(--space-2xl);
-      padding-bottom: var(--space-3xl);
-    }
-
+    #dashboard { min-height: 100vh; padding: 2rem 0 3rem; }
     .dashboard-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: var(--space-2xl);
+      margin-bottom: 2rem;
       flex-wrap: wrap;
-      gap: var(--space-lg);
+      gap: 1rem;
     }
-
-    .dashboard-title {
-      display: flex;
-      align-items: center;
-      gap: var(--space-md);
-    }
-
-    .dashboard-title img {
-      width: 48px;
-      height: 48px;
-      border-radius: var(--radius-lg);
-    }
-
-    .dashboard-title h1 {
-      font-family: var(--font-display);
-      font-size: clamp(1.75rem, 4vw, 2.5rem);
-      font-weight: 900;
-      line-height: 1.1;
-    }
-
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: var(--space-md);
-    }
-
+    .dashboard-title { display: flex; align-items: center; gap: 1rem; }
+    .dashboard-title img { width: 48px; border-radius: var(--radius-lg); }
+    .dashboard-title h1 { font-family: var(--font-display); font-size: clamp(1.75rem,4vw,2.5rem); font-weight: 900; }
+    
+    .user-info { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
     .user-badge {
       display: inline-flex;
       align-items: center;
-      gap: var(--space-xs);
-      padding: var(--space-sm) var(--space-md);
-      background: linear-gradient(135deg, var(--clr-gold-dim), rgba(11, 37, 69, 0.05));
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: linear-gradient(135deg, #f5e6cc, rgba(11,37,69,0.05));
       border: 1px solid var(--clr-gold);
-      border-radius: var(--radius-full);
+      border-radius: 999px;
       font-weight: 700;
       font-size: 0.875rem;
     }
 
     .tabs {
       display: flex;
-      gap: var(--space-xs);
-      margin-bottom: var(--space-2xl);
-      border-bottom: 2px solid var(--clr-border-subtle);
+      gap: 0.25rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid var(--clr-cloud);
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
     }
-
     .tab {
-      padding: var(--space-md) var(--space-lg);
+      padding: 0.875rem 1.25rem;
       background: transparent;
       border: none;
       border-bottom: 3px solid transparent;
       font-weight: 700;
       font-size: 0.9375rem;
-      color: var(--clr-text-secondary);
+      color: var(--clr-slate);
       cursor: pointer;
       transition: all 0.2s;
       white-space: nowrap;
       margin-bottom: -2px;
     }
+    .tab:hover { color: var(--clr-navy); }
+    .tab.active { color: var(--clr-navy); border-bottom-color: var(--clr-gold); }
 
-    .tab:hover {
-      color: var(--clr-navy);
-    }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.3s; }
+    @keyframes fadeIn { from { opacity: 0; } }
 
-    .tab.active {
-      color: var(--clr-navy);
-      border-bottom-color: var(--clr-gold);
-    }
-
-    .tab-content {
-      display: none;
-    }
-
-    .tab-content.active {
-      display: block;
-      animation: fadeIn 0.3s;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-    }
-
-    .grid {
-      display: grid;
-      gap: var(--space-xl);
-      margin-bottom: var(--space-2xl);
-    }
-
-    .grid-2 {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .grid-3 {
-      grid-template-columns: repeat(3, 1fr);
-    }
+    .grid { display: grid; gap: 1.5rem; margin-bottom: 2rem; }
+    .grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-4 { grid-template-columns: repeat(4, 1fr); }
 
     .card {
-      background: var(--clr-bg-elevated);
-      border: 1px solid var(--clr-border-subtle);
+      background: var(--clr-white);
+      border: 1px solid var(--clr-cloud);
       border-radius: var(--radius-2xl);
-      padding: var(--space-xl);
+      padding: 1.5rem;
       box-shadow: var(--shadow-sm);
       transition: all 0.2s;
     }
-
-    .card:hover {
-      box-shadow: var(--shadow-md);
-    }
-
+    .card:hover { box-shadow: var(--shadow-md); }
     .card-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: var(--space-lg);
+      margin-bottom: 1.25rem;
     }
+    .card-title { font-family: var(--font-display); font-size: 1.25rem; font-weight: 800; }
 
-    .card-title {
-      font-family: var(--font-display);
-      font-size: 1.25rem;
-      font-weight: 800;
-    }
-
-    .stat-card {
-      text-align: center;
-    }
-
+    .stat-card { text-align: center; }
     .stat-value {
       font-family: var(--font-display);
-      font-size: clamp(2rem, 5vw, 3rem);
+      font-size: clamp(2rem,5vw,3rem);
       font-weight: 900;
       color: var(--clr-gold);
       line-height: 1;
-      margin-bottom: var(--space-xs);
+      margin-bottom: 0.5rem;
     }
-
     .stat-label {
       font-size: 0.875rem;
       font-weight: 600;
-      color: var(--clr-text-secondary);
+      color: var(--clr-slate);
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
 
-    /* Article List */
-    .article-list {
-      display: grid;
-      gap: var(--space-md);
-    }
-
-    .article-item {
+    .item-list { display: grid; gap: 1rem; }
+    .item {
       display: flex;
-      gap: var(--space-lg);
-      padding: var(--space-lg);
-      background: var(--clr-bg-primary);
-      border: 1px solid var(--clr-border-subtle);
+      gap: 1rem;
+      padding: 1rem;
+      background: var(--clr-paper);
+      border: 1px solid var(--clr-cloud);
       border-radius: var(--radius-xl);
       transition: all 0.2s;
     }
-
-    .article-item:hover {
-      border-color: var(--clr-gold);
-      box-shadow: var(--shadow-sm);
-    }
-
-    .article-meta {
-      flex: 1;
-    }
-
-    .article-title {
-      font-weight: 700;
-      font-size: 1.0625rem;
-      margin-bottom: var(--space-xs);
-    }
-
-    .article-info {
+    .item:hover { border-color: var(--clr-gold); box-shadow: var(--shadow-sm); }
+    .item-meta { flex: 1; }
+    .item-title { font-weight: 700; font-size: 1.0625rem; margin-bottom: 0.25rem; }
+    .item-info {
       display: flex;
-      gap: var(--space-md);
+      gap: 1rem;
       font-size: 0.8125rem;
-      color: var(--clr-text-tertiary);
-      margin-bottom: var(--space-sm);
+      color: var(--clr-mist);
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
     }
-
-    .article-excerpt {
-      font-size: 0.9375rem;
-      color: var(--clr-text-secondary);
-      line-height: 1.6;
-    }
-
-    .article-actions {
-      display: flex;
-      gap: var(--space-xs);
-      align-items: flex-start;
-    }
-
-    .btn-sm {
-      padding: var(--space-xs) var(--space-md);
-      font-size: 0.8125rem;
-    }
-
-    /* Editor */
-    .editor {
-      background: var(--clr-bg-primary);
-      border: 1px solid var(--clr-border-subtle);
-      border-radius: var(--radius-xl);
-      padding: var(--space-lg);
-    }
-
-    .editor textarea {
-      width: 100%;
-      min-height: 300px;
-      padding: var(--space-md);
-      border: 1px solid var(--clr-border-subtle);
-      border-radius: var(--radius-lg);
-      font-family: var(--font-body);
-      font-size: 0.9375rem;
-      line-height: 1.7;
-      resize: vertical;
-    }
-
-    .editor textarea:focus {
-      outline: none;
-      border-color: var(--clr-gold);
-    }
-
-    .event-form {
-      display: grid;
-      gap: var(--space-lg);
-    }
-
-    /* Responsive */
-    @media (max-width: 1024px) {
-      .grid-3 {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .grid-2 {
-        grid-template-columns: 1fr;
-      }
-
-      .dashboard-header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .article-item {
-        flex-direction: column;
-      }
-    }
-
-    .hidden {
-      display: none !important;
-    }
+    .item-content { font-size: 0.9375rem; color: var(--clr-slate); line-height: 1.6; }
+    .item-actions { display: flex; gap: 0.5rem; align-items: flex-start; }
 
     .badge {
       display: inline-flex;
-      padding: 0.25rem 0.5rem;
-      border-radius: var(--radius-full);
+      padding: 0.25rem 0.625rem;
+      border-radius: 999px;
       font-size: 0.75rem;
       font-weight: 700;
     }
+    .badge-success { background: rgba(5,150,105,0.1); color: var(--clr-success); }
+    .badge-warning { background: rgba(217,119,6,0.1); color: var(--clr-warning); }
+    .badge-info { background: rgba(14,165,233,0.1); color: var(--clr-info); }
+    .badge-danger { background: rgba(220,38,38,0.1); color: var(--clr-danger); }
 
-    .badge-success {
-      background: rgba(5, 150, 105, 0.1);
-      color: var(--clr-success);
+    .member-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: var(--clr-paper);
+      border: 1px solid var(--clr-cloud);
+      border-radius: var(--radius-xl);
+    }
+    .member-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--clr-gold), var(--clr-navy));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 900;
+      font-size: 1.25rem;
+    }
+    .member-info { flex: 1; }
+    .member-name { font-weight: 700; margin-bottom: 0.25rem; }
+    .member-role { font-size: 0.875rem; color: var(--clr-slate); }
+
+    .notification {
+      padding: 1rem;
+      background: var(--clr-white);
+      border: 1px solid var(--clr-cloud);
+      border-left: 4px solid var(--clr-info);
+      border-radius: var(--radius-lg);
+      margin-bottom: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .notification:hover { box-shadow: var(--shadow-sm); }
+    .notification.unread { background: rgba(14,165,233,0.05); }
+    .notification-title { font-weight: 700; margin-bottom: 0.25rem; }
+    .notification-time { font-size: 0.75rem; color: var(--clr-mist); }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0.5rem;
+    }
+    .calendar-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--clr-cloud);
+      border-radius: var(--radius-lg);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .calendar-day:hover { background: var(--clr-paper); }
+    .calendar-day.has-event {
+      background: linear-gradient(135deg, #f5e6cc, rgba(11,37,69,0.05));
+      border-color: var(--clr-gold);
+    }
+    .calendar-day.today {
+      background: var(--clr-navy);
+      color: white;
+      font-weight: 900;
     }
 
-    .badge-warning {
-      background: rgba(217, 119, 6, 0.1);
-      color: var(--clr-warning);
+    .file-upload {
+      border: 2px dashed var(--clr-cloud);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .file-upload:hover { border-color: var(--clr-gold); background: var(--clr-paper); }
+    .file-upload input { display: none; }
+
+    @media (max-width: 1024px) {
+      .grid-4, .grid-3 { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+      .item { flex-direction: column; }
     }
   </style>
 </head>
@@ -560,33 +363,33 @@
       <div class="login-logo">
         <img src="assets/img/logo.png" alt="Parlement JPV">
         <h1>Espace Bureau</h1>
-        <p>Accès réservé aux membres du bureau</p>
+        <p>Plateforme collaborative du bureau</p>
       </div>
 
-      <div id="loginError" class="alert alert-error hidden">
-        Mot de passe incorrect
-      </div>
+      <div id="loginAlert"></div>
 
       <form id="loginForm">
         <div class="form-group">
-          <label class="form-label" for="password">Mot de passe</label>
-          <input 
-            type="password" 
-            id="password" 
-            class="form-input" 
-            placeholder="Entrez le mot de passe"
-            required
-            autocomplete="current-password"
-          >
+          <label class="form-label" for="username">Identifiant</label>
+          <input type="text" id="username" class="form-input" placeholder="Votre identifiant" required autocomplete="username">
         </div>
 
-        <button type="submit" class="btn btn-primary">
-          🔓 Se connecter
-        </button>
+        <div class="form-group">
+          <label class="form-label" for="password">Mot de passe</label>
+          <input type="password" id="password" class="form-input" placeholder="Votre mot de passe" required autocomplete="current-password">
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">🔓 Se connecter</button>
       </form>
 
-      <p style="margin-top: var(--space-lg); text-align: center; font-size: 0.875rem; color: var(--clr-text-tertiary);">
-        Contactez le président si vous avez oublié le mot de passe
+      <div style="margin-top: 1.5rem; text-align: center;">
+        <button class="btn btn-ghost btn-sm" onclick="showFirstTimeSetup()">
+          ⚙️ Premier membre ? Créer les comptes
+        </button>
+      </div>
+
+      <p style="margin-top: 1rem; text-align: center; font-size: 0.875rem; color: var(--clr-slate);">
+        Contactez le président si vous avez oublié vos identifiants
       </p>
     </div>
   </div>
@@ -597,103 +400,129 @@
       <!-- Header -->
       <div class="dashboard-header">
         <div class="dashboard-title">
-          <img src="assets/img/logo.png" alt="Parlement JPV">
+          <img src="assets/img/logo.png" alt="">
           <div>
             <h1>Espace Bureau</h1>
-            <p style="color: var(--clr-text-secondary); font-size: 0.9375rem;">
-              Gestion et organisation — Parlement JPV
-            </p>
+            <p style="color: var(--clr-slate); font-size: 0.9375rem;">Plateforme collaborative — Parlement JPV</p>
           </div>
         </div>
 
         <div class="user-info">
-          <span class="user-badge">👤 <span id="userName">Membre du Bureau</span></span>
+          <span class="user-badge">
+            <span id="userAvatar"></span>
+            <span id="userName"></span>
+          </span>
           <button class="btn btn-ghost btn-sm" onclick="logout()">Déconnexion</button>
         </div>
       </div>
 
-      <!-- Stats -->
-      <div class="grid grid-3">
+      <!-- Quick Stats -->
+      <div class="grid grid-4">
         <div class="card stat-card">
           <div class="stat-value" id="statArticles">0</div>
-          <div class="stat-label">Articles publiés</div>
+          <div class="stat-label">Articles</div>
         </div>
         <div class="card stat-card">
           <div class="stat-value" id="statEvents">0</div>
-          <div class="stat-label">Événements prévus</div>
+          <div class="stat-label">Événements</div>
         </div>
         <div class="card stat-card">
           <div class="stat-value" id="statTasks">0</div>
-          <div class="stat-label">Tâches en cours</div>
+          <div class="stat-label">Tâches actives</div>
+        </div>
+        <div class="card stat-card">
+          <div class="stat-value" id="statMembers">0</div>
+          <div class="stat-label">Membres</div>
         </div>
       </div>
 
       <!-- Tabs -->
       <div class="tabs">
-        <button class="tab active" onclick="switchTab('articles')">📝 Articles</button>
+        <button class="tab active" onclick="switchTab('dashboard')">🏠 Tableau de bord</button>
+        <button class="tab" onclick="switchTab('articles')">📝 Articles</button>
         <button class="tab" onclick="switchTab('events')">📅 Événements</button>
         <button class="tab" onclick="switchTab('tasks')">✅ Tâches</button>
-        <button class="tab" onclick="switchTab('settings')">⚙️ Paramètres</button>
+        <button class="tab" onclick="switchTab('files')">📎 Fichiers</button>
+        <button class="tab" onclick="switchTab('calendar')">📆 Calendrier</button>
+        <button class="tab" onclick="switchTab('members')">👥 Membres</button>
+        <button class="tab" onclick="switchTab('notifications')">🔔 Notifications</button>
+        <button class="tab" onclick="switchTab('analytics')">📊 Analytics</button>
+      </div>
+
+      <!-- Tab: Dashboard -->
+      <div id="tabDashboard" class="tab-content active">
+        <div class="grid grid-2">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Activité récente</h2>
+            </div>
+            <div id="recentActivity"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Tâches urgentes</h2>
+            </div>
+            <div id="urgentTasks"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Prochains événements</h2>
+          </div>
+          <div id="upcomingEvents"></div>
+        </div>
       </div>
 
       <!-- Tab: Articles -->
-      <div id="tabArticles" class="tab-content active">
+      <div id="tabArticles" class="tab-content">
         <div class="grid grid-2">
-          <!-- Article Editor -->
           <div class="card">
             <div class="card-header">
-              <h2 class="card-title">Nouvel Article</h2>
+              <h2 class="card-title">Publier un article</h2>
             </div>
-
-            <form id="articleForm" class="editor">
+            <form id="articleForm">
               <div class="form-group">
-                <label class="form-label" for="articleTitle">Titre</label>
-                <input 
-                  type="text" 
-                  id="articleTitle" 
-                  class="form-input" 
-                  placeholder="Titre de l'article"
-                  required
-                >
+                <label class="form-label">Titre</label>
+                <input type="text" id="articleTitle" class="form-input" placeholder="Titre de l'article" required>
               </div>
-
               <div class="form-group">
-                <label class="form-label" for="articleAuthor">Auteur</label>
-                <input 
-                  type="text" 
-                  id="articleAuthor" 
-                  class="form-input" 
-                  placeholder="Votre nom"
-                  required
-                >
+                <label class="form-label">Catégorie</label>
+                <select id="articleCategory" class="form-input" required>
+                  <option value="">Choisir une catégorie</option>
+                  <option value="actualites">Actualités</option>
+                  <option value="debats">Débats</option>
+                  <option value="projets">Projets</option>
+                  <option value="evenements">Événements</option>
+                  <option value="tribune">Tribune libre</option>
+                </select>
               </div>
-
               <div class="form-group">
-                <label class="form-label" for="articleContent">Contenu</label>
-                <textarea 
-                  id="articleContent" 
-                  placeholder="Rédigez votre article ici..."
-                  required
-                ></textarea>
+                <label class="form-label">Contenu</label>
+                <textarea id="articleContent" class="form-input" placeholder="Rédigez votre article..." required></textarea>
               </div>
-
-              <button type="submit" class="btn btn-gold">
-                ✨ Publier l'article
-              </button>
+              <div class="form-group">
+                <label class="form-label">
+                  <input type="checkbox" id="articlePublic" checked style="margin-right: 0.5rem;">
+                  Publier publiquement sur le site
+                </label>
+              </div>
+              <button type="submit" class="btn btn-gold btn-block">✨ Publier</button>
             </form>
           </div>
 
-          <!-- Articles List -->
           <div class="card">
             <div class="card-header">
-              <h2 class="card-title">Articles récents</h2>
+              <h2 class="card-title">Articles publiés</h2>
+              <select id="articleFilter" class="form-input" style="width: auto; padding: 0.5rem;">
+                <option value="all">Tous</option>
+                <option value="public">Publics</option>
+                <option value="private">Privés</option>
+                <option value="mine">Mes articles</option>
+              </select>
             </div>
-
-            <div id="articlesList" class="article-list">
-              <p style="color: var(--clr-text-tertiary); text-align: center; padding: var(--space-2xl);">
-                Aucun article publié
-              </p>
-            </div>
+            <div id="articlesList" class="item-list"></div>
           </div>
         </div>
       </div>
@@ -701,83 +530,42 @@
       <!-- Tab: Events -->
       <div id="tabEvents" class="tab-content">
         <div class="grid grid-2">
-          <!-- Event Creator -->
           <div class="card">
             <div class="card-header">
-              <h2 class="card-title">Nouvel Événement</h2>
+              <h2 class="card-title">Créer un événement</h2>
             </div>
-
-            <form id="eventForm" class="event-form">
+            <form id="eventForm">
               <div class="form-group">
-                <label class="form-label" for="eventTitle">Titre de l'événement</label>
-                <input 
-                  type="text" 
-                  id="eventTitle" 
-                  class="form-input" 
-                  placeholder="Ex: Débat sur l'IA"
-                  required
-                >
+                <label class="form-label">Titre</label>
+                <input type="text" id="eventTitle" class="form-input" required>
               </div>
-
+              <div class="grid grid-2" style="gap: 1rem;">
+                <div class="form-group">
+                  <label class="form-label">Date</label>
+                  <input type="date" id="eventDate" class="form-input" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Heure</label>
+                  <input type="time" id="eventTime" class="form-input" required>
+                </div>
+              </div>
               <div class="form-group">
-                <label class="form-label" for="eventDate">Date</label>
-                <input 
-                  type="date" 
-                  id="eventDate" 
-                  class="form-input"
-                  required
-                >
+                <label class="form-label">Lieu</label>
+                <input type="text" id="eventLocation" class="form-input" placeholder="Ex: Salle A204" required>
               </div>
-
               <div class="form-group">
-                <label class="form-label" for="eventTime">Heure</label>
-                <input 
-                  type="time" 
-                  id="eventTime" 
-                  class="form-input"
-                  required
-                >
+                <label class="form-label">Description</label>
+                <textarea id="eventDescription" class="form-input" rows="3" required></textarea>
               </div>
-
-              <div class="form-group">
-                <label class="form-label" for="eventLocation">Lieu</label>
-                <input 
-                  type="text" 
-                  id="eventLocation" 
-                  class="form-input" 
-                  placeholder="Ex: Salle A204"
-                  required
-                >
-              </div>
-
-              <div class="form-group">
-                <label class="form-label" for="eventDescription">Description</label>
-                <textarea 
-                  id="eventDescription" 
-                  class="form-input"
-                  placeholder="Détails de l'événement..."
-                  rows="4"
-                  required
-                ></textarea>
-              </div>
-
-              <button type="submit" class="btn btn-primary">
-                📅 Créer l'événement
-              </button>
+              <button type="submit" class="btn btn-primary btn-block">📅 Créer</button>
             </form>
           </div>
 
-          <!-- Events List -->
           <div class="card">
             <div class="card-header">
               <h2 class="card-title">Événements à venir</h2>
             </div>
-
-            <div id="eventsList" class="article-list">
-              <p style="color: var(--clr-text-tertiary); text-align: center; padding: var(--space-2xl);">
-                Aucun événement prévu
-              </p>
-            </div>
+            <div id="eventsList" class="item-list"></div>
           </div>
         </div>
       </div>
@@ -785,420 +573,132 @@
       <!-- Tab: Tasks -->
       <div id="tabTasks" class="tab-content">
         <div class="grid grid-2">
-          <!-- Task Creator -->
           <div class="card">
             <div class="card-header">
-              <h2 class="card-title">Nouvelle Tâche</h2>
+              <h2 class="card-title">Nouvelle tâche</h2>
             </div>
-
-            <form id="taskForm" class="event-form">
+            <form id="taskForm">
               <div class="form-group">
-                <label class="form-label" for="taskTitle">Tâche</label>
-                <input 
-                  type="text" 
-                  id="taskTitle" 
-                  class="form-input" 
-                  placeholder="Ex: Préparer les invitations"
-                  required
-                >
+                <label class="form-label">Tâche</label>
+                <input type="text" id="taskTitle" class="form-input" required>
               </div>
-
               <div class="form-group">
-                <label class="form-label" for="taskAssignee">Assigné à</label>
-                <input 
-                  type="text" 
-                  id="taskAssignee" 
-                  class="form-input" 
-                  placeholder="Nom du responsable"
-                  required
-                >
+                <label class="form-label">Assigné à</label>
+                <select id="taskAssignee" class="form-input" required></select>
               </div>
-
               <div class="form-group">
-                <label class="form-label" for="taskDeadline">Date limite</label>
-                <input 
-                  type="date" 
-                  id="taskDeadline" 
-                  class="form-input"
-                  required
-                >
+                <label class="form-label">Priorité</label>
+                <select id="taskPriority" class="form-input" required>
+                  <option value="low">🟢 Basse</option>
+                  <option value="medium" selected>🟡 Moyenne</option>
+                  <option value="high">🔴 Haute</option>
+                </select>
               </div>
-
-              <button type="submit" class="btn btn-primary">
-                ✅ Ajouter la tâche
-              </button>
+              <div class="form-group">
+                <label class="form-label">Date limite</label>
+                <input type="date" id="taskDeadline" class="form-input" required>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">✅ Créer</button>
             </form>
           </div>
 
-          <!-- Tasks List -->
           <div class="card">
             <div class="card-header">
-              <h2 class="card-title">Tâches en cours</h2>
+              <h2 class="card-title">Tâches</h2>
+              <select id="taskFilter" class="form-input" style="width: auto; padding: 0.5rem;">
+                <option value="active">Actives</option>
+                <option value="completed">Terminées</option>
+                <option value="all">Toutes</option>
+                <option value="mine">Mes tâches</option>
+              </select>
             </div>
-
-            <div id="tasksList" class="article-list">
-              <p style="color: var(--clr-text-tertiary); text-align: center; padding: var(--space-2xl);">
-                Aucune tâche
-              </p>
-            </div>
+            <div id="tasksList" class="item-list"></div>
           </div>
         </div>
       </div>
 
-      <!-- Tab: Settings -->
-      <div id="tabSettings" class="tab-content">
-        <div class="card" style="max-width: 600px;">
+      <!-- Tab: Files -->
+      <div id="tabFiles" class="tab-content">
+        <div class="card">
           <div class="card-header">
-            <h2 class="card-title">Paramètres</h2>
+            <h2 class="card-title">Gestion des fichiers</h2>
+          </div>
+          
+          <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+            <input type="file" id="fileInput" multiple>
+            <p style="font-size: 2rem; margin-bottom: 0.5rem;">📎</p>
+            <p style="font-weight: 700; margin-bottom: 0.25rem;">Cliquer pour ajouter des fichiers</p>
+            <p style="font-size: 0.875rem; color: var(--clr-slate);">Documents, images, PDFs...</p>
           </div>
 
-          <form id="settingsForm" class="event-form">
-            <div class="form-group">
-              <label class="form-label" for="settingsName">Votre nom (affiché sur le dashboard)</label>
-              <input 
-                type="text" 
-                id="settingsName" 
-                class="form-input" 
-                placeholder="Prénom Nom"
-              >
+          <div id="filesList" class="item-list" style="margin-top: 1.5rem;"></div>
+        </div>
+      </div>
+
+      <!-- Tab: Calendar -->
+      <div id="tabCalendar" class="tab-content">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Calendrier</h2>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="btn btn-ghost btn-sm" onclick="changeMonth(-1)">‹</button>
+              <span id="currentMonth" style="font-weight: 700; padding: 0 1rem;"></span>
+              <button class="btn btn-ghost btn-sm" onclick="changeMonth(1)">›</button>
             </div>
+          </div>
+          <div id="calendarView"></div>
+        </div>
+      </div>
 
-            <div class="form-group">
-              <label class="form-label" for="newPassword">Changer le mot de passe</label>
-              <input 
-                type="password" 
-                id="newPassword" 
-                class="form-input" 
-                placeholder="Nouveau mot de passe"
-              >
-              <p style="font-size: 0.8125rem; color: var(--clr-text-tertiary); margin-top: var(--space-xs);">
-                Laissez vide pour ne pas changer
-              </p>
+      <!-- Tab: Members -->
+      <div id="tabMembers" class="tab-content">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Annuaire des membres</h2>
+          </div>
+          <div id="membersList" class="grid grid-3"></div>
+        </div>
+      </div>
+
+      <!-- Tab: Notifications -->
+      <div id="tabNotifications" class="tab-content">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Notifications</h2>
+            <button class="btn btn-ghost btn-sm" onclick="markAllAsRead()">Tout marquer comme lu</button>
+          </div>
+          <div id="notificationsList"></div>
+        </div>
+      </div>
+
+      <!-- Tab: Analytics -->
+      <div id="tabAnalytics" class="tab-content">
+        <div class="grid grid-2">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Activité par membre</h2>
             </div>
+            <div id="memberActivity"></div>
+          </div>
 
-            <button type="submit" class="btn btn-primary">
-              💾 Enregistrer
-            </button>
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Articles par catégorie</h2>
+            </div>
+            <div id="articleStats"></div>
+          </div>
+        </div>
 
-            <button type="button" class="btn btn-danger" onclick="clearAllData()" style="margin-top: var(--space-md);">
-              🗑️ Effacer toutes les données
-            </button>
-          </form>
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Taux de complétion des tâches</h2>
+          </div>
+          <div id="taskCompletion"></div>
         </div>
       </div>
     </div>
   </div>
 
-  <script>
-    // Configuration
-    const CONFIG = {
-      defaultPassword: 'ParlementJPV2026', // Changez ce mot de passe !
-      storageKeys: {
-        auth: 'bureau_auth',
-        password: 'bureau_password',
-        userName: 'bureau_user_name',
-        articles: 'bureau_articles',
-        events: 'bureau_events',
-        tasks: 'bureau_tasks'
-      }
-    };
-
-    // Authentication
-    function checkAuth() {
-      const isAuthenticated = localStorage.getItem(CONFIG.storageKeys.auth) === 'true';
-      if (isAuthenticated) {
-        showDashboard();
-      }
-    }
-
-    document.getElementById('loginForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const password = document.getElementById('password').value;
-      const savedPassword = localStorage.getItem(CONFIG.storageKeys.password) || CONFIG.defaultPassword;
-
-      if (password === savedPassword) {
-        localStorage.setItem(CONFIG.storageKeys.auth, 'true');
-        showDashboard();
-      } else {
-        document.getElementById('loginError').classList.remove('hidden');
-        setTimeout(() => {
-          document.getElementById('loginError').classList.add('hidden');
-        }, 3000);
-      }
-    });
-
-    function showDashboard() {
-      document.getElementById('loginScreen').classList.add('hidden');
-      document.getElementById('dashboard').classList.remove('hidden');
-      loadUserName();
-      loadData();
-    }
-
-    function logout() {
-      if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
-        localStorage.removeItem(CONFIG.storageKeys.auth);
-        location.reload();
-      }
-    }
-
-    function loadUserName() {
-      const name = localStorage.getItem(CONFIG.storageKeys.userName) || 'Membre du Bureau';
-      document.getElementById('userName').textContent = name;
-    }
-
-    // Tab Management
-    function switchTab(tabName) {
-      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-      
-      event.target.classList.add('active');
-      document.getElementById('tab' + tabName.charAt(0).toUpperCase() + tabName.slice(1)).classList.add('active');
-    }
-
-    // Data Management
-    function saveData(key, data) {
-      localStorage.setItem(key, JSON.stringify(data));
-      loadData();
-    }
-
-    function getData(key) {
-      const data = localStorage.getItem(key);
-      return data ? JSON.parse(data) : [];
-    }
-
-    function loadData() {
-      loadArticles();
-      loadEvents();
-      loadTasks();
-      updateStats();
-    }
-
-    function updateStats() {
-      document.getElementById('statArticles').textContent = getData(CONFIG.storageKeys.articles).length;
-      document.getElementById('statEvents').textContent = getData(CONFIG.storageKeys.events).length;
-      document.getElementById('statTasks').textContent = getData(CONFIG.storageKeys.tasks).filter(t => !t.completed).length;
-    }
-
-    // Articles
-    document.getElementById('articleForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      
-      const article = {
-        id: Date.now(),
-        title: document.getElementById('articleTitle').value,
-        author: document.getElementById('articleAuthor').value,
-        content: document.getElementById('articleContent').value,
-        date: new Date().toLocaleDateString('fr-FR'),
-        time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
-      };
-
-      const articles = getData(CONFIG.storageKeys.articles);
-      articles.unshift(article);
-      saveData(CONFIG.storageKeys.articles, articles);
-
-      e.target.reset();
-      alert('✅ Article publié avec succès !');
-    });
-
-    function loadArticles() {
-      const articles = getData(CONFIG.storageKeys.articles);
-      const container = document.getElementById('articlesList');
-
-      if (articles.length === 0) {
-        container.innerHTML = '<p style="color: var(--clr-text-tertiary); text-align: center; padding: var(--space-2xl);">Aucun article publié</p>';
-        return;
-      }
-
-      container.innerHTML = articles.map(article => `
-        <div class="article-item">
-          <div class="article-meta">
-            <div class="article-title">${article.title}</div>
-            <div class="article-info">
-              <span>📝 ${article.author}</span>
-              <span>📅 ${article.date}</span>
-              <span>🕐 ${article.time}</span>
-            </div>
-            <div class="article-excerpt">${article.content.substring(0, 150)}${article.content.length > 150 ? '...' : ''}</div>
-          </div>
-          <div class="article-actions">
-            <button class="btn btn-ghost btn-sm" onclick="viewArticle(${article.id})">👁️ Voir</button>
-            <button class="btn btn-danger btn-sm" onclick="deleteArticle(${article.id})">🗑️</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function viewArticle(id) {
-      const article = getData(CONFIG.storageKeys.articles).find(a => a.id === id);
-      if (article) {
-        alert(`${article.title}\n\nPar ${article.author} - ${article.date} à ${article.time}\n\n${article.content}`);
-      }
-    }
-
-    function deleteArticle(id) {
-      if (confirm('Supprimer cet article ?')) {
-        const articles = getData(CONFIG.storageKeys.articles).filter(a => a.id !== id);
-        saveData(CONFIG.storageKeys.articles, articles);
-      }
-    }
-
-    // Events
-    document.getElementById('eventForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      
-      const event = {
-        id: Date.now(),
-        title: document.getElementById('eventTitle').value,
-        date: document.getElementById('eventDate').value,
-        time: document.getElementById('eventTime').value,
-        location: document.getElementById('eventLocation').value,
-        description: document.getElementById('eventDescription').value
-      };
-
-      const events = getData(CONFIG.storageKeys.events);
-      events.push(event);
-      saveData(CONFIG.storageKeys.events, events);
-
-      e.target.reset();
-      alert('✅ Événement créé avec succès !');
-    });
-
-    function loadEvents() {
-      const events = getData(CONFIG.storageKeys.events);
-      const container = document.getElementById('eventsList');
-
-      if (events.length === 0) {
-        container.innerHTML = '<p style="color: var(--clr-text-tertiary); text-align: center; padding: var(--space-2xl);">Aucun événement prévu</p>';
-        return;
-      }
-
-      container.innerHTML = events.map(event => `
-        <div class="article-item">
-          <div class="article-meta">
-            <div class="article-title">${event.title}</div>
-            <div class="article-info">
-              <span>📅 ${new Date(event.date).toLocaleDateString('fr-FR')}</span>
-              <span>🕐 ${event.time}</span>
-              <span>📍 ${event.location}</span>
-            </div>
-            <div class="article-excerpt">${event.description}</div>
-          </div>
-          <div class="article-actions">
-            <button class="btn btn-danger btn-sm" onclick="deleteEvent(${event.id})">🗑️</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function deleteEvent(id) {
-      if (confirm('Supprimer cet événement ?')) {
-        const events = getData(CONFIG.storageKeys.events).filter(e => e.id !== id);
-        saveData(CONFIG.storageKeys.events, events);
-      }
-    }
-
-    // Tasks
-    document.getElementById('taskForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      
-      const task = {
-        id: Date.now(),
-        title: document.getElementById('taskTitle').value,
-        assignee: document.getElementById('taskAssignee').value,
-        deadline: document.getElementById('taskDeadline').value,
-        completed: false
-      };
-
-      const tasks = getData(CONFIG.storageKeys.tasks);
-      tasks.push(task);
-      saveData(CONFIG.storageKeys.tasks, tasks);
-
-      e.target.reset();
-      alert('✅ Tâche ajoutée avec succès !');
-    });
-
-    function loadTasks() {
-      const tasks = getData(CONFIG.storageKeys.tasks);
-      const container = document.getElementById('tasksList');
-
-      if (tasks.length === 0) {
-        container.innerHTML = '<p style="color: var(--clr-text-tertiary); text-align: center; padding: var(--space-2xl);">Aucune tâche</p>';
-        return;
-      }
-
-      container.innerHTML = tasks.map(task => `
-        <div class="article-item" style="${task.completed ? 'opacity: 0.5;' : ''}">
-          <div class="article-meta">
-            <div class="article-title" style="${task.completed ? 'text-decoration: line-through;' : ''}">
-              ${task.title}
-            </div>
-            <div class="article-info">
-              <span>👤 ${task.assignee}</span>
-              <span>📅 ${new Date(task.deadline).toLocaleDateString('fr-FR')}</span>
-              <span class="badge ${task.completed ? 'badge-success' : 'badge-warning'}">
-                ${task.completed ? '✅ Terminée' : '⏳ En cours'}
-              </span>
-            </div>
-          </div>
-          <div class="article-actions">
-            ${!task.completed ? `<button class="btn btn-ghost btn-sm" onclick="toggleTask(${task.id})">✅ Terminer</button>` : ''}
-            <button class="btn btn-danger btn-sm" onclick="deleteTask(${task.id})">🗑️</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function toggleTask(id) {
-      const tasks = getData(CONFIG.storageKeys.tasks);
-      const task = tasks.find(t => t.id === id);
-      if (task) {
-        task.completed = !task.completed;
-        saveData(CONFIG.storageKeys.tasks, tasks);
-      }
-    }
-
-    function deleteTask(id) {
-      if (confirm('Supprimer cette tâche ?')) {
-        const tasks = getData(CONFIG.storageKeys.tasks).filter(t => t.id !== id);
-        saveData(CONFIG.storageKeys.tasks, tasks);
-      }
-    }
-
-    // Settings
-    document.getElementById('settingsForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      
-      const name = document.getElementById('settingsName').value;
-      const newPassword = document.getElementById('newPassword').value;
-
-      if (name) {
-        localStorage.setItem(CONFIG.storageKeys.userName, name);
-        loadUserName();
-      }
-
-      if (newPassword) {
-        localStorage.setItem(CONFIG.storageKeys.password, newPassword);
-        alert('✅ Mot de passe modifié !');
-      }
-
-      alert('✅ Paramètres enregistrés !');
-      e.target.reset();
-    });
-
-    function clearAllData() {
-      if (confirm('⚠️ ATTENTION : Cette action supprimera TOUTES les données (articles, événements, tâches). Continuer ?')) {
-        if (confirm('Êtes-vous VRAIMENT sûr ? Cette action est irréversible !')) {
-          localStorage.removeItem(CONFIG.storageKeys.articles);
-          localStorage.removeItem(CONFIG.storageKeys.events);
-          localStorage.removeItem(CONFIG.storageKeys.tasks);
-          loadData();
-          alert('✅ Toutes les données ont été effacées');
-        }
-      }
-    }
-
-    // Initialize
-    checkAuth();
-  </script>
+  <script src="bureau-app.js"></script>
 </body>
 </html>
