@@ -5,354 +5,152 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
 
-  <title>Espace Bureau — Parlement JPV</title>
-  <meta name="description" content="Espace collaboratif réservé au bureau du Parlement JPV">
-
+  <title>Espace Bureau Pro — Parlement JPV</title>
   <link rel="icon" href="assets/img/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 
   <style>
-    /* Premium Design System */
     :root {
-      --clr-ink: #0a0e1a;
-      --clr-slate: #475569;
-      --clr-mist: #94a3b8;
-      --clr-cloud: #e2e8f0;
-      --clr-paper: #fafbfc;
-      --clr-white: #ffffff;
-      --clr-gold: #c9a050;
-      --clr-navy: #0b2545;
-      --clr-success: #059669;
-      --clr-danger: #dc2626;
-      --clr-info: #0ea5e9;
-      --clr-warning: #d97706;
-      
-      --font-display: 'Fraunces', Georgia, serif;
-      --font-body: 'Instrument Sans', system-ui, sans-serif;
+      --clr-ink: #0a0e1a; --clr-slate: #475569; --clr-mist: #94a3b8; --clr-cloud: #e2e8f0;
+      --clr-paper: #fafbfc; --clr-white: #ffffff; --clr-gold: #c9a050; --clr-navy: #0b2545;
+      --clr-success: #059669; --clr-danger: #dc2626; --clr-info: #0ea5e9; --clr-warning: #d97706;
+      --font-display: 'Fraunces', Georgia, serif; --font-body: 'Instrument Sans', system-ui, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
-      
-      --radius-lg: 0.75rem;
-      --radius-xl: 1rem;
-      --radius-2xl: 1.5rem;
-      --shadow-sm: 0 1px 3px rgba(10,14,26,0.06);
-      --shadow-md: 0 4px 6px -1px rgba(10,14,26,0.08);
-      --shadow-lg: 0 10px 15px -3px rgba(10,14,26,0.10);
-      --shadow-xl: 0 20px 25px -5px rgba(10,14,26,0.10);
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: var(--font-body);
-      line-height: 1.7;
-      color: var(--clr-ink);
-      background: var(--clr-paper);
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .container { max-width: 1400px; margin: 0 auto; padding: 0 clamp(1rem,4vw,2rem); }
+    body { font-family: var(--font-body); line-height: 1.7; color: var(--clr-ink); background: var(--clr-paper); -webkit-font-smoothing: antialiased; }
+    .container { max-width: 1600px; margin: 0 auto; padding: 0 clamp(1rem,4vw,2rem); }
     .hidden { display: none !important; }
-
-    /* Login Screen */
-    #loginScreen {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, var(--clr-navy) 0%, #1a4d7a 100%);
-      position: relative;
-    }
-    #loginScreen::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,255,255,.02) 2px 4px);
-      pointer-events: none;
-    }
-    .login-box {
-      background: var(--clr-white);
-      border-radius: var(--radius-2xl);
-      padding: 3rem;
-      box-shadow: var(--shadow-xl);
-      width: 100%;
-      max-width: 420px;
-      position: relative;
-      z-index: 1;
-      animation: fadeInUp 0.6s ease-out;
-    }
+    
+    /* Login */
+    #loginScreen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--clr-navy) 0%, #1a4d7a 100%); position: relative; }
+    #loginScreen::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,255,255,.02) 2px 4px); pointer-events: none; }
+    .login-box { background: var(--clr-white); border-radius: 1.5rem; padding: 3rem; box-shadow: 0 20px 60px rgba(0,0,0,0.3); width: 100%; max-width: 420px; z-index: 1; animation: fadeInUp 0.6s ease-out; }
     @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } }
-
     .login-logo { text-align: center; margin-bottom: 2rem; }
-    .login-logo img { width: 64px; border-radius: var(--radius-lg); margin-bottom: 1rem; }
+    .login-logo img { width: 64px; border-radius: 0.75rem; margin-bottom: 1rem; }
     .login-logo h1 { font-family: var(--font-display); font-size: 1.75rem; font-weight: 900; margin-bottom: 0.5rem; }
-    .login-logo p { font-size: 0.9375rem; color: var(--clr-slate); }
-
+    
+    /* Forms */
     .form-group { margin-bottom: 1.25rem; }
     .form-label { display: block; font-weight: 700; font-size: 0.875rem; margin-bottom: 0.5rem; }
-    .form-input {
-      width: 100%;
-      padding: 0.875rem 1rem;
-      border: 1px solid var(--clr-cloud);
-      border-radius: var(--radius-lg);
-      font-family: var(--font-body);
-      font-size: 1rem;
-      transition: all 0.2s;
-    }
-    .form-input:focus { outline: none; border-color: var(--clr-gold); box-shadow: 0 0 0 3px rgba(201,160,80,0.1); }
-    textarea.form-input { min-height: 200px; resize: vertical; font-family: var(--font-body); }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      padding: 0.875rem 1.5rem;
-      border-radius: var(--radius-lg);
-      font-weight: 700;
-      font-size: 0.9375rem;
-      border: none;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-decoration: none;
-    }
+    .form-input, .form-select, .form-textarea { width: 100%; padding: 0.875rem 1rem; border: 1px solid var(--clr-cloud); border-radius: 0.75rem; font-family: var(--font-body); font-size: 1rem; transition: all 0.2s; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--clr-gold); box-shadow: 0 0 0 3px rgba(201,160,80,0.1); }
+    .form-textarea { min-height: 150px; resize: vertical; }
+    
+    /* Buttons */
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.875rem 1.5rem; border-radius: 0.75rem; font-weight: 700; font-size: 0.9375rem; border: none; cursor: pointer; transition: all 0.2s; text-decoration: none; white-space: nowrap; }
     .btn-primary { background: var(--clr-navy); color: white; }
-    .btn-primary:hover { background: #1a4d7a; transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+    .btn-primary:hover { background: #1a4d7a; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(11,37,69,0.2); }
     .btn-gold { background: linear-gradient(135deg, var(--clr-gold), #c19940); color: white; }
     .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(201,160,80,0.3); }
-    .btn-ghost { background: transparent; border: 1px solid var(--clr-cloud); color: var(--clr-ink); }
-    .btn-ghost:hover { background: var(--clr-paper); border-color: var(--clr-navy); }
     .btn-success { background: var(--clr-success); color: white; }
     .btn-danger { background: var(--clr-danger); color: white; }
+    .btn-ghost { background: transparent; border: 1px solid var(--clr-cloud); color: var(--clr-ink); }
+    .btn-ghost:hover { background: var(--clr-paper); border-color: var(--clr-navy); }
     .btn-sm { padding: 0.5rem 1rem; font-size: 0.8125rem; }
     .btn-block { width: 100%; }
-
-    .alert {
-      padding: 1rem;
-      border-radius: var(--radius-lg);
-      margin-bottom: 1rem;
-      font-size: 0.875rem;
-      border-left: 4px solid;
-    }
+    
+    /* Alerts */
+    .alert { padding: 1rem; border-radius: 0.75rem; margin-bottom: 1rem; font-size: 0.875rem; border-left: 4px solid; }
     .alert-error { background: rgba(220,38,38,0.1); border-color: var(--clr-danger); color: #991b1b; }
     .alert-success { background: rgba(5,150,105,0.1); border-color: var(--clr-success); color: #065f46; }
     .alert-info { background: rgba(14,165,233,0.1); border-color: var(--clr-info); color: #075985; }
-
+    
     /* Dashboard */
     #dashboard { min-height: 100vh; padding: 2rem 0 3rem; }
-    .dashboard-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
+    .dashboard-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
     .dashboard-title { display: flex; align-items: center; gap: 1rem; }
-    .dashboard-title img { width: 48px; border-radius: var(--radius-lg); }
+    .dashboard-title img { width: 48px; border-radius: 0.75rem; }
     .dashboard-title h1 { font-family: var(--font-display); font-size: clamp(1.75rem,4vw,2.5rem); font-weight: 900; }
-    
     .user-info { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
-    .user-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: linear-gradient(135deg, #f5e6cc, rgba(11,37,69,0.05));
-      border: 1px solid var(--clr-gold);
-      border-radius: 999px;
-      font-weight: 700;
-      font-size: 0.875rem;
-    }
-
-    .tabs {
-      display: flex;
-      gap: 0.25rem;
-      margin-bottom: 2rem;
-      border-bottom: 2px solid var(--clr-cloud);
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-    .tab {
-      padding: 0.875rem 1.25rem;
-      background: transparent;
-      border: none;
-      border-bottom: 3px solid transparent;
-      font-weight: 700;
-      font-size: 0.9375rem;
-      color: var(--clr-slate);
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
-      margin-bottom: -2px;
-    }
+    .user-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: linear-gradient(135deg, #f5e6cc, rgba(11,37,69,0.05)); border: 1px solid var(--clr-gold); border-radius: 999px; font-weight: 700; font-size: 0.875rem; }
+    
+    /* Tabs */
+    .tabs { display: flex; gap: 0.25rem; margin-bottom: 2rem; border-bottom: 2px solid var(--clr-cloud); overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .tab { padding: 0.875rem 1.25rem; background: transparent; border: none; border-bottom: 3px solid transparent; font-weight: 700; font-size: 0.9375rem; color: var(--clr-slate); cursor: pointer; transition: all 0.2s; white-space: nowrap; margin-bottom: -2px; }
     .tab:hover { color: var(--clr-navy); }
     .tab.active { color: var(--clr-navy); border-bottom-color: var(--clr-gold); }
-
     .tab-content { display: none; }
     .tab-content.active { display: block; animation: fadeIn 0.3s; }
     @keyframes fadeIn { from { opacity: 0; } }
-
+    
+    /* Grid */
     .grid { display: grid; gap: 1.5rem; margin-bottom: 2rem; }
     .grid-2 { grid-template-columns: repeat(2, 1fr); }
     .grid-3 { grid-template-columns: repeat(3, 1fr); }
     .grid-4 { grid-template-columns: repeat(4, 1fr); }
-
-    .card {
-      background: var(--clr-white);
-      border: 1px solid var(--clr-cloud);
-      border-radius: var(--radius-2xl);
-      padding: 1.5rem;
-      box-shadow: var(--shadow-sm);
-      transition: all 0.2s;
-    }
-    .card:hover { box-shadow: var(--shadow-md); }
-    .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1.25rem;
-    }
+    
+    /* Cards */
+    .card { background: var(--clr-white); border: 1px solid var(--clr-cloud); border-radius: 1.5rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(10,14,26,0.06); transition: all 0.2s; }
+    .card:hover { box-shadow: 0 4px 12px rgba(10,14,26,0.08); }
+    .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
     .card-title { font-family: var(--font-display); font-size: 1.25rem; font-weight: 800; }
-
+    
+    /* Stats */
     .stat-card { text-align: center; }
-    .stat-value {
-      font-family: var(--font-display);
-      font-size: clamp(2rem,5vw,3rem);
-      font-weight: 900;
-      color: var(--clr-gold);
-      line-height: 1;
-      margin-bottom: 0.5rem;
-    }
-    .stat-label {
-      font-size: 0.875rem;
-      font-weight: 600;
-      color: var(--clr-slate);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
+    .stat-value { font-family: var(--font-display); font-size: clamp(2rem,5vw,3rem); font-weight: 900; color: var(--clr-gold); line-height: 1; margin-bottom: 0.5rem; }
+    .stat-label { font-size: 0.875rem; font-weight: 600; color: var(--clr-slate); text-transform: uppercase; letter-spacing: 0.05em; }
+    
+    /* Items */
     .item-list { display: grid; gap: 1rem; }
-    .item {
-      display: flex;
-      gap: 1rem;
-      padding: 1rem;
-      background: var(--clr-paper);
-      border: 1px solid var(--clr-cloud);
-      border-radius: var(--radius-xl);
-      transition: all 0.2s;
-    }
-    .item:hover { border-color: var(--clr-gold); box-shadow: var(--shadow-sm); }
+    .item { display: flex; gap: 1rem; padding: 1rem; background: var(--clr-paper); border: 1px solid var(--clr-cloud); border-radius: 1rem; transition: all 0.2s; }
+    .item:hover { border-color: var(--clr-gold); box-shadow: 0 1px 3px rgba(10,14,26,0.06); }
     .item-meta { flex: 1; }
     .item-title { font-weight: 700; font-size: 1.0625rem; margin-bottom: 0.25rem; }
-    .item-info {
-      display: flex;
-      gap: 1rem;
-      font-size: 0.8125rem;
-      color: var(--clr-mist);
-      margin-bottom: 0.5rem;
-      flex-wrap: wrap;
-    }
+    .item-info { display: flex; gap: 1rem; font-size: 0.8125rem; color: var(--clr-mist); margin-bottom: 0.5rem; flex-wrap: wrap; }
     .item-content { font-size: 0.9375rem; color: var(--clr-slate); line-height: 1.6; }
     .item-actions { display: flex; gap: 0.5rem; align-items: flex-start; }
-
-    .badge {
-      display: inline-flex;
-      padding: 0.25rem 0.625rem;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      font-weight: 700;
-    }
+    
+    /* Badges */
+    .badge { display: inline-flex; padding: 0.25rem 0.625rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; }
     .badge-success { background: rgba(5,150,105,0.1); color: var(--clr-success); }
     .badge-warning { background: rgba(217,119,6,0.1); color: var(--clr-warning); }
     .badge-info { background: rgba(14,165,233,0.1); color: var(--clr-info); }
     .badge-danger { background: rgba(220,38,38,0.1); color: var(--clr-danger); }
-
-    .member-card {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1rem;
-      background: var(--clr-paper);
-      border: 1px solid var(--clr-cloud);
-      border-radius: var(--radius-xl);
-    }
-    .member-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--clr-gold), var(--clr-navy));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 900;
-      font-size: 1.25rem;
-    }
+    
+    /* Members */
+    .member-card { display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--clr-paper); border: 1px solid var(--clr-cloud); border-radius: 1rem; transition: all 0.2s; }
+    .member-card:hover { box-shadow: 0 2px 8px rgba(10,14,26,0.06); }
+    .member-avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--clr-gold), var(--clr-navy)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 1.25rem; flex-shrink: 0; }
     .member-info { flex: 1; }
     .member-name { font-weight: 700; margin-bottom: 0.25rem; }
     .member-role { font-size: 0.875rem; color: var(--clr-slate); }
-
-    .notification {
-      padding: 1rem;
-      background: var(--clr-white);
-      border: 1px solid var(--clr-cloud);
-      border-left: 4px solid var(--clr-info);
-      border-radius: var(--radius-lg);
-      margin-bottom: 0.75rem;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .notification:hover { box-shadow: var(--shadow-sm); }
-    .notification.unread { background: rgba(14,165,233,0.05); }
-    .notification-title { font-weight: 700; margin-bottom: 0.25rem; }
-    .notification-time { font-size: 0.75rem; color: var(--clr-mist); }
-
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 0.5rem;
-    }
-    .calendar-day {
-      aspect-ratio: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid var(--clr-cloud);
-      border-radius: var(--radius-lg);
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .calendar-day:hover { background: var(--clr-paper); }
-    .calendar-day.has-event {
-      background: linear-gradient(135deg, #f5e6cc, rgba(11,37,69,0.05));
-      border-color: var(--clr-gold);
-    }
-    .calendar-day.today {
-      background: var(--clr-navy);
-      color: white;
-      font-weight: 900;
-    }
-
-    .file-upload {
-      border: 2px dashed var(--clr-cloud);
-      border-radius: var(--radius-xl);
-      padding: 2rem;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .file-upload:hover { border-color: var(--clr-gold); background: var(--clr-paper); }
-    .file-upload input { display: none; }
-
-    @media (max-width: 1024px) {
-      .grid-4, .grid-3 { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 768px) {
-      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
-      .item { flex-direction: column; }
-    }
+    .member-meta { font-size: 0.8125rem; color: var(--clr-mist); margin-top: 0.25rem; }
+    
+    /* Progress */
+    .progress-bar { width: 100%; height: 8px; background: var(--clr-cloud); border-radius: 999px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--clr-gold), var(--clr-navy)); transition: width 0.3s; }
+    
+    /* Poll/Vote */
+    .poll-option { padding: 1rem; background: var(--clr-paper); border: 2px solid var(--clr-cloud); border-radius: 0.75rem; cursor: pointer; transition: all 0.2s; margin-bottom: 0.75rem; }
+    .poll-option:hover { border-color: var(--clr-gold); }
+    .poll-option.selected { border-color: var(--clr-navy); background: rgba(11,37,69,0.05); }
+    .poll-results { margin-top: 1.5rem; }
+    .poll-result { margin-bottom: 1rem; }
+    .poll-result-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.875rem; font-weight: 600; }
+    
+    /* Chat */
+    .chat-messages { max-height: 400px; overflow-y: auto; padding: 1rem; background: var(--clr-paper); border-radius: 0.75rem; margin-bottom: 1rem; }
+    .chat-message { margin-bottom: 1rem; }
+    .chat-message.own { text-align: right; }
+    .chat-bubble { display: inline-block; padding: 0.75rem 1rem; border-radius: 1rem; max-width: 70%; }
+    .chat-message.own .chat-bubble { background: var(--clr-navy); color: white; border-bottom-right-radius: 0.25rem; }
+    .chat-message:not(.own) .chat-bubble { background: var(--clr-white); border: 1px solid var(--clr-cloud); border-bottom-left-radius: 0.25rem; }
+    .chat-author { font-size: 0.75rem; font-weight: 700; margin-bottom: 0.25rem; color: var(--clr-slate); }
+    .chat-time { font-size: 0.6875rem; color: var(--clr-mist); margin-top: 0.25rem; }
+    
+    /* Table */
+    .table { width: 100%; border-collapse: collapse; }
+    .table th { text-align: left; padding: 0.75rem; background: var(--clr-paper); font-weight: 700; font-size: 0.875rem; border-bottom: 2px solid var(--clr-cloud); }
+    .table td { padding: 0.75rem; border-bottom: 1px solid var(--clr-cloud); }
+    .table tr:hover { background: var(--clr-paper); }
+    
+    /* Responsive */
+    @media (max-width: 1024px) { .grid-4, .grid-3 { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 768px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } .item { flex-direction: column; } }
   </style>
 </head>
 
@@ -362,8 +160,8 @@
     <div class="login-box">
       <div class="login-logo">
         <img src="assets/img/logo.png" alt="Parlement JPV">
-        <h1>Espace Bureau</h1>
-        <p>Plateforme collaborative du bureau</p>
+        <h1>Espace Bureau Pro</h1>
+        <p style="color: var(--clr-slate); font-size: 0.9375rem;">Plateforme collaborative avancée</p>
       </div>
 
       <div id="loginAlert"></div>
@@ -371,334 +169,605 @@
       <form id="loginForm">
         <div class="form-group">
           <label class="form-label" for="username">Identifiant</label>
-          <input type="text" id="username" class="form-input" placeholder="Votre identifiant" required autocomplete="username">
+          <input type="text" id="username" class="form-input" required autocomplete="username">
         </div>
-
         <div class="form-group">
           <label class="form-label" for="password">Mot de passe</label>
-          <input type="password" id="password" class="form-input" placeholder="Votre mot de passe" required autocomplete="current-password">
+          <input type="password" id="password" class="form-input" required autocomplete="current-password">
         </div>
-
-        <button type="submit" class="btn btn-primary btn-block">🔓 Se connecter</button>
+        <button type="submit" class="btn btn-primary btn-block">🔓 Connexion</button>
       </form>
 
       <div style="margin-top: 1.5rem; text-align: center;">
-        <button class="btn btn-ghost btn-sm" onclick="showFirstTimeSetup()">
-          ⚙️ Premier membre ? Créer les comptes
-        </button>
+        <button class="btn btn-ghost btn-sm" onclick="showSetup()">⚙️ Configuration initiale</button>
       </div>
-
-      <p style="margin-top: 1rem; text-align: center; font-size: 0.875rem; color: var(--clr-slate);">
-        Contactez le président si vous avez oublié vos identifiants
-      </p>
     </div>
   </div>
 
   <!-- Dashboard -->
   <div id="dashboard" class="hidden">
     <div class="container">
-      <!-- Header -->
       <div class="dashboard-header">
         <div class="dashboard-title">
           <img src="assets/img/logo.png" alt="">
           <div>
-            <h1>Espace Bureau</h1>
-            <p style="color: var(--clr-slate); font-size: 0.9375rem;">Plateforme collaborative — Parlement JPV</p>
+            <h1>Bureau Pro</h1>
+            <p style="color: var(--clr-slate); font-size: 0.9375rem;">Gestion collaborative avancée</p>
           </div>
         </div>
-
         <div class="user-info">
-          <span class="user-badge">
-            <span id="userAvatar"></span>
-            <span id="userName"></span>
-          </span>
+          <span class="user-badge"><span id="userAvatar"></span><span id="userName"></span></span>
           <button class="btn btn-ghost btn-sm" onclick="logout()">Déconnexion</button>
         </div>
       </div>
 
-      <!-- Quick Stats -->
+      <!-- Stats -->
       <div class="grid grid-4">
-        <div class="card stat-card">
-          <div class="stat-value" id="statArticles">0</div>
-          <div class="stat-label">Articles</div>
-        </div>
-        <div class="card stat-card">
-          <div class="stat-value" id="statEvents">0</div>
-          <div class="stat-label">Événements</div>
-        </div>
-        <div class="card stat-card">
-          <div class="stat-value" id="statTasks">0</div>
-          <div class="stat-label">Tâches actives</div>
-        </div>
-        <div class="card stat-card">
-          <div class="stat-value" id="statMembers">0</div>
-          <div class="stat-label">Membres</div>
-        </div>
+        <div class="card stat-card"><div class="stat-value" id="statArticles">0</div><div class="stat-label">Articles</div></div>
+        <div class="card stat-card"><div class="stat-value" id="statEvents">0</div><div class="stat-label">Événements</div></div>
+        <div class="card stat-card"><div class="stat-value" id="statTasks">0</div><div class="stat-label">Tâches</div></div>
+        <div class="card stat-card"><div class="stat-value" id="statMembers">0</div><div class="stat-label">Membres</div></div>
       </div>
 
       <!-- Tabs -->
       <div class="tabs">
-        <button class="tab active" onclick="switchTab('dashboard')">🏠 Tableau de bord</button>
+        <button class="tab active" onclick="switchTab('dashboard')">🏠 Dashboard</button>
         <button class="tab" onclick="switchTab('articles')">📝 Articles</button>
         <button class="tab" onclick="switchTab('events')">📅 Événements</button>
         <button class="tab" onclick="switchTab('tasks')">✅ Tâches</button>
+        <button class="tab" onclick="switchTab('votes')">🗳️ Votes</button>
+        <button class="tab" onclick="switchTab('minutes')">📋 PV</button>
+        <button class="tab" onclick="switchTab('budget')">💰 Budget</button>
+        <button class="tab" onclick="switchTab('attendance')">📊 Présences</button>
+        <button class="tab" onclick="switchTab('resources')">🔑 Réservations</button>
+        <button class="tab" onclick="switchTab('chat')">💬 Discussion</button>
+        <button class="tab" onclick="switchTab('members')">👥 Annuaire</button>
         <button class="tab" onclick="switchTab('files')">📎 Fichiers</button>
-        <button class="tab" onclick="switchTab('calendar')">📆 Calendrier</button>
-        <button class="tab" onclick="switchTab('members')">👥 Membres</button>
-        <button class="tab" onclick="switchTab('notifications')">🔔 Notifications</button>
-        <button class="tab" onclick="switchTab('analytics')">📊 Analytics</button>
+        <button class="tab" onclick="switchTab('settings')">⚙️ Paramètres</button>
       </div>
 
-      <!-- Tab: Dashboard -->
-      <div id="tabDashboard" class="tab-content active">
-        <div class="grid grid-2">
-          <div class="card">
-            <div class="card-header">
-              <h2 class="card-title">Activité récente</h2>
-            </div>
-            <div id="recentActivity"></div>
-          </div>
+      <!-- All tab contents will be injected by JavaScript -->
+      <div id="tabsContainer"></div>
+    </div>
+  </div>
 
-          <div class="card">
-            <div class="card-header">
-              <h2 class="card-title">Tâches urgentes</h2>
+  <script>
+    // Application state
+    const APP = {
+      version: '3.0',
+      currentUser: null,
+      sheetsUrl: 'https://docs.google.com/spreadsheets/d/12cQHZ8ip8btocRuOtNqxVuFWbQ5-KSBQI38PsI5_Eg8/edit?usp=sharing',
+      storage: {
+        users: 'bureau_users_v3',
+        articles: 'bureau_articles_v3',
+        events: 'bureau_events_v3',
+        tasks: 'bureau_tasks_v3',
+        files: 'bureau_files_v3',
+        notifications: 'bureau_notifications_v3',
+        votes: 'bureau_votes_v3',
+        minutes: 'bureau_minutes_v3',
+        budget: 'bureau_budget_v3',
+        attendance: 'bureau_attendance_v3',
+        resources: 'bureau_resources_v3',
+        chat: 'bureau_chat_v3',
+        allMembers: 'bureau_all_members_v3',
+        session: 'bureau_session_v3'
+      },
+      defaultUsers: [
+        { id: 1, username: 'president', password: 'President2026!', name: 'Président', role: 'Président', email: 'president@parlementjpv.fr', isBureau: true },
+        { id: 2, username: 'secretaire', password: 'Secretaire2026!', name: 'Secrétaire', role: 'Secrétaire Général', email: 'secretaire@parlementjpv.fr', isBureau: true },
+        { id: 3, username: 'tresorier', password: 'Tresorier2026!', name: 'Trésorier', role: 'Trésorier', email: 'tresorier@parlementjpv.fr', isBureau: true },
+        { id: 4, username: 'communication', password: 'Comm2026!', name: 'Responsable Com', role: 'Communication', email: 'com@parlementjpv.fr', isBureau: true }
+      ]
+    };
+
+    // Utility functions
+    function saveData(key, data) {
+      try { localStorage.setItem(key, JSON.stringify(data)); return true; } 
+      catch (e) { console.error('Storage error:', e); return false; }
+    }
+
+    function getData(key) {
+      try { const data = localStorage.getItem(key); return data ? JSON.parse(data) : null; } 
+      catch (e) { console.error('Retrieval error:', e); return null; }
+    }
+
+    function showAlert(message, type = 'info') {
+      const container = document.getElementById('loginAlert') || document.querySelector('.container');
+      if (container) {
+        const alert = document.createElement('div');
+        alert.className = `alert alert-${type}`;
+        alert.textContent = message;
+        container.insertBefore(alert, container.firstChild);
+        setTimeout(() => alert.remove(), 4000);
+      }
+    }
+
+    function formatDate(d) { return new Date(d).toLocaleDateString('fr-FR', {day: 'numeric', month: 'long', year: 'numeric'}); }
+    function formatTime(d) { return new Date(d).toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'}); }
+    function getAvatar(name) { return name.charAt(0).toUpperCase(); }
+
+    // Initialize
+    function init() {
+      let users = getData(APP.storage.users);
+      if (!users) {
+        users = APP.defaultUsers;
+        saveData(APP.storage.users, users);
+      }
+    }
+
+    // Authentication
+    function showSetup() {
+      document.getElementById('loginAlert').innerHTML = `
+        <div class="alert alert-info">
+          <strong>Comptes par défaut créés :</strong><br>
+          president / President2026!<br>
+          secretaire / Secretaire2026!<br>
+          tresorier / Tresorier2026!<br>
+          communication / Comm2026!
+        </div>
+      `;
+      init();
+    }
+
+    function login(username, password) {
+      const users = getData(APP.storage.users) || APP.defaultUsers;
+      const user = users.find(u => u.username === username && u.password === password);
+      if (user) {
+        APP.currentUser = user;
+        saveData(APP.storage.session, { userId: user.id, loginTime: Date.now() });
+        showDashboard();
+        return true;
+      }
+      return false;
+    }
+
+    function checkSession() {
+      const session = getData(APP.storage.session);
+      if (session) {
+        const users = getData(APP.storage.users) || APP.defaultUsers;
+        const user = users.find(u => u.id === session.userId);
+        if (user) {
+          APP.currentUser = user;
+          showDashboard();
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function logout() {
+      if (confirm('Déconnexion ?')) {
+        localStorage.removeItem(APP.storage.session);
+        location.reload();
+      }
+    }
+
+    function showDashboard() {
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('dashboard').classList.remove('hidden');
+      document.getElementById('userName').textContent = APP.currentUser.name;
+      document.getElementById('userAvatar').textContent = getAvatar(APP.currentUser.name);
+      renderAllTabs();
+      loadAllData();
+      syncMembersFromSheets(); // Sync Google Sheets
+    }
+
+    // Tab switching
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      event.target.classList.add('active');
+      const content = document.getElementById('tab' + tabName.charAt(0).toUpperCase() + tabName.slice(1));
+      if (content) content.classList.add('active');
+      if (tabName === 'members') loadMembers();
+      if (tabName === 'chat') loadChat();
+    }
+
+    // === INTEGRATION GOOGLE SHEETS ===
+    async function syncMembersFromSheets() {
+      try {
+        // Extract Sheet ID
+        const sheetId = '12cQHZ8ip8btocRuOtNqxVuFWbQ5-KSBQI38PsI5_Eg8';
+        
+        // IMPORTANT: Le Google Sheet doit être PUBLIC (Anyone with link can view)
+        // Format CSV export URL
+        const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`;
+        
+        const response = await fetch(csvUrl);
+        if (!response.ok) throw new Error('Impossible de charger le Google Sheet');
+        
+        const csvText = await response.text();
+        const rows = csvText.split('\n').slice(1); // Skip header
+        
+        const members = rows.map((row, index) => {
+          const cols = row.split(',');
+          if (cols.length < 3) return null;
+          return {
+            id: 1000 + index,
+            name: cols[0]?.trim(),
+            classe: cols[1]?.trim(),
+            email: cols[2]?.trim(),
+            phone: cols[3]?.trim() || '',
+            role: cols[4]?.trim() || 'Membre',
+            joinedDate: cols[5]?.trim() || new Date().toISOString(),
+            isBureau: false,
+            isActive: true
+          };
+        }).filter(m => m && m.name);
+        
+        saveData(APP.storage.allMembers, members);
+        updateStats();
+        loadMembers();
+        showAlert(`✅ ${members.length} membres synchronisés depuis Google Sheets`, 'success');
+      } catch (error) {
+        console.error('Sync error:', error);
+        showAlert('⚠️ Erreur de synchronisation Google Sheets. Vérifiez que le Sheet est public.', 'error');
+      }
+    }
+
+    // Render tabs
+    function renderAllTabs() {
+      const container = document.getElementById('tabsContainer');
+      container.innerHTML = `
+        ${renderDashboard()}
+        ${renderArticles()}
+        ${renderEvents()}
+        ${renderTasks()}
+        ${renderVotes()}
+        ${renderMinutes()}
+        ${renderBudget()}
+        ${renderAttendance()}
+        ${renderResources()}
+        ${renderChat()}
+        ${renderMembers()}
+        ${renderFiles()}
+        ${renderSettings()}
+      `;
+    }
+
+    function renderDashboard() {
+      return `
+        <div id="tabDashboard" class="tab-content active">
+          <div class="grid grid-2">
+            <div class="card">
+              <div class="card-header"><h2 class="card-title">Activité récente</h2></div>
+              <div id="recentActivity"></div>
             </div>
-            <div id="urgentTasks"></div>
+            <div class="card">
+              <div class="card-header"><h2 class="card-title">Tâches urgentes</h2></div>
+              <div id="urgentTasks"></div>
+            </div>
           </div>
         </div>
+      `;
+    }
 
-        <div class="card">
-          <div class="card-header">
-            <h2 class="card-title">Prochains événements</h2>
-          </div>
-          <div id="upcomingEvents"></div>
-        </div>
-      </div>
-
-      <!-- Tab: Articles -->
-      <div id="tabArticles" class="tab-content">
-        <div class="grid grid-2">
-          <div class="card">
-            <div class="card-header">
-              <h2 class="card-title">Publier un article</h2>
+    function renderArticles() { return `<div id="tabArticles" class="tab-content"><div class="card"><p>Articles - En développement</p></div></div>`; }
+    function renderEvents() { return `<div id="tabEvents" class="tab-content"><div class="card"><p>Événements - En développement</p></div></div>`; }
+    function renderTasks() { return `<div id="tabTasks" class="tab-content"><div class="card"><p>Tâches - En développement</p></div></div>`; }
+    
+    function renderVotes() {
+      return `
+        <div id="tabVotes" class="tab-content">
+          <div class="grid grid-2">
+            <div class="card">
+              <div class="card-header"><h2 class="card-title">Créer un vote</h2></div>
+              <form id="voteForm">
+                <div class="form-group">
+                  <label class="form-label">Question</label>
+                  <input type="text" id="voteQuestion" class="form-input" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Options (une par ligne)</label>
+                  <textarea id="voteOptions" class="form-textarea" rows="4" placeholder="Option 1\nOption 2\nOption 3" required></textarea>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Date limite</label>
+                  <input type="datetime-local" id="voteDeadline" class="form-input" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">🗳️ Créer le vote</button>
+              </form>
             </div>
-            <form id="articleForm">
+            <div class="card">
+              <div class="card-header"><h2 class="card-title">Votes actifs</h2></div>
+              <div id="votesList"></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderMinutes() {
+      return `
+        <div id="tabMinutes" class="tab-content">
+          <div class="card">
+            <div class="card-header"><h2 class="card-title">Procès-verbaux</h2></div>
+            <form id="minutesForm">
+              <div class="form-group">
+                <label class="form-label">Date de la réunion</label>
+                <input type="date" id="minutesDate" class="form-input" required>
+              </div>
               <div class="form-group">
                 <label class="form-label">Titre</label>
-                <input type="text" id="articleTitle" class="form-input" placeholder="Titre de l'article" required>
+                <input type="text" id="minutesTitle" class="form-input" placeholder="Réunion du bureau" required>
               </div>
               <div class="form-group">
-                <label class="form-label">Catégorie</label>
-                <select id="articleCategory" class="form-input" required>
-                  <option value="">Choisir une catégorie</option>
-                  <option value="actualites">Actualités</option>
-                  <option value="debats">Débats</option>
-                  <option value="projets">Projets</option>
-                  <option value="evenements">Événements</option>
-                  <option value="tribune">Tribune libre</option>
-                </select>
+                <label class="form-label">Participants</label>
+                <input type="text" id="minutesParticipants" class="form-input" placeholder="Noms séparés par des virgules">
               </div>
               <div class="form-group">
-                <label class="form-label">Contenu</label>
-                <textarea id="articleContent" class="form-input" placeholder="Rédigez votre article..." required></textarea>
+                <label class="form-label">Ordre du jour</label>
+                <textarea id="minutesAgenda" class="form-textarea" rows="3"></textarea>
               </div>
               <div class="form-group">
-                <label class="form-label">
-                  <input type="checkbox" id="articlePublic" checked style="margin-right: 0.5rem;">
-                  Publier publiquement sur le site
-                </label>
+                <label class="form-label">Compte-rendu</label>
+                <textarea id="minutesContent" class="form-textarea" rows="8" required></textarea>
               </div>
-              <button type="submit" class="btn btn-gold btn-block">✨ Publier</button>
+              <div class="form-group">
+                <label class="form-label">Décisions prises</label>
+                <textarea id="minutesDecisions" class="form-textarea" rows="3"></textarea>
+              </div>
+              <button type="submit" class="btn btn-gold btn-block">💾 Enregistrer le PV</button>
             </form>
-          </div>
-
-          <div class="card">
-            <div class="card-header">
-              <h2 class="card-title">Articles publiés</h2>
-              <select id="articleFilter" class="form-input" style="width: auto; padding: 0.5rem;">
-                <option value="all">Tous</option>
-                <option value="public">Publics</option>
-                <option value="private">Privés</option>
-                <option value="mine">Mes articles</option>
-              </select>
-            </div>
-            <div id="articlesList" class="item-list"></div>
+            <div id="minutesList" style="margin-top: 2rem;"></div>
           </div>
         </div>
-      </div>
+      `;
+    }
 
-      <!-- Tab: Events -->
-      <div id="tabEvents" class="tab-content">
-        <div class="grid grid-2">
-          <div class="card">
-            <div class="card-header">
-              <h2 class="card-title">Créer un événement</h2>
+    function renderBudget() {
+      return `
+        <div id="tabBudget" class="tab-content">
+          <div class="grid grid-2">
+            <div class="card">
+              <div class="card-header"><h2 class="card-title">Ajouter une transaction</h2></div>
+              <form id="budgetForm">
+                <div class="form-group">
+                  <label class="form-label">Type</label>
+                  <select id="budgetType" class="form-input" required>
+                    <option value="income">Recette</option>
+                    <option value="expense">Dépense</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Montant (€)</label>
+                  <input type="number" step="0.01" id="budgetAmount" class="form-input" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Catégorie</label>
+                  <input type="text" id="budgetCategory" class="form-input" placeholder="Ex: Événements, Matériel..." required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Description</label>
+                  <input type="text" id="budgetDescription" class="form-input" required>
+                </div>
+                <button type="submit" class="btn btn-success btn-block">💰 Ajouter</button>
+              </form>
             </div>
-            <form id="eventForm">
+            <div class="card">
+              <div class="card-header"><h2 class="card-title">Solde actuel</h2></div>
+              <div style="text-align: center; padding: 2rem;">
+                <div style="font-family: var(--font-display); font-size: 3rem; font-weight: 900; color: var(--clr-gold);" id="budgetBalance">0 €</div>
+              </div>
+              <div id="budgetHistory"></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderAttendance() {
+      return `
+        <div id="tabAttendance" class="tab-content">
+          <div class="card">
+            <div class="card-header"><h2 class="card-title">Feuille de présence</h2></div>
+            <form id="attendanceForm">
               <div class="form-group">
-                <label class="form-label">Titre</label>
-                <input type="text" id="eventTitle" class="form-input" required>
+                <label class="form-label">Événement</label>
+                <input type="text" id="attendanceEvent" class="form-input" placeholder="Nom de l'événement" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Date</label>
+                <input type="date" id="attendanceDate" class="form-input" required>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">📊 Nouvelle feuille</button>
+            </form>
+            <div id="attendanceSheets" style="margin-top: 2rem;"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderResources() {
+      return `
+        <div id="tabResources" class="tab-content">
+          <div class="card">
+            <div class="card-header"><h2 class="card-title">Réserver une ressource</h2></div>
+            <form id="resourceForm">
+              <div class="form-group">
+                <label class="form-label">Ressource</label>
+                <select id="resourceName" class="form-input" required>
+                  <option value="salle_reunion">Salle de réunion</option>
+                  <option value="materiel_sono">Matériel sono</option>
+                  <option value="projecteur">Projecteur</option>
+                  <option value="stand">Stand événement</option>
+                </select>
               </div>
               <div class="grid grid-2" style="gap: 1rem;">
                 <div class="form-group">
                   <label class="form-label">Date</label>
-                  <input type="date" id="eventDate" class="form-input" required>
+                  <input type="date" id="resourceDate" class="form-input" required>
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Heure</label>
-                  <input type="time" id="eventTime" class="form-input" required>
+                  <label class="form-label">Durée</label>
+                  <select id="resourceDuration" class="form-input" required>
+                    <option value="1h">1 heure</option>
+                    <option value="2h">2 heures</option>
+                    <option value="demi-journee">Demi-journée</option>
+                    <option value="journee">Journée complète</option>
+                  </select>
                 </div>
               </div>
               <div class="form-group">
-                <label class="form-label">Lieu</label>
-                <input type="text" id="eventLocation" class="form-input" placeholder="Ex: Salle A204" required>
+                <label class="form-label">Motif</label>
+                <input type="text" id="resourceReason" class="form-input" required>
               </div>
-              <div class="form-group">
-                <label class="form-label">Description</label>
-                <textarea id="eventDescription" class="form-input" rows="3" required></textarea>
-              </div>
-              <button type="submit" class="btn btn-primary btn-block">📅 Créer</button>
+              <button type="submit" class="btn btn-primary btn-block">🔑 Réserver</button>
+            </form>
+            <div id="resourceBookings" style="margin-top: 2rem;"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderChat() {
+      return `
+        <div id="tabChat" class="tab-content">
+          <div class="card">
+            <div class="card-header"><h2 class="card-title">Discussion du bureau</h2></div>
+            <div class="chat-messages" id="chatMessages"></div>
+            <form id="chatForm" style="display: flex; gap: 0.5rem;">
+              <input type="text" id="chatInput" class="form-input" placeholder="Votre message..." required style="flex: 1;">
+              <button type="submit" class="btn btn-primary">Envoyer</button>
             </form>
           </div>
+        </div>
+      `;
+    }
 
+    function renderMembers() {
+      return `
+        <div id="tabMembers" class="tab-content">
           <div class="card">
             <div class="card-header">
-              <h2 class="card-title">Événements à venir</h2>
+              <h2 class="card-title">Annuaire complet</h2>
+              <button class="btn btn-primary btn-sm" onclick="syncMembersFromSheets()">🔄 Synchroniser Google Sheets</button>
             </div>
-            <div id="eventsList" class="item-list"></div>
+            <div class="alert alert-info" style="margin-bottom: 1rem;">
+              <strong>📊 Google Sheets intégré</strong><br>
+              Les membres sont automatiquement synchronisés depuis le Google Sheet.<br>
+              <small>Sheet ID: ${APP.sheetsUrl}</small>
+            </div>
+            <div id="membersList"></div>
           </div>
         </div>
-      </div>
+      `;
+    }
 
-      <!-- Tab: Tasks -->
-      <div id="tabTasks" class="tab-content">
-        <div class="grid grid-2">
-          <div class="card">
-            <div class="card-header">
-              <h2 class="card-title">Nouvelle tâche</h2>
-            </div>
-            <form id="taskForm">
-              <div class="form-group">
-                <label class="form-label">Tâche</label>
-                <input type="text" id="taskTitle" class="form-input" required>
+    function renderFiles() { return `<div id="tabFiles" class="tab-content"><div class="card"><p>Fichiers - En développement</p></div></div>`; }
+    function renderSettings() { return `<div id="tabSettings" class="tab-content"><div class="card"><p>Paramètres - En développement</p></div></div>`; }
+
+    // Load data
+    function loadAllData() {
+      updateStats();
+    }
+
+    function updateStats() {
+      const articles = getData(APP.storage.articles) || [];
+      const events = getData(APP.storage.events) || [];
+      const tasks = getData(APP.storage.tasks) || [];
+      const allMembers = getData(APP.storage.allMembers) || [];
+      
+      document.getElementById('statArticles').textContent = articles.length;
+      document.getElementById('statEvents').textContent = events.length;
+      document.getElementById('statTasks').textContent = tasks.filter(t => !t.completed).length;
+      document.getElementById('statMembers').textContent = allMembers.length;
+    }
+
+    function loadMembers() {
+      const allMembers = getData(APP.storage.allMembers) || [];
+      const bureau = getData(APP.storage.users) || APP.defaultUsers;
+      const container = document.getElementById('membersList');
+      
+      if (allMembers.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: var(--clr-slate); padding: 2rem;">Aucun membre. Cliquez sur "Synchroniser" pour importer depuis Google Sheets.</p>';
+        return;
+      }
+      
+      container.innerHTML = `
+        <div style="margin-bottom: 2rem;">
+          <h3 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 1rem;">👑 Bureau (${bureau.length})</h3>
+          <div class="grid grid-3">
+            ${bureau.map(m => `
+              <div class="member-card">
+                <div class="member-avatar">${getAvatar(m.name)}</div>
+                <div class="member-info">
+                  <div class="member-name">${m.name}</div>
+                  <div class="member-role">${m.role}</div>
+                  <div class="member-meta">${m.email}</div>
+                </div>
               </div>
-              <div class="form-group">
-                <label class="form-label">Assigné à</label>
-                <select id="taskAssignee" class="form-input" required></select>
+            `).join('')}
+          </div>
+        </div>
+        
+        <div>
+          <h3 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 1rem;">👥 Tous les membres (${allMembers.length})</h3>
+          <div class="grid grid-3">
+            ${allMembers.map(m => `
+              <div class="member-card">
+                <div class="member-avatar">${getAvatar(m.name)}</div>
+                <div class="member-info">
+                  <div class="member-name">${m.name}</div>
+                  <div class="member-role">${m.classe || 'Membre'}</div>
+                  <div class="member-meta">${m.email || 'Pas d\'email'}</div>
+                  ${m.phone ? `<div class="member-meta">📱 ${m.phone}</div>` : ''}
+                </div>
               </div>
-              <div class="form-group">
-                <label class="form-label">Priorité</label>
-                <select id="taskPriority" class="form-input" required>
-                  <option value="low">🟢 Basse</option>
-                  <option value="medium" selected>🟡 Moyenne</option>
-                  <option value="high">🔴 Haute</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Date limite</label>
-                <input type="date" id="taskDeadline" class="form-input" required>
-              </div>
-              <button type="submit" class="btn btn-primary btn-block">✅ Créer</button>
-            </form>
-          </div>
-
-          <div class="card">
-            <div class="card-header">
-              <h2 class="card-title">Tâches</h2>
-              <select id="taskFilter" class="form-input" style="width: auto; padding: 0.5rem;">
-                <option value="active">Actives</option>
-                <option value="completed">Terminées</option>
-                <option value="all">Toutes</option>
-                <option value="mine">Mes tâches</option>
-              </select>
-            </div>
-            <div id="tasksList" class="item-list"></div>
+            `).join('')}
           </div>
         </div>
-      </div>
+      `;
+    }
 
-      <!-- Tab: Files -->
-      <div id="tabFiles" class="tab-content">
-        <div class="card">
-          <div class="card-header">
-            <h2 class="card-title">Gestion des fichiers</h2>
-          </div>
-          
-          <div class="file-upload" onclick="document.getElementById('fileInput').click()">
-            <input type="file" id="fileInput" multiple>
-            <p style="font-size: 2rem; margin-bottom: 0.5rem;">📎</p>
-            <p style="font-weight: 700; margin-bottom: 0.25rem;">Cliquer pour ajouter des fichiers</p>
-            <p style="font-size: 0.875rem; color: var(--clr-slate);">Documents, images, PDFs...</p>
-          </div>
-
-          <div id="filesList" class="item-list" style="margin-top: 1.5rem;"></div>
+    function loadChat() {
+      const messages = getData(APP.storage.chat) || [];
+      const container = document.getElementById('chatMessages');
+      
+      container.innerHTML = messages.map(msg => `
+        <div class="chat-message ${msg.userId === APP.currentUser.id ? 'own' : ''}">
+          ${msg.userId !== APP.currentUser.id ? `<div class="chat-author">${msg.userName}</div>` : ''}
+          <div class="chat-bubble">${msg.text}</div>
+          <div class="chat-time">${formatTime(msg.createdAt)}</div>
         </div>
-      </div>
+      `).join('');
+      
+      container.scrollTop = container.scrollHeight;
+    }
 
-      <!-- Tab: Calendar -->
-      <div id="tabCalendar" class="tab-content">
-        <div class="card">
-          <div class="card-header">
-            <h2 class="card-title">Calendrier</h2>
-            <div style="display: flex; gap: 0.5rem;">
-              <button class="btn btn-ghost btn-sm" onclick="changeMonth(-1)">‹</button>
-              <span id="currentMonth" style="font-weight: 700; padding: 0 1rem;"></span>
-              <button class="btn btn-ghost btn-sm" onclick="changeMonth(1)">›</button>
-            </div>
-          </div>
-          <div id="calendarView"></div>
-        </div>
-      </div>
+    // Event listeners
+    document.addEventListener('DOMContentLoaded', () => {
+      init();
+      checkSession();
+      
+      document.getElementById('loginForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (login(document.getElementById('username').value, document.getElementById('password').value)) {
+          e.target.reset();
+        } else {
+          showAlert('Identifiants incorrects', 'error');
+        }
+      });
 
-      <!-- Tab: Members -->
-      <div id="tabMembers" class="tab-content">
-        <div class="card">
-          <div class="card-header">
-            <h2 class="card-title">Annuaire des membres</h2>
-          </div>
-          <div id="membersList" class="grid grid-3"></div>
-        </div>
-      </div>
-
-      <!-- Tab: Notifications -->
-      <div id="tabNotifications" class="tab-content">
-        <div class="card">
-          <div class="card-header">
-            <h2 class="card-title">Notifications</h2>
-            <button class="btn btn-ghost btn-sm" onclick="markAllAsRead()">Tout marquer comme lu</button>
-          </div>
-          <div id="notificationsList"></div>
-        </div>
-      </div>
-
-      <!-- Tab: Analytics -->
-      <div id="tabAnalytics" class="tab-content">
-        <div class="grid grid-2">
-          <div class="card">
-            <div class="card-header">
-              <h2 class="card-title">Activité par membre</h2>
-            </div>
-            <div id="memberActivity"></div>
-          </div>
-
-          <div class="card">
-            <div class="card-header">
-              <h2 class="card-title">Articles par catégorie</h2>
-            </div>
-            <div id="articleStats"></div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-header">
-            <h2 class="card-title">Taux de complétion des tâches</h2>
-          </div>
-          <div id="taskCompletion"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script src="bureau-app.js"></script>
+      // Chat form
+      document.addEventListener('submit', (e) => {
+        if (e.target.id === 'chatForm') {
+          e.preventDefault();
+          const messages = getData(APP.storage.chat) || [];
+          messages.push({
+            id: Date.now(),
+            text: document.getElementById('chatInput').value,
+            userId: APP.currentUser.id,
+            userName: APP.currentUser.name,
+            createdAt: new Date().toISOString()
+          });
+          saveData(APP.storage.chat, messages);
+          e.target.reset();
+          loadChat();
+        }
+      });
+    });
+  </script>
 </body>
 </html>
