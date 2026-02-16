@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+
+  <title>Espace Bureau — Parlement JPV</title>
+  <meta name="description" content="Espace privé réservé au bureau du Parlement JPV pour l'organisation et la gestion des événements.">
+
+  <!-- Icons -->
+  <link rel="icon" href="assets/img/favicon.png" sizes="any">
+
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,900&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================================================
+       ESPACE BUREAU PREMIUM — AUTHENTICATED DASHBOARD
+       ========================================================= */
+
+    :root {
+      --clr-ink: #0a0e1a;
+      --clr-slate: #475569;
+      --clr-mist: #94a3b8;
+      --clr-fog: #cbd5e1;
+      --clr-cloud: #e2e8f0;
+      --clr-paper: #fafbfc;
+      --clr-white: #ffffff;
+      
+      --clr-gold: #c9a050;
+      --clr-gold-dim: #f5e6cc;
+      --clr-navy: #0b2545;
+      --clr-navy-light: #1a4d7a;
+      --clr-success: #059669;
+      --clr-danger: #dc2626;
+      --clr-warning: #d97706;
+      
+      --clr-text-primary: var(--clr-ink);
+      --clr-text-secondary: var(--clr-slate);
+      --clr-text-tertiary: var(--clr-mist);
+      --clr-bg-primary: var(--clr-paper);
+      --clr-bg-elevated: var(--clr-white);
+      --clr-border-subtle: var(--clr-cloud);
+      
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body: 'Instrument Sans', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      
+      --space-xs: 0.5rem;
+      --space-sm: 0.75rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2rem;
+      --space-2xl: 3rem;
+      --space-3xl: 4rem;
+      
+      --radius-sm: 0.375rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+      --radius-2xl: 1.5rem;
+      --radius-full: 624.9375rem;
+      
+      --shadow-sm: 0 1px 3px rgba(10, 14, 26, 0.06), 0 1px 2px rgba(10, 14, 26, 0.03);
+      --shadow-md: 0 4px 6px -1px rgba(10, 14, 26, 0.08), 0 2px 4px -1px rgba(10, 14, 26, 0.04);
+      --shadow-lg: 0 10px 15px -3px rgba(10, 14, 26, 0.10), 0 4px 6px -2px rgba(10, 14, 26, 0.03);
+      --shadow-xl: 0 20px 25px -5px rgba(10, 14, 26, 0.10);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--clr-text-primary);
+      background: var(--clr-bg-primary);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 clamp(1rem, 4vw, 2rem);
+    }
+
+    /* Login Screen */
+    #loginScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--clr-navy) 0%, var(--clr-navy-light) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #loginScreen::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: 
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,.02) 2px, rgba(255,255,255,.02) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,.02) 2px, rgba(255,255,255,.02) 4px);
+      pointer-events: none;
+    }
+
+    .login-box {
+      background: var(--clr-bg-elevated);
+      border-radius: var(--radius-2xl);
+      padding: var(--space-3xl);
+      box-shadow: var(--shadow-xl);
+      width: 100%;
+      max-width: 420px;
+      position: relative;
+      z-index: 1;
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+    }
+
+    .login-logo {
+      text-align: center;
+      margin-bottom: var(--space-2xl);
+    }
+
+    .login-logo img {
+      width: 64px;
+      height: 64px;
+      border-radius: var(--radius-lg);
+      margin-bottom: var(--space-md);
+    }
+
+    .login-logo h1 {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 900;
+      margin-bottom: var(--space-xs);
+    }
+
+    .login-logo p {
+      font-size: 0.9375rem;
+      color: var(--clr-text-secondary);
+    }
+
+    .form-group {
+      margin-bottom: var(--space-lg);
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.875rem;
+      margin-bottom: var(--space-xs);
+      color: var(--clr-text-primary);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: var(--space-md);
+      border: 1px solid var(--clr-border-subtle);
+      border-radius: var(--radius-lg);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      transition: all 0.2s;
+      background: var(--clr-bg-primary);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--clr-gold);
+      box-shadow: 0 0 0 3px rgba(201, 160, 80, 0.1);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      padding: var(--space-md) var(--space-xl);
+      border-radius: var(--radius-lg);
+      font-weight: 700;
+      font-size: 0.9375rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      width: 100%;
+    }
+
+    .btn-primary {
+      background: var(--clr-navy);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--clr-navy-light);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--clr-gold), #c19940);
+      color: white;
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(201, 160, 80, 0.3);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--clr-border-subtle);
+      color: var(--clr-text-primary);
+    }
+
+    .btn-ghost:hover {
+      background: var(--clr-bg-primary);
+      border-color: var(--clr-navy);
+    }
+
+    .btn-danger {
+      background: var(--clr-danger);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #b91c1c;
+      transform: translateY(-2px);
+    }
+
+    .alert {
+      padding: var(--space-md);
+      border-radius: var(--radius-lg);
+      margin-bottom: var(--space-lg);
+      font-size: 0.875rem;
+      border-left: 4px solid;
+    }
+
+    .alert-error {
+      background: rgba(220, 38, 38, 0.1);
+      border-color: var(--clr-danger);
+      color: #991b1b;
+    }
+
+    .alert-success {
+      background: rgba(5, 150, 105, 0.1);
+      border-color: var(--clr-success);
+      color: #065f46;
+    }
+
+    /* Dashboard */
+    #dashboard {
+      min-height: 100vh;
+      padding-top: var(--space-2xl);
+      padding-bottom: var(--space-3xl);
+    }
+
+    .dashboard-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-2xl);
+      flex-wrap: wrap;
+      gap: var(--space-lg);
+    }
+
+    .dashboard-title {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    .dashboard-title img {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-lg);
+    }
+
+    .dashboard-title h1 {
+      font-family: var(--font-display);
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    .user-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: var(--space-sm) var(--space-md);
+      background: linear-gradient(135deg, var(--clr-gold-dim), rgba(11, 37, 69, 0.05));
+      border: 1px solid var(--clr-gold);
+      border-radius: var(--radius-full);
+      font-weight: 700;
+      font-size: 0.875rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: var(--space-xs);
+      margin-bottom: var(--space-2xl);
+      border-bottom: 2px solid var(--clr-border-subtle);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab {
+      padding: var(--space-md) var(--space-lg);
+      background: transparent;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-weight: 700;
+      font-size: 0.9375rem;
+      color: var(--clr-text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+      margin-bottom: -2px;
+    }
+
+    .tab:hover {
+      color: var(--clr-navy);
+    }
+
+    .tab.active {
+      color: var(--clr-navy);
+      border-bottom-color: var(--clr-gold);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+    }
+
+    .grid {
+      display: grid;
+      gap: var(--space-xl);
+      margin-bottom: var(--space-2xl);
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .card {
+      background: var(--clr-bg-elevated);
+      border: 1px solid var(--clr-border-subtle);
+      border-radius: var(--radius-2xl);
+      padding: var(--space-xl);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-lg);
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+
+    .stat-card {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 900;
+      color: var(--clr-gold);
+      line-height: 1;
+      margin-bottom: var(--space-xs);
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--clr-text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Article List */
+    .article-list {
+      display: grid;
+      gap: var(--space-md);
+    }
+
+    .article-item {
+      display: flex;
+      gap: var(--space-lg);
+      padding: var(--space-lg);
+      background: var(--clr-bg-primary);
+      border: 1px solid var(--clr-border-subtle);
+      border-radius: var(--radius-xl);
+      transition: all 0.2s;
+    }
+
+    .article-item:hover {
+      border-color: var(--clr-gold);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .article-meta {
+      flex: 1;
+    }
+
+    .article-title {
+      font-weight: 700;
+      font-size: 1.0625rem;
+      margin-bottom: var(--space-xs);
+    }
+
+    .article-info {
+      display: flex;
+      gap: var(--space-md);
+      font-size: 0.8125rem;
+      color: var(--clr-text-tertiary);
+      margin-bottom: var(--space-sm);
+    }
+
+    .article-excerpt {
+      font-size: 0.9375rem;
+      color: var(--clr-text-secondary);
+      line-height: 1.6;
+    }
+
+    .article-actions {
+      display: flex;
+      gap: var(--space-xs);
+      align-items: flex-start;
+    }
+
+    .btn-sm {
+      padding: var(--space-xs) var(--space-md);
+      font-size: 0.8125rem;
+    }
+
+    /* Editor */
+    .editor {
+      background: var(--clr-bg-primary);
+      border: 1px solid var(--clr-border-subtle);
+      border-radius: var(--radius-xl);
+      padding: var(--space-lg);
+    }
+
+    .editor textarea {
+      width: 100%;
+      min-height: 300px;
+      padding: var(--space-md);
+      border: 1px solid var(--clr-border-subtle);
+      border-radius: var(--radius-lg);
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      resize: vertical;
+    }
+
+    .editor textarea:focus {
+      outline: none;
+      border-color: var(--clr-gold);
+    }
+
+    .event-form {
+      display: grid;
+      gap: var(--space-lg);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .article-item {
+        flex-direction: column;
+      }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .badge {
+      display: inline-flex;
+      padding: 0.25rem 0.5rem;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .badge-success {
+      background: rgba(5, 150, 105, 0.1);
+      color: var(--clr-success);
+    }
+
+    .badge-warning {
+      background: rgba(217, 119, 6, 0.1);
+      color: var(--clr-warning);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Login Screen -->
+  <div id="loginScreen">
+    <div class="login-box">
+      <div class="login-logo">
+        <img src="assets/img/logo.png" alt="Parlement JPV">
+        <h1>Espace Bureau</h1>
+        <p>Accès réservé aux membres du bureau</p>
+      </div>
+
+      <div id="loginError" class="alert alert-error hidden">
+        Mot de passe incorrect
+      </div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label class="form-label" for="password">Mot de passe</label>
+          <input 
+            type="password" 
+            id="password" 
+            class="form-input" 
+            placeholder="Entrez le mot de passe"
+            required
+            autocomplete="current-password"
+          >
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+          🔓 Se connecter
+        </button>
+      </form>
+
+      <p style="margin-top: var(--space-lg); text-align: center; font-size: 0.875rem; color: var(--clr-text-tertiary);">
+        Contactez le président si vous avez oublié le mot de passe
+      </p>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard" class="hidden">
+    <div class="container">
+      <!-- Header -->
+      <div class="dashboard-header">
+        <div class="dashboard-title">
+          <img src="assets/img/logo.png" alt="Parlement JPV">
+          <div>
+            <h1>Espace Bureau</h1>
+            <p style="color: var(--clr-text-secondary); font-size: 0.9375rem;">
+              Gestion et organisation — Parlement JPV
+            </p>
+          </div>
+        </div>
+
+        <div class="user-info">
+          <span class="user-badge">👤 <span id="userName">Membre du Bureau</span></span>
+          <button class="btn btn-ghost btn-sm" onclick="logout()">Déconnexion</button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-3">
+        <div class="card stat-card">
+          <div class="stat-value" id="statArticles">0</div>
+          <div class="stat-label">Articles publiés</div>
+        </div>
+        <div class="card stat-card">
+          <div class="stat-value" id="statEvents">0</div>
+          <div class="stat-label">Événements prévus</div>
+        </div>
+        <div class="card stat-card">
+          <div class="stat-value" id="statTasks">0</div>
+          <div class="stat-label">Tâches en cours</div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('articles')">📝 Articles</button>
+        <button class="tab" onclick="switchTab('events')">📅 Événements</button>
+        <button class="tab" onclick="switchTab('tasks')">✅ Tâches</button>
+        <button class="tab" onclick="switchTab('settings')">⚙️ Paramètres</button>
+      </div>
+
+      <!-- Tab: Articles -->
+      <div id="tabArticles" class="tab-content active">
+        <div class="grid grid-2">
+          <!-- Article Editor -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Nouvel Article</h2>
+            </div>
+
+            <form id="articleForm" class="editor">
+              <div class="form-group">
+                <label class="form-label" for="articleTitle">Titre</label>
+                <input 
+                  type="text" 
+                  id="articleTitle" 
+                  class="form-input" 
+                  placeholder="Titre de l'article"
+                  required
+                >
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="articleAuthor">Auteur</label>
+                <input 
+                  type="text" 
+                  id="articleAuthor" 
+                  class="form-input" 
+                  placeholder="Votre nom"
+                  required
+                >
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="articleContent">Contenu</label>
+                <textarea 
+                  id="articleContent" 
+                  placeholder="Rédigez votre article ici..."
+                  required
+                ></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-gold">
+                ✨ Publier l'article
+              </button>
+            </form>
+          </div>
+
+          <!-- Articles List -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Articles récents</h2>
+            </div>
+
+            <div id="articlesList" class="article-list">
+              <p style="color: var(--clr-text-tertiary); text-align: center; padding: var(--space-2xl);">
+                Aucun article publié
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Events -->
+      <div id="tabEvents" class="tab-content">
+        <div class="grid grid-2">
+          <!-- Event Creator -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Nouvel Événement</h2>
+            </div>
+
+            <form id="eventForm" class="event-form">
+              <div class="form-group">
+                <label class="form-label" for="eventTitle">Titre de l'événement</label>
+                <input 
+                  type="text" 
+                  id="eventTitle" 
+                  class="form-input" 
+                  placeholder="Ex: Débat sur l'IA"
+                  required
+                >
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="eventDate">Date</label>
+                <input 
+                  type="date" 
+                  id="eventDate" 
+                  class="form-input"
+                  required
+                >
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="eventTime">Heure</label>
+                <input 
+                  type="time" 
+                  id="eventTime" 
+                  class="form-input"
+                  required
+                >
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="eventLocation">Lieu</label>
+                <input 
+                  type="text" 
+                  id="eventLocation" 
+                  class="form-input" 
+                  placeholder="Ex: Salle A204"
+                  required
+                >
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="eventDescription">Description</label>
+                <textarea 
+                  id="eventDescription" 
+                  class="form-input"
+                  placeholder="Détails de l'événement..."
+                  rows="4"
+                  required
+                ></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary">
+                📅 Créer l'événement
+              </button>
+            </form>
+          </div>
+
+          <!-- Events List -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Événements à venir</h2>
+            </div>
+
+            <div id="eventsList" class="article-list">
+              <p style="color: var(--clr-text-tertiary); text-align: center; padding: var(--space-2xl);">
+                Aucun événement prévu
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Tasks -->
+      <div id="tabTasks" class="tab-content">
+        <div class="grid grid-2">
+          <!-- Task Creator -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Nouvelle Tâche</h2>
+            </div>
+
+            <form id="taskForm" class="event-form">
+              <div class="form-group">
+                <label class="form-label" for="taskTitle">Tâche</label>
+                <input 
+                  type="text" 
+                  id="taskTitle" 
+                  class="form-input" 
+                  placeholder="Ex: Préparer les invitations"
+                  required
+                >
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="taskAssignee">Assigné à</label>
+                <input 
+                  type="text" 
+                  id="taskAssignee" 
+                  class="form-input" 
+                  placeholder="Nom du responsable"
+                  required
+                >
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="taskDeadline">Date limite</label>
+                <input 
+                  type="date" 
+                  id="taskDeadline" 
+                  class="form-input"
+                  required
+                >
+              </div>
+
+              <button type="submit" class="btn btn-primary">
+                ✅ Ajouter la tâche
+              </button>
+            </form>
+          </div>
+
+          <!-- Tasks List -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Tâches en cours</h2>
+            </div>
+
+            <div id="tasksList" class="article-list">
+              <p style="color: var(--clr-text-tertiary); text-align: center; padding: var(--space-2xl);">
+                Aucune tâche
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Settings -->
+      <div id="tabSettings" class="tab-content">
+        <div class="card" style="max-width: 600px;">
+          <div class="card-header">
+            <h2 class="card-title">Paramètres</h2>
+          </div>
+
+          <form id="settingsForm" class="event-form">
+            <div class="form-group">
+              <label class="form-label" for="settingsName">Votre nom (affiché sur le dashboard)</label>
+              <input 
+                type="text" 
+                id="settingsName" 
+                class="form-input" 
+                placeholder="Prénom Nom"
+              >
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="newPassword">Changer le mot de passe</label>
+              <input 
+                type="password" 
+                id="newPassword" 
+                class="form-input" 
+                placeholder="Nouveau mot de passe"
+              >
+              <p style="font-size: 0.8125rem; color: var(--clr-text-tertiary); margin-top: var(--space-xs);">
+                Laissez vide pour ne pas changer
+              </p>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+              💾 Enregistrer
+            </button>
+
+            <button type="button" class="btn btn-danger" onclick="clearAllData()" style="margin-top: var(--space-md);">
+              🗑️ Effacer toutes les données
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Configuration
+    const CONFIG = {
+      defaultPassword: 'ParlementJPV2026', // Changez ce mot de passe !
+      storageKeys: {
+        auth: 'bureau_auth',
+        password: 'bureau_password',
+        userName: 'bureau_user_name',
+        articles: 'bureau_articles',
+        events: 'bureau_events',
+        tasks: 'bureau_tasks'
+      }
+    };
+
+    // Authentication
+    function checkAuth() {
+      const isAuthenticated = localStorage.getItem(CONFIG.storageKeys.auth) === 'true';
+      if (isAuthenticated) {
+        showDashboard();
+      }
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const password = document.getElementById('password').value;
+      const savedPassword = localStorage.getItem(CONFIG.storageKeys.password) || CONFIG.defaultPassword;
+
+      if (password === savedPassword) {
+        localStorage.setItem(CONFIG.storageKeys.auth, 'true');
+        showDashboard();
+      } else {
+        document.getElementById('loginError').classList.remove('hidden');
+        setTimeout(() => {
+          document.getElementById('loginError').classList.add('hidden');
+        }, 3000);
+      }
+    });
+
+    function showDashboard() {
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('dashboard').classList.remove('hidden');
+      loadUserName();
+      loadData();
+    }
+
+    function logout() {
+      if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
+        localStorage.removeItem(CONFIG.storageKeys.auth);
+        location.reload();
+      }
+    }
+
+    function loadUserName() {
+      const name = localStorage.getItem(CONFIG.storageKeys.userName) || 'Membre du Bureau';
+      document.getElementById('userName').textContent = name;
+    }
+
+    // Tab Management
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      
+      event.target.classList.add('active');
+      document.getElementById('tab' + tabName.charAt(0).toUpperCase() + tabName.slice(1)).classList.add('active');
+    }
+
+    // Data Management
+    function saveData(key, data) {
+      localStorage.setItem(key, JSON.stringify(data));
+      loadData();
+    }
+
+    function getData(key) {
+      const data = localStorage.getItem(key);
+      return data ? JSON.parse(data) : [];
+    }
+
+    function loadData() {
+      loadArticles();
+      loadEvents();
+      loadTasks();
+      updateStats();
+    }
+
+    function updateStats() {
+      document.getElementById('statArticles').textContent = getData(CONFIG.storageKeys.articles).length;
+      document.getElementById('statEvents').textContent = getData(CONFIG.storageKeys.events).length;
+      document.getElementById('statTasks').textContent = getData(CONFIG.storageKeys.tasks).filter(t => !t.completed).length;
+    }
+
+    // Articles
+    document.getElementById('articleForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const article = {
+        id: Date.now(),
+        title: document.getElementById('articleTitle').value,
+        author: document.getElementById('articleAuthor').value,
+        content: document.getElementById('articleContent').value,
+        date: new Date().toLocaleDateString('fr-FR'),
+        time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+      };
+
+      const articles = getData(CONFIG.storageKeys.articles);
+      articles.unshift(article);
+      saveData(CONFIG.storageKeys.articles, articles);
+
+      e.target.reset();
+      alert('✅ Article publié avec succès !');
+    });
+
+    function loadArticles() {
+      const articles = getData(CONFIG.storageKeys.articles);
+      const container = document.getElementById('articlesList');
+
+      if (articles.length === 0) {
+        container.innerHTML = '<p style="color: var(--clr-text-tertiary); text-align: center; padding: var(--space-2xl);">Aucun article publié</p>';
+        return;
+      }
+
+      container.innerHTML = articles.map(article => `
+        <div class="article-item">
+          <div class="article-meta">
+            <div class="article-title">${article.title}</div>
+            <div class="article-info">
+              <span>📝 ${article.author}</span>
+              <span>📅 ${article.date}</span>
+              <span>🕐 ${article.time}</span>
+            </div>
+            <div class="article-excerpt">${article.content.substring(0, 150)}${article.content.length > 150 ? '...' : ''}</div>
+          </div>
+          <div class="article-actions">
+            <button class="btn btn-ghost btn-sm" onclick="viewArticle(${article.id})">👁️ Voir</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteArticle(${article.id})">🗑️</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function viewArticle(id) {
+      const article = getData(CONFIG.storageKeys.articles).find(a => a.id === id);
+      if (article) {
+        alert(`${article.title}\n\nPar ${article.author} - ${article.date} à ${article.time}\n\n${article.content}`);
+      }
+    }
+
+    function deleteArticle(id) {
+      if (confirm('Supprimer cet article ?')) {
+        const articles = getData(CONFIG.storageKeys.articles).filter(a => a.id !== id);
+        saveData(CONFIG.storageKeys.articles, articles);
+      }
+    }
+
+    // Events
+    document.getElementById('eventForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const event = {
+        id: Date.now(),
+        title: document.getElementById('eventTitle').value,
+        date: document.getElementById('eventDate').value,
+        time: document.getElementById('eventTime').value,
+        location: document.getElementById('eventLocation').value,
+        description: document.getElementById('eventDescription').value
+      };
+
+      const events = getData(CONFIG.storageKeys.events);
+      events.push(event);
+      saveData(CONFIG.storageKeys.events, events);
+
+      e.target.reset();
+      alert('✅ Événement créé avec succès !');
+    });
+
+    function loadEvents() {
+      const events = getData(CONFIG.storageKeys.events);
+      const container = document.getElementById('eventsList');
+
+      if (events.length === 0) {
+        container.innerHTML = '<p style="color: var(--clr-text-tertiary); text-align: center; padding: var(--space-2xl);">Aucun événement prévu</p>';
+        return;
+      }
+
+      container.innerHTML = events.map(event => `
+        <div class="article-item">
+          <div class="article-meta">
+            <div class="article-title">${event.title}</div>
+            <div class="article-info">
+              <span>📅 ${new Date(event.date).toLocaleDateString('fr-FR')}</span>
+              <span>🕐 ${event.time}</span>
+              <span>📍 ${event.location}</span>
+            </div>
+            <div class="article-excerpt">${event.description}</div>
+          </div>
+          <div class="article-actions">
+            <button class="btn btn-danger btn-sm" onclick="deleteEvent(${event.id})">🗑️</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function deleteEvent(id) {
+      if (confirm('Supprimer cet événement ?')) {
+        const events = getData(CONFIG.storageKeys.events).filter(e => e.id !== id);
+        saveData(CONFIG.storageKeys.events, events);
+      }
+    }
+
+    // Tasks
+    document.getElementById('taskForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const task = {
+        id: Date.now(),
+        title: document.getElementById('taskTitle').value,
+        assignee: document.getElementById('taskAssignee').value,
+        deadline: document.getElementById('taskDeadline').value,
+        completed: false
+      };
+
+      const tasks = getData(CONFIG.storageKeys.tasks);
+      tasks.push(task);
+      saveData(CONFIG.storageKeys.tasks, tasks);
+
+      e.target.reset();
+      alert('✅ Tâche ajoutée avec succès !');
+    });
+
+    function loadTasks() {
+      const tasks = getData(CONFIG.storageKeys.tasks);
+      const container = document.getElementById('tasksList');
+
+      if (tasks.length === 0) {
+        container.innerHTML = '<p style="color: var(--clr-text-tertiary); text-align: center; padding: var(--space-2xl);">Aucune tâche</p>';
+        return;
+      }
+
+      container.innerHTML = tasks.map(task => `
+        <div class="article-item" style="${task.completed ? 'opacity: 0.5;' : ''}">
+          <div class="article-meta">
+            <div class="article-title" style="${task.completed ? 'text-decoration: line-through;' : ''}">
+              ${task.title}
+            </div>
+            <div class="article-info">
+              <span>👤 ${task.assignee}</span>
+              <span>📅 ${new Date(task.deadline).toLocaleDateString('fr-FR')}</span>
+              <span class="badge ${task.completed ? 'badge-success' : 'badge-warning'}">
+                ${task.completed ? '✅ Terminée' : '⏳ En cours'}
+              </span>
+            </div>
+          </div>
+          <div class="article-actions">
+            ${!task.completed ? `<button class="btn btn-ghost btn-sm" onclick="toggleTask(${task.id})">✅ Terminer</button>` : ''}
+            <button class="btn btn-danger btn-sm" onclick="deleteTask(${task.id})">🗑️</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function toggleTask(id) {
+      const tasks = getData(CONFIG.storageKeys.tasks);
+      const task = tasks.find(t => t.id === id);
+      if (task) {
+        task.completed = !task.completed;
+        saveData(CONFIG.storageKeys.tasks, tasks);
+      }
+    }
+
+    function deleteTask(id) {
+      if (confirm('Supprimer cette tâche ?')) {
+        const tasks = getData(CONFIG.storageKeys.tasks).filter(t => t.id !== id);
+        saveData(CONFIG.storageKeys.tasks, tasks);
+      }
+    }
+
+    // Settings
+    document.getElementById('settingsForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('settingsName').value;
+      const newPassword = document.getElementById('newPassword').value;
+
+      if (name) {
+        localStorage.setItem(CONFIG.storageKeys.userName, name);
+        loadUserName();
+      }
+
+      if (newPassword) {
+        localStorage.setItem(CONFIG.storageKeys.password, newPassword);
+        alert('✅ Mot de passe modifié !');
+      }
+
+      alert('✅ Paramètres enregistrés !');
+      e.target.reset();
+    });
+
+    function clearAllData() {
+      if (confirm('⚠️ ATTENTION : Cette action supprimera TOUTES les données (articles, événements, tâches). Continuer ?')) {
+        if (confirm('Êtes-vous VRAIMENT sûr ? Cette action est irréversible !')) {
+          localStorage.removeItem(CONFIG.storageKeys.articles);
+          localStorage.removeItem(CONFIG.storageKeys.events);
+          localStorage.removeItem(CONFIG.storageKeys.tasks);
+          loadData();
+          alert('✅ Toutes les données ont été effacées');
+        }
+      }
+    }
+
+    // Initialize
+    checkAuth();
+  </script>
+</body>
+</html>
