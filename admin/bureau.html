@@ -1,1 +1,1533 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Espace Bureau Pro — Parlement JPV</title>
+  <link rel="icon" href="assets/img/favicon.png">
+
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300&family=Instrument+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Netlify Identity (login réel) -->
+  <script defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+  <style>
+    :root {
+      --clr-ink: #0a0e1a;
+      --clr-slate: #475569;
+      --clr-mist: #94a3b8;
+      --clr-cloud: #e2e8f0;
+      --clr-fog: #cbd5e1;
+      --clr-snow: #f1f5f9;
+      --clr-paper: #fafbfc;
+      --clr-white: #ffffff;
+
+      --clr-gold: #c9a050;
+      --clr-gold-light: #d4af64;
+      --clr-gold-dim: #f5e6cc;
+
+      --clr-navy: #0b2545;
+      --clr-navy-light: #1a4d7a;
+
+      --clr-success: #059669;
+      --clr-danger: #dc2626;
+      --clr-info: #0ea5e9;
+      --clr-warning: #d97706;
+
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body: 'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+      --shadow-sm: 0 1px 3px rgba(10, 14, 26, 0.06), 0 1px 2px rgba(10, 14, 26, 0.03);
+      --shadow-md: 0 4px 6px -1px rgba(10, 14, 26, 0.08), 0 2px 4px -1px rgba(10, 14, 26, 0.04);
+      --shadow-lg: 0 10px 15px -3px rgba(10, 14, 26, 0.12), 0 4px 6px -2px rgba(10, 14, 26, 0.05);
+      --shadow-2xl: 0 25px 50px -12px rgba(10, 14, 26, 0.25);
+
+      --radius-lg: .75rem;
+      --radius-xl: 1rem;
+      --radius-2xl: 1.5rem;
+      --radius-full: 999rem;
+
+      --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+      --ease-elegant: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; scroll-behavior: smooth; }
+    body { font-family: var(--font-body); line-height: 1.7; color: var(--clr-ink); background: var(--clr-paper); overflow-x: hidden; position: relative; }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.015) 2px, rgba(0,0,0,.015) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,.015) 2px, rgba(0,0,0,.015) 4px);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .container { max-width: 1680px; margin: 0 auto; padding: 0 clamp(1rem, 4vw, 2.5rem); position: relative; z-index: 2; }
+    .hidden { display: none !important; }
+
+    /* LOGIN */
+    #loginScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--clr-navy) 0%, var(--clr-navy-light) 100%);
+      position: relative;
+      overflow: hidden;
+      z-index: 2;
+    }
+    #loginScreen::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,255,255,.02) 2px 4px),
+        repeating-linear-gradient(90deg, transparent 0 2px, rgba(255,255,255,.02) 2px 4px);
+      pointer-events: none;
+    }
+    #loginScreen::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 50% 50%, rgba(201, 160, 80, 0.15) 0%, transparent 50%);
+      animation: rotate 30s linear infinite;
+    }
+    @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    .login-box {
+      background: var(--clr-white);
+      border-radius: var(--radius-2xl);
+      padding: 3rem;
+      box-shadow: var(--shadow-2xl);
+      width: 100%;
+      max-width: 520px;
+      position: relative;
+      z-index: 10;
+      animation: fadeInUp 0.8s var(--ease-elegant);
+    }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } }
+
+    .login-logo { text-align: center; margin-bottom: 2.25rem; }
+    .login-logo img { width: 72px; height: 72px; border-radius: var(--radius-xl); margin-bottom: 1.25rem; }
+    .login-logo h1 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 900;
+      margin-bottom: .35rem;
+      background: linear-gradient(135deg, var(--clr-navy), var(--clr-gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .login-sub { color: var(--clr-slate); font-size: .95rem; }
+
+    /* FORMS */
+    .form-group { margin-bottom: 1.25rem; }
+    .form-label { display: block; font-weight: 800; font-size: .875rem; margin-bottom: .5rem; color: var(--clr-ink); }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: .875rem 1rem;
+      border: 2px solid var(--clr-cloud);
+      border-radius: var(--radius-lg);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      transition: all .2s var(--ease-smooth);
+      background: var(--clr-white);
+      color: var(--clr-ink);
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--clr-gold);
+      box-shadow: 0 0 0 4px rgba(201, 160, 80, 0.12);
+      transform: translateY(-1px);
+    }
+    .form-textarea { min-height: 180px; resize: vertical; line-height: 1.7; }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      padding: .875rem 1.75rem;
+      border-radius: var(--radius-lg);
+      font-weight: 800;
+      font-size: .95rem;
+      border: none;
+      cursor: pointer;
+      transition: all .2s var(--ease-smooth);
+      text-decoration: none;
+      white-space: nowrap;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-primary { background: var(--clr-navy); color: #fff; }
+    .btn-primary:hover { background: var(--clr-navy-light); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+    .btn-gold { background: linear-gradient(135deg, var(--clr-gold), #c19940); color: #fff; }
+    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(201, 160, 80, 0.35); }
+    .btn-success { background: var(--clr-success); color: #fff; }
+    .btn-success:hover { background: #047857; transform: translateY(-2px); }
+    .btn-danger { background: var(--clr-danger); color: #fff; }
+    .btn-danger:hover { background: #b91c1c; }
+    .btn-ghost { background: transparent; border: 2px solid var(--clr-cloud); color: var(--clr-ink); }
+    .btn-ghost:hover { background: var(--clr-paper); border-color: var(--clr-navy); color: var(--clr-navy); }
+    .btn-sm { padding: .5rem 1rem; font-size: .82rem; }
+    .btn-block { width: 100%; }
+
+    /* ALERTS */
+    .alert {
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius-lg);
+      margin-bottom: 1rem;
+      font-size: .95rem;
+      border-left: 4px solid;
+      animation: slideInRight .35s var(--ease-elegant);
+    }
+    @keyframes slideInRight { from { opacity: 0; transform: translateX(-18px); } }
+    .alert-error { background: rgba(220, 38, 38, 0.08); border-color: var(--clr-danger); color: #991b1b; }
+    .alert-success { background: rgba(5, 150, 105, 0.08); border-color: var(--clr-success); color: #065f46; }
+    .alert-info { background: rgba(14, 165, 233, 0.08); border-color: var(--clr-info); color: #075985; }
+    .alert-warning { background: rgba(217, 119, 6, 0.08); border-color: var(--clr-warning); color: #92400e; }
+
+    /* DASHBOARD */
+    #dashboard { min-height: 100vh; padding: 2rem 0 4rem; position: relative; z-index: 2; }
+    .dashboard-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 2.25rem; flex-wrap: wrap; gap: 1.25rem;
+      animation: fadeIn .6s var(--ease-elegant);
+    }
+    @keyframes fadeIn { from { opacity: 0; } }
+    .dashboard-title { display: flex; align-items: center; gap: 1.25rem; }
+    .dashboard-title img { width: 56px; height: 56px; border-radius: var(--radius-xl); box-shadow: var(--shadow-md); }
+    .dashboard-title h1 { font-family: var(--font-display); font-size: clamp(1.75rem, 4vw, 2.75rem); font-weight: 900; line-height: 1.1; letter-spacing: -0.02em; }
+    .user-info { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .user-badge {
+      display: inline-flex; align-items: center; gap: .625rem;
+      padding: .625rem 1.25rem;
+      background: linear-gradient(135deg, var(--clr-gold-dim), rgba(11, 37, 69, 0.05));
+      border: 2px solid var(--clr-gold);
+      border-radius: var(--radius-full);
+      font-weight: 800;
+      font-size: .95rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* TABS */
+    .tabs {
+      display: flex; gap: .5rem; margin-bottom: 2.25rem;
+      border-bottom: 2px solid var(--clr-cloud);
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      padding-bottom: 2px;
+    }
+    .tab {
+      padding: 1rem 1.5rem;
+      background: transparent;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-weight: 800;
+      font-size: .95rem;
+      color: var(--clr-slate);
+      cursor: pointer;
+      transition: all .2s var(--ease-smooth);
+      white-space: nowrap;
+      margin-bottom: -2px;
+      position: relative;
+    }
+    .tab::after {
+      content:'';
+      position:absolute; bottom:-2px; left:0; right:0;
+      height:3px; background: var(--clr-gold);
+      transform: scaleX(0);
+      transition: transform .3s var(--ease-elegant);
+    }
+    .tab:hover { color: var(--clr-navy); }
+    .tab.active { color: var(--clr-navy); }
+    .tab.active::after { transform: scaleX(1); }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeInScale .35s var(--ease-elegant); }
+    @keyframes fadeInScale { from { opacity: 0; transform: scale(.985); } }
+
+    /* GRID + CARDS */
+    .grid { display: grid; gap: 1.75rem; margin-bottom: 2rem; }
+    .grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+    .card {
+      background: var(--clr-white);
+      border: 1px solid var(--clr-cloud);
+      border-radius: var(--radius-2xl);
+      padding: clamp(1.5rem, 3vw, 2.25rem);
+      box-shadow: var(--shadow-sm);
+      transition: all .3s var(--ease-smooth);
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content:'';
+      position:absolute; top:0; left:0; right:0;
+      height:3px;
+      background: linear-gradient(90deg, var(--clr-gold), var(--clr-navy));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .4s var(--ease-elegant);
+    }
+    .card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+    .card:hover::before { transform: scaleX(1); }
+
+    .card-header {
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom: 1.25rem; gap:1rem; flex-wrap:wrap;
+    }
+    .card-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 900; letter-spacing: -0.015em; }
+
+    /* STATS */
+    .stat-card { text-align:center; }
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: .75rem;
+      background: linear-gradient(135deg, var(--clr-gold), var(--clr-navy));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-label { font-size: .875rem; font-weight: 800; color: var(--clr-slate); text-transform: uppercase; letter-spacing: .08em; }
+
+    /* LISTS */
+    .item { padding: 1.25rem; background: var(--clr-paper); border: 1px solid var(--clr-cloud); border-radius: var(--radius-xl); transition: all .2s var(--ease-smooth); }
+    .item:hover { border-color: var(--clr-gold); box-shadow: var(--shadow-sm); transform: translateX(4px); }
+    .item-header { display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; margin-bottom:.75rem; }
+    .item-title { font-weight: 900; font-size: 1.05rem; }
+    .item-meta { font-size: .8125rem; color: var(--clr-mist); }
+
+    /* BADGES */
+    .badge { display:inline-flex; align-items:center; padding:.25rem .75rem; border-radius: var(--radius-full); font-size: .75rem; font-weight: 800; letter-spacing:.02em; }
+    .badge-success { background: rgba(5,150,105,.1); color: var(--clr-success); }
+    .badge-warning { background: rgba(217,119,6,.1); color: var(--clr-warning); }
+    .badge-info { background: rgba(14,165,233,.1); color: var(--clr-info); }
+    .badge-danger { background: rgba(220,38,38,.1); color: var(--clr-danger); }
+
+    /* CHAT */
+    .chat-messages { max-height: 480px; overflow-y:auto; padding:1.25rem; background: var(--clr-paper); border-radius: var(--radius-xl); margin-bottom: 1.25rem; border: 1px solid var(--clr-cloud); scroll-behavior:smooth; }
+    .chat-message { margin-bottom: 1.15rem; }
+    .chat-message.own { text-align:right; }
+    .chat-bubble { display:inline-block; padding:.875rem 1.25rem; border-radius: var(--radius-xl); max-width: 75%; word-wrap: break-word; }
+    .chat-message.own .chat-bubble { background: linear-gradient(135deg, var(--clr-navy), var(--clr-navy-light)); color:#fff; border-bottom-right-radius:.375rem; box-shadow: var(--shadow-md); }
+    .chat-message:not(.own) .chat-bubble { background: var(--clr-white); border:1px solid var(--clr-cloud); border-bottom-left-radius:.375rem; color: var(--clr-ink); }
+    .chat-author { font-size: .75rem; font-weight: 900; margin-bottom: .35rem; color: var(--clr-slate); }
+    .chat-time { font-size: .6875rem; color: var(--clr-mist); margin-top: .35rem; }
+
+    /* MEMBERS */
+    .member-card { display:flex; align-items:center; gap:1.25rem; padding:1.25rem; background: var(--clr-paper); border:1px solid var(--clr-cloud); border-radius: var(--radius-xl); transition: all .2s var(--ease-smooth); }
+    .member-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); border-color: var(--clr-gold); }
+    .member-avatar {
+      width: 56px; height:56px; border-radius:50%;
+      background: linear-gradient(135deg, var(--clr-gold), var(--clr-navy));
+      display:flex; align-items:center; justify-content:center;
+      color:#fff; font-weight: 900; font-size: 1.5rem;
+      box-shadow: var(--shadow-md);
+      flex-shrink: 0;
+    }
+    .member-name { font-weight: 900; font-size: 1.05rem; margin-bottom: .25rem; }
+    .member-role { font-size: .875rem; color: var(--clr-slate); font-weight: 700; }
+    .member-meta { font-size: .8125rem; color: var(--clr-mist); margin-top: .25rem; }
+
+    /* EMPTY */
+    .empty-state { text-align:center; padding: 3rem 2rem; color: var(--clr-slate); }
+    .empty-icon { font-size: 4rem; margin-bottom: 1rem; opacity: .5; }
+    .empty-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 900; margin-bottom: .5rem; }
+
+    /* Responsive */
+    @media (max-width:1280px){ .grid-4{ grid-template-columns: repeat(2,1fr);} }
+    @media (max-width:1024px){ .grid-3{ grid-template-columns: repeat(2,1fr);} }
+    @media (max-width:768px){
+      .grid-2,.grid-3,.grid-4{ grid-template-columns: 1fr; }
+      .dashboard-header{ flex-direction:column; align-items:flex-start; }
+      .tab{ padding:.75rem 1rem; font-size:.875rem; }
+    }
+    @media (max-width:640px){
+      .login-box{ padding:2rem 1.5rem; }
+      .card{ padding:1.25rem; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- LOGIN -->
+  <div id="loginScreen">
+    <div class="login-box">
+      <div class="login-logo">
+        <img src="assets/img/logo.png" alt="Parlement JPV">
+        <h1>Bureau Pro</h1>
+        <p class="login-sub">Connexion sécurisée — contenu partagé (serveur)</p>
+      </div>
+
+      <div id="loginAlert"></div>
+
+      <button class="btn btn-gold btn-block" id="btnLogin">
+        🔐 Se connecter (Netlify Identity)
+      </button>
+
+      <button class="btn btn-ghost btn-block" style="margin-top:.75rem" id="btnSignup">
+        ✨ Créer un compte (si autorisé)
+      </button>
+
+      <div class="alert alert-info" style="margin-top: 1.25rem; margin-bottom: 0;">
+        <strong>Important</strong><br>
+        Ici, rien n’est stocké en localStorage pour le contenu.<br>
+        Articles / événements / tâches / chat / fichiers passent par l’API serveur.
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="hidden">
+    <div class="container">
+      <div class="dashboard-header">
+        <div class="dashboard-title">
+          <img src="assets/img/logo.png" alt="">
+          <div>
+            <h1>Espace Bureau</h1>
+            <p style="color: var(--clr-slate); font-size: 0.9375rem;">
+              Gestion collaborative — Parlement JPV
+            </p>
+          </div>
+        </div>
+
+        <div class="user-info">
+          <span class="user-badge">
+            <span id="userAvatar" style="display:inline-flex;width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--clr-gold),var(--clr-navy));align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:.875rem;"></span>
+            <span id="userName"></span>
+          </span>
+          <button class="btn btn-ghost btn-sm" id="btnLogout">Déconnexion</button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-4">
+        <div class="card stat-card">
+          <div class="stat-value" id="statArticles">0</div>
+          <div class="stat-label">Articles</div>
+        </div>
+        <div class="card stat-card">
+          <div class="stat-value" id="statEvents">0</div>
+          <div class="stat-label">Événements</div>
+        </div>
+        <div class="card stat-card">
+          <div class="stat-value" id="statTasks">0</div>
+          <div class="stat-label">Tâches actives</div>
+        </div>
+        <div class="card stat-card">
+          <div class="stat-value" id="statMembers">0</div>
+          <div class="stat-label">Membres</div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab(this, 'dashboard')">🏠 Dashboard</button>
+        <button class="tab" onclick="switchTab(this, 'articles')">📝 Articles</button>
+        <button class="tab" onclick="switchTab(this, 'events')">📅 Événements</button>
+        <button class="tab" onclick="switchTab(this, 'tasks')">✅ Tâches</button>
+        <button class="tab" onclick="switchTab(this, 'chat')">💬 Discussion</button>
+        <button class="tab" onclick="switchTab(this, 'members')">👥 Annuaire</button>
+        <button class="tab" onclick="switchTab(this, 'files')">📎 Fichiers</button>
+        <button class="tab" onclick="switchTab(this, 'settings')">⚙️ Paramètres</button>
+      </div>
+
+      <div id="tabsContainer"></div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================
+    // IMPORTANT
+    // =========================================================
+    // Ce bureau ne stocke PAS le contenu en localStorage.
+    // Il dépend d'une API Netlify Functions :
+    //  - /.netlify/functions/articles  (GET, POST, DELETE)
+    //  - /.netlify/functions/events    (GET, POST, DELETE)
+    //  - /.netlify/functions/tasks     (GET, POST, PATCH, DELETE)
+    //  - /.netlify/functions/chat      (GET, POST)
+    //  - /.netlify/functions/files     (GET, POST, DELETE)  (base64 possible mais évite les gros fichiers)
+    //
+    // Auth réelle = Netlify Identity. Les writes sont protégés via JWT.
+    // =========================================================
+
+    const APP = {
+      currentUser: null,
+      sheets: {
+        enabled: true,
+        sheetId: '12cQHZ8ip8btocRuOtNqxVuFWbQ5-KSBQI38PsI5_Eg8'
+      }
+    };
+
+    // =========================================================
+    // HELPERS
+    // =========================================================
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text ?? '';
+      return div.innerHTML;
+    }
+    function formatDate(d) {
+      return new Date(d).toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' });
+    }
+    function formatTime(d) {
+      return new Date(d).toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+    }
+    function getAvatar(name) {
+      return (name || '?').charAt(0).toUpperCase();
+    }
+    function showAlert(message, type='info') {
+      const container = document.getElementById('loginAlert');
+      if (!container) return;
+      container.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+      setTimeout(() => { container.innerHTML = ''; }, 6000);
+    }
+    function showInlineAlert(containerId, message, type='info') {
+      const el = document.getElementById(containerId);
+      if (!el) return;
+      el.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+      setTimeout(() => { el.innerHTML = ''; }, 5000);
+    }
+
+    // =========================================================
+    // API (Netlify Functions)
+    // =========================================================
+    function getIdentityToken() {
+      const u = window.netlifyIdentity?.currentUser?.();
+      return u?.token?.access_token || null;
+    }
+
+    async function apiFetch(path, options = {}) {
+      const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
+      const token = getIdentityToken();
+      if (token) headers.Authorization = `Bearer ${token}`;
+
+      const res = await fetch(`/.netlify/functions${path}`, { ...options, headers });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || `API error (${res.status})`);
+      return data;
+    }
+
+    const api = {
+      // ARTICLES
+      getArticles: (isPublic=false) => apiFetch(`/articles${isPublic ? '?public=1' : ''}`),
+      createArticle: (payload) => apiFetch('/articles', { method:'POST', body: JSON.stringify(payload) }),
+      deleteArticle: (id) => apiFetch(`/articles?id=${encodeURIComponent(id)}`, { method:'DELETE' }),
+
+      // EVENTS
+      getEvents: () => apiFetch('/events'),
+      createEvent: (payload) => apiFetch('/events', { method:'POST', body: JSON.stringify(payload) }),
+      deleteEvent: (id) => apiFetch(`/events?id=${encodeURIComponent(id)}`, { method:'DELETE' }),
+
+      // TASKS
+      getTasks: () => apiFetch('/tasks'),
+      createTask: (payload) => apiFetch('/tasks', { method:'POST', body: JSON.stringify(payload) }),
+      patchTask: (id, patch) => apiFetch(`/tasks?id=${encodeURIComponent(id)}`, { method:'PATCH', body: JSON.stringify(patch) }),
+      deleteTask: (id) => apiFetch(`/tasks?id=${encodeURIComponent(id)}`, { method:'DELETE' }),
+
+      // CHAT
+      getChat: () => apiFetch('/chat'),
+      postChat: (payload) => apiFetch('/chat', { method:'POST', body: JSON.stringify(payload) }),
+
+      // FILES (ATTENTION: base64 = lourd, limite taille)
+      getFiles: () => apiFetch('/files'),
+      uploadFile: (payload) => apiFetch('/files', { method:'POST', body: JSON.stringify(payload) }),
+      deleteFile: (id) => apiFetch(`/files?id=${encodeURIComponent(id)}`, { method:'DELETE' }),
+    };
+
+    // =========================================================
+    // AUTH (Netlify Identity)
+    // =========================================================
+    function requireIdentity() {
+      if (!window.netlifyIdentity) {
+        showAlert("Netlify Identity n'est pas chargé. Vérifie que tu es sur Netlify (pas GitHub Pages).", 'error');
+        return false;
+      }
+      return true;
+    }
+
+    function showDashboard(user) {
+      APP.currentUser = user;
+
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('dashboard').classList.remove('hidden');
+
+      const displayName =
+        user.user_metadata?.full_name ||
+        user.user_metadata?.name ||
+        user.email ||
+        'Membre';
+
+      document.getElementById('userName').textContent = displayName;
+      document.getElementById('userAvatar').textContent = getAvatar(displayName);
+
+      renderAllTabs();
+      loadAllData().catch(e => console.error(e));
+      if (APP.sheets.enabled) syncMembersFromSheets().catch(() => {});
+    }
+
+    function logout() {
+      if (!confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) return;
+      window.netlifyIdentity.logout();
+    }
+
+    // =========================================================
+    // TABS
+    // =========================================================
+    function switchTab(btn, tabName) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+
+      const content = document.getElementById('tab' + tabName.charAt(0).toUpperCase() + tabName.slice(1));
+      if (content) content.classList.add('active');
+
+      if (tabName === 'members') loadMembers();
+      if (tabName === 'chat') loadChat();
+      if (tabName === 'tasks') loadTasks();
+      if (tabName === 'articles') loadArticles();
+      if (tabName === 'events') loadEvents();
+      if (tabName === 'files') loadFiles();
+      if (tabName === 'dashboard') loadRecentActivity();
+    }
+
+    // =========================================================
+    // GOOGLE SHEETS MEMBERS SYNC (lecture publique)
+    // =========================================================
+    function parseCSV(text) {
+      const rows = [];
+      let row = [];
+      let cell = '';
+      let inQuotes = false;
+
+      for (let i = 0; i < text.length; i++) {
+        const c = text[i];
+        const next = text[i + 1];
+
+        if (c === '"' && inQuotes && next === '"') { cell += '"'; i++; continue; }
+        if (c === '"') { inQuotes = !inQuotes; continue; }
+
+        if (c === ',' && !inQuotes) { row.push(cell); cell = ''; continue; }
+        if ((c === '\n' || c === '\r') && !inQuotes) {
+          if (cell.length || row.length) { row.push(cell); rows.push(row); }
+          row = []; cell = '';
+          continue;
+        }
+        cell += c;
+      }
+      if (cell.length || row.length) { row.push(cell); rows.push(row); }
+      return rows;
+    }
+
+    let SHEETS_MEMBERS_CACHE = [];
+
+    async function syncMembersFromSheets() {
+      try {
+        const csvUrl = `https://docs.google.com/spreadsheets/d/${APP.sheets.sheetId}/export?format=csv`;
+        const res = await fetch(csvUrl);
+        if (!res.ok) throw new Error('Google Sheet inaccessible (partage public requis)');
+        const csvText = await res.text();
+
+        const table = parseCSV(csvText).filter(r => r.some(x => (x || '').trim() !== ''));
+        if (table.length <= 1) throw new Error('Sheet vide');
+
+        const rows = table.slice(1);
+        const members = rows.map((cols, idx) => {
+          const name = (cols[0] || '').trim();
+          if (!name) return null;
+          return {
+            id: 1000 + idx,
+            name,
+            classe: (cols[1] || '').trim(),
+            email: (cols[2] || '').trim(),
+            phone: (cols[3] || '').trim(),
+            role: (cols[4] || '').trim() || 'Membre',
+            joinedDate: (cols[5] || '').trim() || new Date().toISOString(),
+            isActive: true
+          };
+        }).filter(Boolean);
+
+        SHEETS_MEMBERS_CACHE = members;
+        updateStats();
+        loadMembers();
+
+        // petit toast visuel (dans loginAlert sinon vide)
+        console.log(`Members synced: ${members.length}`);
+      } catch (e) {
+        console.warn('Sheets sync failed:', e.message);
+      }
+    }
+
+    // =========================================================
+    // RENDER TABS
+    // =========================================================
+    function renderAllTabs() {
+      const container = document.getElementById('tabsContainer');
+      container.innerHTML = `
+        ${renderDashboardTab()}
+        ${renderArticlesTab()}
+        ${renderEventsTab()}
+        ${renderTasksTab()}
+        ${renderChatTab()}
+        ${renderMembersTab()}
+        ${renderFilesTab()}
+        ${renderSettingsTab()}
+      `;
+    }
+
+    function renderDashboardTab() {
+      return `
+        <div id="tabDashboard" class="tab-content active">
+          <div class="grid grid-2">
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Activité récente</h2>
+              </div>
+              <div id="recentActivity"></div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Actions rapides</h2>
+              </div>
+              <div class="grid grid-2" style="gap: 1rem; margin-bottom: 0;">
+                <button class="btn btn-primary" onclick="switchTab(document.querySelectorAll('.tab')[1], 'articles')">📝 Nouvel article</button>
+                <button class="btn btn-gold" onclick="switchTab(document.querySelectorAll('.tab')[2], 'events')">📅 Créer événement</button>
+                <button class="btn btn-success" onclick="switchTab(document.querySelectorAll('.tab')[3], 'tasks')">✅ Ajouter tâche</button>
+                <button class="btn btn-ghost" onclick="switchTab(document.querySelectorAll('.tab')[4], 'chat')">💬 Discussion</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderArticlesTab() {
+      return `
+        <div id="tabArticles" class="tab-content">
+          <div class="grid grid-2">
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Publier un article</h2>
+              </div>
+              <form id="articleForm">
+                <div class="form-group">
+                  <label class="form-label">Titre</label>
+                  <input class="form-input" id="articleTitle" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Catégorie</label>
+                  <select class="form-select" id="articleCategory" required>
+                    <option value="">Choisir...</option>
+                    <option value="actualites">Actualités</option>
+                    <option value="debats">Débats</option>
+                    <option value="projets">Projets</option>
+                    <option value="evenements">Événements</option>
+                    <option value="tribune">Tribune libre</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Contenu</label>
+                  <textarea class="form-textarea" id="articleContent" required placeholder="Rédigez votre article..."></textarea>
+                </div>
+                <div class="form-group">
+                  <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer;">
+                    <input type="checkbox" id="articlePublic" checked style="width:auto;">
+                    <span>Publier publiquement sur le site</span>
+                  </label>
+                </div>
+                <button type="submit" class="btn btn-gold btn-block">✨ Publier</button>
+              </form>
+              <div id="articleAlert" style="margin-top: 1rem;"></div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Articles</h2>
+                <select id="articleFilter" class="form-select" style="width:auto; padding:.5rem 1rem;">
+                  <option value="all" selected>Tous (bureau)</option>
+                  <option value="public">Publics uniquement</option>
+                  <option value="mine">Mes articles</option>
+                </select>
+              </div>
+              <div id="articlesList"></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderEventsTab() {
+      return `
+        <div id="tabEvents" class="tab-content">
+          <div class="grid grid-2">
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Créer un événement</h2>
+              </div>
+              <form id="eventForm">
+                <div class="form-group">
+                  <label class="form-label">Titre</label>
+                  <input class="form-input" id="eventTitle" required>
+                </div>
+                <div class="grid grid-2" style="gap:1rem;">
+                  <div class="form-group">
+                    <label class="form-label">Date</label>
+                    <input type="date" class="form-input" id="eventDate" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Heure</label>
+                    <input type="time" class="form-input" id="eventTime" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Lieu</label>
+                  <input class="form-input" id="eventLocation" placeholder="Ex: Salle A204" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Description</label>
+                  <textarea class="form-textarea" id="eventDescription" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">📅 Créer</button>
+              </form>
+              <div id="eventAlert" style="margin-top: 1rem;"></div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Événements</h2>
+              </div>
+              <div id="eventsList"></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderTasksTab() {
+      return `
+        <div id="tabTasks" class="tab-content">
+          <div class="grid grid-2">
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Nouvelle tâche</h2>
+              </div>
+              <form id="taskForm">
+                <div class="form-group">
+                  <label class="form-label">Tâche</label>
+                  <input class="form-input" id="taskTitle" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Assigné à</label>
+                  <input class="form-input" id="taskAssigneeName" placeholder="Nom / rôle (ex: Secrétaire)" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Priorité</label>
+                  <select class="form-select" id="taskPriority" required>
+                    <option value="low">🟢 Basse</option>
+                    <option value="medium" selected>🟡 Moyenne</option>
+                    <option value="high">🔴 Haute</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Date limite</label>
+                  <input type="date" class="form-input" id="taskDeadline" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">✅ Créer</button>
+              </form>
+              <div id="taskAlert" style="margin-top: 1rem;"></div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Tâches</h2>
+                <select id="taskFilter" class="form-select" style="width:auto; padding:.5rem 1rem;">
+                  <option value="active" selected>Actives</option>
+                  <option value="completed">Terminées</option>
+                  <option value="all">Toutes</option>
+                  <option value="mine">Mes tâches (créées par moi)</option>
+                </select>
+              </div>
+              <div id="tasksList"></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderChatTab() {
+      return `
+        <div id="tabChat" class="tab-content">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Discussion du bureau</h2>
+            </div>
+            <div class="chat-messages" id="chatMessages"></div>
+            <form id="chatForm" style="display:flex; gap:.75rem;">
+              <input type="text" id="chatInput" class="form-input" placeholder="Votre message..." required style="flex:1;">
+              <button type="submit" class="btn btn-primary">Envoyer</button>
+            </form>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderMembersTab() {
+      return `
+        <div id="tabMembers" class="tab-content">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Annuaire complet</h2>
+              <button class="btn btn-primary btn-sm" onclick="syncMembersFromSheets()">
+                🔄 Synchroniser Google Sheets
+              </button>
+            </div>
+            <div class="alert alert-info">
+              <strong>📊 Google Sheets intégré</strong><br>
+              Les membres sont lus depuis Google Sheets (lecture publique).<br>
+              <small>Sheet ID: ${APP.sheets.sheetId}</small>
+            </div>
+            <div id="membersList"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderFilesTab() {
+      return `
+        <div id="tabFiles" class="tab-content">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Gestion des fichiers</h2>
+              <span class="badge badge-warning">⚠️ Évite les gros fichiers (base64)</span>
+            </div>
+            <div style="border:2px dashed var(--clr-cloud); border-radius:var(--radius-xl); padding:3rem 2rem; text-align:center; cursor:pointer; transition:all .2s;"
+                 id="fileUploadZone">
+              <p style="font-size:3rem; margin-bottom:.75rem; opacity:.5;">📎</p>
+              <p style="font-weight:900; margin-bottom:.5rem;">Cliquer pour ajouter des fichiers</p>
+              <p style="font-size:.875rem; color:var(--clr-slate);">Documents, images, PDFs...</p>
+              <input type="file" id="fileInput" multiple style="display:none;">
+            </div>
+            <div id="filesList" style="margin-top:1.5rem;"></div>
+            <div id="filesAlert" style="margin-top: 1rem;"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderSettingsTab() {
+      const name =
+        APP.currentUser?.user_metadata?.full_name ||
+        APP.currentUser?.user_metadata?.name ||
+        APP.currentUser?.email || '';
+      return `
+        <div id="tabSettings" class="tab-content">
+          <div class="grid grid-2">
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Compte</h2>
+              </div>
+              <div class="alert alert-info">
+                <strong>Connexion</strong><br>
+                Gérée par Netlify Identity.<br>
+                <small>${escapeHtml(name)}</small>
+              </div>
+              <button class="btn btn-ghost btn-block" onclick="window.netlifyIdentity.open('user')">
+                👤 Gérer mon compte (Identity)
+              </button>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Actions</h2>
+              </div>
+              <button class="btn btn-danger btn-block" onclick="hardRefreshCaches()">
+                🔄 Recharger (vider cache mémoire)
+              </button>
+              <p style="margin-top: 1rem; font-size: .875rem; color: var(--clr-slate);">
+                Cette page ne stocke pas les contenus en localStorage. Le contenu vient de l’API serveur.
+              </p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function hardRefreshCaches() {
+      SHEETS_MEMBERS_CACHE = [];
+      loadAllData().catch(() => {});
+      alert("Rechargé.");
+    }
+
+    // =========================================================
+    // DATA LOADERS (server)
+    // =========================================================
+    let CACHE = {
+      articles: [],
+      events: [],
+      tasks: [],
+      chat: [],
+      files: []
+    };
+
+    async function loadAllData() {
+      await Promise.allSettled([
+        loadArticles('all'),
+        loadEvents(),
+        loadTasks('active'),
+        loadChat(),
+        loadFiles()
+      ]);
+      await updateStats();
+      await loadRecentActivity();
+    }
+
+    async function updateStats() {
+      const articles = CACHE.articles || [];
+      const events = CACHE.events || [];
+      const tasks = CACHE.tasks || [];
+      const allMembers = SHEETS_MEMBERS_CACHE || [];
+
+      document.getElementById('statArticles').textContent = articles.length;
+      document.getElementById('statEvents').textContent = events.length;
+      document.getElementById('statTasks').textContent = tasks.filter(t => !t.completed).length;
+      document.getElementById('statMembers').textContent = allMembers.length;
+    }
+
+    async function loadRecentActivity() {
+      const container = document.getElementById('recentActivity');
+      if (!container) return;
+
+      const articles = (CACHE.articles || []).slice(0, 2).map(a => ({
+        type: '📝',
+        text: `${a.author} a publié "${a.title}"`,
+        date: a.created_at || a.createdAt
+      }));
+      const events = (CACHE.events || []).slice(0, 2).map(e => ({
+        type: '📅',
+        text: `Événement "${e.title}" le ${formatDate(e.date)}`,
+        date: e.created_at || e.createdAt
+      }));
+      const tasks = (CACHE.tasks || []).slice(0, 1).map(t => ({
+        type: '✅',
+        text: `Tâche "${t.title}" assignée à ${t.assignee_name || t.assigneeName}`,
+        date: t.created_at || t.createdAt
+      }));
+
+      const recent = [...articles, ...events, ...tasks]
+        .filter(x => x.date)
+        .sort((a,b) => new Date(b.date) - new Date(a.date))
+        .slice(0, 6);
+
+      if (!recent.length) {
+        container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-title">Aucune activité récente</div></div>';
+        return;
+      }
+
+      container.innerHTML = recent.map(item => `
+        <div style="padding:1rem; border-left:3px solid var(--clr-gold); background:var(--clr-paper); margin-bottom:.75rem; border-radius:var(--radius-lg);">
+          ${item.type} ${escapeHtml(item.text)}
+          <div style="font-size:.75rem; color:var(--clr-mist); margin-top:.35rem;">${formatDate(item.date)}</div>
+        </div>
+      `).join('');
+    }
+
+    // =========================================================
+    // ARTICLES (server)
+    // =========================================================
+    async function loadArticles(filter='all') {
+      const container = document.getElementById('articlesList');
+      if (!container) return;
+
+      try {
+        const isPublicOnly = (filter === 'public');
+        const { articles } = await api.getArticles(isPublicOnly);
+        CACHE.articles = articles || [];
+
+        let filtered = CACHE.articles;
+        if (filter === 'mine') {
+          const myId = APP.currentUser?.id || APP.currentUser?.sub;
+          filtered = filtered.filter(a => (a.author_id || a.authorId) === myId);
+        }
+
+        if (!filtered.length) {
+          container.innerHTML = '<div class="empty-state"><div class="empty-icon">📝</div><div class="empty-title">Aucun article</div></div>';
+          await updateStats();
+          return;
+        }
+
+        container.innerHTML = filtered.map(article => `
+          <div class="item">
+            <div class="item-header">
+              <div>
+                <div class="item-title">${escapeHtml(article.title)}</div>
+                <div class="item-meta">
+                  ✍️ ${escapeHtml(article.author)} •
+                  📅 ${formatDate(article.created_at || article.createdAt)} •
+                  📂 ${escapeHtml(article.category)}
+                  ${article.is_public || article.isPublic ? ' • <span class="badge badge-success">🌐 Public</span>' : ' • <span class="badge badge-warning">🔒 Privé</span>'}
+                </div>
+              </div>
+              <button class="btn btn-danger btn-sm" onclick="deleteArticle(${article.id})">🗑️</button>
+            </div>
+            <div style="color: var(--clr-slate); line-height:1.6;">
+              ${escapeHtml((article.content || '').substring(0, 240))}${(article.content || '').length > 240 ? '…' : ''}
+            </div>
+          </div>
+        `).join('');
+
+        await updateStats();
+      } catch (e) {
+        console.error(e);
+        container.innerHTML = `<div class="alert alert-error">Erreur chargement articles : ${escapeHtml(e.message)}</div>`;
+      }
+    }
+
+    async function deleteArticle(id) {
+      if (!confirm('Supprimer cet article ?')) return;
+      try {
+        await api.deleteArticle(id);
+        await loadArticles(document.getElementById('articleFilter')?.value || 'all');
+        showInlineAlert('articleAlert', '✅ Article supprimé', 'success');
+      } catch (e) {
+        showInlineAlert('articleAlert', `❌ ${e.message}`, 'error');
+      }
+    }
+
+    // =========================================================
+    // EVENTS (server)
+    // =========================================================
+    async function loadEvents() {
+      const container = document.getElementById('eventsList');
+      if (!container) return;
+
+      try {
+        const { events } = await api.getEvents();
+        CACHE.events = (events || []).slice().sort((a,b) => new Date(a.date) - new Date(b.date));
+
+        if (!CACHE.events.length) {
+          container.innerHTML = '<div class="empty-state"><div class="empty-icon">📅</div><div class="empty-title">Aucun événement</div></div>';
+          await updateStats();
+          return;
+        }
+
+        container.innerHTML = CACHE.events.map(event => `
+          <div class="item">
+            <div class="item-header">
+              <div>
+                <div class="item-title">${escapeHtml(event.title)}</div>
+                <div class="item-meta">
+                  📅 ${formatDate(event.date)} •
+                  🕐 ${escapeHtml(event.time)} •
+                  📍 ${escapeHtml(event.location)} •
+                  👤 ${escapeHtml(event.creator)}
+                </div>
+              </div>
+              <button class="btn btn-danger btn-sm" onclick="deleteEvent(${event.id})">🗑️</button>
+            </div>
+            <div style="color: var(--clr-slate); line-height:1.6;">
+              ${escapeHtml(event.description)}
+            </div>
+          </div>
+        `).join('');
+
+        await updateStats();
+      } catch (e) {
+        console.error(e);
+        container.innerHTML = `<div class="alert alert-error">Erreur chargement événements : ${escapeHtml(e.message)}</div>`;
+      }
+    }
+
+    async function deleteEvent(id) {
+      if (!confirm('Supprimer cet événement ?')) return;
+      try {
+        await api.deleteEvent(id);
+        await loadEvents();
+        showInlineAlert('eventAlert', '✅ Événement supprimé', 'success');
+      } catch (e) {
+        showInlineAlert('eventAlert', `❌ ${e.message}`, 'error');
+      }
+    }
+
+    // =========================================================
+    // TASKS (server)
+    // =========================================================
+    async function loadTasks(filter='active') {
+      const container = document.getElementById('tasksList');
+      if (!container) return;
+
+      try {
+        const { tasks } = await api.getTasks();
+        CACHE.tasks = tasks || [];
+
+        let filtered = CACHE.tasks;
+        if (filter === 'active') filtered = filtered.filter(t => !t.completed);
+        if (filter === 'completed') filtered = filtered.filter(t => !!t.completed);
+        if (filter === 'mine') {
+          const myId = APP.currentUser?.id || APP.currentUser?.sub;
+          filtered = filtered.filter(t => (t.creator_id || t.creatorId) === myId);
+        }
+
+        if (!filtered.length) {
+          container.innerHTML = '<div class="empty-state"><div class="empty-icon">✅</div><div class="empty-title">Aucune tâche</div></div>';
+          await updateStats();
+          return;
+        }
+
+        const priorityIcons = { low: '🟢', medium: '🟡', high: '🔴' };
+
+        container.innerHTML = filtered.map(task => `
+          <div class="item" style="${task.completed ? 'opacity:.6;' : ''}">
+            <div class="item-header">
+              <div>
+                <div class="item-title" style="${task.completed ? 'text-decoration:line-through;' : ''}">
+                  ${priorityIcons[task.priority] || '🟡'} ${escapeHtml(task.title)}
+                </div>
+                <div class="item-meta">
+                  👤 ${escapeHtml(task.assignee_name || task.assigneeName)} •
+                  📅 ${formatDate(task.deadline)} •
+                  ${task.completed ? '<span class="badge badge-success">✅ Terminée</span>' : '<span class="badge badge-warning">⏳ En cours</span>'}
+                </div>
+              </div>
+              <div style="display:flex; gap:.5rem;">
+                ${!task.completed ? `<button class="btn btn-success btn-sm" onclick="completeTask(${task.id})">✅</button>` : ''}
+                <button class="btn btn-danger btn-sm" onclick="deleteTask(${task.id})">🗑️</button>
+              </div>
+            </div>
+          </div>
+        `).join('');
+
+        await updateStats();
+      } catch (e) {
+        console.error(e);
+        container.innerHTML = `<div class="alert alert-error">Erreur chargement tâches : ${escapeHtml(e.message)}</div>`;
+      }
+    }
+
+    async function completeTask(id) {
+      try {
+        await api.patchTask(id, { completed: true });
+        await loadTasks(document.getElementById('taskFilter')?.value || 'active');
+        showInlineAlert('taskAlert', '✅ Tâche terminée !', 'success');
+      } catch (e) {
+        showInlineAlert('taskAlert', `❌ ${e.message}`, 'error');
+      }
+    }
+
+    async function deleteTask(id) {
+      if (!confirm('Supprimer cette tâche ?')) return;
+      try {
+        await api.deleteTask(id);
+        await loadTasks(document.getElementById('taskFilter')?.value || 'active');
+        showInlineAlert('taskAlert', '✅ Tâche supprimée', 'success');
+      } catch (e) {
+        showInlineAlert('taskAlert', `❌ ${e.message}`, 'error');
+      }
+    }
+
+    // =========================================================
+    // CHAT (server)
+    // =========================================================
+    async function loadChat() {
+      const container = document.getElementById('chatMessages');
+      if (!container) return;
+
+      try {
+        const { messages } = await api.getChat();
+        CACHE.chat = messages || [];
+
+        const myId = APP.currentUser?.id || APP.currentUser?.sub;
+
+        if (!CACHE.chat.length) {
+          container.innerHTML = '<div class="empty-state"><div class="empty-icon">💬</div><div class="empty-title">Aucun message</div></div>';
+          return;
+        }
+
+        container.innerHTML = CACHE.chat.map(msg => `
+          <div class="chat-message ${ (msg.user_id || msg.userId) === myId ? 'own' : ''}">
+            ${(msg.user_id || msg.userId) !== myId ? `<div class="chat-author">${escapeHtml(msg.user_name || msg.userName)}</div>` : ''}
+            <div class="chat-bubble">${escapeHtml(msg.text)}</div>
+            <div class="chat-time">${formatTime(msg.created_at || msg.createdAt)}</div>
+          </div>
+        `).join('');
+
+        container.scrollTop = container.scrollHeight;
+      } catch (e) {
+        console.error(e);
+        container.innerHTML = `<div class="alert alert-error">Erreur chargement chat : ${escapeHtml(e.message)}</div>`;
+      }
+    }
+
+    // =========================================================
+    // MEMBERS (Sheets)
+    // =========================================================
+    function loadMembers() {
+      const container = document.getElementById('membersList');
+      if (!container) return;
+
+      const members = SHEETS_MEMBERS_CACHE || [];
+      if (!members.length) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">👥</div>
+            <div class="empty-title">Aucun membre chargé</div>
+            <p>Synchronise depuis Google Sheets (feuille publique)</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = `
+        <div class="grid grid-3">
+          ${members.map(m => `
+            <div class="member-card">
+              <div class="member-avatar">${getAvatar(m.name)}</div>
+              <div style="flex:1;">
+                <div class="member-name">${escapeHtml(m.name)}</div>
+                <div class="member-role">${escapeHtml(m.classe || m.role || 'Membre')}</div>
+                <div class="member-meta">${escapeHtml(m.email || 'Pas d’email')}</div>
+                ${m.phone ? `<div class="member-meta">📱 ${escapeHtml(m.phone)}</div>` : ''}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // =========================================================
+    // FILES (server)
+    // =========================================================
+    async function loadFiles() {
+      const container = document.getElementById('filesList');
+      if (!container) return;
+
+      try {
+        const { files } = await api.getFiles();
+        CACHE.files = files || [];
+
+        if (!CACHE.files.length) {
+          container.innerHTML = '<div class="empty-state"><div class="empty-icon">📎</div><div class="empty-title">Aucun fichier</div></div>';
+          return;
+        }
+
+        container.innerHTML = `<div class="item-list">${CACHE.files.map(file => `
+          <div class="item">
+            <div class="item-header">
+              <div>
+                <div class="item-title">📎 ${escapeHtml(file.name)}</div>
+                <div class="item-meta">
+                  👤 ${escapeHtml(file.uploaded_by || file.uploadedBy)} •
+                  📅 ${formatDate(file.uploaded_at || file.uploadedAt)} •
+                  📊 ${Number(file.size || 0) ? (Number(file.size)/1024).toFixed(1) + ' KB' : '—'}
+                </div>
+              </div>
+              <div style="display:flex; gap:.5rem;">
+                ${file.url ? `<a href="${file.url}" target="_blank" class="btn btn-primary btn-sm">⬇️</a>` : (file.data ? `<a href="${file.data}" download="${escapeHtml(file.name)}" class="btn btn-primary btn-sm">⬇️</a>` : '')}
+                <button class="btn btn-danger btn-sm" onclick="deleteFile(${file.id})">🗑️</button>
+              </div>
+            </div>
+          </div>
+        `).join('')}</div>`;
+      } catch (e) {
+        console.error(e);
+        container.innerHTML = `<div class="alert alert-error">Erreur chargement fichiers : ${escapeHtml(e.message)}</div>`;
+      }
+    }
+
+    async function deleteFile(id) {
+      if (!confirm('Supprimer ce fichier ?')) return;
+      try {
+        await api.deleteFile(id);
+        await loadFiles();
+        showInlineAlert('filesAlert', '✅ Fichier supprimé', 'success');
+      } catch (e) {
+        showInlineAlert('filesAlert', `❌ ${e.message}`, 'error');
+      }
+    }
+
+    async function handleFileUpload(files) {
+      // Limite raisonnable en base64 (sinon explosion)
+      const MAX_MB = 5;
+      for (const file of Array.from(files)) {
+        const mb = file.size / (1024 * 1024);
+        if (mb > MAX_MB) {
+          showInlineAlert('filesAlert', `❌ ${escapeHtml(file.name)} est trop gros (${mb.toFixed(1)}MB). Max ${MAX_MB}MB`, 'error');
+          continue;
+        }
+
+        const reader = new FileReader();
+        await new Promise((resolve) => {
+          reader.onload = async (e) => {
+            try {
+              const payload = {
+                name: file.name,
+                type: file.type,
+                size: file.size,
+                // Option simple: stocker dataURL (base64) côté serveur
+                // Option pro: stocker en Supabase Storage et garder une URL
+                data: e.target.result
+              };
+              await api.uploadFile(payload);
+              await loadFiles();
+              showInlineAlert('filesAlert', `✅ ${escapeHtml(file.name)} uploadé`, 'success');
+            } catch (err) {
+              showInlineAlert('filesAlert', `❌ ${escapeHtml(file.name)} : ${escapeHtml(err.message)}`, 'error');
+            } finally {
+              resolve();
+            }
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+    }
+
+    // =========================================================
+    // EVENT LISTENERS
+    // =========================================================
+    document.addEventListener('DOMContentLoaded', () => {
+      // Login buttons
+      document.getElementById('btnLogin').addEventListener('click', () => {
+        if (!requireIdentity()) return;
+        window.netlifyIdentity.open('login');
+      });
+      document.getElementById('btnSignup').addEventListener('click', () => {
+        if (!requireIdentity()) return;
+        window.netlifyIdentity.open('signup');
+      });
+
+      document.getElementById('btnLogout').addEventListener('click', logout);
+
+      // Identity events
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on('init', (user) => {
+          if (user) showDashboard(user);
+        });
+        window.netlifyIdentity.on('login', (user) => {
+          window.netlifyIdentity.close();
+          showDashboard(user);
+        });
+        window.netlifyIdentity.on('logout', () => {
+          location.reload();
+        });
+        window.netlifyIdentity.init();
+      } else {
+        showAlert("⚠️ Netlify Identity indisponible. Cette page doit être servie via Netlify.", 'warning');
+      }
+
+      // Delegated submits
+      document.addEventListener('submit', async (e) => {
+        // ARTICLE
+        if (e.target.id === 'articleForm') {
+          e.preventDefault();
+          try {
+            await api.createArticle({
+              title: document.getElementById('articleTitle').value,
+              category: document.getElementById('articleCategory').value,
+              content: document.getElementById('articleContent').value,
+              isPublic: document.getElementById('articlePublic').checked,
+              author: (document.getElementById('userName')?.textContent || 'Bureau')
+            });
+            e.target.reset();
+            await loadArticles(document.getElementById('articleFilter')?.value || 'all');
+            await loadRecentActivity();
+            showInlineAlert('articleAlert', '✅ Article publié (serveur) !', 'success');
+          } catch (err) {
+            showInlineAlert('articleAlert', `❌ ${escapeHtml(err.message)}`, 'error');
+          }
+        }
+
+        // EVENT
+        if (e.target.id === 'eventForm') {
+          e.preventDefault();
+          try {
+            await api.createEvent({
+              title: document.getElementById('eventTitle').value,
+              date: document.getElementById('eventDate').value,
+              time: document.getElementById('eventTime').value,
+              location: document.getElementById('eventLocation').value,
+              description: document.getElementById('eventDescription').value,
+              creator: (document.getElementById('userName')?.textContent || 'Bureau')
+            });
+            e.target.reset();
+            await loadEvents();
+            await loadRecentActivity();
+            showInlineAlert('eventAlert', '✅ Événement créé (serveur) !', 'success');
+          } catch (err) {
+            showInlineAlert('eventAlert', `❌ ${escapeHtml(err.message)}`, 'error');
+          }
+        }
+
+        // TASK
+        if (e.target.id === 'taskForm') {
+          e.preventDefault();
+          try {
+            await api.createTask({
+              title: document.getElementById('taskTitle').value,
+              assigneeName: document.getElementById('taskAssigneeName').value,
+              priority: document.getElementById('taskPriority').value,
+              deadline: document.getElementById('taskDeadline').value
+            });
+            e.target.reset();
+            await loadTasks(document.getElementById('taskFilter')?.value || 'active');
+            await loadRecentActivity();
+            showInlineAlert('taskAlert', '✅ Tâche créée (serveur) !', 'success');
+          } catch (err) {
+            showInlineAlert('taskAlert', `❌ ${escapeHtml(err.message)}`, 'error');
+          }
+        }
+
+        // CHAT
+        if (e.target.id === 'chatForm') {
+          e.preventDefault();
+          try {
+            const text = document.getElementById('chatInput').value;
+            await api.postChat({ text });
+            e.target.reset();
+            await loadChat();
+          } catch (err) {
+            alert(err.message);
+          }
+        }
+      });
+
+      // Filter changes
+      document.addEventListener('change', (e) => {
+        if (e.target.id === 'articleFilter') loadArticles(e.target.value);
+        if (e.target.id === 'taskFilter') loadTasks(e.target.value);
+      });
+
+      // File upload
+      document.addEventListener('click', (e) => {
+        if (e.target.id === 'fileUploadZone' || e.target.closest('#fileUploadZone')) {
+          document.getElementById('fileInput')?.click();
+        }
+      });
+      document.addEventListener('change', (e) => {
+        if (e.target.id === 'fileInput' && e.target.files && e.target.files.length > 0) {
+          handleFileUpload(e.target.files);
+          e.target.value = '';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
 
