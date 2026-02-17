@@ -1,329 +1,1279 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="robots" content="noindex, nofollow" />
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
   <title>Espace Bureau Pro — Parlement JPV</title>
-  <link rel="icon" href="/assets/img/favicon.png" />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
-
-  <!-- ✅ Netlify Identity (vraie auth) -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <link rel="icon" href="assets/img/favicon.png">
+  
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300&family=Instrument+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
+    /* ========================================
+       ULTRA PREMIUM DESIGN SYSTEM 🔥
+       ======================================== */
     :root {
-      --clr-ink: #0a0e1a; --clr-slate: #475569; --clr-mist: #94a3b8; --clr-cloud: #e2e8f0;
-      --clr-paper: #fafbfc; --clr-white: #ffffff; --clr-gold: #c9a050; --clr-navy: #0b2545;
-      --clr-success: #059669; --clr-danger: #dc2626; --clr-info: #0ea5e9; --clr-warning: #d97706;
-      --font-display: 'Fraunces', Georgia, serif; --font-body: 'Instrument Sans', system-ui, sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
+      --clr-ink: #0a0e1a;
+      --clr-ink-light: #1a202e;
+      --clr-slate: #475569;
+      --clr-slate-light: #64748b;
+      --clr-mist: #94a3b8;
+      --clr-fog: #cbd5e1;
+      --clr-cloud: #e2e8f0;
+      --clr-snow: #f1f5f9;
+      --clr-paper: #fafbfc;
+      --clr-white: #ffffff;
+      
+      --clr-gold: #c9a050;
+      --clr-gold-light: #d4af64;
+      --clr-gold-dim: #f5e6cc;
+      
+      --clr-navy: #0b2545;
+      --clr-navy-light: #1a4d7a;
+      --clr-navy-dim: #e6ecf2;
+      
+      --clr-success: #059669;
+      --clr-danger: #dc2626;
+      --clr-info: #0ea5e9;
+      --clr-warning: #d97706;
+      --clr-purple: #8b5cf6;
+      
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body: 'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+      
+      --shadow-xs: 0 1px 2px rgba(10, 14, 26, 0.04);
+      --shadow-sm: 0 1px 3px rgba(10, 14, 26, 0.06), 0 1px 2px rgba(10, 14, 26, 0.03);
+      --shadow-md: 0 4px 6px -1px rgba(10, 14, 26, 0.08), 0 2px 4px -1px rgba(10, 14, 26, 0.04);
+      --shadow-lg: 0 10px 15px -3px rgba(10, 14, 26, 0.12), 0 4px 6px -2px rgba(10, 14, 26, 0.05);
+      --shadow-xl: 0 20px 25px -5px rgba(10, 14, 26, 0.15);
+      --shadow-2xl: 0 25px 50px -12px rgba(10, 14, 26, 0.25);
+      
+      --radius-sm: 0.375rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+      --radius-2xl: 1.5rem;
+      --radius-full: 624.9375rem;
+      
+      --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+      --ease-elegant: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: var(--font-body); line-height: 1.7; color: var(--clr-ink); background: var(--clr-paper); -webkit-font-smoothing: antialiased; }
-    .container { max-width: 1600px; margin: 0 auto; padding: 0 clamp(1rem,4vw,2rem); }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --clr-ink: #fafbfc;
+        --clr-paper: #0a0e1a;
+        --clr-white: #1a202e;
+        --clr-cloud: #2d3748;
+        --clr-fog: #374151;
+      }
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--clr-ink);
+      background: var(--clr-paper);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: 
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.015) 2px, rgba(0,0,0,.015) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,.015) 2px, rgba(0,0,0,.015) 4px);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .container {
+      max-width: 1680px;
+      margin: 0 auto;
+      padding: 0 clamp(1rem, 4vw, 2.5rem);
+      position: relative;
+      z-index: 2;
+    }
+
     .hidden { display: none !important; }
 
-    /* Login */
-    #loginScreen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--clr-navy) 0%, #1a4d7a 100%); position: relative; }
-    #loginScreen::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,255,255,.02) 2px 4px); pointer-events: none; }
-    .login-box { background: var(--clr-white); border-radius: 1.5rem; padding: 3rem; box-shadow: 0 20px 60px rgba(0,0,0,0.3); width: 100%; max-width: 440px; z-index: 1; animation: fadeInUp 0.6s ease-out; }
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } }
-    .login-logo { text-align: center; margin-bottom: 2rem; }
-    .login-logo img { width: 64px; border-radius: 0.75rem; margin-bottom: 1rem; }
-    .login-logo h1 { font-family: var(--font-display); font-size: 1.75rem; font-weight: 900; margin-bottom: 0.5rem; }
-
-    /* Forms */
-    .form-group { margin-bottom: 1.25rem; }
-    .form-label { display: block; font-weight: 700; font-size: 0.875rem; margin-bottom: 0.5rem; }
-    .form-input, .form-select, .form-textarea {
-      width: 100%; padding: 0.875rem 1rem; border: 1px solid var(--clr-cloud); border-radius: 0.75rem;
-      font-family: var(--font-body); font-size: 1rem; transition: all 0.2s;
-      background: #fff;
+    /* ========================================
+       LOGIN SCREEN 🔐
+       ======================================== */
+    #loginScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--clr-navy) 0%, var(--clr-navy-light) 100%);
+      position: relative;
+      overflow: hidden;
     }
-    .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--clr-gold); box-shadow: 0 0 0 3px rgba(201,160,80,0.1); }
-    .form-textarea { min-height: 150px; resize: vertical; }
 
-    /* Buttons */
+    #loginScreen::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: 
+        repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,255,255,.02) 2px 4px),
+        repeating-linear-gradient(90deg, transparent 0 2px, rgba(255,255,255,.02) 2px 4px);
+      pointer-events: none;
+    }
+
+    #loginScreen::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 50% 50%, rgba(201, 160, 80, 0.15) 0%, transparent 50%);
+      animation: rotate 30s linear infinite;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .login-box {
+      background: var(--clr-white);
+      border-radius: var(--radius-2xl);
+      padding: 3rem;
+      box-shadow: var(--shadow-2xl);
+      width: 100%;
+      max-width: 440px;
+      position: relative;
+      z-index: 10;
+      animation: fadeInUp 0.8s var(--ease-elegant);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+    }
+
+    .login-logo {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .login-logo img {
+      width: 72px;
+      height: 72px;
+      border-radius: var(--radius-xl);
+      margin-bottom: 1.25rem;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .login-logo h1 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 900;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, var(--clr-navy), var(--clr-gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ========================================
+       FORMS 📝
+       ======================================== */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+      color: var(--clr-ink);
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border: 2px solid var(--clr-cloud);
+      border-radius: var(--radius-lg);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      transition: all 0.2s var(--ease-smooth);
+      background: var(--clr-white);
+      color: var(--clr-ink);
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--clr-gold);
+      box-shadow: 0 0 0 4px rgba(201, 160, 80, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .form-textarea {
+      min-height: 180px;
+      resize: vertical;
+      font-family: var(--font-body);
+      line-height: 1.7;
+    }
+
+    /* ========================================
+       BUTTONS 🎯
+       ======================================== */
     .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
-      padding: 0.875rem 1.5rem; border-radius: 0.75rem; font-weight: 700;
-      font-size: 0.9375rem; border: none; cursor: pointer; transition: all 0.2s;
-      text-decoration: none; white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.875rem 1.75rem;
+      border-radius: var(--radius-lg);
+      font-weight: 700;
+      font-size: 0.9375rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s var(--ease-smooth);
+      text-decoration: none;
+      white-space: nowrap;
+      position: relative;
+      overflow: hidden;
     }
-    .btn-primary { background: var(--clr-navy); color: white; }
-    .btn-primary:hover { background: #1a4d7a; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(11,37,69,0.2); }
-    .btn-gold { background: linear-gradient(135deg, var(--clr-gold), #c19940); color: white; }
-    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(201,160,80,0.3); }
-    .btn-success { background: var(--clr-success); color: white; }
-    .btn-danger { background: var(--clr-danger); color: white; }
-    .btn-ghost { background: transparent; border: 1px solid var(--clr-cloud); color: var(--clr-ink); }
-    .btn-ghost:hover { background: var(--clr-paper); border-color: var(--clr-navy); }
-    .btn-sm { padding: 0.5rem 1rem; font-size: 0.8125rem; }
-    .btn-block { width: 100%; }
 
-    /* Alerts */
-    .alert { padding: 1rem; border-radius: 0.75rem; margin-bottom: 1rem; font-size: 0.875rem; border-left: 4px solid; }
-    .alert-error { background: rgba(220,38,38,0.1); border-color: var(--clr-danger); color: #991b1b; }
-    .alert-success { background: rgba(5,150,105,0.1); border-color: var(--clr-success); color: #065f46; }
-    .alert-info { background: rgba(14,165,233,0.1); border-color: var(--clr-info); color: #075985; }
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
 
-    /* Dashboard */
-    #dashboard { min-height: 100vh; padding: 2rem 0 3rem; }
-    .dashboard-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
-    .dashboard-title { display: flex; align-items: center; gap: 1rem; }
-    .dashboard-title img { width: 48px; border-radius: 0.75rem; }
-    .dashboard-title h1 { font-family: var(--font-display); font-size: clamp(1.75rem,4vw,2.5rem); font-weight: 900; }
-    .user-info { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
-    .user-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: linear-gradient(135deg, #f5e6cc, rgba(11,37,69,0.05)); border: 1px solid var(--clr-gold); border-radius: 999px; font-weight: 700; font-size: 0.875rem; }
+    .btn:active::before {
+      width: 300px;
+      height: 300px;
+    }
 
-    /* Tabs */
-    .tabs { display: flex; gap: 0.25rem; margin-bottom: 2rem; border-bottom: 2px solid var(--clr-cloud); overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    .tab { padding: 0.875rem 1.25rem; background: transparent; border: none; border-bottom: 3px solid transparent; font-weight: 700; font-size: 0.9375rem; color: var(--clr-slate); cursor: pointer; transition: all 0.2s; white-space: nowrap; margin-bottom: -2px; }
-    .tab:hover { color: var(--clr-navy); }
-    .tab.active { color: var(--clr-navy); border-bottom-color: var(--clr-gold); }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; animation: fadeIn 0.25s; }
-    @keyframes fadeIn { from { opacity: 0; } }
+    .btn-primary {
+      background: var(--clr-navy);
+      color: white;
+    }
 
-    /* Grid */
-    .grid { display: grid; gap: 1.5rem; margin-bottom: 2rem; }
+    .btn-primary:hover {
+      background: var(--clr-navy-light);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--clr-gold), #c19940);
+      color: white;
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(201, 160, 80, 0.35);
+    }
+
+    .btn-success {
+      background: var(--clr-success);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #047857;
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      background: var(--clr-danger);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #b91c1c;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: 2px solid var(--clr-cloud);
+      color: var(--clr-ink);
+    }
+
+    .btn-ghost:hover {
+      background: var(--clr-paper);
+      border-color: var(--clr-navy);
+      color: var(--clr-navy);
+    }
+
+    .btn-sm {
+      padding: 0.5rem 1rem;
+      font-size: 0.8125rem;
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    /* ========================================
+       ALERTS 📢
+       ======================================== */
+    .alert {
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius-lg);
+      margin-bottom: 1.25rem;
+      font-size: 0.9375rem;
+      border-left: 4px solid;
+      animation: slideInRight 0.4s var(--ease-elegant);
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+    }
+
+    .alert-error {
+      background: rgba(220, 38, 38, 0.08);
+      border-color: var(--clr-danger);
+      color: #991b1b;
+    }
+
+    .alert-success {
+      background: rgba(5, 150, 105, 0.08);
+      border-color: var(--clr-success);
+      color: #065f46;
+    }
+
+    .alert-info {
+      background: rgba(14, 165, 233, 0.08);
+      border-color: var(--clr-info);
+      color: #075985;
+    }
+
+    .alert-warning {
+      background: rgba(217, 119, 6, 0.08);
+      border-color: var(--clr-warning);
+      color: #92400e;
+    }
+
+    /* ========================================
+       DASHBOARD 📊
+       ======================================== */
+    #dashboard {
+      min-height: 100vh;
+      padding: 2rem 0 4rem;
+    }
+
+    .dashboard-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      animation: fadeIn 0.6s var(--ease-elegant);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+    }
+
+    .dashboard-title {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .dashboard-title img {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+    }
+
+    .dashboard-title h1 {
+      font-family: var(--font-display);
+      font-size: clamp(1.75rem, 4vw, 2.75rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .user-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.625rem;
+      padding: 0.625rem 1.25rem;
+      background: linear-gradient(135deg, var(--clr-gold-dim), rgba(11, 37, 69, 0.05));
+      border: 2px solid var(--clr-gold);
+      border-radius: var(--radius-full);
+      font-weight: 700;
+      font-size: 0.9375rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ========================================
+       TABS 📑
+       ======================================== */
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2.5rem;
+      border-bottom: 2px solid var(--clr-cloud);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 2px;
+    }
+
+    .tab {
+      padding: 1rem 1.5rem;
+      background: transparent;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-weight: 700;
+      font-size: 0.9375rem;
+      color: var(--clr-slate);
+      cursor: pointer;
+      transition: all 0.2s var(--ease-smooth);
+      white-space: nowrap;
+      margin-bottom: -2px;
+      position: relative;
+    }
+
+    .tab::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--clr-gold);
+      transform: scaleX(0);
+      transition: transform 0.3s var(--ease-elegant);
+    }
+
+    .tab:hover {
+      color: var(--clr-navy);
+    }
+
+    .tab.active {
+      color: var(--clr-navy);
+    }
+
+    .tab.active::after {
+      transform: scaleX(1);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeInScale 0.4s var(--ease-elegant);
+    }
+
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: scale(0.98);
+      }
+    }
+
+    /* ========================================
+       GRIDS 📐
+       ======================================== */
+    .grid {
+      display: grid;
+      gap: 1.75rem;
+      margin-bottom: 2rem;
+    }
+
     .grid-2 { grid-template-columns: repeat(2, 1fr); }
     .grid-3 { grid-template-columns: repeat(3, 1fr); }
     .grid-4 { grid-template-columns: repeat(4, 1fr); }
 
-    /* Cards */
-    .card { background: var(--clr-white); border: 1px solid var(--clr-cloud); border-radius: 1.5rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(10,14,26,0.06); transition: all 0.2s; }
-    .card:hover { box-shadow: 0 4px 12px rgba(10,14,26,0.08); }
-    .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; gap: 1rem; flex-wrap: wrap; }
-    .card-title { font-family: var(--font-display); font-size: 1.25rem; font-weight: 800; }
+    /* ========================================
+       CARDS 🎴
+       ======================================== */
+    .card {
+      background: var(--clr-white);
+      border: 1px solid var(--clr-cloud);
+      border-radius: var(--radius-2xl);
+      padding: clamp(1.5rem, 3vw, 2.25rem);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s var(--ease-smooth);
+      position: relative;
+      overflow: hidden;
+    }
 
-    /* Stats */
-    .stat-card { text-align: center; }
-    .stat-value { font-family: var(--font-display); font-size: clamp(2rem,5vw,3rem); font-weight: 900; color: var(--clr-gold); line-height: 1; margin-bottom: 0.5rem; }
-    .stat-label { font-size: 0.875rem; font-weight: 600; color: var(--clr-slate); text-transform: uppercase; letter-spacing: 0.05em; }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--clr-gold), var(--clr-navy));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s var(--ease-elegant);
+    }
 
-    /* Members */
-    .member-card { display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--clr-paper); border: 1px solid var(--clr-cloud); border-radius: 1rem; transition: all 0.2s; }
-    .member-card:hover { box-shadow: 0 2px 8px rgba(10,14,26,0.06); }
-    .member-avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--clr-gold), var(--clr-navy)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 1.25rem; flex-shrink: 0; }
-    .member-info { flex: 1; }
-    .member-name { font-weight: 700; margin-bottom: 0.25rem; }
-    .member-role { font-size: 0.875rem; color: var(--clr-slate); }
-    .member-meta { font-size: 0.8125rem; color: var(--clr-mist); margin-top: 0.25rem; }
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-4px);
+    }
 
-    /* Chat */
-    .chat-messages { max-height: 420px; overflow-y: auto; padding: 1rem; background: var(--clr-paper); border-radius: 0.75rem; margin-bottom: 1rem; border: 1px solid var(--clr-cloud); }
-    .chat-message { margin-bottom: 1rem; }
-    .chat-message.own { text-align: right; }
-    .chat-bubble { display: inline-block; padding: 0.75rem 1rem; border-radius: 1rem; max-width: 72%; }
-    .chat-message.own .chat-bubble { background: var(--clr-navy); color: white; border-bottom-right-radius: 0.25rem; }
-    .chat-message:not(.own) .chat-bubble { background: var(--clr-white); border: 1px solid var(--clr-cloud); border-bottom-left-radius: 0.25rem; }
-    .chat-author { font-size: 0.75rem; font-weight: 700; margin-bottom: 0.25rem; color: var(--clr-slate); }
-    .chat-time { font-size: 0.6875rem; color: var(--clr-mist); margin-top: 0.25rem; }
+    .card:hover::before {
+      transform: scaleX(1);
+    }
 
-    /* Responsive */
-    @media (max-width: 1024px) { .grid-4, .grid-3 { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 768px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 900;
+      letter-spacing: -0.015em;
+    }
+
+    /* ========================================
+       STATS 📈
+       ======================================== */
+    .stat-card {
+      text-align: center;
+      position: relative;
+    }
+
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 0.75rem;
+      background: linear-gradient(135deg, var(--clr-gold), var(--clr-navy));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: countUp 1s var(--ease-elegant);
+    }
+
+    @keyframes countUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--clr-slate);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* ========================================
+       MEMBERS 👥
+       ======================================== */
+    .member-card {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      padding: 1.25rem;
+      background: var(--clr-paper);
+      border: 1px solid var(--clr-cloud);
+      border-radius: var(--radius-xl);
+      transition: all 0.2s var(--ease-smooth);
+    }
+
+    .member-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+      border-color: var(--clr-gold);
+    }
+
+    .member-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--clr-gold), var(--clr-navy));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 900;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+      box-shadow: var(--shadow-md);
+    }
+
+    .member-info {
+      flex: 1;
+    }
+
+    .member-name {
+      font-weight: 800;
+      font-size: 1.0625rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .member-role {
+      font-size: 0.875rem;
+      color: var(--clr-slate);
+      font-weight: 600;
+    }
+
+    .member-meta {
+      font-size: 0.8125rem;
+      color: var(--clr-mist);
+      margin-top: 0.375rem;
+    }
+
+    /* ========================================
+       CHAT 💬
+       ======================================== */
+    .chat-messages {
+      max-height: 480px;
+      overflow-y: auto;
+      padding: 1.25rem;
+      background: var(--clr-paper);
+      border-radius: var(--radius-xl);
+      margin-bottom: 1.25rem;
+      border: 1px solid var(--clr-cloud);
+      scroll-behavior: smooth;
+    }
+
+    .chat-message {
+      margin-bottom: 1.25rem;
+      animation: slideInMessage 0.3s var(--ease-elegant);
+    }
+
+    @keyframes slideInMessage {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+    }
+
+    .chat-message.own {
+      text-align: right;
+    }
+
+    .chat-bubble {
+      display: inline-block;
+      padding: 0.875rem 1.25rem;
+      border-radius: var(--radius-xl);
+      max-width: 75%;
+      word-wrap: break-word;
+    }
+
+    .chat-message.own .chat-bubble {
+      background: linear-gradient(135deg, var(--clr-navy), var(--clr-navy-light));
+      color: white;
+      border-bottom-right-radius: 0.375rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    .chat-message:not(.own) .chat-bubble {
+      background: var(--clr-white);
+      border: 1px solid var(--clr-cloud);
+      border-bottom-left-radius: 0.375rem;
+      color: var(--clr-ink);
+    }
+
+    .chat-author {
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 0.375rem;
+      color: var(--clr-slate);
+    }
+
+    .chat-time {
+      font-size: 0.6875rem;
+      color: var(--clr-mist);
+      margin-top: 0.375rem;
+    }
+
+    /* ========================================
+       ITEM LIST 📋
+       ======================================== */
+    .item-list {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .item {
+      padding: 1.25rem;
+      background: var(--clr-paper);
+      border: 1px solid var(--clr-cloud);
+      border-radius: var(--radius-xl);
+      transition: all 0.2s var(--ease-smooth);
+    }
+
+    .item:hover {
+      border-color: var(--clr-gold);
+      box-shadow: var(--shadow-sm);
+      transform: translateX(4px);
+    }
+
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .item-title {
+      font-weight: 800;
+      font-size: 1.0625rem;
+    }
+
+    .item-meta {
+      font-size: 0.8125rem;
+      color: var(--clr-mist);
+    }
+
+    /* ========================================
+       BADGE 🏷️
+       ======================================== */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .badge-success {
+      background: rgba(5, 150, 105, 0.1);
+      color: var(--clr-success);
+    }
+
+    .badge-warning {
+      background: rgba(217, 119, 6, 0.1);
+      color: var(--clr-warning);
+    }
+
+    .badge-info {
+      background: rgba(14, 165, 233, 0.1);
+      color: var(--clr-info);
+    }
+
+    .badge-danger {
+      background: rgba(220, 38, 38, 0.1);
+      color: var(--clr-danger);
+    }
+
+    /* ========================================
+       RESPONSIVE 📱
+       ======================================== */
+    @media (max-width: 1280px) {
+      .grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .grid-3 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .grid-2,
+      .grid-3,
+      .grid-4 {
+        grid-template-columns: 1fr;
+      }
+
+      .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .tabs {
+        gap: 0.25rem;
+      }
+
+      .tab {
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .login-box {
+        padding: 2rem 1.5rem;
+      }
+
+      .card {
+        padding: 1.25rem;
+      }
+    }
+
+    /* ========================================
+       LOADING SPINNER 🔄
+       ======================================== */
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ========================================
+       EMPTY STATES 🗂️
+       ======================================== */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: var(--clr-slate);
+    }
+
+    .empty-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    .empty-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 900;
+      margin-bottom: 0.5rem;
+    }
   </style>
 </head>
 
 <body>
-  <!-- Login Screen -->
+  <!-- ========================================
+       LOGIN SCREEN
+       ======================================== -->
   <div id="loginScreen">
     <div class="login-box">
       <div class="login-logo">
-        <img src="/assets/img/logo.png" alt="Parlement JPV" />
-        <h1>Espace Bureau Pro</h1>
-        <p style="color: var(--clr-slate); font-size: 0.9375rem;">Accès réservé (Netlify Identity)</p>
+        <img src="assets/img/logo.png" alt="Parlement JPV">
+        <h1>Bureau Pro</h1>
+        <p style="color: var(--clr-slate); font-size: 0.9375rem; margin-top: 0.5rem;">
+          Plateforme collaborative avancée
+        </p>
       </div>
 
       <div id="loginAlert"></div>
 
-      <!-- ✅ On garde une UI "form", mais c’est Identity qui fait le login -->
       <form id="loginForm">
-        <button type="submit" class="btn btn-primary btn-block">🔓 Se connecter</button>
+        <div class="form-group">
+          <label class="form-label" for="username">Identifiant</label>
+          <input 
+            type="text" 
+            id="username" 
+            class="form-input" 
+            placeholder="Votre identifiant" 
+            required 
+            autocomplete="username"
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Mot de passe</label>
+          <input 
+            type="password" 
+            id="password" 
+            class="form-input" 
+            placeholder="Votre mot de passe" 
+            required 
+            autocomplete="current-password"
+          >
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">
+          🔓 Se connecter
+        </button>
       </form>
 
-      <div style="margin-top: 1rem; text-align: center;">
-        <button class="btn btn-ghost btn-sm" id="btnOpenRecovery" type="button">🔑 Mot de passe oublié</button>
+      <div style="margin-top: 1.5rem; text-align: center;">
+        <button class="btn btn-ghost btn-sm" onclick="showFirstSetup()">
+          ⚙️ Configuration initiale
+        </button>
       </div>
 
-      <div class="alert alert-info" style="margin-top: 1.25rem;">
-        <strong>Invite-only</strong> : seul le bureau invité peut accéder.
+      <div class="alert alert-info" style="margin-top: 1.5rem; margin-bottom: 0;">
+        <strong>Comptes par défaut</strong><br>
+        president / President2026!<br>
+        secretaire / Secretaire2026!
       </div>
     </div>
   </div>
 
-  <!-- Dashboard -->
+  <!-- ========================================
+       DASHBOARD
+       ======================================== -->
   <div id="dashboard" class="hidden">
     <div class="container">
+      <!-- Header -->
       <div class="dashboard-header">
         <div class="dashboard-title">
-          <img src="/assets/img/logo.png" alt="" />
+          <img src="assets/img/logo.png" alt="">
           <div>
-            <h1>Bureau Pro</h1>
-            <p style="color: var(--clr-slate); font-size: 0.9375rem;">Gestion collaborative</p>
+            <h1>Espace Bureau</h1>
+            <p style="color: var(--clr-slate); font-size: 0.9375rem;">
+              Gestion collaborative — Parlement JPV
+            </p>
           </div>
         </div>
+
         <div class="user-info">
-          <span class="user-badge"><span id="userAvatar"></span><span id="userName"></span></span>
-          <button class="btn btn-ghost btn-sm" id="btnLogout" type="button">Déconnexion</button>
+          <span class="user-badge">
+            <span id="userAvatar" style="display: inline-flex; width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--clr-gold), var(--clr-navy)); align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 0.875rem;"></span>
+            <span id="userName"></span>
+          </span>
+          <button class="btn btn-ghost btn-sm" onclick="logout()">Déconnexion</button>
         </div>
       </div>
 
       <!-- Stats -->
       <div class="grid grid-4">
-        <div class="card stat-card"><div class="stat-value" id="statArticles">0</div><div class="stat-label">Articles</div></div>
-        <div class="card stat-card"><div class="stat-value" id="statEvents">0</div><div class="stat-label">Événements</div></div>
-        <div class="card stat-card"><div class="stat-value" id="statTasks">0</div><div class="stat-label">Tâches</div></div>
-        <div class="card stat-card"><div class="stat-value" id="statMembers">0</div><div class="stat-label">Membres</div></div>
+        <div class="card stat-card">
+          <div class="stat-value" id="statArticles">0</div>
+          <div class="stat-label">Articles</div>
+        </div>
+        <div class="card stat-card">
+          <div class="stat-value" id="statEvents">0</div>
+          <div class="stat-label">Événements</div>
+        </div>
+        <div class="card stat-card">
+          <div class="stat-value" id="statTasks">0</div>
+          <div class="stat-label">Tâches actives</div>
+        </div>
+        <div class="card stat-card">
+          <div class="stat-value" id="statMembers">0</div>
+          <div class="stat-label">Membres</div>
+        </div>
       </div>
 
       <!-- Tabs -->
-      <div class="tabs" id="tabsBar">
-        <button class="tab active" type="button" onclick="switchTab(event,'dashboard')">🏠 Dashboard</button>
-        <button class="tab" type="button" onclick="switchTab(event,'articles')">📝 Articles</button>
-        <button class="tab" type="button" onclick="switchTab(event,'events')">📅 Événements</button>
-        <button class="tab" type="button" onclick="switchTab(event,'tasks')">✅ Tâches</button>
-        <button class="tab" type="button" onclick="switchTab(event,'chat')">💬 Discussion</button>
-        <button class="tab" type="button" onclick="switchTab(event,'members')">👥 Annuaire</button>
-        <button class="tab" type="button" onclick="switchTab(event,'settings')">⚙️ Paramètres</button>
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab(event, 'dashboard')">🏠 Dashboard</button>
+        <button class="tab" onclick="switchTab(event, 'articles')">📝 Articles</button>
+        <button class="tab" onclick="switchTab(event, 'events')">📅 Événements</button>
+        <button class="tab" onclick="switchTab(event, 'tasks')">✅ Tâches</button>
+        <button class="tab" onclick="switchTab(event, 'chat')">💬 Discussion</button>
+        <button class="tab" onclick="switchTab(event, 'members')">👥 Annuaire</button>
+        <button class="tab" onclick="switchTab(event, 'files')">📎 Fichiers</button>
+        <button class="tab" onclick="switchTab(event, 'settings')">⚙️ Paramètres</button>
       </div>
 
+      <!-- Tab Contents -->
       <div id="tabsContainer"></div>
     </div>
   </div>
 
   <script>
-    // ====== CONFIG APP ======
+    // ========================================
+    // APP CONFIGURATION
+    // ========================================
     const APP = {
-      version: '3.1',
+      version: '4.0',
       currentUser: null,
-
-      // Interne bureau (local)
+      
       storage: {
-        articlesLocal: 'bureau_articles_local_v3', // juste pour stats locales si tu veux
-        events: 'bureau_events_v3',
-        tasks: 'bureau_tasks_v3',
-        chat: 'bureau_chat_v3',
-        allMembers: 'bureau_all_members_v3'
+        users: 'bureau_users_v4',
+        articles: 'bureau_articles_v4',
+        events: 'bureau_events_v4',
+        tasks: 'bureau_tasks_v4',
+        files: 'bureau_files_v4',
+        chat: 'bureau_chat_v4',
+        allMembers: 'bureau_all_members_v4',
+        session: 'bureau_session_v4'
       },
-
-      // Membres (optionnel) via Google Sheets CSV public
+      
       sheets: {
         enabled: true,
         sheetId: '12cQHZ8ip8btocRuOtNqxVuFWbQ5-KSBQI38PsI5_Eg8'
-      }
+      },
+      
+      defaultUsers: [
+        { 
+          id: 1, 
+          username: 'president', 
+          password: 'President2026!', 
+          name: 'Président', 
+          role: 'Président', 
+          email: 'president@parlementjpv.fr' 
+        },
+        { 
+          id: 2, 
+          username: 'secretaire', 
+          password: 'Secretaire2026!', 
+          name: 'Secrétaire', 
+          role: 'Secrétaire Général', 
+          email: 'secretaire@parlementjpv.fr' 
+        },
+        { 
+          id: 3, 
+          username: 'tresorier', 
+          password: 'Tresorier2026!', 
+          name: 'Trésorier', 
+          role: 'Trésorier', 
+          email: 'tresorier@parlementjpv.fr' 
+        },
+        { 
+          id: 4, 
+          username: 'communication', 
+          password: 'Comm2026!', 
+          name: 'Responsable Com', 
+          role: 'Communication', 
+          email: 'com@parlementjpv.fr' 
+        }
+      ]
     };
 
-    // ====== UTIL ======
-    const $ = (sel) => document.querySelector(sel);
-    function escapeHtml(s){
-      return (s||'')
-        .replaceAll('&','&amp;')
-        .replaceAll('<','&lt;')
-        .replaceAll('>','&gt;')
-        .replaceAll('"','&quot;')
-        .replaceAll("'",'&#039;');
-    }
-
+    // ========================================
+    // UTILITY FUNCTIONS
+    // ========================================
     function saveData(key, data) {
-      try { localStorage.setItem(key, JSON.stringify(data)); return true; }
-      catch (e) { console.error('Storage error:', e); return false; }
+      try {
+        localStorage.setItem(key, JSON.stringify(data));
+        return true;
+      } catch (e) {
+        console.error('Storage error:', e);
+        return false;
+      }
     }
 
     function getData(key) {
-      try { const data = localStorage.getItem(key); return data ? JSON.parse(data) : null; }
-      catch (e) { console.error('Retrieval error:', e); return null; }
-    }
-
-    function showLoginAlert(message, type='info') {
-      const container = document.getElementById('loginAlert');
-      container.innerHTML = `<div class="alert alert-${type}">${escapeHtml(message)}</div>`;
-      setTimeout(()=>{ if(container) container.innerHTML = ''; }, 5000);
-    }
-
-    function showInline(containerId, message, type='info') {
-      const el = document.getElementById(containerId);
-      if (!el) return;
-      el.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
-      setTimeout(()=>{ if(el) el.innerHTML = ''; }, 6000);
-    }
-
-    function formatDate(d) { return new Date(d).toLocaleDateString('fr-FR', {day:'numeric', month:'long', year:'numeric'}); }
-    function formatTime(d) { return new Date(d).toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'}); }
-    function getAvatar(name) { return (name || '?').charAt(0).toUpperCase(); }
-
-    // ====== AUTH (NETLIFY IDENTITY) ======
-    function requireLogin() {
-      const user = netlifyIdentity.currentUser();
-      if (!user) {
-        document.getElementById('dashboard').classList.add('hidden');
-        document.getElementById('loginScreen').classList.remove('hidden');
-        return;
+      try {
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : null;
+      } catch (e) {
+        console.error('Retrieval error:', e);
+        return null;
       }
-      showDashboard(user);
+    }
+
+    function formatDate(d) {
+      return new Date(d).toLocaleDateString('fr-FR', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+    }
+
+    function formatTime(d) {
+      return new Date(d).toLocaleTimeString('fr-FR', {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    function getAvatar(name) {
+      return (name || '?').charAt(0).toUpperCase();
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function showAlert(message, type = 'info') {
+      const container = document.getElementById('loginAlert');
+      if (!container) return;
+      
+      container.innerHTML = `
+        <div class="alert alert-${type}">
+          ${message}
+        </div>
+      `;
+      
+      setTimeout(() => {
+        container.innerHTML = '';
+      }, 5000);
+    }
+
+    // ========================================
+    // AUTHENTICATION
+    // ========================================
+    function initializeUsers() {
+      let users = getData(APP.storage.users);
+      if (!users) {
+        users = APP.defaultUsers;
+        saveData(APP.storage.users, users);
+      }
+      return users;
+    }
+
+    function showFirstSetup() {
+      showAlert(`
+        <strong>Configuration initiale</strong><br><br>
+        Comptes par défaut créés :<br>
+        • president / President2026!<br>
+        • secretaire / Secretaire2026!<br>
+        • tresorier / Tresorier2026!<br>
+        • communication / Comm2026!
+      `, 'success');
+      initializeUsers();
+    }
+
+    function login(username, password) {
+      const users = getData(APP.storage.users) || APP.defaultUsers;
+      const user = users.find(u => u.username === username && u.password === password);
+      
+      if (user) {
+        APP.currentUser = user;
+        saveData(APP.storage.session, {
+          userId: user.id,
+          loginTime: Date.now()
+        });
+        showDashboard();
+        return true;
+      }
+      
+      return false;
+    }
+
+    function checkSession() {
+      const session = getData(APP.storage.session);
+      if (session) {
+        const users = getData(APP.storage.users) || APP.defaultUsers;
+        const user = users.find(u => u.id === session.userId);
+        if (user) {
+          APP.currentUser = user;
+          showDashboard();
+          return true;
+        }
+      }
+      return false;
     }
 
     function logout() {
-      netlifyIdentity.logout();
+      if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
+        localStorage.removeItem(APP.storage.session);
+        location.reload();
+      }
     }
 
-    function showDashboard(user) {
-      APP.currentUser = user;
-
+    function showDashboard() {
       document.getElementById('loginScreen').classList.add('hidden');
       document.getElementById('dashboard').classList.remove('hidden');
-
-      const displayName = user.user_metadata?.full_name || user.email || 'Membre';
-      document.getElementById('userName').textContent = displayName;
-      document.getElementById('userAvatar').textContent = getAvatar(displayName);
-
+      
+      document.getElementById('userName').textContent = APP.currentUser.name;
+      document.getElementById('userAvatar').textContent = getAvatar(APP.currentUser.name);
+      
       renderAllTabs();
       loadAllData();
-
-      if (APP.sheets.enabled) syncMembersFromSheets().catch(()=>{});
+      
+      if (APP.sheets.enabled) {
+        syncMembersFromSheets();
+      }
     }
 
-    // ====== TABS ======
+    // ========================================
+    // TAB SWITCHING
+    // ========================================
     function switchTab(evt, tabName) {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-
-      // ✅ event passé proprement (plus de "event is not defined")
+      
       evt.currentTarget.classList.add('active');
-
+      
       const content = document.getElementById('tab' + tabName.charAt(0).toUpperCase() + tabName.slice(1));
       if (content) content.classList.add('active');
-
-      // Lazy loads
+      
+      // Lazy load specific tabs
       if (tabName === 'members') loadMembers();
       if (tabName === 'chat') loadChat();
-      if (tabName === 'articles') refreshPublicArticlesHint();
+      if (tabName === 'tasks') loadTasks();
+      if (tabName === 'articles') loadArticles();
+      if (tabName === 'events') loadEvents();
+      if (tabName === 'files') loadFiles();
     }
 
-    // ====== GOOGLE SHEETS SYNC (OPTIONNEL) ======
+    // ========================================
+    // GOOGLE SHEETS SYNC
+    // ========================================
     async function syncMembersFromSheets() {
       try {
         const csvUrl = `https://docs.google.com/spreadsheets/d/${APP.sheets.sheetId}/export?format=csv`;
         const res = await fetch(csvUrl);
+        
         if (!res.ok) throw new Error('Google Sheet inaccessible');
+        
         const csvText = await res.text();
-
         const lines = csvText.split('\n').filter(Boolean);
+        
         if (lines.length <= 1) throw new Error('Sheet vide');
-
-        // parse CSV "simple" (si tu as des virgules dans les cellules -> à remplacer par un parseur CSV)
-        const rows = lines.slice(1);
-
+        
+        const rows = lines.slice(1); // Skip header
+        
         const members = rows.map((row, idx) => {
-          const cols = row.split(',').map(c => (c||'').trim());
+          const cols = row.split(',').map(c => c.trim());
           if (!cols[0]) return null;
+          
           return {
             id: 1000 + idx,
             name: cols[0],
@@ -335,16 +1285,21 @@
             isActive: true
           };
         }).filter(Boolean);
-
+        
         saveData(APP.storage.allMembers, members);
         updateStats();
         loadMembers();
+        
+        showAlert(`✅ ${members.length} membres synchronisés depuis Google Sheets`, 'success');
       } catch (e) {
         console.warn('Sheets sync failed:', e.message);
+        showAlert(`⚠️ Erreur de synchronisation : ${e.message}`, 'warning');
       }
     }
 
-    // ====== RENDER UI ======
+    // ========================================
+    // RENDER TABS
+    // ========================================
     function renderAllTabs() {
       const container = document.getElementById('tabsContainer');
       container.innerHTML = `
@@ -354,6 +1309,7 @@
         ${renderTasks()}
         ${renderChat()}
         ${renderMembers()}
+        ${renderFiles()}
         ${renderSettings()}
       `;
     }
@@ -363,20 +1319,29 @@
         <div id="tabDashboard" class="tab-content active">
           <div class="grid grid-2">
             <div class="card">
-              <div class="card-header"><h2 class="card-title">Raccourcis</h2></div>
-              <div class="grid grid-2" style="margin-bottom:0;">
-                <a class="btn btn-primary" href="/articles/" target="_blank" rel="noopener">🌐 Voir articles publics</a>
-                <button class="btn btn-ghost" type="button" onclick="netlifyIdentity.open('user')">👤 Mon compte</button>
+              <div class="card-header">
+                <h2 class="card-title">Activité récente</h2>
               </div>
-              <div style="margin-top:12px;color:var(--clr-slate);font-size:.95rem;">
-                Les publications d’articles passent par une Netlify Function (sécurisée) et deviennent visibles publiquement.
-              </div>
+              <div id="recentActivity"></div>
             </div>
-
+            
             <div class="card">
-              <div class="card-header"><h2 class="card-title">Statut</h2></div>
-              <div id="statusBox" class="alert alert-info" style="margin-bottom:0;">
-                Connecté en tant que <strong>${escapeHtml(APP.currentUser?.email || '')}</strong>
+              <div class="card-header">
+                <h2 class="card-title">Actions rapides</h2>
+              </div>
+              <div class="grid grid-2" style="gap: 1rem; margin-bottom: 0;">
+                <button class="btn btn-primary" onclick="switchTab(event, 'articles')">
+                  📝 Nouvel article
+                </button>
+                <button class="btn btn-gold" onclick="switchTab(event, 'events')">
+                  📅 Créer événement
+                </button>
+                <button class="btn btn-success" onclick="switchTab(event, 'tasks')">
+                  ✅ Ajouter tâche
+                </button>
+                <button class="btn btn-ghost" onclick="switchTab(event, 'chat')">
+                  💬 Discussion
+                </button>
               </div>
             </div>
           </div>
@@ -389,53 +1354,51 @@
         <div id="tabArticles" class="tab-content">
           <div class="grid grid-2">
             <div class="card">
-              <div class="card-header"><h2 class="card-title">Publier un article (public)</h2></div>
-
+              <div class="card-header">
+                <h2 class="card-title">Publier un article</h2>
+              </div>
               <form id="articleForm">
                 <div class="form-group">
                   <label class="form-label">Titre</label>
-                  <input class="form-input" id="aTitle" required />
+                  <input class="form-input" id="articleTitle" required>
                 </div>
-
                 <div class="form-group">
-                  <label class="form-label">Extrait (optionnel)</label>
-                  <input class="form-input" id="aExcerpt" maxlength="180" placeholder="Résumé en 1 phrase" />
+                  <label class="form-label">Catégorie</label>
+                  <select class="form-select" id="articleCategory" required>
+                    <option value="">Choisir...</option>
+                    <option value="actualites">Actualités</option>
+                    <option value="debats">Débats</option>
+                    <option value="projets">Projets</option>
+                    <option value="evenements">Événements</option>
+                    <option value="tribune">Tribune libre</option>
+                  </select>
                 </div>
-
                 <div class="form-group">
-                  <label class="form-label">Image de couverture (URL optionnelle)</label>
-                  <input class="form-input" id="aCoverUrl" placeholder="https://..." />
+                  <label class="form-label">Contenu</label>
+                  <textarea class="form-textarea" id="articleContent" required placeholder="Rédigez votre article..."></textarea>
                 </div>
-
                 <div class="form-group">
-                  <label class="form-label">Contenu (HTML simple)</label>
-                  <textarea class="form-textarea" id="aContent" required placeholder="<p>Texte...</p>"></textarea>
-                  <div style="margin-top:6px;color:var(--clr-mist);font-size:.85rem;">
-                    Conseil : utilise <code style="font-family:var(--font-mono)">p, h2, ul, li, a</code>. Pas de scripts.
-                  </div>
+                  <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                    <input type="checkbox" id="articlePublic" checked style="width: auto;">
+                    <span>Publier publiquement sur le site</span>
+                  </label>
                 </div>
-
-                <button class="btn btn-gold btn-block" type="submit">🚀 Publier</button>
+                <button type="submit" class="btn btn-gold btn-block">✨ Publier</button>
               </form>
-
-              <div id="articlePublishMsg" style="margin-top:12px;"></div>
+              <div id="articleAlert" style="margin-top: 1rem;"></div>
             </div>
-
+            
             <div class="card">
-              <div class="card-header"><h2 class="card-title">Articles publics</h2></div>
-
-              <div class="alert alert-info">
-                <strong>Accès public :</strong><br />
-                <a href="/articles/" target="_blank" rel="noopener">/articles/</a>
+              <div class="card-header">
+                <h2 class="card-title">Articles récents</h2>
+                <select id="articleFilter" class="form-select" style="width: auto; padding: 0.5rem 1rem;">
+                  <option value="all">Tous</option>
+                  <option value="public">Publics</option>
+                  <option value="private">Privés</option>
+                  <option value="mine">Mes articles</option>
+                </select>
               </div>
-
-              <button class="btn btn-ghost btn-block" type="button" id="btnRefreshPublicIndex">🔄 Rafraîchir l’index public</button>
-              <div id="publicIndexMsg" style="margin-top:12px;"></div>
-
-              <div style="margin-top:16px;">
-                <h3 style="font-family:var(--font-display);font-size:1.1rem;margin-bottom:8px;">Derniers articles</h3>
-                <div id="publicArticlesPreview" style="display:grid;gap:10px;"></div>
-              </div>
+              <div id="articlesList"></div>
             </div>
           </div>
         </div>
@@ -445,9 +1408,45 @@
     function renderEvents() {
       return `
         <div id="tabEvents" class="tab-content">
-          <div class="card">
-            <div class="card-header"><h2 class="card-title">Événements</h2></div>
-            <div class="alert alert-info" style="margin-bottom:0;">Module événement : à brancher ensuite (localStorage ou functions).</div>
+          <div class="grid grid-2">
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Créer un événement</h2>
+              </div>
+              <form id="eventForm">
+                <div class="form-group">
+                  <label class="form-label">Titre</label>
+                  <input class="form-input" id="eventTitle" required>
+                </div>
+                <div class="grid grid-2" style="gap: 1rem;">
+                  <div class="form-group">
+                    <label class="form-label">Date</label>
+                    <input type="date" class="form-input" id="eventDate" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Heure</label>
+                    <input type="time" class="form-input" id="eventTime" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Lieu</label>
+                  <input class="form-input" id="eventLocation" placeholder="Ex: Salle A204" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Description</label>
+                  <textarea class="form-textarea" id="eventDescription" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">📅 Créer</button>
+              </form>
+              <div id="eventAlert" style="margin-top: 1rem;"></div>
+            </div>
+            
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Événements à venir</h2>
+              </div>
+              <div id="eventsList"></div>
+            </div>
           </div>
         </div>
       `;
@@ -456,13 +1455,49 @@
     function renderTasks() {
       return `
         <div id="tabTasks" class="tab-content">
-          <div class="card">
-            <div class="card-header"><h2 class="card-title">Tâches</h2></div>
-            <form id="taskForm" style="display:flex; gap:.5rem; flex-wrap:wrap;">
-              <input class="form-input" id="taskText" required placeholder="Nouvelle tâche..." style="flex:1; min-width:240px;" />
-              <button class="btn btn-primary" type="submit">Ajouter</button>
-            </form>
-            <div id="tasksList" style="margin-top:14px; display:grid; gap:10px;"></div>
+          <div class="grid grid-2">
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Nouvelle tâche</h2>
+              </div>
+              <form id="taskForm">
+                <div class="form-group">
+                  <label class="form-label">Tâche</label>
+                  <input class="form-input" id="taskTitle" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Assigné à</label>
+                  <select class="form-select" id="taskAssignee" required></select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Priorité</label>
+                  <select class="form-select" id="taskPriority" required>
+                    <option value="low">🟢 Basse</option>
+                    <option value="medium" selected>🟡 Moyenne</option>
+                    <option value="high">🔴 Haute</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Date limite</label>
+                  <input type="date" class="form-input" id="taskDeadline" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">✅ Créer</button>
+              </form>
+              <div id="taskAlert" style="margin-top: 1rem;"></div>
+            </div>
+            
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Tâches</h2>
+                <select id="taskFilter" class="form-select" style="width: auto; padding: 0.5rem 1rem;">
+                  <option value="active">Actives</option>
+                  <option value="completed">Terminées</option>
+                  <option value="all">Toutes</option>
+                  <option value="mine">Mes tâches</option>
+                </select>
+              </div>
+              <div id="tasksList"></div>
+            </div>
           </div>
         </div>
       `;
@@ -472,10 +1507,12 @@
       return `
         <div id="tabChat" class="tab-content">
           <div class="card">
-            <div class="card-header"><h2 class="card-title">Discussion du bureau</h2></div>
+            <div class="card-header">
+              <h2 class="card-title">Discussion du bureau</h2>
+            </div>
             <div class="chat-messages" id="chatMessages"></div>
-            <form id="chatForm" style="display:flex; gap:0.5rem;">
-              <input type="text" id="chatInput" class="form-input" placeholder="Votre message..." required style="flex:1;" />
+            <form id="chatForm" style="display: flex; gap: 0.75rem;">
+              <input type="text" id="chatInput" class="form-input" placeholder="Votre message..." required style="flex: 1;">
               <button type="submit" class="btn btn-primary">Envoyer</button>
             </form>
           </div>
@@ -488,17 +1525,36 @@
         <div id="tabMembers" class="tab-content">
           <div class="card">
             <div class="card-header">
-              <h2 class="card-title">Annuaire</h2>
-              <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
-                <button class="btn btn-ghost btn-sm" type="button" id="btnSyncMembers">🔄 Sync Google Sheets</button>
-              </div>
+              <h2 class="card-title">Annuaire complet</h2>
+              <button class="btn btn-primary btn-sm" onclick="syncMembersFromSheets()">
+                🔄 Synchroniser Google Sheets
+              </button>
             </div>
-
             <div class="alert alert-info">
-              Si l’annuaire ne charge pas, vérifie que le Google Sheet est public (export CSV).
+              <strong>📊 Google Sheets intégré</strong><br>
+              Les membres sont automatiquement synchronisés depuis le Google Sheet.<br>
+              <small>Sheet ID: ${APP.sheets.sheetId}</small>
             </div>
-
             <div id="membersList"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderFiles() {
+      return `
+        <div id="tabFiles" class="tab-content">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Gestion des fichiers</h2>
+            </div>
+            <div style="border: 2px dashed var(--clr-cloud); border-radius: var(--radius-xl); padding: 3rem 2rem; text-align: center; cursor: pointer; transition: all 0.2s;" id="fileUploadZone">
+              <p style="font-size: 3rem; margin-bottom: 0.75rem; opacity: 0.5;">📎</p>
+              <p style="font-weight: 700; margin-bottom: 0.5rem;">Cliquer pour ajouter des fichiers</p>
+              <p style="font-size: 0.875rem; color: var(--clr-slate);">Documents, images, PDFs...</p>
+              <input type="file" id="fileInput" multiple style="display: none;">
+            </div>
+            <div id="filesList" style="margin-top: 1.5rem;"></div>
           </div>
         </div>
       `;
@@ -509,64 +1565,351 @@
         <div id="tabSettings" class="tab-content">
           <div class="grid grid-2">
             <div class="card">
-              <div class="card-header"><h2 class="card-title">Compte</h2></div>
-              <button class="btn btn-primary btn-block" type="button" onclick="netlifyIdentity.open('user')">👤 Gérer mon compte</button>
-              <div style="margin-top:10px;color:var(--clr-slate);font-size:.95rem;">
-                Gère ton email, ton mot de passe, etc.
+              <div class="card-header">
+                <h2 class="card-title">Paramètres du compte</h2>
               </div>
+              <form id="settingsForm">
+                <div class="form-group">
+                  <label class="form-label">Nom affiché</label>
+                  <input class="form-input" id="settingsName" value="${APP.currentUser?.name || ''}">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Nouveau mot de passe</label>
+                  <input type="password" class="form-input" id="settingsPassword" placeholder="Laissez vide pour ne pas changer">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">💾 Enregistrer</button>
+              </form>
+              <div id="settingsAlert" style="margin-top: 1rem;"></div>
             </div>
-
+            
             <div class="card">
-              <div class="card-header"><h2 class="card-title">Liens</h2></div>
-              <a class="btn btn-ghost btn-block" href="/" target="_blank" rel="noopener">🏠 Site public</a>
-              <a class="btn btn-ghost btn-block" href="/articles/" target="_blank" rel="noopener">📰 Articles publics</a>
+              <div class="card-header">
+                <h2 class="card-title">Actions</h2>
+              </div>
+              <button class="btn btn-danger btn-block" onclick="clearAllData()">
+                🗑️ Effacer toutes les données
+              </button>
+              <p style="margin-top: 1rem; font-size: 0.875rem; color: var(--clr-slate);">
+                Cette action supprimera tous les articles, événements, tâches et messages. Elle est irréversible.
+              </p>
             </div>
           </div>
         </div>
       `;
     }
 
-    // ====== DATA / FEATURES ======
+    // ========================================
+    // DATA LOADING FUNCTIONS
+    // ========================================
     function loadAllData() {
       updateStats();
-      loadChat();
-      loadMembers();
-      loadTasks();
-      refreshPublicArticlesHint();
+      loadRecentActivity();
+      populateAssigneeDropdown();
     }
 
     function updateStats() {
-      // Articles publics: on lit l’index public si présent (sinon 0)
-      // Articles internes (local) : optionnel
+      const articles = getData(APP.storage.articles) || [];
       const events = getData(APP.storage.events) || [];
       const tasks = getData(APP.storage.tasks) || [];
       const allMembers = getData(APP.storage.allMembers) || [];
-
+      
+      document.getElementById('statArticles').textContent = articles.length;
       document.getElementById('statEvents').textContent = events.length;
       document.getElementById('statTasks').textContent = tasks.filter(t => !t.completed).length;
       document.getElementById('statMembers').textContent = allMembers.length;
-
-      // articles publics (best-effort)
-      fetch('/articles/index.json', { cache: 'no-store' })
-        .then(r => r.ok ? r.json() : [])
-        .then(list => { document.getElementById('statArticles').textContent = (Array.isArray(list) ? list.length : 0); })
-        .catch(() => { document.getElementById('statArticles').textContent = '0'; });
     }
 
-    // ---- Members
-    function loadMembers() {
-      const allMembers = getData(APP.storage.allMembers) || [];
-      const container = document.getElementById('membersList');
+    function loadRecentActivity() {
+      const container = document.getElementById('recentActivity');
       if (!container) return;
-
-      if (!allMembers.length) {
-        container.innerHTML = `<p style="text-align:center;color:var(--clr-slate);padding:1.5rem;">Aucun membre chargé. Clique sur “Sync Google Sheets”.</p>`;
+      
+      const articles = getData(APP.storage.articles) || [];
+      const events = getData(APP.storage.events) || [];
+      const tasks = getData(APP.storage.tasks) || [];
+      
+      const recent = [
+        ...articles.slice(0, 2).map(a => ({ 
+          type: '📝', 
+          text: `${a.author} a publié "${a.title}"`, 
+          date: a.createdAt 
+        })),
+        ...events.slice(0, 2).map(e => ({ 
+          type: '📅', 
+          text: `Événement "${e.title}" le ${formatDate(e.date)}`, 
+          date: e.createdAt 
+        })),
+        ...tasks.slice(0, 1).map(t => ({ 
+          type: '✅', 
+          text: `Tâche "${t.title}" assignée à ${t.assigneeName}`, 
+          date: t.createdAt 
+        }))
+      ]
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .slice(0, 5);
+      
+      if (!recent.length) {
+        container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-title">Aucune activité récente</div></div>';
         return;
       }
+      
+      container.innerHTML = recent.map(item => `
+        <div style="padding: 1rem; border-left: 3px solid var(--clr-gold); background: var(--clr-paper); margin-bottom: 0.75rem; border-radius: var(--radius-lg);">
+          ${item.type} ${item.text}
+          <div style="font-size: 0.75rem; color: var(--clr-mist); margin-top: 0.375rem;">${formatDate(item.date)}</div>
+        </div>
+      `).join('');
+    }
 
+    function populateAssigneeDropdown() {
+      const users = getData(APP.storage.users) || APP.defaultUsers;
+      const select = document.getElementById('taskAssignee');
+      if (!select) return;
+      
+      select.innerHTML = users.map(u => 
+        `<option value="${u.id}">${u.name} (${u.role})</option>`
+      ).join('');
+    }
+
+    // ========================================
+    // ARTICLES FUNCTIONS
+    // ========================================
+    function loadArticles(filter = 'all') {
+      const articles = getData(APP.storage.articles) || [];
+      const container = document.getElementById('articlesList');
+      if (!container) return;
+      
+      let filtered = articles;
+      if (filter === 'public') filtered = articles.filter(a => a.isPublic);
+      else if (filter === 'private') filtered = articles.filter(a => !a.isPublic);
+      else if (filter === 'mine') filtered = articles.filter(a => a.authorId === APP.currentUser.id);
+      
+      if (!filtered.length) {
+        container.innerHTML = '<div class="empty-state"><div class="empty-icon">📝</div><div class="empty-title">Aucun article</div></div>';
+        return;
+      }
+      
+      container.innerHTML = filtered.map(article => `
+        <div class="item">
+          <div class="item-header">
+            <div>
+              <div class="item-title">${escapeHtml(article.title)}</div>
+              <div class="item-meta">
+                ✍️ ${escapeHtml(article.author)} • 
+                📅 ${formatDate(article.createdAt)} • 
+                📂 ${escapeHtml(article.category)}
+                ${article.isPublic ? ' • <span class="badge badge-success">🌐 Public</span>' : ' • <span class="badge badge-warning">🔒 Privé</span>'}
+              </div>
+            </div>
+            ${article.authorId === APP.currentUser.id ? `
+              <button class="btn btn-danger btn-sm" onclick="deleteArticle(${article.id})">🗑️</button>
+            ` : ''}
+          </div>
+          <div style="color: var(--clr-slate); line-height: 1.6;">
+            ${article.content.substring(0, 200)}${article.content.length > 200 ? '...' : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function deleteArticle(id) {
+      if (confirm('Supprimer cet article ?')) {
+        let articles = getData(APP.storage.articles) || [];
+        articles = articles.filter(a => a.id !== id);
+        saveData(APP.storage.articles, articles);
+        updateStats();
+        loadArticles();
+        showInlineAlert('articleAlert', 'Article supprimé', 'success');
+      }
+    }
+
+    // ========================================
+    // EVENTS FUNCTIONS
+    // ========================================
+    function loadEvents() {
+      const events = getData(APP.storage.events) || [];
+      const container = document.getElementById('eventsList');
+      if (!container) return;
+      
+      const sorted = events.sort((a, b) => new Date(a.date) - new Date(b.date));
+      
+      if (!sorted.length) {
+        container.innerHTML = '<div class="empty-state"><div class="empty-icon">📅</div><div class="empty-title">Aucun événement</div></div>';
+        return;
+      }
+      
+      container.innerHTML = sorted.map(event => `
+        <div class="item">
+          <div class="item-header">
+            <div>
+              <div class="item-title">${escapeHtml(event.title)}</div>
+              <div class="item-meta">
+                📅 ${formatDate(event.date)} • 
+                🕐 ${event.time} • 
+                📍 ${escapeHtml(event.location)} • 
+                👤 ${escapeHtml(event.creator)}
+              </div>
+            </div>
+            ${event.creatorId === APP.currentUser.id ? `
+              <button class="btn btn-danger btn-sm" onclick="deleteEvent(${event.id})">🗑️</button>
+            ` : ''}
+          </div>
+          <div style="color: var(--clr-slate); line-height: 1.6;">
+            ${escapeHtml(event.description)}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function deleteEvent(id) {
+      if (confirm('Supprimer cet événement ?')) {
+        let events = getData(APP.storage.events) || [];
+        events = events.filter(e => e.id !== id);
+        saveData(APP.storage.events, events);
+        updateStats();
+        loadEvents();
+        showInlineAlert('eventAlert', 'Événement supprimé', 'success');
+      }
+    }
+
+    // ========================================
+    // TASKS FUNCTIONS
+    // ========================================
+    function loadTasks(filter = 'active') {
+      const tasks = getData(APP.storage.tasks) || [];
+      const container = document.getElementById('tasksList');
+      if (!container) return;
+      
+      let filtered = tasks;
+      if (filter === 'active') filtered = tasks.filter(t => !t.completed);
+      else if (filter === 'completed') filtered = tasks.filter(t => t.completed);
+      else if (filter === 'mine') filtered = tasks.filter(t => t.assigneeId === APP.currentUser.id && !t.completed);
+      
+      if (!filtered.length) {
+        container.innerHTML = '<div class="empty-state"><div class="empty-icon">✅</div><div class="empty-title">Aucune tâche</div></div>';
+        return;
+      }
+      
+      const priorityIcons = { low: '🟢', medium: '🟡', high: '🔴' };
+      
+      container.innerHTML = filtered.map(task => `
+        <div class="item" style="${task.completed ? 'opacity: 0.6;' : ''}">
+          <div class="item-header">
+            <div>
+              <div class="item-title" style="${task.completed ? 'text-decoration: line-through;' : ''}">
+                ${priorityIcons[task.priority]} ${escapeHtml(task.title)}
+              </div>
+              <div class="item-meta">
+                👤 ${escapeHtml(task.assigneeName)} • 
+                📅 ${formatDate(task.deadline)} • 
+                ${task.completed ? '<span class="badge badge-success">✅ Terminée</span>' : '<span class="badge badge-warning">⏳ En cours</span>'}
+              </div>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+              ${!task.completed && task.assigneeId === APP.currentUser.id ? `
+                <button class="btn btn-success btn-sm" onclick="completeTask(${task.id})">✅</button>
+              ` : ''}
+              ${task.creatorId === APP.currentUser.id ? `
+                <button class="btn btn-danger btn-sm" onclick="deleteTask(${task.id})">🗑️</button>
+              ` : ''}
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function completeTask(id) {
+      const tasks = getData(APP.storage.tasks) || [];
+      const task = tasks.find(t => t.id === id);
+      if (task) {
+        task.completed = true;
+        task.completedAt = new Date().toISOString();
+        saveData(APP.storage.tasks, tasks);
+        updateStats();
+        loadTasks();
+        showInlineAlert('taskAlert', 'Tâche terminée !', 'success');
+      }
+    }
+
+    function deleteTask(id) {
+      if (confirm('Supprimer cette tâche ?')) {
+        let tasks = getData(APP.storage.tasks) || [];
+        tasks = tasks.filter(t => t.id !== id);
+        saveData(APP.storage.tasks, tasks);
+        updateStats();
+        loadTasks();
+        showInlineAlert('taskAlert', 'Tâche supprimée', 'success');
+      }
+    }
+
+    // ========================================
+    // CHAT FUNCTIONS
+    // ========================================
+    function loadChat() {
+      const messages = getData(APP.storage.chat) || [];
+      const container = document.getElementById('chatMessages');
+      if (!container) return;
+      
+      const myId = APP.currentUser.id;
+      
+      if (!messages.length) {
+        container.innerHTML = '<div class="empty-state"><div class="empty-icon">💬</div><div class="empty-title">Aucun message</div></div>';
+        return;
+      }
+      
+      container.innerHTML = messages.map(msg => `
+        <div class="chat-message ${msg.userId === myId ? 'own' : ''}">
+          ${msg.userId !== myId ? `<div class="chat-author">${escapeHtml(msg.userName)}</div>` : ''}
+          <div class="chat-bubble">${escapeHtml(msg.text)}</div>
+          <div class="chat-time">${formatTime(msg.createdAt)}</div>
+        </div>
+      `).join('');
+      
+      container.scrollTop = container.scrollHeight;
+    }
+
+    // ========================================
+    // MEMBERS FUNCTIONS
+    // ========================================
+    function loadMembers() {
+      const allMembers = getData(APP.storage.allMembers) || [];
+      const bureau = getData(APP.storage.users) || APP.defaultUsers;
+      const container = document.getElementById('membersList');
+      if (!container) return;
+      
+      if (!allMembers.length) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">👥</div>
+            <div class="empty-title">Aucun membre chargé</div>
+            <p>Cliquez sur "Synchroniser" pour importer depuis Google Sheets</p>
+          </div>
+        `;
+        return;
+      }
+      
       container.innerHTML = `
+        <div style="margin-bottom: 2.5rem;">
+          <h3 style="font-family: var(--font-display); font-size: 1.75rem; font-weight: 900; margin-bottom: 1.25rem; letter-spacing: -0.01em;">
+            👑 Bureau (${bureau.length})
+          </h3>
+          <div class="grid grid-3">
+            ${bureau.map(m => `
+              <div class="member-card">
+                <div class="member-avatar">${getAvatar(m.name)}</div>
+                <div class="member-info">
+                  <div class="member-name">${escapeHtml(m.name)}</div>
+                  <div class="member-role">${escapeHtml(m.role)}</div>
+                  <div class="member-meta">${escapeHtml(m.email)}</div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        
         <div>
-          <h3 style="font-family: var(--font-display); font-size: 1.35rem; margin-bottom: 1rem;">👥 Membres (${allMembers.length})</h3>
+          <h3 style="font-family: var(--font-display); font-size: 1.75rem; font-weight: 900; margin-bottom: 1.25rem; letter-spacing: -0.01em;">
+            👥 Tous les membres (${allMembers.length})
+          </h3>
           <div class="grid grid-3">
             ${allMembers.map(m => `
               <div class="member-card">
@@ -574,7 +1917,7 @@
                 <div class="member-info">
                   <div class="member-name">${escapeHtml(m.name)}</div>
                   <div class="member-role">${escapeHtml(m.classe || 'Membre')}</div>
-                  <div class="member-meta">${escapeHtml(m.email || 'Pas d’email')}</div>
+                  <div class="member-meta">${escapeHtml(m.email || 'Pas d\'email')}</div>
                   ${m.phone ? `<div class="member-meta">📱 ${escapeHtml(m.phone)}</div>` : ''}
                 </div>
               </div>
@@ -584,219 +1927,256 @@
       `;
     }
 
-    // ---- Chat
-    function loadChat() {
-      const messages = getData(APP.storage.chat) || [];
-      const container = document.getElementById('chatMessages');
+    // ========================================
+    // FILES FUNCTIONS
+    // ========================================
+    function loadFiles() {
+      const files = getData(APP.storage.files) || [];
+      const container = document.getElementById('filesList');
       if (!container) return;
-
-      const myId = APP.currentUser?.id || APP.currentUser?.email || 'me';
-      container.innerHTML = messages.map(msg => `
-        <div class="chat-message ${msg.userId === myId ? 'own' : ''}">
-          ${msg.userId !== myId ? `<div class="chat-author">${escapeHtml(msg.userName)}</div>` : ''}
-          <div class="chat-bubble">${escapeHtml(msg.text)}</div>
-          <div class="chat-time">${formatTime(msg.createdAt)}</div>
-        </div>
-      `).join('');
-
-      container.scrollTop = container.scrollHeight;
-    }
-
-    // ---- Tasks
-    function loadTasks() {
-      const tasks = getData(APP.storage.tasks) || [];
-      const container = document.getElementById('tasksList');
-      if (!container) return;
-
-      if (!tasks.length) {
-        container.innerHTML = `<div class="alert alert-info" style="margin-bottom:0;">Aucune tâche.</div>`;
+      
+      if (!files.length) {
+        container.innerHTML = '<div class="empty-state"><div class="empty-icon">📎</div><div class="empty-title">Aucun fichier</div></div>';
         return;
       }
-
-      container.innerHTML = tasks
-        .slice()
-        .reverse()
-        .map(t => `
-          <div class="card" style="border-radius:14px;padding:12px 14px;">
-            <div style="display:flex;gap:.75rem;align-items:flex-start;justify-content:space-between;">
-              <div>
-                <div style="font-weight:800;">${escapeHtml(t.text)}</div>
-                <div style="color:var(--clr-mist);font-size:.85rem;">${formatDate(t.createdAt)}</div>
+      
+      container.innerHTML = `<div class="item-list">${files.map(file => `
+        <div class="item">
+          <div class="item-header">
+            <div>
+              <div class="item-title">📎 ${escapeHtml(file.name)}</div>
+              <div class="item-meta">
+                👤 ${escapeHtml(file.uploadedBy)} • 
+                📅 ${formatDate(file.uploadedAt)} • 
+                📊 ${(file.size / 1024).toFixed(1)} KB
               </div>
-              <button class="btn btn-ghost btn-sm" type="button" onclick="toggleTask(${t.id})">
-                ${t.completed ? '↩️ Réactiver' : '✅ Terminer'}
-              </button>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+              <a href="${file.data}" download="${file.name}" class="btn btn-primary btn-sm">⬇️</a>
+              ${file.uploadedById === APP.currentUser.id ? `
+                <button class="btn btn-danger btn-sm" onclick="deleteFile(${file.id})">🗑️</button>
+              ` : ''}
             </div>
           </div>
-        `).join('');
+        </div>
+      `).join('')}</div>`;
     }
 
-    function toggleTask(id) {
-      const tasks = getData(APP.storage.tasks) || [];
-      const t = tasks.find(x => x.id === id);
-      if (!t) return;
-      t.completed = !t.completed;
-      saveData(APP.storage.tasks, tasks);
-      updateStats();
-      loadTasks();
+    function handleFileUpload(files) {
+      const fileData = getData(APP.storage.files) || [];
+      
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const fileObj = {
+            id: Date.now() + Math.random(),
+            name: file.name,
+            type: file.type,
+            size: file.size,
+            data: e.target.result,
+            uploadedBy: APP.currentUser.name,
+            uploadedById: APP.currentUser.id,
+            uploadedAt: new Date().toISOString()
+          };
+          
+          fileData.push(fileObj);
+          saveData(APP.storage.files, fileData);
+          loadFiles();
+        };
+        reader.readAsDataURL(file);
+      });
     }
 
-    // ---- Articles publics preview
-    async function refreshPublicArticlesHint() {
-      const preview = document.getElementById('publicArticlesPreview');
-      if (!preview) return;
-
-      try {
-        const res = await fetch('/articles/index.json', { cache: 'no-store' });
-        if (!res.ok) throw new Error('Index public introuvable');
-
-        const items = await res.json();
-        const top = (Array.isArray(items) ? items.slice(0, 5) : []);
-
-        if (!top.length) {
-          preview.innerHTML = `<div class="alert alert-info" style="margin-bottom:0;">Aucun article public pour l’instant.</div>`;
-          return;
-        }
-
-        preview.innerHTML = top.map(it => `
-          <div style="padding:10px 12px;border:1px solid var(--clr-cloud);border-radius:14px;background:var(--clr-paper);">
-            <div style="font-weight:800;"><a href="${it.url}" target="_blank" rel="noopener" style="color:var(--clr-navy);text-decoration:none;">${escapeHtml(it.title)}</a></div>
-            <div style="color:var(--clr-mist);font-size:.85rem;">Par ${escapeHtml(it.author)} • ${formatDate(it.dateISO)}</div>
-          </div>
-        `).join('');
-
-      } catch (e) {
-        preview.innerHTML = `<div class="alert alert-error" style="margin-bottom:0;">Impossible de lire /articles/index.json</div>`;
+    function deleteFile(id) {
+      if (confirm('Supprimer ce fichier ?')) {
+        let files = getData(APP.storage.files) || [];
+        files = files.filter(f => f.id !== id);
+        saveData(APP.storage.files, files);
+        loadFiles();
       }
     }
 
-    // ---- Publish article (Netlify Function)
-    async function publishArticle(payload) {
-      const user = netlifyIdentity.currentUser();
-      if (!user) throw new Error('Non connecté');
-
-      const token = await user.jwt();
-      const res = await fetch('/.netlify/functions/publish-article', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json().catch(()=> ({}));
-      if (!res.ok) throw new Error(data.error || 'Erreur publication');
-      return data; // { ok, slug, url }
+    // ========================================
+    // UTILITY FUNCTIONS
+    // ========================================
+    function showInlineAlert(containerId, message, type = 'info') {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      
+      container.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+      setTimeout(() => {
+        container.innerHTML = '';
+      }, 5000);
     }
 
-    // ====== EVENTS (SINGLE SUBMIT HANDLER, NO BUG) ======
-    document.addEventListener('DOMContentLoaded', () => {
-      // Identity boot
-      netlifyIdentity.init();
-      netlifyIdentity.on('init', requireLogin);
-      netlifyIdentity.on('login', (user) => { netlifyIdentity.close(); showDashboard(user); });
-      netlifyIdentity.on('logout', () => location.reload());
+    function clearAllData() {
+      if (!confirm('⚠️ ATTENTION : Cette action supprimera TOUTES les données (articles, événements, tâches, messages). Continuer ?')) return;
+      if (!confirm('Êtes-vous VRAIMENT sûr ? Cette action est irréversible !')) return;
+      
+      localStorage.removeItem(APP.storage.articles);
+      localStorage.removeItem(APP.storage.events);
+      localStorage.removeItem(APP.storage.tasks);
+      localStorage.removeItem(APP.storage.files);
+      localStorage.removeItem(APP.storage.chat);
+      
+      loadAllData();
+      showInlineAlert('settingsAlert', '✅ Toutes les données ont été effacées', 'success');
+    }
 
-      // Login button
+    // ========================================
+    // EVENT LISTENERS
+    // ========================================
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeUsers();
+      checkSession();
+      
+      // Login form
       document.getElementById('loginForm').addEventListener('submit', (e) => {
         e.preventDefault();
-        netlifyIdentity.open('login');
-      });
-
-      document.getElementById('btnOpenRecovery').addEventListener('click', () => {
-        netlifyIdentity.open('login');
-        setTimeout(()=>netlifyIdentity.open('recovery'), 250);
-      });
-
-      document.getElementById('btnLogout').addEventListener('click', logout);
-
-      // ✅ ONE submit handler, dispatch by form id (no collisions)
-      document.addEventListener('submit', async (e) => {
-        // ---- Article form
-        if (e.target && e.target.id === 'articleForm') {
-          e.preventDefault();
-
-          const title = document.getElementById('aTitle')?.value?.trim();
-          const excerpt = document.getElementById('aExcerpt')?.value?.trim();
-          const coverUrl = document.getElementById('aCoverUrl')?.value?.trim();
-          const contentHTML = document.getElementById('aContent')?.value?.trim();
-
-          if (!title || !contentHTML) {
-            showInline('articlePublishMsg', 'Titre et contenu obligatoires.', 'error');
-            return;
-          }
-
-          try {
-            const user = netlifyIdentity.currentUser();
-            const author = user?.user_metadata?.full_name || user?.email || 'Bureau';
-
-            const data = await publishArticle({ title, excerpt, coverUrl, contentHTML, author });
-
-            showInline('articlePublishMsg', `✅ Publié : <a href="${data.url}" target="_blank" rel="noopener">${data.url}</a>`, 'success');
-            e.target.reset();
-
-            updateStats();
-            refreshPublicArticlesHint();
-          } catch (err) {
-            showInline('articlePublishMsg', `❌ ${escapeHtml(err.message)}`, 'error');
-          }
-          return;
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        
+        if (login(username, password)) {
+          e.target.reset();
+        } else {
+          showAlert('Identifiants incorrects', 'error');
         }
-
-        // ---- Chat form
-        if (e.target && e.target.id === 'chatForm') {
+      });
+      
+      // Form handlers with event delegation
+      document.addEventListener('submit', (e) => {
+        // Article form
+        if (e.target.id === 'articleForm') {
           e.preventDefault();
-
-          const input = document.getElementById('chatInput');
-          const text = (input?.value || '').trim();
-          if (!text) return;
-
-          const messages = getData(APP.storage.chat) || [];
-          const myId = APP.currentUser?.id || APP.currentUser?.email || 'me';
-          const myName = APP.currentUser?.user_metadata?.full_name || APP.currentUser?.email || 'Moi';
-
-          messages.push({
+          const articles = getData(APP.storage.articles) || [];
+          
+          articles.unshift({
             id: Date.now(),
-            text,
-            userId: myId,
-            userName: myName,
+            title: document.getElementById('articleTitle').value,
+            category: document.getElementById('articleCategory').value,
+            content: document.getElementById('articleContent').value,
+            isPublic: document.getElementById('articlePublic').checked,
+            author: APP.currentUser.name,
+            authorId: APP.currentUser.id,
             createdAt: new Date().toISOString()
           });
-
-          saveData(APP.storage.chat, messages);
-          input.value = '';
-          loadChat();
-          return;
+          
+          saveData(APP.storage.articles, articles);
+          e.target.reset();
+          updateStats();
+          loadArticles();
+          showInlineAlert('articleAlert', '✅ Article publié avec succès !', 'success');
         }
-
-        // ---- Task form
-        if (e.target && e.target.id === 'taskForm') {
+        
+        // Event form
+        if (e.target.id === 'eventForm') {
           e.preventDefault();
-          const text = document.getElementById('taskText')?.value?.trim();
-          if (!text) return;
-
+          const events = getData(APP.storage.events) || [];
+          
+          events.push({
+            id: Date.now(),
+            title: document.getElementById('eventTitle').value,
+            date: document.getElementById('eventDate').value,
+            time: document.getElementById('eventTime').value,
+            location: document.getElementById('eventLocation').value,
+            description: document.getElementById('eventDescription').value,
+            creator: APP.currentUser.name,
+            creatorId: APP.currentUser.id,
+            createdAt: new Date().toISOString()
+          });
+          
+          saveData(APP.storage.events, events);
+          e.target.reset();
+          updateStats();
+          loadEvents();
+          showInlineAlert('eventAlert', '✅ Événement créé !', 'success');
+        }
+        
+        // Task form
+        if (e.target.id === 'taskForm') {
+          e.preventDefault();
           const tasks = getData(APP.storage.tasks) || [];
-          tasks.push({ id: Date.now(), text, completed: false, createdAt: new Date().toISOString() });
+          const users = getData(APP.storage.users) || APP.defaultUsers;
+          const assigneeId = parseInt(document.getElementById('taskAssignee').value);
+          const assignee = users.find(u => u.id === assigneeId);
+          
+          tasks.push({
+            id: Date.now(),
+            title: document.getElementById('taskTitle').value,
+            assigneeId,
+            assigneeName: assignee.name,
+            priority: document.getElementById('taskPriority').value,
+            deadline: document.getElementById('taskDeadline').value,
+            creator: APP.currentUser.name,
+            creatorId: APP.currentUser.id,
+            createdAt: new Date().toISOString(),
+            completed: false
+          });
+          
           saveData(APP.storage.tasks, tasks);
-
           e.target.reset();
           updateStats();
           loadTasks();
-          return;
+          showInlineAlert('taskAlert', '✅ Tâche créée !', 'success');
+        }
+        
+        // Chat form
+        if (e.target.id === 'chatForm') {
+          e.preventDefault();
+          const messages = getData(APP.storage.chat) || [];
+          
+          messages.push({
+            id: Date.now(),
+            text: document.getElementById('chatInput').value,
+            userId: APP.currentUser.id,
+            userName: APP.currentUser.name,
+            createdAt: new Date().toISOString()
+          });
+          
+          saveData(APP.storage.chat, messages);
+          e.target.reset();
+          loadChat();
+        }
+        
+        // Settings form
+        if (e.target.id === 'settingsForm') {
+          e.preventDefault();
+          const users = getData(APP.storage.users) || APP.defaultUsers;
+          const user = users.find(u => u.id === APP.currentUser.id);
+          
+          const newName = document.getElementById('settingsName').value;
+          const newPassword = document.getElementById('settingsPassword').value;
+          
+          if (newName) user.name = newName;
+          if (newPassword) user.password = newPassword;
+          
+          saveData(APP.storage.users, users);
+          APP.currentUser = user;
+          
+          document.getElementById('userName').textContent = user.name;
+          document.getElementById('userAvatar').textContent = getAvatar(user.name);
+          
+          showInlineAlert('settingsAlert', '✅ Paramètres enregistrés !', 'success');
         }
       });
-
-      // Buttons created after render: use event delegation
-      document.addEventListener('click', async (e) => {
-        if (e.target && e.target.id === 'btnSyncMembers') {
-          await syncMembersFromSheets();
-          updateStats();
-          loadMembers();
-          return;
+      
+      // Filter changes
+      document.addEventListener('change', (e) => {
+        if (e.target.id === 'articleFilter') loadArticles(e.target.value);
+        if (e.target.id === 'taskFilter') loadTasks(e.target.value);
+      });
+      
+      // File upload
+      document.addEventListener('click', (e) => {
+        if (e.target.id === 'fileUploadZone' || e.target.closest('#fileUploadZone')) {
+          document.getElementById('fileInput')?.click();
         }
-        if (e.target && e.target.id === 'btnRefreshPublicIndex') {
-          // just refresh preview and stats
-          refreshPublicArticlesHint();
-          updateStats();
-          showInline('publicIndexMsg', '✅ Index public rafraîchi (lecture).', 'success');
-          return;
+      });
+      
+      document.getElementById('fileInput')?.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+          handleFileUpload(e.target.files);
+          e.target.value = '';
         }
       });
     });
