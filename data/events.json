@@ -1,80 +1,90 @@
 {
-  "stats 2026": {
+  "stats de 2026": {
     "inscrits": 120,
-    "debats": 6,
-    "conferences": 2,
+    "debats": 5,
+    "conferences": 3,
     "actions": 10
   },
   "events": [
     {
-      "title": "Débat : la liberté d’expression",
+      "title": "Débat : la liberté d'expression",
       "type": "Débat",
-      "tag": "Passé",
-      "date": "2026-01-26",
-      "location": "Lycée JPV"
+      "tag": "Action passée",
+      "start": "2026-01-26T12:00:00+01:00",
+      "end": "2026-01-26T13:00:00+01:00",
+      "location": "Salle Samuel Paty"
     },
     {
       "title": "Avocat du diable",
       "type": "Débat",
-      "tag": "Passé",
-      "date": "2026-02-02",
-      "location": "Lycée JPV"
+      "tag": "Action passée",
+      "start": "2026-02-02T12:00:00+01:00",
+      "end": "2026-02-02T13:00:00+01:00",
+      "location": "Salle Samuel Paty"
     },
     {
       "title": "Trump : Russie ou Chine ?",
       "type": "Débat",
-      "tag": "Passé",
-      "date": "2026-02-09",
-      "location": "Lycée JPV"
+      "tag": "Action passée",
+      "start": "2026-02-09T12:00:00+01:00",
+      "end": "2026-02-09T13:00:00+01:00",
+      "location": "Salle Samuel Paty"
     },
     {
-      "title": "Mini concours d’éloquence",
+      "title": "Mini concours d'éloquence",
       "type": "Concours",
-      "tag": "Passé",
-      "date": "2026-02-19",
+      "tag": "Action passée",
+      "start": "2026-02-19T12:00:00+01:00",
+      "end": "2026-02-19T13:00:00+01:00",
       "location": "Salle Samuel Paty"
     },
     {
       "title": "Faut-il catégoriser les extrêmes ?",
       "type": "Débat",
-      "tag": "Passé",
-      "date": "2026-03-18",
-      "location": "Lycée JPV"
+      "tag": "Action passée",
+      "start": "2026-03-18T12:00:00+01:00",
+      "end": "2026-03-18T13:00:00+01:00",
+      "location": "Salle Samuel Paty"
     },
     {
-      "title": "Art oratoire et présentation (2h)",
-      "type": "Formation",
+      "title": "Art oratoire et présentation",
+      "type": "Atelier",
       "tag": "À venir",
-      "date": "2026-04-02",
-      "location": "Lycée JPV"
+      "start": "2026-04-02T10:00:00+02:00",
+      "end": "2026-04-02T12:00:00+02:00",
+      "location": "Salle Samuel Paty"
     },
     {
-      "title": "Remise du concours ACT",
-      "type": "Cérémonie",
+      "title": "Remise des prix – Concours ACT",
+      "type": "Concours",
       "tag": "À venir",
-      "date": "2026-04-03",
-      "location": "Lycée JPV"
+      "start": "2026-04-03T12:00:00+02:00",
+      "end": "2026-04-03T13:00:00+02:00",
+      "location": "Salle Samuel Paty"
     },
     {
-      "title": "Conférence avec Madame Thévenot (Députée)",
+      "title": "Conférence Thevenot",
       "type": "Conférence",
       "tag": "À venir",
-      "date": "2026-04-10",
-      "location": "Lycée JPV"
+      "start": "2026-04-10T12:00:00+02:00",
+      "end": "2026-04-10T13:00:00+02:00",
+      "location": "À confirmer"
     },
     {
-      "title": "Participation au Joli Mois de l’Europe",
+      "title": "Participation au Joli Mois de l'Europe",
       "type": "Événement",
       "tag": "À venir",
-      "date": "2026-05-01",
-      "location": "France"
+      "start": "2026-05-01T00:00:00+02:00",
+      "end": "2026-05-31T23:59:00+02:00",
+      "location": "À confirmer"
     },
     {
-      "title": "Débat à l’Assemblée nationale",
+      "title": "Débat à l'Assemblée nationale",
       "type": "Débat",
       "tag": "À venir",
-      "date": "2026-06-04",
-      "location": "Assemblée nationale"
+      "start": "2026-06-04T12:00:00+02:00",
+      "end": "2026-06-04T14:00:00+02:00",
+      "location": "Assemblée nationale, Paris"
     }
   ]
 }
