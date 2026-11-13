@@ -1,0 +1,30 @@
+---
+interface Ev { title: string; type: string; start: string; end?: string; location: string; report?: string; tentative?: boolean }
+interface Props { events: Ev[]; limit?: number; upcoming?: boolean; past?: boolean }
+const { events, limit, upcoming = false, past = false } = Astro.props;
+const now = Date.now();
+let list = events.slice().sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
+if (upcoming) list = list.filter((e) => new Date(e.start).getTime() >= now);
+if (past) list = list.filter((e) => new Date(e.start).getTime() < now).reverse();
+if (limit) list = list.slice(0, limit);
+const day = (s: string) => new Intl.DateTimeFormat('fr-FR', { day: '2-digit', timeZone: 'Europe/Paris' }).format(new Date(s));
+const mon = (s: string) => new Intl.DateTimeFormat('fr-FR', { month: 'short', timeZone: 'Europe/Paris' }).format(new Date(s)).replace('.', '');
+const time = (s: string) => new Intl.DateTimeFormat('fr-FR', { timeStyle: 'short', timeZone: 'Europe/Paris' }).format(new Date(s));
+const year = (s: string) => new Date(s).getFullYear();
+---
+{list.length === 0 ? (
+  <p class="muted">Aucune séance programmée pour le moment. Abonne-toi à la newsletter pour être prévenu·e.</p>
+) : (
+  <div>
+    {list.map((e) => (
+      <article class="event">
+        <div class="event-date"><b>{day(e.start)}</b><span>{mon(e.start)} {year(e.start)}</span></div>
+        <div>
+          <div class="flex" style="gap:8px;"><span class="pill">{e.type}</span>{e.tentative && <span class="pill pill-gold">Date indicative</span>}</div>
+          <h3>{e.title}</h3>
+          <div class="meta">{time(e.start)}{e.end ? ` – ${time(e.end)}` : ''} · {e.location}{e.report && <> · <a href={e.report}>Rapport (PDF)</a></>}</div>
+        </div>
+      </article>
+    ))}
+  </div>
+)}

@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+const items = [
+  { t: "L'Étudiant", d: "Au CESE, l'engagement lycéen mis à l'honneur — article sur le trophée ACT.", u: 'https://www.letudiant.fr/lycee/au-cese-l-engagement-lyceen-mis-a-l-honneur.html' },
+  { t: 'Instagram', d: 'Photos, extraits, annonces et récaps des séances.', u: 'https://instagram.com/parlementjpv' },
+  { t: 'LinkedIn', d: 'Invités, communications officielles, réseau.', u: 'https://www.linkedin.com/company/parlementjpv/' },
+  { t: 'Le 144 — journal du lycée', d: 'Article consacré au Parlement JPV dans le journal du lycée.', u: '' },
+];
+---
+<Base title="Ils parlent de nous" description="Presse, réseaux sociaux et médias qui parlent du Parlement JPV.">
+  <div class="page-head"><div class="container"><span class="eyebrow">Communication — image publique</span><h1>Ils parlent de nous</h1></div></div>
+  <section class="section"><div class="container grid grid-2">
+    {items.map((i) => (
+      <div class="card"><h3>{i.t}</h3><p class="muted">{i.d}</p>{i.u ? <a class="btn btn-outline btn-sm" href={i.u} target="_blank" rel="noopener">Ouvrir</a> : <span class="small muted">Lien à venir</span>}</div>
+    ))}
+  </div></section>
+</Base>

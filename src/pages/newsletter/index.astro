@@ -1,0 +1,21 @@
+---
+import Base from '../../layouts/Base.astro';
+import NewsletterForm from '../../components/NewsletterForm.astro';
+---
+<Base title="Newsletter" description="Abonne-toi à la newsletter du Parlement JPV et consulte les anciens numéros.">
+  <div class="page-head"><div class="container"><span class="eyebrow">Newsletter</span><h1>L'essentiel, une fois par mois</h1><p class="lead">Prochaines séances, ouverture des candidatures, rapports publiés, JPV MUN. Désinscription en un clic.</p></div></div>
+  <section class="section"><div class="container grid grid-2" style="gap:48px;align-items:start;">
+    <div class="card"><h3>S'abonner</h3><NewsletterForm /></div>
+    <div><h3>Anciens numéros</h3><div id="archive" class="grid"><p class="muted small">Chargement…</p></div></div>
+  </div></section>
+</Base>
+<script>
+  import { getSupabase, supabaseConfigured } from '../../lib/supabase';
+  const el = document.getElementById('archive')!;
+  (async () => {
+    if (!supabaseConfigured) { el.innerHTML = '<p class="muted small">Aucun numéro publié pour le moment.</p>'; return; }
+    const { data } = await getSupabase().from('newsletters').select('id, subject, sent_at').not('sent_at', 'is', null).order('sent_at', { ascending: false }).limit(24);
+    if (!data || data.length === 0) { el.innerHTML = '<p class="muted small">Aucun numéro publié pour le moment.</p>'; return; }
+    el.innerHTML = data.map((n) => `<a class="card" style="text-decoration:none;padding:16px 20px;" href="/newsletter/lire?id=${n.id}"><strong>${n.subject}</strong><br><span class="small muted">${new Date(n.sent_at).toLocaleDateString('fr-FR', { dateStyle: 'long' })}</span></a>`).join('');
+  })();
+</script>

@@ -1,0 +1,53 @@
+---
+interface Props { compact?: boolean }
+const { compact = false } = Astro.props;
+const id = `nl-${Math.random().toString(36).slice(2, 8)}`;
+---
+<form class:list={['nl-form', { compact }]} data-newsletter id={id} novalidate>
+  <div class="nl-row">
+    <input type="email" name="email" placeholder="ton.email@exemple.fr" required autocomplete="email" aria-label="Adresse email" />
+    <button class="btn btn-gold btn-sm" type="submit">S'abonner</button>
+  </div>
+  <label class="checkbox nl-consent">
+    <input type="checkbox" name="consent" required />
+    <span>J'accepte de recevoir la newsletter du Parlement JPV. Désinscription en un clic à tout moment.</span>
+  </label>
+  <div class="cf-turnstile" data-sitekey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || ''} data-size="flexible"></div>
+  <p class="nl-msg small" role="status" aria-live="polite"></p>
+</form>
+
+<style>
+  .nl-form { display: grid; gap: 10px; }
+  .nl-row { display: flex; gap: 8px; }
+  .nl-row input { flex: 1; min-width: 0; padding: 10px 14px; border-radius: 999px; border: 1.5px solid var(--line); font: inherit; background: #fff; color: var(--ink); }
+  .nl-row input:focus { outline: none; border-color: var(--gold); box-shadow: var(--focus); }
+  .compact .nl-row input { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); color: #fff; }
+  .compact .nl-consent { color: rgba(246,241,230,0.6); font-size: 0.78rem; }
+  .nl-msg { margin: 0; min-height: 1.2em; }
+  .nl-msg.ok { color: #6ee7a8; } .nl-msg.err { color: #fda29b; }
+  :not(.compact) .nl-msg.ok { color: var(--ok); } :not(.compact) .nl-msg.err { color: var(--err); }
+  .cf-turnstile:empty { display: none; }
+</style>
+
+<script>
+  import { subscribeNewsletter } from '../lib/newsletter';
+  document.querySelectorAll<HTMLFormElement>('form[data-newsletter]').forEach((form) => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msg = form.querySelector('.nl-msg') as HTMLElement;
+      const btn = form.querySelector('button') as HTMLButtonElement;
+      const email = (form.elements.namedItem('email') as HTMLInputElement).value.trim();
+      const consent = (form.elements.namedItem('consent') as HTMLInputElement).checked;
+      msg.className = 'nl-msg small';
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { msg.textContent = 'Adresse email invalide.'; msg.classList.add('err'); return; }
+      if (!consent) { msg.textContent = 'Merci de cocher la case de consentement.'; msg.classList.add('err'); return; }
+      const token = (form.querySelector('[name="cf-turnstile-response"]') as HTMLInputElement | null)?.value || '';
+      btn.disabled = true; msg.textContent = 'Envoi…';
+      const res = await subscribeNewsletter(email, token);
+      btn.disabled = false;
+      msg.textContent = res.message;
+      msg.classList.add(res.ok ? 'ok' : 'err');
+      if (res.ok) form.reset();
+    });
+  });
+</script>

@@ -1,0 +1,16 @@
+{
+  "stats": { "inscrits": 120, "debats": 5, "conferences": 3, "actions": 10 },
+  "events": [
+    { "title": "Débat : la liberté d'expression", "type": "Débat", "start": "2026-01-26T12:00:00+01:00", "end": "2026-01-26T13:00:00+01:00", "location": "Salle Samuel Paty", "report": "/assets/docs/rapport-liberte-expression.pdf" },
+    { "title": "Avocat du diable", "type": "Débat", "start": "2026-02-02T12:00:00+01:00", "end": "2026-02-02T13:00:00+01:00", "location": "Salle Samuel Paty", "report": "/assets/docs/rapport-avocat-du-diable.pdf" },
+    { "title": "Trump : Russie ou Chine ?", "type": "Débat", "start": "2026-02-09T12:00:00+01:00", "end": "2026-02-09T13:00:00+01:00", "location": "Salle Samuel Paty" },
+    { "title": "Mini concours d'éloquence", "type": "Concours", "start": "2026-02-19T12:00:00+01:00", "end": "2026-02-19T13:00:00+01:00", "location": "Salle Samuel Paty" },
+    { "title": "Faut-il catégoriser les extrêmes ?", "type": "Débat", "start": "2026-03-18T12:00:00+01:00", "end": "2026-03-18T13:00:00+01:00", "location": "Salle Samuel Paty" },
+    { "title": "Art oratoire et présentation", "type": "Atelier", "start": "2026-04-02T12:00:00+02:00", "end": "2026-04-02T13:00:00+02:00", "location": "Salle Samuel Paty" },
+    { "title": "Remise des prix – Concours ACT", "type": "Concours", "start": "2026-04-03T12:00:00+02:00", "end": "2026-04-03T13:00:00+02:00", "location": "Salle Samuel Paty" },
+    { "title": "Conférence Thevenot", "type": "Conférence", "start": "2026-04-10T12:00:00+02:00", "end": "2026-04-10T13:00:00+02:00", "location": "À confirmer" },
+    { "title": "Participation au Joli Mois de l'Europe", "type": "Événement", "start": "2026-05-01T12:00:00+02:00", "end": "2026-05-01T13:00:00+02:00", "location": "À confirmer" },
+    { "title": "Débat à l'Assemblée nationale", "type": "Débat", "start": "2026-06-04T10:00:00+02:00", "end": "2026-06-04T16:00:00+02:00", "location": "Assemblée nationale, Paris" },
+    { "title": "Reprise des séances — nouveau bureau", "type": "Séance", "start": "2027-09-15T12:00:00+02:00", "end": "2027-09-15T13:00:00+02:00", "location": "Salle Samuel Paty", "tentative": true }
+  ]
+}

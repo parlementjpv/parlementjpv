@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Mot de passe oublié" noindex>
+  <div class="auth-wrap"><div class="card auth-card">
+    <span class="eyebrow">Espace membre</span>
+    <h1>Mot de passe oublié</h1>
+    <p class="muted small">On t'envoie un lien pour choisir un nouveau mot de passe.</p>
+    <form class="form" id="resetForm" novalidate>
+      <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required autocomplete="email" /></div>
+      <div id="msg"></div>
+      <button class="btn btn-primary" type="submit">Envoyer le lien</button>
+    </form>
+    <p class="auth-foot"><a href="/connexion">← Retour à la connexion</a></p>
+  </div></div>
+</Base>
+<script>
+  import { getSupabase } from '../lib/supabase';
+  import { frError } from '../lib/auth';
+  const form = document.getElementById('resetForm') as HTMLFormElement;
+  const msg = document.getElementById('msg')!;
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    const email = String(new FormData(form).get('email')).trim();
+    const btn = form.querySelector('button')!; btn.disabled = true;
+    const { error } = await getSupabase().auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}/nouveau-mot-de-passe` });
+    msg.innerHTML = error ? `<div class="alert alert-err">${frError(error.message)}</div>` : '<div class="alert alert-ok">Si un compte existe avec cet email, un lien vient d’être envoyé.</div>';
+    btn.disabled = false;
+  });
+</script>

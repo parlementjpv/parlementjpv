@@ -1,0 +1,83 @@
+---
+import Base from '../layouts/Base.astro';
+const toc = [
+  ['preambule', 'Préambule'], ['art1', 'Article 1 — Objectifs'], ['art2', 'Article 2 — Valeurs'], ['art3', 'Article 3 — Organisation'],
+  ['art4', 'Article 4 — Inscription et participation'], ['art5', 'Article 5 — Activités'], ['art6', 'Article 6 — Lieu et matériel'],
+  ['art7', 'Article 7 — Financement'], ['art8', 'Article 8 — Structure'], ['art9', 'Article 9 — Évolution de la charte'], ['art10', 'Article 10 — Respect de la charte'],
+];
+---
+<Base title="Charte officielle" description="Charte du Parlement JPV : principes, valeurs et règles de fonctionnement — cadre du débat, de la parole et de l'engagement citoyen.">
+  <div class="page-head"><div class="container">
+    <span class="eyebrow">Document officiel</span>
+    <h1>Charte du Parlement JPV</h1>
+    <p class="lead">Principes, valeurs et règles de fonctionnement — cadre du débat, de la parole et de l'engagement citoyen.</p>
+    <div class="flex mt-2">
+      <a class="btn btn-primary btn-sm" href="/assets/docs/CHARTE_PARLEMENT_JPV.pdf" target="_blank" rel="noopener">Télécharger le PDF officiel</a>
+      <button class="btn btn-outline btn-sm" type="button" onclick="window.print()">Imprimer</button>
+    </div>
+  </div></div>
+  <section class="section"><div class="container two-col">
+    <aside class="toc"><strong class="small" style="display:block;margin-bottom:8px;">Sommaire</strong>{toc.map(([id, l]) => <a href={`#${id}`}>{l}</a>)}</aside>
+    <div class="prose">
+      <h2 id="preambule">Préambule</h2>
+      <p>Le Parlement JPV est une initiative lycéenne fondée sur la conviction que la parole, le débat et la réflexion citoyenne sont au cœur de la vie démocratique. Ce projet vise à offrir à chaque élève un espace de liberté d'expression, de dialogue et d'engagement. Chaque participant s'engage à respecter la Charte de la Laïcité à l'École et le règlement intérieur, garants du vivre-ensemble, ainsi que l'ensemble des valeurs républicaines qui guident les actions du Parlement JPV.</p>
+      <h2 id="art1">Article 1 — Objectifs</h2>
+      <ul>
+        <li>Promouvoir la prise de parole, l'esprit critique et l'appropriation des valeurs républicaines par les lycéens.</li>
+        <li>Encourager le débat démocratique, le respect des opinions, la tolérance et le vivre-ensemble, dans un cadre fondé sur la laïcité et le respect mutuel.</li>
+        <li>Sensibiliser les élèves aux enjeux citoyens et culturels.</li>
+        <li>Offrir des activités formatrices : débats, conférences, concours d'éloquence, visites institutionnelles.</li>
+      </ul>
+      <h2 id="art2">Article 2 — Valeurs</h2>
+      <ul>
+        <li><strong>Respect</strong> des opinions, des personnes et du cadre scolaire.</li>
+        <li><strong>Neutralité</strong> : le Parlement JPV n'a pas vocation à promouvoir une opinion politique, religieuse ou idéologique.</li>
+        <li><strong>Ouverture</strong> : accueil de tous les élèves, quelle que soit leur classe, section ou spécialités. Chaque professeur est également le bienvenu.</li>
+        <li><strong>Engagement</strong> : participation active et bienveillante à la vie du club.</li>
+      </ul>
+      <h2 id="art3">Article 3 — Organisation</h2>
+      <p>Le Parlement JPV fonctionne sous la responsabilité du Conseil de la Vie Lycéenne et en lien avec ses professeures référentes : Madame Harand-Busson (professeure documentaliste) et Madame Aubossu (C.P.E.). La présence d'au moins un professeur est obligatoire pour permettre la tenue d'une séance, de préférence un professeur différent à chaque séance.</p>
+      <ul>
+        <li>Partenariats possibles avec les ambassadeurs du lycée et les éco-délégués.</li>
+        <li>Réunions selon disponibilités (date fixée par le président du club).</li>
+        <li>Débats : 30 minutes sur l'heure de midi ou en fin de journée.</li>
+      </ul>
+      <h2 id="art4">Article 4 — Inscription et participation</h2>
+      <p>L'inscription se fait sur le principe du volontariat.</p>
+      <ul>
+        <li>Les élèves intéressés s'inscrivent auprès de la professeure référente au CDI ou <a href="/rejoindre">en ligne</a>.</li>
+        <li>L'inscription permet de participer aux débats, conférences, ateliers et concours organisés.</li>
+        <li>Les membres peuvent proposer des thèmes ou des invités, sous validation du comité d'organisation et du proviseur.</li>
+        <li>Un engagement de respect mutuel est signé à l'inscription.</li>
+      </ul>
+      <h2 id="art5">Article 5 — Activités</h2>
+      <ul>
+        <li>Débats citoyens sur des sujets d'actualité ou internes au lycée.</li>
+        <li>Conférences avec des invités extérieurs (journalistes, élus, chercheurs…).</li>
+        <li>Concours d'éloquence individuel ou par équipe.</li>
+        <li>Visites d'institutions locales et rencontres avec des acteurs de la vie publique, sous autorisation du chef d'établissement.</li>
+        <li>Ateliers d'expression orale pour préparer les oraux et concours.</li>
+        <li>Compte Instagram (@parlementjpv) destiné à promouvoir ses activités, avec communication conforme à la charte.</li>
+      </ul>
+      <h2 id="art6">Article 6 — Lieu et matériel</h2>
+      <p>Les activités se tiennent au lycée, principalement en salle Samuel Paty ou en salle de classe selon le nombre de participants et la disponibilité. Le lycée dispose du matériel nécessaire (micros, projecteur, pupitres).</p>
+      <h2 id="art7">Article 7 — Financement</h2>
+      <ul><li>La MDL (Maison des Lycéens).</li><li>Fonds de vie lycéenne.</li><li>Des subventions locales.</li></ul>
+      <h2 id="art8">Article 8 — Structure du Parlement JPV</h2>
+      <p>Le Parlement JPV est placé sous la responsabilité du CVL qui nomme le président du club. Ce président peut être assisté de porte-paroles et de responsables thématiques qu'il nomme parmi les membres inscrits, avec l'accord du bureau du CVL.</p>
+      <ul>
+        <li><strong>Président</strong> : coordination, animation, ordre du jour avec le CVL (élu par le CVL).</li>
+        <li><strong>Vice-président</strong> : seconde le président et assure l'intérim.</li>
+        <li><strong>Secrétaire général</strong> : comptes rendus, inscriptions, convocations (élu par le CVL).</li>
+        <li><strong>Porte-paroles</strong> : représentation auprès des élèves et du CVL.</li>
+        <li><strong>Responsables thématiques</strong> : groupes de travail (environnement, égalité, culture, vie scolaire, etc.).</li>
+      </ul>
+      <h2 id="art9">Article 9 — Évolution de la charte</h2>
+      <p>Le CVL se réserve le droit, avec l'accord de Madame Aubossu, Madame Harand-Busson et du proviseur, de modifier la présente charte afin de l'adapter à l'évolution du projet et aux besoins de la communauté lycéenne. La charte est présentée chaque année pour évolution, approbation et reconduction.</p>
+      <h2 id="art10">Article 10 — Respect de la charte</h2>
+      <p>Tout membre inscrit au Parlement JPV s'engage à respecter les valeurs et les principes de cette charte. Le règlement intérieur du lycée Jean-Pierre Vernant s'applique dans toutes les activités du Parlement JPV. Tout manquement pourra entraîner la suspension de la participation d'un membre.</p>
+      <hr class="sep" />
+      <p class="small muted">Texte conforme au document officiel. Référence : <a href="/assets/docs/CHARTE_PARLEMENT_JPV.pdf">version PDF téléchargeable</a>.</p>
+    </div>
+  </div></section>
+</Base>

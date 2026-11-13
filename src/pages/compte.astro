@@ -1,0 +1,112 @@
+---
+import Base from '../layouts/Base.astro';
+import data from '../data/events.json';
+const upcoming = data.events.filter((e) => new Date(e.start).getTime() >= Date.now()).sort((a, b) => a.start.localeCompare(b.start)).slice(0, 6);
+const key = (e: any) => `${e.start.slice(0, 10)}|${e.title}`;
+const fmt = (s: string) => new Intl.DateTimeFormat('fr-FR', { dateStyle: 'full', timeStyle: 'short', timeZone: 'Europe/Paris' }).format(new Date(s));
+---
+<Base title="Mon espace" noindex>
+  <div class="page-head"><div class="container flex between">
+    <div><span class="eyebrow">Espace membre</span><h1 id="hello">Mon espace</h1></div>
+    <div class="flex"><a class="btn btn-gold btn-sm hidden" id="bureauLink" href="/bureau">Espace bureau</a><button class="btn btn-outline btn-sm" id="logout" type="button">Se déconnecter</button></div>
+  </div></div>
+  <section class="section"><div class="container grid grid-2" style="gap:36px;align-items:start;">
+    <div class="grid">
+      <div class="card" id="welcome" class:list={['hidden']}></div>
+      <div class="card">
+        <h3>Ma candidature</h3>
+        <div id="cand"><p class="muted small">Chargement…</p></div>
+      </div>
+      <div class="card">
+        <h3>Prochaines séances</h3>
+        <p class="muted small">Inscris-toi en un clic : le bureau connaît le nombre de participants à l'avance.</p>
+        <div id="events">
+          {upcoming.map((e) => (
+            <div class="event" data-key={key(e)}>
+              <div class="event-date"><b>{new Date(e.start).getDate()}</b><span>{new Intl.DateTimeFormat('fr-FR', { month: 'short' }).format(new Date(e.start))}</span></div>
+              <div><span class="pill">{e.type}</span><h3>{e.title}</h3><div class="meta">{fmt(e.start)} · {e.location}</div>
+                <button class="btn btn-outline btn-sm mt-1 reg" type="button" data-key={key(e)}>Je participe</button></div>
+            </div>
+          ))}
+          {upcoming.length === 0 && <p class="muted">Aucune séance programmée.</p>}
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <h3>Mes informations</h3>
+        <form class="form" id="profileForm">
+          <div class="form-row">
+            <div class="field"><label for="prenom">Prénom</label><input id="prenom" name="prenom" required /></div>
+            <div class="field"><label for="nom">Nom</label><input id="nom" name="nom" required /></div>
+          </div>
+          <div class="field"><label for="classe">Classe</label><input id="classe" name="classe" /></div>
+          <div class="field"><label>Email</label><input id="email" disabled /></div>
+          <div id="pmsg"></div>
+          <button class="btn btn-primary btn-sm" type="submit">Enregistrer</button>
+        </form>
+      </div>
+      <div class="card">
+        <h3>Mot de passe</h3>
+        <a class="btn btn-outline btn-sm" href="/mot-de-passe-oublie">Changer mon mot de passe</a>
+      </div>
+      <div class="card" style="border-color:#fecdca;">
+        <h3>Supprimer mon compte</h3>
+        <p class="muted small">Supprime ton profil, tes inscriptions et tes candidatures. Irréversible.</p>
+        <button class="btn btn-outline btn-sm" id="delAccount" type="button" style="border-color:var(--err);color:var(--err);">Supprimer définitivement</button>
+      </div>
+    </div>
+  </div></section>
+</Base>
+<script>
+  import { getSupabase } from '../lib/supabase';
+  import { requireSession, getProfile, signOut } from '../lib/auth';
+  (async () => {
+    const session = await requireSession(); if (!session) return;
+    const sb = getSupabase();
+    const p = await getProfile(session.user.id);
+    document.getElementById('hello')!.textContent = p?.prenom ? `Bonjour ${p.prenom}` : 'Mon espace';
+    if (p && ['bureau', 'admin'].includes(p.role)) document.getElementById('bureauLink')!.classList.remove('hidden');
+    if (new URLSearchParams(location.search).get('bienvenue')) { const w = document.getElementById('welcome')!; w.classList.remove('hidden'); w.innerHTML = '<div class="alert alert-ok">Bienvenue ! Ton compte est activé. Tu peux maintenant <a href="/rejoindre">déposer ta candidature</a>.</div>'; }
+    document.getElementById('logout')!.addEventListener('click', signOut);
+
+    // Profil
+    const f = document.getElementById('profileForm') as HTMLFormElement;
+    (f.elements.namedItem('prenom') as HTMLInputElement).value = p?.prenom || '';
+    (f.elements.namedItem('nom') as HTMLInputElement).value = p?.nom || '';
+    (f.elements.namedItem('classe') as HTMLInputElement).value = p?.classe || '';
+    (document.getElementById('email') as HTMLInputElement).value = session.user.email || '';
+    f.addEventListener('submit', async (e) => {
+      e.preventDefault(); const fd = new FormData(f);
+      const { error } = await sb.from('profiles').update({ prenom: fd.get('prenom'), nom: fd.get('nom'), classe: fd.get('classe') }).eq('id', session.user.id);
+      document.getElementById('pmsg')!.innerHTML = error ? `<div class="alert alert-err">${error.message}</div>` : '<div class="alert alert-ok">Enregistré.</div>';
+    });
+
+    // Candidature
+    const { data: cands } = await sb.from('candidatures').select('type, statut, created_at, note_bureau').eq('user_id', session.user.id).order('created_at', { ascending: false });
+    const cEl = document.getElementById('cand')!;
+    const labels: Record<string, string> = { nouvelle: 'Reçue, en attente', en_cours: 'En cours d’examen', acceptee: 'Acceptée 🎉', refusee: 'Non retenue' };
+    cEl.innerHTML = cands && cands.length
+      ? cands.map((c) => `<p><span class="pill">${c.type}</span> déposée le ${new Date(c.created_at).toLocaleDateString('fr-FR')} — <strong>${labels[c.statut] || c.statut}</strong>${c.note_bureau ? `<br><span class="small muted">Message du bureau : ${c.note_bureau}</span>` : ''}</p>`).join('')
+      : '<p class="muted">Aucune candidature pour le moment.</p><a class="btn btn-gold btn-sm" href="/rejoindre">Candidater</a>';
+
+    // Inscriptions aux séances
+    const { data: regs } = await sb.from('event_registrations').select('event_key').eq('user_id', session.user.id);
+    const mine = new Set((regs || []).map((r) => r.event_key));
+    const paint = () => document.querySelectorAll<HTMLButtonElement>('.reg').forEach((b) => { const on = mine.has(b.dataset.key!); b.textContent = on ? '✓ Inscrit·e — annuler' : 'Je participe'; b.classList.toggle('btn-primary', on); b.classList.toggle('btn-outline', !on); });
+    paint();
+    document.querySelectorAll<HTMLButtonElement>('.reg').forEach((b) => b.addEventListener('click', async () => {
+      const k = b.dataset.key!; b.disabled = true;
+      if (mine.has(k)) { await sb.from('event_registrations').delete().eq('user_id', session.user.id).eq('event_key', k); mine.delete(k); }
+      else { await sb.from('event_registrations').insert({ user_id: session.user.id, event_key: k }); mine.add(k); }
+      b.disabled = false; paint();
+    }));
+
+    // Suppression
+    document.getElementById('delAccount')!.addEventListener('click', async () => {
+      if (!confirm('Supprimer définitivement ton compte et toutes tes données ?')) return;
+      const r = await fetch('/api/account-delete', { method: 'POST', headers: { Authorization: `Bearer ${session.access_token}` } });
+      if (r.ok) { await sb.auth.signOut(); location.href = '/?compte=supprime'; } else alert('Erreur lors de la suppression.');
+    });
+  })();
+</script>

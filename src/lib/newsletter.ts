@@ -1,0 +1,30 @@
+/** Appels aux fonctions serveur (Netlify Functions) — jamais de clé secrète côté navigateur. */
+
+export async function subscribeNewsletter(email: string, turnstileToken = ''): Promise<{ ok: boolean; message: string }> {
+  try {
+    const res = await fetch('/api/newsletter-subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, turnstileToken }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) return { ok: false, message: data.error || 'Une erreur est survenue, réessaie plus tard.' };
+    return { ok: true, message: data.message || 'Presque fini : clique sur le lien reçu par email pour confirmer.' };
+  } catch {
+    return { ok: false, message: 'Impossible de joindre le serveur.' };
+  }
+}
+
+export async function postJSON<T = any>(path: string, body: unknown, accessToken?: string): Promise<{ ok: boolean; data: T; error?: string }> {
+  try {
+    const res = await fetch(path, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}) },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json().catch(() => ({}));
+    return { ok: res.ok, data, error: res.ok ? undefined : data.error || `Erreur ${res.status}` };
+  } catch {
+    return { ok: false, data: {} as T, error: 'Impossible de joindre le serveur.' };
+  }
+}

@@ -1,0 +1,117 @@
+---
+import Base from '../layouts/Base.astro';
+import NewsletterForm from '../components/NewsletterForm.astro';
+import EventList from '../components/EventList.astro';
+import { getCollection } from 'astro:content';
+import data from '../data/events.json';
+
+const posts = (await getCollection('posts', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
+const fmt = (d: Date) => new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' }).format(d);
+---
+<Base title="Accueil">
+  <section class="hero">
+    <div class="container hero-inner">
+      <div>
+        <span class="eyebrow">Lycée Jean-Pierre Vernant — Sèvres</span>
+        <h1>Apprendre à <em>débattre</em>, à écouter, à décider.</h1>
+        <p class="lead">Le Parlement JPV est une instance lycéenne dédiée à l'éloquence, au débat démocratique et à l'engagement citoyen. Débats, conférences, concours et visites institutionnelles, dans un cadre neutre, ouvert et exigeant.</p>
+        <div class="hero-actions">
+          <a class="btn btn-gold" href="/rejoindre">Candidater</a>
+          <a class="btn btn-light" href="/institution">Découvrir l'institution</a>
+        </div>
+      </div>
+      <div class="hero-media">
+        <img src="/assets/img/hero.jpg" alt="Un élève argumente lors d'un débat du Parlement JPV" loading="eager" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container">
+      <div class="stats">
+        <div class="stat"><strong>{data.stats.inscrits}</strong><span>inscrits</span></div>
+        <div class="stat"><strong>{data.stats.debats}</strong><span>débats</span></div>
+        <div class="stat"><strong>{data.stats.conferences}</strong><span>conférences</span></div>
+        <div class="stat"><strong>{data.stats.actions}</strong><span>actions en 2026</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="center">
+        <span class="eyebrow">Nos valeurs</span>
+        <h2>Un cadre, quatre piliers</h2>
+      </div>
+      <div class="grid grid-4 mt-3">
+        <div class="card"><h3>Neutralité</h3><p class="muted">Pas de promotion idéologique : priorité au débat structuré et aux arguments.</p></div>
+        <div class="card"><h3>Exigence</h3><p class="muted">Argumentation, écoute, rigueur et respect : non négociables.</p></div>
+        <div class="card"><h3>Ouverture</h3><p class="muted">Participation accessible à tous les élèves volontaires, quelle que soit la classe.</p></div>
+        <div class="card"><h3>Cadre</h3><p class="muted">Organisation encadrée par le CVL et des professeures référentes, suivi sur l'année.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background: var(--cream);">
+    <div class="container grid grid-2" style="gap: 48px; align-items: start;">
+      <div>
+        <span class="eyebrow">Agenda</span>
+        <h2>Les prochaines séances</h2>
+        <EventList events={data.events} limit={4} upcoming />
+        <a class="btn btn-outline mt-2" href="/agenda">Voir tout l'agenda</a>
+      </div>
+      <div>
+        <span class="eyebrow">Actualités</span>
+        <h2>Dernières publications</h2>
+        <div class="grid">
+          {posts.map((p) => (
+            <a class="card post-card" href={`/actualites/${p.id}`}>
+              <span class="pill pill-gold">{p.data.category}</span>
+              <h3>{p.data.title}</h3>
+              <p class="muted small">{p.data.excerpt}</p>
+              <span class="small muted">{fmt(p.data.date)} · {p.data.author}</span>
+            </a>
+          ))}
+        </div>
+        <a class="btn btn-outline mt-2" href="/actualites">Toutes les actualités</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="newsletter">
+    <div class="container">
+      <div class="nl-band">
+        <div>
+          <span class="eyebrow">Newsletter</span>
+          <h2>Ne manque aucun débat</h2>
+          <p class="muted">Une fois par mois : prochaines séances, ouverture des candidatures, rapports publiés, JPV MUN. Zéro spam, désinscription en un clic.</p>
+        </div>
+        <NewsletterForm />
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container">
+      <div class="cta-band">
+        <div>
+          <h2>Envie de prendre la parole ?</h2>
+          <p>Les candidatures pour la rentrée 2027 sont ouvertes. Crée ton compte, dépose ta candidature, le bureau te répond par email.</p>
+        </div>
+        <a class="btn btn-gold" href="/rejoindre">Candidater maintenant</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .post-card { text-decoration: none; display: grid; gap: 8px; }
+  .post-card h3 { font-size: 1.1rem; margin: 4px 0 0; }
+  .post-card p { margin: 0; }
+  .post-card:hover { border-color: var(--gold); }
+  .nl-band { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items: center; padding: 44px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: #fff; }
+  :global(:root[data-theme='dark']) .nl-band { background: #13244a; }
+  @media (max-width: 800px) { .nl-band { grid-template-columns: 1fr; padding: 28px; } }
+</style>

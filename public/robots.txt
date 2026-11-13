@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /compte
+Disallow: /bureau
+Disallow: /connexion
+Disallow: /inscription
+Sitemap: https://parlementjpv.netlify.app/sitemap-index.xml

@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Nouveau mot de passe" noindex>
+  <div class="auth-wrap"><div class="card auth-card">
+    <span class="eyebrow">Espace membre</span>
+    <h1>Nouveau mot de passe</h1>
+    <form class="form" id="pwForm" novalidate>
+      <div class="field"><label for="password">Nouveau mot de passe</label><input id="password" name="password" type="password" required minlength="8" autocomplete="new-password" /></div>
+      <div class="field"><label for="password2">Confirmer</label><input id="password2" name="password2" type="password" required minlength="8" autocomplete="new-password" /></div>
+      <div id="msg"></div>
+      <button class="btn btn-primary" type="submit">Enregistrer</button>
+    </form>
+  </div></div>
+</Base>
+<script>
+  import { getSupabase } from '../lib/supabase';
+  import { frError } from '../lib/auth';
+  const form = document.getElementById('pwForm') as HTMLFormElement;
+  const msg = document.getElementById('msg')!;
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    if (fd.get('password') !== fd.get('password2')) { msg.innerHTML = '<div class="alert alert-err">Les deux mots de passe ne correspondent pas.</div>'; return; }
+    const { error } = await getSupabase().auth.updateUser({ password: String(fd.get('password')) });
+    if (error) { msg.innerHTML = `<div class="alert alert-err">${frError(error.message)}</div>`; return; }
+    msg.innerHTML = '<div class="alert alert-ok">Mot de passe mis à jour. Redirection…</div>';
+    setTimeout(() => (location.href = '/compte'), 1200);
+  });
+</script>

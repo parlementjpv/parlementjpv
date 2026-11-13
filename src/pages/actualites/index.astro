@@ -1,0 +1,44 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const fmt = (d: Date) => new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' }).format(d);
+const cats = ['Tous', ...new Set(posts.map((p) => p.data.category))];
+---
+<Base title="Actualités" description="Articles, comptes rendus et publications officielles du bureau du Parlement JPV.">
+  <div class="page-head">
+    <div class="container">
+      <span class="eyebrow">Actualités</span>
+      <h1>Publications du bureau</h1>
+      <p class="lead">Comptes rendus de débats, projets, événements et tribunes libres.</p>
+      <div class="flex mt-2" id="filters">
+        {cats.map((c, i) => <button class:list={['pill', 'filter', { active: i === 0 }]} data-cat={c} type="button">{c}</button>)}
+      </div>
+    </div>
+  </div>
+  <section class="section">
+    <div class="container grid grid-3" id="postGrid">
+      {posts.map((p) => (
+        <a class="card post" href={`/actualites/${p.id}`} data-cat={p.data.category}>
+          <span class="pill pill-gold">{p.data.category}</span>
+          <h3>{p.data.title}</h3>
+          <p class="muted small">{p.data.excerpt}</p>
+          <span class="small muted">{fmt(p.data.date)} · {p.data.author}</span>
+        </a>
+      ))}
+      {posts.length === 0 && <p class="muted">Aucune publication pour le moment.</p>}
+    </div>
+  </section>
+</Base>
+<style>
+  .post { text-decoration: none; display: grid; gap: 8px; align-content: start; } .post h3 { font-size: 1.15rem; margin: 4px 0 0; } .post p { margin: 0; } .post:hover { border-color: var(--gold); }
+  .filter { cursor: pointer; border: 0; font: inherit; font-size: 0.8rem; } .filter.active { background: var(--navy); color: #fff; }
+</style>
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.filter').forEach((b) => b.addEventListener('click', () => {
+    document.querySelectorAll('.filter').forEach((x) => x.classList.remove('active'));
+    b.classList.add('active');
+    const cat = b.dataset.cat;
+    document.querySelectorAll<HTMLElement>('#postGrid .post').forEach((p) => { p.style.display = cat === 'Tous' || p.dataset.cat === cat ? '' : 'none'; });
+  }));
+</script>

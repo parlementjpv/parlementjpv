@@ -1,0 +1,23 @@
+---
+import Base from '../layouts/Base.astro';
+import reports from '../data/reports.json';
+const list = reports.slice().sort((a, b) => b.date.localeCompare(a.date));
+const fmt = (d: string) => new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' }).format(new Date(d));
+---
+<Base title="Rapports" description="Rapports officiels des débats et documents publics du Parlement JPV.">
+  <div class="page-head"><div class="container">
+    <span class="eyebrow">Transparence — traçabilité</span>
+    <h1>Rapports officiels</h1>
+    <p class="lead">Chaque action donne lieu à une synthèse publique. Tous les rapports sont consultables et téléchargeables ici.</p>
+  </div></div>
+  <section class="section"><div class="container grid grid-2">
+    {list.map((r) => (
+      <div class="card">
+        <div class="flex between"><span class="pill">{r.type}</span><span class="small muted">{fmt(r.date)}</span></div>
+        <h3 class="mt-2">{r.title}</h3>
+        <p class="muted">{r.summary}</p>
+        <a class="btn btn-primary btn-sm" href={r.file} target="_blank" rel="noopener">Ouvrir le PDF</a>
+      </div>
+    ))}
+  </div></section>
+</Base>

@@ -1,0 +1,38 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+
+# Anciennes URLs du site v1 → nouvelles pages
+[[redirects]]
+  from = "/media"
+  to = "/medias"
+  status = 301
+[[redirects]]
+  from = "/photos"
+  to = "/galerie"
+  status = 301
+[[redirects]]
+  from = "/politique-confidentialite"
+  to = "/confidentialite"
+  status = 301
+[[redirects]]
+  from = "/Espace-bureau"
+  to = "/bureau"
+  status = 301
+[[redirects]]
+  from = "/admin/*"
+  to = "/bureau"
+  status = 301

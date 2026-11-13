@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import EventList from '../components/EventList.astro';
+import data from '../data/events.json';
+---
+<Base title="Agenda" description="Calendrier des débats, conférences, concours et visites du Parlement JPV.">
+  <div class="page-head">
+    <div class="container">
+      <span class="eyebrow">Agenda</span>
+      <h1>Séances et événements</h1>
+      <p class="lead">Débats de 30 minutes sur l'heure de midi, conférences, concours d'éloquence et visites. Ajoute l'agenda à ton calendrier pour ne rien rater.</p>
+      <div class="flex mt-2">
+        <a class="btn btn-outline btn-sm" href="/agenda.ics" download>Ajouter à mon calendrier (.ics)</a>
+        <a class="btn btn-outline btn-sm" href="/#newsletter">Recevoir les rappels par email</a>
+      </div>
+    </div>
+  </div>
+  <section class="section">
+    <div class="container two-col" style="grid-template-columns: 1fr 1fr;">
+      <div>
+        <h2>À venir</h2>
+        <EventList events={data.events} upcoming />
+      </div>
+      <div>
+        <h2>Séances passées</h2>
+        <EventList events={data.events} past />
+      </div>
+    </div>
+  </section>
+</Base>

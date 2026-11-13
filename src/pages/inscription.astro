@@ -1,0 +1,63 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Créer un compte" description="Crée ton compte Parlement JPV pour candidater, t'inscrire aux séances et recevoir la newsletter." noindex>
+  <div class="auth-wrap"><div class="card auth-card">
+    <span class="eyebrow">Espace membre</span>
+    <h1>Créer un compte</h1>
+    <p class="muted small">Réservé aux élèves et personnels du lycée Jean-Pierre Vernant. Confirmation par email.</p>
+    <form class="form" id="signupForm" novalidate>
+      <div class="form-row">
+        <div class="field"><label for="prenom">Prénom</label><input id="prenom" name="prenom" required autocomplete="given-name" /></div>
+        <div class="field"><label for="nom">Nom</label><input id="nom" name="nom" required autocomplete="family-name" /></div>
+      </div>
+      <div class="field"><label for="classe">Classe</label>
+        <select id="classe" name="classe" required>
+          <option value="">Choisir…</option>
+          <option>Seconde</option><option>Première</option><option>Terminale</option><option>Personnel du lycée</option><option>Autre</option>
+        </select>
+      </div>
+      <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required autocomplete="email" /><small>De préférence ton adresse du lycée.</small></div>
+      <div class="field"><label for="password">Mot de passe</label><input id="password" name="password" type="password" required minlength="8" autocomplete="new-password" /><small>8 caractères minimum.</small></div>
+      <label class="checkbox"><input type="checkbox" name="newsletter" checked /><span>Je souhaite recevoir la newsletter (désinscription à tout moment).</span></label>
+      <label class="checkbox"><input type="checkbox" name="rgpd" required /><span>J'ai lu la <a href="/confidentialite" target="_blank">politique de confidentialité</a> et, si j'ai moins de 15 ans, j'ai l'accord d'un parent.</span></label>
+      <div id="msg"></div>
+      <button class="btn btn-primary" type="submit">Créer mon compte</button>
+    </form>
+    <p class="auth-foot">Déjà un compte ? <a href="/connexion">Se connecter</a></p>
+  </div></div>
+</Base>
+<script>
+  import { getSupabase, supabaseConfigured } from '../lib/supabase';
+  import { frError } from '../lib/auth';
+  const form = document.getElementById('signupForm') as HTMLFormElement;
+  const msg = document.getElementById('msg')!;
+  const show = (t: string, k = 'err') => (msg.innerHTML = `<div class="alert alert-${k}">${t}</div>`);
+  if (!supabaseConfigured) show('Le serveur d’inscription n’est pas encore configuré (variables Supabase manquantes).', 'info');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    const fd = new FormData(form);
+    const btn = form.querySelector('button')!; btn.disabled = true; msg.innerHTML = '';
+    try {
+      const { data, error } = await getSupabase().auth.signUp({
+        email: String(fd.get('email')).trim(),
+        password: String(fd.get('password')),
+        options: {
+          emailRedirectTo: `${location.origin}/compte?bienvenue=1`,
+          data: { prenom: fd.get('prenom'), nom: fd.get('nom'), classe: fd.get('classe'), newsletter: fd.get('newsletter') === 'on' },
+        },
+      });
+      if (error) throw error;
+      if (data.user && data.user.identities && data.user.identities.length === 0) throw new Error('already registered');
+      if (fd.get('newsletter') === 'on') {
+        fetch('/api/newsletter-subscribe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: String(fd.get('email')).trim(), fromSignup: true }) }).catch(() => {});
+      }
+      form.classList.add('hidden');
+      show('Compte créé ! Vérifie ta boîte mail et clique sur le lien de confirmation pour activer ton compte.', 'ok');
+    } catch (err: any) {
+      show(frError(err.message || String(err)));
+      btn.disabled = false;
+    }
+  });
+</script>

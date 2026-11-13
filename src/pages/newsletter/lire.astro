@@ -1,0 +1,16 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+<Base title="Newsletter" noindex>
+  <section class="section"><div class="container prose" style="margin-inline:auto;"><a href="/newsletter" class="small muted">← Tous les numéros</a><div id="nl" class="mt-2"><p class="muted">Chargement…</p></div></div></section>
+</Base>
+<script>
+  import { getSupabase } from '../../lib/supabase';
+  const el = document.getElementById('nl')!;
+  const id = new URLSearchParams(location.search).get('id');
+  (async () => {
+    const { data } = await getSupabase().from('newsletters').select('subject, body_html, sent_at').eq('id', id).not('sent_at', 'is', null).maybeSingle();
+    if (!data) { el.innerHTML = '<p class="muted">Numéro introuvable.</p>'; return; }
+    el.innerHTML = `<h1>${data.subject}</h1><p class="muted">${new Date(data.sent_at).toLocaleDateString('fr-FR', { dateStyle: 'long' })}</p>${data.body_html}`;
+  })();
+</script>

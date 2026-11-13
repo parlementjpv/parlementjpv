@@ -1,0 +1,61 @@
+---
+import NewsletterForm from './NewsletterForm.astro';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <strong class="foot-brand">Parlement JPV</strong>
+        <p class="muted small">Instance lycéenne de débat, d'engagement citoyen et d'initiatives structurées.<br />Lycée Jean-Pierre Vernant — Sèvres.</p>
+        <div class="flex">
+          <a class="social" href="https://instagram.com/parlementjpv" target="_blank" rel="noopener">Instagram</a>
+          <a class="social" href="https://www.linkedin.com/company/parlementjpv/" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </div>
+      <div>
+        <h4>Le Parlement</h4>
+        <a href="/institution">L'institution</a>
+        <a href="/qui-sommes-nous">Qui sommes-nous</a>
+        <a href="/charte">Charte officielle</a>
+        <a href="/rapports">Rapports</a>
+        <a href="/medias">Ils parlent de nous</a>
+      </div>
+      <div>
+        <h4>Participer</h4>
+        <a href="/agenda">Agenda</a>
+        <a href="/actualites">Actualités</a>
+        <a href="/jpv-mun">JPV MUN</a>
+        <a href="/galerie">Galerie</a>
+        <a href="/rejoindre">Candidater</a>
+        <a href="/contact">Contact</a>
+      </div>
+      <div>
+        <h4>Newsletter</h4>
+        <p class="small muted">Débats, conférences, candidatures : l'essentiel, une fois par mois.</p>
+        <NewsletterForm compact />
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© {year} Parlement JPV</span>
+      <span>
+        <a href="/mentions-legales">Mentions légales</a> · <a href="/confidentialite">Confidentialité</a> · <a href="/newsletter/desinscription">Se désinscrire</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer { background: var(--navy-deep); color: rgba(246,241,230,0.85); margin-top: 72px; padding: 56px 0 24px; }
+  .foot-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.4fr; gap: 36px; }
+  .foot-brand { font-family: var(--font-display); font-size: 1.3rem; color: #fff; display: block; margin-bottom: 8px; }
+  .site-footer h4 { color: var(--gold-soft); font-family: var(--font-body); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 12px; }
+  .site-footer a { display: block; color: rgba(246,241,230,0.8); text-decoration: none; font-size: 0.92rem; padding: 3px 0; }
+  .site-footer a:hover { color: var(--gold-soft); }
+  .site-footer .muted { color: rgba(246,241,230,0.6); }
+  .social { display: inline-block !important; border: 1px solid rgba(255,255,255,0.2); border-radius: 999px; padding: 5px 12px !important; font-size: 0.8rem !important; }
+  .foot-bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.12); font-size: 0.8rem; color: rgba(246,241,230,0.55); }
+  .foot-bottom a { display: inline; font-size: inherit; }
+  @media (max-width: 900px) { .foot-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 540px) { .foot-grid { grid-template-columns: 1fr; } }
+</style>

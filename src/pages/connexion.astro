@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Connexion" noindex>
+  <div class="auth-wrap"><div class="card auth-card">
+    <span class="eyebrow">Espace membre</span>
+    <h1>Connexion</h1>
+    <form class="form" id="loginForm" novalidate>
+      <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required autocomplete="email" /></div>
+      <div class="field"><label for="password">Mot de passe</label><input id="password" name="password" type="password" required autocomplete="current-password" /></div>
+      <div id="msg"></div>
+      <button class="btn btn-primary" type="submit">Se connecter</button>
+      <a class="small center" href="/mot-de-passe-oublie">Mot de passe oublié ?</a>
+    </form>
+    <p class="auth-foot">Pas encore de compte ? <a href="/inscription">Créer un compte</a></p>
+  </div></div>
+</Base>
+<script>
+  import { getSupabase, supabaseConfigured } from '../lib/supabase';
+  import { frError } from '../lib/auth';
+  const form = document.getElementById('loginForm') as HTMLFormElement;
+  const msg = document.getElementById('msg')!;
+  const show = (t: string, k = 'err') => (msg.innerHTML = `<div class="alert alert-${k}">${t}</div>`);
+  if (!supabaseConfigured) show('Le serveur de connexion n’est pas encore configuré.', 'info');
+  const next = new URLSearchParams(location.search).get('next') || '/compte';
+  getSupabase && supabaseConfigured && getSupabase().auth.getSession().then(({ data }) => { if (data.session) location.href = next; });
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    const fd = new FormData(form);
+    const btn = form.querySelector('button')!; btn.disabled = true; msg.innerHTML = '';
+    const { error } = await getSupabase().auth.signInWithPassword({ email: String(fd.get('email')).trim(), password: String(fd.get('password')) });
+    if (error) { show(frError(error.message)); btn.disabled = false; return; }
+    location.href = next.startsWith('/') ? next : '/compte';
+  });
+</script>

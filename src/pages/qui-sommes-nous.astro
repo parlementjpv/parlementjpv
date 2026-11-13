@@ -1,0 +1,92 @@
+---
+import Base from '../layouts/Base.astro';
+import team from '../data/team.json';
+const initials = (n: string) => n.split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase();
+---
+<Base title="Qui sommes-nous" description="Présentation du Parlement JPV : mission, valeurs, organisation, bureau et rôles.">
+  <div class="page-head">
+    <div class="container">
+      <span class="eyebrow">Parlement JPV · Lycée Jean-Pierre Vernant</span>
+      <h1>Qui sommes-nous ?</h1>
+      <p class="lead">Une initiative lycéenne dédiée à la prise de parole, au débat démocratique et à l'engagement citoyen. Nous organisons des débats, conférences, concours d'éloquence et visites institutionnelles, dans un cadre neutre, ouvert et exigeant.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container grid grid-3">
+      <div class="card">
+        <span class="eyebrow">Objectifs</span>
+        <ul class="check">
+          <li>Développer la prise de parole et l'esprit critique.</li>
+          <li>Apprendre à débattre avec respect, rigueur et écoute.</li>
+          <li>Sensibiliser aux enjeux citoyens, culturels et politiques.</li>
+          <li>Proposer des activités formatrices : débats, conférences, concours, visites.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="eyebrow">Valeurs</span>
+        <ul class="check">
+          <li>Respect des personnes, des opinions et du cadre scolaire.</li>
+          <li>Neutralité : pas de promotion politique, religieuse ou idéologique.</li>
+          <li>Ouverture : participation sans barrière inutile.</li>
+          <li>Engagement : implication, fiabilité, bienveillance.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="eyebrow">Cadre</span>
+        <ul class="check">
+          <li>Instance sous la responsabilité du CVL, en lien avec une professeure référente.</li>
+          <li>Présence d'au moins un adulte requise lors des séances.</li>
+          <li>Réunions selon disponibilités (midi / après les cours).</li>
+          <li>Matériel du lycée : micros, projecteur, pupitres.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background: var(--cream);">
+    <div class="container">
+      <div class="center">
+        <span class="eyebrow">Le bureau</span>
+        <h2>Une équipe resserrée pour piloter et cadrer</h2>
+        <p class="lead">Bureau 2025-2026. Un nouveau bureau sera constitué à la rentrée 2027.</p>
+      </div>
+      <div class="grid grid-2 mt-4">
+        {team.map((m) => (
+          <div class="card member">
+            <div class="flex">
+              {m.photo ? <img class="avatar" src={m.photo} alt={m.name} width="72" height="72" /> : <div class="avatar">{initials(m.name)}</div>}
+              <div>
+                <div class="role">{m.role}</div>
+                <h3 style="margin:0;">{m.name}</h3>
+              </div>
+            </div>
+            <p class="muted" style="margin:0;">{m.bio}</p>
+            {m.quote && <p class="quote">« {m.quote} »</p>}
+            <div class="tags">{m.tags.map((t) => <span class="pill">{t}</span>)}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Les rôles</span>
+      <h2>Qui fait quoi, concrètement</h2>
+      <div class="grid grid-3 mt-2">
+        <div class="card"><div class="role-k">Président</div><h3>Coordination générale</h3><p class="muted">Anime les séances, fixe l'ordre du jour, arbitre l'organisation et représente le Parlement.</p></div>
+        <div class="card"><div class="role-k">Vice-présidence</div><h3>Sécurisation & intérim</h3><p class="muted">Soutien opérationnel : logistique, timing, gestion des imprévus. Assure l'intérim si besoin.</p></div>
+        <div class="card"><div class="role-k">Secrétariat</div><h3>Comptes rendus & suivi</h3><p class="muted">Rédige, archive, organise : inscriptions, convocations, documents. Sans suivi, pas de crédibilité.</p></div>
+        <div class="card"><div class="role-k">Communication</div><h3>Relais & mobilisation</h3><p class="muted">Fait vivre le Parlement dans le lycée : annonces, recrutement, remontées et coordination terrain.</p></div>
+        <div class="card"><div class="role-k">Contenu</div><h3>Préparation & cadrage</h3><p class="muted">Prépare les sujets, structure les séances, propose thèmes et intervenants, garantit la neutralité.</p></div>
+        <div class="card"><div class="role-k">Trésorerie</div><h3>Budget & subventions</h3><p class="muted">Budget prévisionnel, suivi des dépenses, demandes MDL / fonds de vie lycéenne.</p></div>
+      </div>
+      <div class="cta-band mt-4">
+        <div><h2>Rejoindre le Parlement JPV</h2><p>Adhésion volontaire : inscription simple, participation aux débats, conférences, ateliers et concours.</p></div>
+        <a class="btn btn-gold" href="/rejoindre">Candidater</a>
+      </div>
+    </div>
+  </section>
+</Base>
+<style>.role-k { font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); font-weight: 700; margin-bottom: 6px; } .member .avatar { object-fit: cover; }</style>

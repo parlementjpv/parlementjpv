@@ -1,0 +1,67 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="L'institution" description="Pourquoi le Parlement JPV existe : mission, principes, fonctionnement et documents de l'instance lycéenne.">
+  <div class="page-head">
+    <div class="container">
+      <span class="eyebrow">Institution — transparence et méthode</span>
+      <h1>Pourquoi le Parlement JPV existe</h1>
+      <p class="lead">Une instance lycéenne dédiée à la formation à l'argumentation, à la décision et à l'action. Notre objectif : produire des débats de qualité, utiles, traçables — et faire grandir les élèves vite.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container grid grid-3">
+      <div class="card">
+        <span class="eyebrow">Mission</span>
+        <ul class="check">
+          <li><strong>Former</strong> : éloquence, esprit critique, méthode.</li>
+          <li><strong>Structurer</strong> : rôles, règles, calendrier, comptes rendus.</li>
+          <li><strong>Agir</strong> : initiatives concrètes et suivi.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="eyebrow">Principes</span>
+        <ul class="check">
+          <li><strong>Exigence</strong> : arguments, sources, réfutations.</li>
+          <li><strong>Respect</strong> : pas d'attaque personnelle, seulement des idées.</li>
+          <li><strong>Transparence</strong> : rapports publics, décisions archivées.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="eyebrow">Fonctionnement</span>
+        <p class="muted">Groupes de travail, modération, temps de parole, synthèse et décisions. Débats de 30 minutes sur l'heure de midi ou en fin de journée, en salle Samuel Paty.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background: var(--cream); padding-top: 56px; padding-bottom: 56px;">
+    <div class="container">
+      <span class="eyebrow">Organisation</span>
+      <h2>Cinq pôles, deux professeures référentes</h2>
+      <div class="grid grid-3 mt-2">
+        {['Débat', 'Éloquence', 'Visites', 'Conférences', 'Communication'].map((p) => (
+          <div class="card" style="padding: 18px 22px;"><strong>{p}</strong></div>
+        ))}
+      </div>
+      <p class="muted mt-3">L'instance fonctionne sous la responsabilité du Conseil de la Vie Lycéenne (CVL), en lien avec ses professeures référentes. La présence d'au moins un adulte est obligatoire pour la tenue d'une séance.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Documents</span>
+      <h2>Tout est public</h2>
+      <div class="grid grid-3 mt-2">
+        <a class="card doc" href="/charte"><h3>Charte officielle</h3><p class="muted">Principes, valeurs et règles de fonctionnement.</p></a>
+        <a class="card doc" href="/rapports"><h3>Rapports de débats</h3><p class="muted">Synthèses publiées après chaque action.</p></a>
+        <a class="card doc" href="/agenda"><h3>Calendrier</h3><p class="muted">Séances passées et à venir.</p></a>
+      </div>
+      <div class="flex mt-4">
+        <a class="btn btn-primary" href="/rejoindre">Rejoindre</a>
+        <a class="btn btn-outline" href="/qui-sommes-nous">Voir le bureau</a>
+      </div>
+    </div>
+  </section>
+</Base>
+<style>.doc { text-decoration: none; } .doc:hover { border-color: var(--gold); } .doc p { margin: 0; }</style>

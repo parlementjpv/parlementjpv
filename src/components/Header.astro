@@ -1,0 +1,85 @@
+---
+const links = [
+  { href: '/institution', label: "L'institution" },
+  { href: '/agenda', label: 'Agenda' },
+  { href: '/actualites', label: 'Actualités' },
+  { href: '/rapports', label: 'Rapports' },
+  { href: '/jpv-mun', label: 'JPV MUN' },
+  { href: '/qui-sommes-nous', label: 'Qui sommes-nous' },
+];
+const current = Astro.url.pathname.replace(/\.html$/, '');
+---
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href="/">
+      <img src="/assets/img/favicon.png" alt="" width="40" height="40" />
+      <span>
+        <strong>Parlement JPV</strong>
+        <small>Lycée Jean-Pierre Vernant — Sèvres</small>
+      </span>
+    </a>
+    <nav class="nav-links" aria-label="Navigation principale">
+      {links.map((l) => (
+        <a href={l.href} aria-current={current === l.href ? 'page' : undefined}>{l.label}</a>
+      ))}
+    </nav>
+    <div class="nav-actions">
+      <button class="icon-btn" id="themeToggle" type="button" aria-label="Basculer le thème">☾</button>
+      <a class="btn btn-outline btn-sm nav-auth" href="/connexion" data-auth="out">Connexion</a>
+      <a class="btn btn-outline btn-sm nav-auth hidden" href="/compte" data-auth="in">Mon espace</a>
+      <a class="btn btn-gold btn-sm" href="/rejoindre">Rejoindre</a>
+      <button class="icon-btn burger" id="burger" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobileNav">☰</button>
+    </div>
+  </div>
+  <nav class="mobile-nav" id="mobileNav" aria-label="Navigation mobile">
+    {links.map((l) => <a href={l.href}>{l.label}</a>)}
+    <a href="/galerie">Galerie</a>
+    <a href="/charte">Charte</a>
+    <a href="/contact">Contact</a>
+    <a href="/connexion" data-auth="out">Connexion</a>
+    <a href="/compte" data-auth="in" class="hidden">Mon espace</a>
+    <a href="/rejoindre" class="btn btn-gold">Rejoindre</a>
+  </nav>
+</header>
+
+<style>
+  .site-header { position: sticky; top: 0; z-index: 50; background: rgba(251,249,244,0.88); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+  :global(:root[data-theme='dark']) .site-header { background: rgba(11,24,48,0.88); }
+  .nav { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 12px 20px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .brand img { border-radius: 10px; }
+  .brand strong { display: block; font-family: var(--font-display); font-size: 1.1rem; line-height: 1.1; }
+  .brand small { display: block; font-size: 0.68rem; color: var(--muted); letter-spacing: 0.04em; }
+  .nav-links { display: flex; gap: 4px; }
+  .nav-links a { white-space: nowrap; text-decoration: none; font-size: 0.9rem; font-weight: 500; padding: 8px 11px; border-radius: 8px; color: var(--ink); }
+  .nav-links a:hover, .nav-links a[aria-current='page'] { background: rgba(11,37,69,0.07); }
+  :global(:root[data-theme='dark']) .nav-links a:hover, :global(:root[data-theme='dark']) .nav-links a[aria-current='page'] { background: rgba(255,255,255,0.1); }
+  .nav-actions { display: flex; align-items: center; gap: 8px; }
+  .icon-btn { background: transparent; border: 1px solid var(--line); border-radius: 10px; width: 38px; height: 38px; cursor: pointer; color: var(--ink); font-size: 1rem; }
+  .burger { display: none; }
+  .mobile-nav { display: none; flex-direction: column; gap: 4px; padding: 10px 20px 18px; border-top: 1px solid var(--line); }
+  .mobile-nav a { padding: 10px 6px; text-decoration: none; font-weight: 500; }
+  .mobile-nav.open { display: flex; }
+  @media (max-width: 1000px) {
+    .nav-links, .nav-auth, .nav-actions .btn-gold { display: none; }
+    .burger { display: inline-block; }
+    .brand small { display: none; }
+  }
+</style>
+
+<script>
+  const root = document.documentElement;
+  const saved = localStorage.getItem('theme');
+  if (saved) root.setAttribute('data-theme', saved);
+  document.getElementById('themeToggle')?.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  });
+  const burger = document.getElementById('burger');
+  const mobile = document.getElementById('mobileNav');
+  burger?.addEventListener('click', () => {
+    const open = mobile?.classList.toggle('open');
+    burger.setAttribute('aria-expanded', String(!!open));
+  });
+</script>

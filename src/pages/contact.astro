@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Contact" description="Contacter le bureau du Parlement JPV.">
+  <div class="page-head"><div class="container"><span class="eyebrow">Contact</span><h1>Nous écrire</h1><p class="lead">Une question, une proposition d'intervenant, un partenariat ? Le bureau répond par email sous quelques jours.</p></div></div>
+  <section class="section"><div class="container grid grid-2" style="gap:48px; align-items:start;">
+    <form class="form card" id="contactForm" novalidate>
+      <div class="form-row">
+        <div class="field"><label for="c-nom">Nom</label><input id="c-nom" name="nom" required autocomplete="name" /></div>
+        <div class="field"><label for="c-email">Email</label><input id="c-email" name="email" type="email" required autocomplete="email" /></div>
+      </div>
+      <div class="field"><label for="c-sujet">Sujet</label>
+        <select id="c-sujet" name="sujet"><option>Question générale</option><option>Proposer un intervenant / une conférence</option><option>Partenariat</option><option>Presse</option><option>JPV MUN</option><option>Autre</option></select>
+      </div>
+      <div class="field"><label for="c-msg">Message</label><textarea id="c-msg" name="message" required minlength="10"></textarea></div>
+      <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;" aria-hidden="true" />
+      <div class="cf-turnstile" data-sitekey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || ''} data-size="flexible"></div>
+      <div id="contactMsg"></div>
+      <button class="btn btn-primary" type="submit">Envoyer</button>
+    </form>
+    <div>
+      <div class="card"><h3>Email</h3><p class="muted">Pour tout ce qui ne passe pas par le formulaire :</p><a class="btn btn-outline btn-sm" href="mailto:parlementjpv@gmail.com">parlementjpv@gmail.com</a></div>
+      <div class="card mt-2"><h3>Réseaux</h3><div class="flex"><a class="btn btn-outline btn-sm" href="https://instagram.com/parlementjpv" target="_blank" rel="noopener">Instagram</a><a class="btn btn-outline btn-sm" href="https://www.linkedin.com/company/parlementjpv/" target="_blank" rel="noopener">LinkedIn</a></div></div>
+      <div class="card mt-2"><h3>Lieu</h3><p class="muted" style="margin:0;">Lycée Jean-Pierre Vernant<br />21 rue du Docteur Ledermann, 92310 Sèvres<br />Séances en salle Samuel Paty.</p></div>
+    </div>
+  </div></section>
+</Base>
+<script>
+  import { postJSON } from '../lib/newsletter';
+  const form = document.getElementById('contactForm') as HTMLFormElement;
+  const msg = document.getElementById('contactMsg')!;
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    const fd = Object.fromEntries(new FormData(form).entries());
+    const btn = form.querySelector('button')!; btn.disabled = true; msg.innerHTML = '';
+    const r = await postJSON('/api/contact', { ...fd, turnstileToken: (fd['cf-turnstile-response'] as string) || '' });
+    btn.disabled = false;
+    msg.innerHTML = r.ok ? '<div class="alert alert-ok">Message envoyé. Merci, on te répond vite.</div>' : `<div class="alert alert-err">${r.error}</div>`;
+    if (r.ok) form.reset();
+  });
+</script>
