@@ -4,4 +4,4 @@ Disallow: /compte
 Disallow: /bureau
 Disallow: /connexion
 Disallow: /inscription
-Sitemap: https://parlementjpv.netlify.app/sitemap-index.xml
+Sitemap: https://parlementjpv.github.io/sitemap-index.xml

@@ -28,6 +28,7 @@ import Base from '../layouts/Base.astro';
   </div></div>
 </Base>
 <script>
+  import { api } from '../lib/newsletter';
   import { getSupabase, supabaseConfigured } from '../lib/supabase';
   import { frError } from '../lib/auth';
   const form = document.getElementById('signupForm') as HTMLFormElement;
@@ -51,7 +52,7 @@ import Base from '../layouts/Base.astro';
       if (error) throw error;
       if (data.user && data.user.identities && data.user.identities.length === 0) throw new Error('already registered');
       if (fd.get('newsletter') === 'on') {
-        fetch('/api/newsletter-subscribe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: String(fd.get('email')).trim(), fromSignup: true }) }).catch(() => {});
+        fetch(api('/api/newsletter-subscribe'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: String(fd.get('email')).trim(), fromSignup: true }) }).catch(() => {});
       }
       form.classList.add('hidden');
       show('Compte créé ! Vérifie ta boîte mail et clique sur le lien de confirmation pour activer ton compte.', 'ok');

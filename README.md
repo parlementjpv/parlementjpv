@@ -2,14 +2,15 @@
 
 Site du Parlement JPV (lycée Jean-Pierre Vernant, Sèvres) : vitrine, agenda, actualités, rapports, **inscription sécurisée**, **newsletter double opt-in**, **candidatures en ligne**, **espace membre** et **espace bureau**.
 
-Stack 100 % gratuite : [Astro](https://astro.build) (site statique) · [Supabase](https://supabase.com) (auth + base Postgres, UE) · [Resend](https://resend.com) (emails) · [Netlify](https://netlify.com) (hébergement + fonctions serveur) · Cloudflare Turnstile (anti-robots, facultatif).
+Stack 100 % gratuite : [Astro](https://astro.build) (site statique) · [Supabase](https://supabase.com) (auth + base Postgres, UE) · [Resend](https://resend.com) (emails) · GitHub Pages (hébergement) + Supabase Edge Functions (serveur) · Cloudflare Turnstile (anti-robots, facultatif).
 
 ```
 src/pages/        pages du site (.astro) — une par URL
 src/components/   Header, Footer, NewsletterForm, EventList
 src/content/posts/  actualités en Markdown (1 fichier = 1 article)
 src/data/         events.json (agenda + stats), reports.json, team.json
-netlify/functions/  API serveur : newsletter, contact, candidature, rôles, suppression de compte
+supabase/functions/ API serveur (Edge Functions Deno) : newsletter, contact, candidature, rôles, suppression de compte
+.github/workflows/  déploiement automatique sur GitHub Pages à chaque push sur main
 supabase/schema.sql tables + règles de sécurité (RLS)
 ```
 
@@ -31,12 +32,20 @@ supabase/schema.sql tables + règles de sécurité (RLS)
 ### 3. Cloudflare Turnstile (facultatif, recommandé)
 Dashboard Cloudflare → Turnstile → Add site → note *Site key* et *Secret key*. Sans ça, les formulaires fonctionnent mais sans protection anti-robots.
 
-### 4. Netlify (hébergement)
-1. **Add new site → Import from Git** → ce repo. Build command `npm run build`, publish `dist` (déjà dans `netlify.toml`).
-2. **Site configuration → Environment variables** : ajoute toutes les variables de `.env.example` avec tes vraies valeurs.
-3. Deploy. Puis **Domain management** pour brancher `parlementjpv.fr` si tu as le domaine.
+### 4. Fonctions serveur (Supabase Edge Functions)
+```bash
+npx supabase login                      # ou SUPABASE_ACCESS_TOKEN=sbp_...
+npx supabase link --project-ref bisnyrbrllipxstimpkk
+npx supabase secrets set RESEND_API_KEY=re_... BUREAU_EMAIL=parlementjpv@gmail.com SITE_URL=https://parlementjpv.github.io "MAIL_FROM=Parlement JPV <onboarding@resend.dev>"
+npx supabase functions deploy           # déploie les 8 fonctions
+```
 
-### 5. Premier admin
+### 5. GitHub Pages (hébergement)
+1. Repo **Settings → Pages → Source : GitHub Actions**.
+2. **Settings → Secrets and variables → Actions → Variables** : `PUBLIC_SUPABASE_URL` et `PUBLIC_SUPABASE_ANON_KEY` (valeurs dans Supabase → Project Settings → API Keys).
+3. Chaque push sur `main` redéploie le site (workflow `deploy.yml`). Domaine perso : Settings → Pages → Custom domain.
+
+### 6. Premier admin
 Crée ton compte sur le site (`/inscription`), confirme l'email, puis dans Supabase **SQL Editor** :
 ```sql
 update public.profiles set role = 'admin' where id = (select id from auth.users where email = 'ton@email.fr');
@@ -59,14 +68,13 @@ Tu as maintenant accès à `/bureau`, où tu peux donner le rôle *bureau* aux a
 ```bash
 npm install
 cp .env.example .env   # puis remplis les valeurs
-npm run dev            # http://localhost:4321  (les fonctions serveur nécessitent `npx netlify dev`)
+npm run dev            # http://localhost:4321  (fonctions serveur en local : `npx supabase functions serve`)
 ```
 
 ## Sécurité — ce qui a changé par rapport à la v1
 - Plus aucun mot de passe dans le code (la v1 avait les identifiants du bureau en clair dans `Espace-bureau.html`, lisibles par tous).
 - Mots de passe hachés par Supabase Auth, sessions JWT, confirmation d'email, réinitialisation sécurisée.
 - Row Level Security : chaque membre ne lit que ses données ; candidatures, abonnés et messages réservés au bureau ; changement de rôle réservé aux admins et vérifié côté serveur.
-- Clé `service_role` et clé Resend uniquement dans les variables d'environnement Netlify.
+- Clé `service_role` et clé Resend uniquement dans les secrets des Edge Functions, jamais dans le code.
 - Newsletter en double opt-in, lien de désinscription dans chaque email + en-tête `List-Unsubscribe` (RGPD / anti-spam).
-- En-têtes HTTP de sécurité (HSTS, nosniff, X-Frame-Options) dans `netlify.toml`.
 - Plus de Google Analytics ni de cookies tiers → plus de bannière cookies nécessaire.

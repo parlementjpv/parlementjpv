@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@astrojs/sitemap": "^3.7.4",
-    "@netlify/functions": "^3.1.0"
+    "@netlify/functions": "^3.1.0",
+    "supabase": "^3.1.0"
   }
 }

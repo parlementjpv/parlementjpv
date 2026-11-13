@@ -1,8 +1,11 @@
-/** Appels aux fonctions serveur (Netlify Functions) — jamais de clé secrète côté navigateur. */
+/** Appels aux fonctions serveur (Supabase Edge Functions) — jamais de clé secrète côté navigateur. */
+const FN_BASE = `${(import.meta.env.PUBLIC_SUPABASE_URL || '').replace(/\/$/, '')}/functions/v1`;
+/** Transforme '/api/xxx' en URL complète de la fonction serveur. */
+export const api = (path: string) => `${FN_BASE}/${path.replace(/^\/api\//, '')}`;
 
 export async function subscribeNewsletter(email: string, turnstileToken = ''): Promise<{ ok: boolean; message: string }> {
   try {
-    const res = await fetch('/api/newsletter-subscribe', {
+    const res = await fetch(api('/api/newsletter-subscribe'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, turnstileToken }),
@@ -17,7 +20,7 @@ export async function subscribeNewsletter(email: string, turnstileToken = ''): P
 
 export async function postJSON<T = any>(path: string, body: unknown, accessToken?: string): Promise<{ ok: boolean; data: T; error?: string }> {
   try {
-    const res = await fetch(path, {
+    const res = await fetch(api(path), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}) },
       body: JSON.stringify(body),
