@@ -1,12 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
-import team from '../data/team.json';
-const initials = (n: string) => n.split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase();
+import postes from '../data/postes.json';
 ---
 <Base title="Qui sommes-nous" description="Présentation du Parlement JPV : mission, valeurs, organisation, bureau et rôles.">
   <div class="page-head">
     <div class="container">
-      <span class="eyebrow">Le bureau 2025-2026</span>
+      <span class="eyebrow">Le Parlement JPV</span>
       <h1>Qui sommes-nous ?</h1>
       <p class="lead">Une initiative lycéenne dédiée à la prise de parole, au débat démocratique et à l'engagement citoyen. Nous organisons des débats, conférences, concours d'éloquence et visites institutionnelles, dans un cadre neutre, ouvert et exigeant.</p>
     </div>
@@ -44,27 +43,20 @@ const initials = (n: string) => n.split(/\s+/).map((w) => w[0]).join('').slice(0
     </div>
   </section>
 
-  <section class="section" style="background: var(--pierre);">
-    <div class="container">
-      <div class="center">
+  <section class="section election">
+    <div class="container election-grid">
+      <div>
         <span class="eyebrow">Le bureau</span>
-        <h2>Une équipe resserrée pour piloter et cadrer</h2>
-        <p class="lead">Bureau 2025-2026. Un nouveau bureau sera constitué à la rentrée 2027.</p>
+        <h2>Le nouveau bureau est en cours d'élection.</h2>
+        <p class="lead">Le bureau 2025-2026 a terminé son mandat. Les candidatures sont ouvertes pour tous les postes : la nouvelle équipe sera présentée ici dès sa désignation.</p>
+        <div class="flex mt-3">
+          <a class="btn btn-primary" href="/candidature">Candidater au bureau</a>
+          <a class="btn btn-outline" href="/candidature#formulaire">Voir le formulaire</a>
+        </div>
       </div>
-      <div class="grid grid-2 mt-4">
-        {team.map((m) => (
-          <div class="member">
-            <div class="flex">
-              {m.photo ? <img class="avatar" src={m.photo} alt={m.name} width="72" height="72" /> : <div class="avatar">{initials(m.name)}</div>}
-              <div>
-                <div class="role">{m.role}</div>
-                <h3 style="margin:0;">{m.name}</h3>
-              </div>
-            </div>
-            <p class="muted" style="margin:0;">{m.bio}</p>
-            {m.quote && <p class="quote">« {m.quote} »</p>}
-            <div class="tags">{m.tags.map((t) => <span class="pill">{t}</span>)}</div>
-          </div>
+      <div class="seats" aria-label={`${postes.length} postes à pourvoir`}>
+        {postes.map((p) => (
+          <div class="seat-row"><span class="dot" aria-hidden="true"></span><span>{p.titre}</span><span class="state">à pourvoir</span></div>
         ))}
       </div>
     </div>
@@ -84,9 +76,16 @@ const initials = (n: string) => n.split(/\s+/).map((w) => w[0]).join('').slice(0
       </div>
       <div class="cta-band mt-4">
         <div><h2>Rejoindre le Parlement JPV</h2><p>Adhésion volontaire : inscription simple, participation aux débats, conférences, ateliers et concours.</p></div>
-        <a class="btn btn-primary" href="/rejoindre">Candidater</a>
+        <a class="btn btn-primary" href="/candidature">Candidater</a>
       </div>
     </div>
   </section>
 </Base>
-<style>.role-k { font-size: 0.95rem; color: var(--rouge); font-weight: 700; margin-bottom: 6px; } .member .avatar { object-fit: cover; }</style>
+<style>.role-k { font-size: 0.95rem; color: var(--rouge); font-weight: 700; margin-bottom: 6px; } .member .avatar { object-fit: cover; }  .election { background: var(--pierre); }
+  .election-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(28px, 5vw, 72px); align-items: center; }
+  .seats { border-top: var(--rule); }
+  .seat-row { display: grid; grid-template-columns: 18px 1fr auto; gap: 14px; align-items: center; padding: 12px 0; border-bottom: 2px solid var(--pierre-fonce); font-weight: 700; }
+  .seat-row .dot { width: 14px; height: 14px; border-radius: 50%; border: 3px dashed var(--rouge); }
+  .seat-row .state { font-weight: 600; font-size: 0.85rem; color: var(--rouge); }
+  @media (max-width: 860px) { .election-grid { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,137 @@
+---
+import Base from '../layouts/Base.astro';
+import postes from '../data/postes.json';
+---
+<Base title="Candidature" description="Candidater au Parlement JPV : élection du nouveau bureau et adhésion des membres.">
+  <div class="page-head"><div class="container">
+    <span class="eyebrow">Candidature Parlement JPV</span>
+    <h1>Le bureau se renouvelle. Présente-toi.</h1>
+    <p class="lead">L'ancien bureau a terminé son mandat. Le nouveau est en cours d'élection : chaque poste est ouvert à tous les élèves du lycée.</p>
+    <span class="stamp mt-3">Élection en cours</span>
+  </div></div>
+
+  <section class="section">
+    <div class="container">
+      <h2>Les postes à pourvoir</h2>
+      <p class="muted">Tu peux viser un poste précis ou te déclarer disponible pour n'importe lequel.</p>
+      <div class="postes mt-3">
+        {postes.map((p) => (
+          <div class="poste">
+            <h3>{p.titre}</h3>
+            <p>{p.role}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background: var(--pierre);" id="formulaire">
+    <div class="container cand-grid">
+      <div>
+        <h2>Comment ça se passe</h2>
+        <ol class="steps-c">
+          <li><b>Tu déposes ta candidature</b> en ligne, avec le poste visé et quelques lignes de motivation.</li>
+          <li><b>Le bureau sortant et les professeures référentes</b> étudient les candidatures. Tu reçois une réponse par email.</li>
+          <li><b>Le nouveau bureau est désigné</b> en lien avec le CVL, puis présenté à tous sur le site.</li>
+        </ol>
+        <p class="muted mt-3">Tu veux simplement participer aux débats sans responsabilité ? Choisis « Devenir membre » dans le formulaire.</p>
+      </div>
+
+      <div class="card">
+        <h2 style="font-size:1.8rem;">Ma candidature</h2>
+        <div id="gate" class="alert alert-info">Pour candidater, <a class="link" href="/connexion?next=/candidature">connecte-toi</a> ou <a class="link" href="/inscription">crée un compte</a>. Ça te permet de suivre la réponse du bureau depuis ton espace.</div>
+        <form class="form hidden" id="candForm" novalidate>
+          <fieldset class="choice">
+            <legend>Je candidate</legend>
+            <label><input type="radio" name="type" value="bureau" checked /> <span><b>Au bureau</b><br /><small>Élection en cours</small></span></label>
+            <label><input type="radio" name="type" value="membre" /> <span><b>Comme membre</b><br /><small>Débats, conférences, ateliers</small></span></label>
+          </fieldset>
+          <div class="field" id="posteField"><label for="poste">Poste visé</label>
+            <select id="poste" name="poste">
+              <option value="Peu importe">N'importe quel poste</option>
+              {postes.map((p) => <option value={p.titre}>{p.titre}</option>)}
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="field"><label for="prenom">Prénom</label><input id="prenom" name="prenom" required /></div>
+            <div class="field"><label for="nom">Nom</label><input id="nom" name="nom" required /></div>
+          </div>
+          <div class="form-row">
+            <div class="field"><label for="classe">Classe</label><input id="classe" name="classe" required placeholder="ex. 1re 4" /></div>
+            <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required /></div>
+          </div>
+          <div class="field"><label for="motivation" id="motivLabel">Pourquoi ce poste, et que ferais-tu cette année ?</label><textarea id="motivation" name="motivation" required minlength="80"></textarea><small>Au moins quelques lignes, concrètes.</small></div>
+          <div class="field"><label for="experience">Expérience (facultatif)</label><textarea id="experience" name="experience" style="min-height:80px;" placeholder="Débats, théâtre, concours, délégué·e de classe…"></textarea></div>
+          <div class="field"><label for="dispo">Disponibilités</label><input id="dispo" name="disponibilites" placeholder="ex. lundi et jeudi midi" /></div>
+          <label class="checkbox"><input type="checkbox" name="charte" required /><span>Je m'engage à respecter la <a class="link" href="/charte" target="_blank">charte du Parlement JPV</a>.</span></label>
+          <div id="msg"></div>
+          <button class="btn btn-primary" type="submit">Envoyer ma candidature</button>
+        </form>
+        <div id="done" class="hidden"></div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .postes { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); border-top: var(--rule); }
+  .poste { padding: 20px 20px 18px 0; border-bottom: 2px solid var(--pierre-fonce); }
+  .poste h3 { font-size: 1.25rem; margin-bottom: 6px; }
+  .poste p { color: var(--gris); margin: 0; font-size: 0.95rem; }
+  .cand-grid { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: clamp(28px, 5vw, 64px); align-items: start; }
+  @media (max-width: 900px) { .cand-grid { grid-template-columns: 1fr; } }
+  .steps-c { padding-left: 22px; margin: 0; }
+  .steps-c li { margin-bottom: 14px; font-size: 1.05rem; }
+  .steps-c li::marker { color: var(--rouge); font-weight: 800; }
+  .choice { border: 0; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .choice legend { font-weight: 700; margin-bottom: 8px; }
+  .choice label { display: flex; gap: 10px; align-items: flex-start; border: 2px solid var(--nuit); padding: 12px; cursor: pointer; }
+  .choice label:has(input:checked) { border-color: var(--rouge); box-shadow: inset 0 0 0 1px var(--rouge); }
+  .choice input { accent-color: var(--rouge); margin-top: 4px; }
+  .choice small { color: var(--gris); }
+</style>
+
+<script>
+  import { getSupabase, supabaseConfigured } from '../lib/supabase';
+  import { getSession, getProfile } from '../lib/auth';
+  import { postJSON } from '../lib/newsletter';
+  const form = document.getElementById('candForm') as HTMLFormElement, gate = document.getElementById('gate')!, msg = document.getElementById('msg')!, done = document.getElementById('done')!;
+  const posteField = document.getElementById('posteField')!, motivLabel = document.getElementById('motivLabel')!;
+  const syncType = () => {
+    const bureau = (form.querySelector('input[name="type"]:checked') as HTMLInputElement).value === 'bureau';
+    posteField.classList.toggle('hidden', !bureau);
+    motivLabel.textContent = bureau ? 'Pourquoi ce poste, et que ferais-tu cette année ?' : 'Pourquoi veux-tu rejoindre le Parlement JPV ?';
+  };
+  form.querySelectorAll('input[name="type"]').forEach((r) => r.addEventListener('change', syncType));
+  const statuts: Record<string, string> = { nouvelle: 'reçue', en_cours: "en cours d'examen", acceptee: 'acceptée', refusee: 'non retenue' };
+  (async () => {
+    if (!supabaseConfigured) return;
+    const session = await getSession(); if (!session) return;
+    const sb = getSupabase();
+    const { data: existing } = await sb.from('candidatures').select('type, poste, statut, created_at').eq('user_id', session.user.id).order('created_at', { ascending: false }).limit(1);
+    gate.classList.add('hidden');
+    if (existing && existing.length && existing[0].statut !== 'refusee') {
+      const c = existing[0];
+      done.classList.remove('hidden');
+      done.innerHTML = `<div class="alert alert-ok">Tu as déjà candidaté (${c.type === 'bureau' ? `bureau — ${c.poste || 'tout poste'}` : 'membre'}) le ${new Date(c.created_at).toLocaleDateString('fr-FR')}. Statut : <strong>${statuts[c.statut] || c.statut}</strong>. Suis-la depuis <a class="link" href="/compte">ton espace</a>.</div>`;
+      return;
+    }
+    form.classList.remove('hidden');
+    const p = await getProfile(session.user.id);
+    (form.elements.namedItem('prenom') as HTMLInputElement).value = p?.prenom || '';
+    (form.elements.namedItem('nom') as HTMLInputElement).value = p?.nom || '';
+    (form.elements.namedItem('classe') as HTMLInputElement).value = p?.classe || '';
+    (form.elements.namedItem('email') as HTMLInputElement).value = session.user.email || '';
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault(); if (!form.checkValidity()) { form.reportValidity(); return; }
+      const fd = new FormData(form); const btn = form.querySelector('button')!; btn.disabled = true; msg.innerHTML = '';
+      const type = String(fd.get('type'));
+      const row = { user_id: session.user.id, type, poste: type === 'bureau' ? fd.get('poste') : null, prenom: fd.get('prenom'), nom: fd.get('nom'), classe: fd.get('classe'), email: fd.get('email'), motivation: fd.get('motivation'), experience: fd.get('experience') || null, disponibilites: fd.get('disponibilites') || null };
+      const { data, error } = await sb.from('candidatures').insert(row).select('id').single();
+      if (error) { msg.innerHTML = `<div class="alert alert-err">L'envoi a échoué : ${error.message}</div>`; btn.disabled = false; return; }
+      await postJSON('/api/candidature-notify', { id: data.id }, session.access_token);
+      form.classList.add('hidden'); done.classList.remove('hidden');
+      done.innerHTML = '<div class="alert alert-ok">Candidature envoyée. Le bureau te répondra par email, et tu peux suivre son statut depuis ton espace.</div>';
+    });
+  })();
+</script>

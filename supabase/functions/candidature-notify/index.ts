@@ -9,7 +9,7 @@ Deno.serve(async (req) => {
   const { data: c } = await admin().from('candidatures').select('*').eq('id', b.id).eq('user_id', me.user.id).maybeSingle();
   if (!c) return json(req, 404, { error: 'Candidature introuvable.' });
   const r = resend();
-  const typeLabel = ({ membre: 'Membre', mun: 'Délégué·e JPV MUN', bureau: 'Bureau' } as Record<string, string>)[c.type] || c.type;
+  const typeLabel = (c.type === 'bureau' ? `Bureau — ${c.poste || 'tout poste'}` : 'Membre');
   try {
     await r.emails.send({
       from: FROM, to: BUREAU_EMAIL, replyTo: c.email, subject: `[Candidature ${typeLabel}] ${c.prenom} ${c.nom} (${c.classe})`,

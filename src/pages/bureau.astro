@@ -95,7 +95,7 @@ import Base from '../layouts/Base.astro';
     const tb = document.querySelector('#candTable tbody')!;
     tb.innerHTML = (cands || []).map((c) => `<tr>
       <td>${d(c.created_at)}</td><td><strong>${esc(c.prenom)} ${esc(c.nom)}</strong><br><span class="muted">${esc(c.classe)}<br><a href="mailto:${esc(c.email)}">${esc(c.email)}</a></span></td>
-      <td><span class="pill">${esc(c.type)}</span></td>
+      <td><span class="pill">${esc(c.type)}</span>${c.poste ? `<br><strong>${esc(c.poste)}</strong>` : ''}</td>
       <td class="motiv">${esc(c.motivation)}${c.experience ? `<br><em class="muted">Exp. : ${esc(c.experience)}</em>` : ''}${c.disponibilites ? `<br><span class="muted">Dispo : ${esc(c.disponibilites)}</span>` : ''}</td>
       <td><select data-id="${c.id}" class="statut">${['nouvelle', 'en_cours', 'acceptee', 'refusee'].map((s) => `<option ${s === c.statut ? 'selected' : ''}>${s}</option>`).join('')}</select></td>
       <td><input data-id="${c.id}" class="note" value="${esc(c.note_bureau || '')}" placeholder="ex. RDV mardi midi au CDI" /></td></tr>`).join('') || '<tr><td colspan="6" class="muted">Aucune candidature.</td></tr>';
@@ -140,10 +140,10 @@ import Base from '../layouts/Base.astro';
     });
 
     // Inscriptions aux séances
-    const { data: regs } = await sb.from('event_registrations').select('event_key, profiles(prenom, nom, classe)').order('created_at');
+    const { data: regs } = await sb.from('event_signups').select('event_key, prenom, nom, classe, email').order('created_at');
     const byEv: Record<string, any[]> = {};
-    (regs || []).forEach((r: any) => { (byEv[r.event_key] ||= []).push(r.profiles); });
-    document.getElementById('inscr')!.innerHTML = Object.keys(byEv).sort().map((k) => `<h3 style="font-size:1.05rem;">${esc(k.split('|')[1])} <span class="muted small">(${k.split('|')[0]}) — ${byEv[k].length} inscrit·e·s</span></h3><p class="small">${byEv[k].map((p) => `${esc(p?.prenom)} ${esc(p?.nom)} (${esc(p?.classe || '?')})`).join(' · ')}</p>`).join('') || '<p class="muted">Aucune inscription.</p>';
+    (regs || []).forEach((r: any) => { (byEv[r.event_key] ||= []).push(r); });
+    document.getElementById('inscr')!.innerHTML = Object.keys(byEv).sort().map((k) => `<h3 style="font-size:1.05rem;">${esc(k.split('|')[1])} <span class="muted small">(${k.split('|')[0]}) — ${byEv[k].length} inscrit·e·s</span></h3><p class="small">${byEv[k].map((p) => `${esc(p.prenom)} ${esc(p.nom)} (${esc(p.classe)}) &lt;${esc(p.email)}&gt;`).join('<br>')}</p>`).join('') || '<p class="muted">Aucune inscription.</p>';
 
     // Messages
     const { data: msgs } = await sb.from('contact_messages').select('*').order('created_at', { ascending: false }).limit(100);

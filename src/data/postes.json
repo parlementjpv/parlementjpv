@@ -1,0 +1,11 @@
+[
+  { "titre": "Président·e", "role": "Coordonne l'ensemble, anime les séances, fixe l'ordre du jour et représente le Parlement auprès du lycée et des partenaires." },
+  { "titre": "Vice-président·e", "role": "Seconde la présidence, gère la logistique des séances et assure l'intérim." },
+  { "titre": "Secrétaire général·e", "role": "Rédige les comptes rendus, tient les inscriptions et archive les décisions." },
+  { "titre": "Trésorier·e", "role": "Prépare le budget, suit les dépenses et monte les demandes de subvention (MDL, fonds de vie lycéenne)." },
+  { "titre": "Responsable Débat", "role": "Choisit les motions, conçoit les formats et veille au respect du cadre pendant les séances." },
+  { "titre": "Responsable Éloquence", "role": "Entraîne les orateurs : posture, diction, structure des arguments, gestion du temps." },
+  { "titre": "Responsable Conférences", "role": "Trouve les intervenants, cadre les sujets et organise les conférences de A à Z." },
+  { "titre": "Responsable Visites", "role": "Organise les sorties institutionnelles : contacts, autorisations, transport, préparation." },
+  { "titre": "Responsable Communication", "role": "Fait vivre le Parlement dans le lycée et sur Instagram : annonces, affiches, récaps." }
+]

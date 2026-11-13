@@ -69,7 +69,7 @@ const fmt = (s: string) => new Intl.DateTimeFormat('fr-FR', { dateStyle: 'full',
     const p = await getProfile(session.user.id);
     document.getElementById('hello')!.textContent = p?.prenom ? `Bonjour ${p.prenom}` : 'Mon espace';
     if (p && ['bureau', 'admin'].includes(p.role)) document.getElementById('bureauLink')!.classList.remove('hidden');
-    if (new URLSearchParams(location.search).get('bienvenue')) { const w = document.getElementById('welcome')!; w.classList.remove('hidden'); w.innerHTML = '<div class="alert alert-ok">Bienvenue ! Ton compte est activé. Tu peux maintenant <a href="/rejoindre">déposer ta candidature</a>.</div>'; }
+    if (new URLSearchParams(location.search).get('bienvenue')) { const w = document.getElementById('welcome')!; w.classList.remove('hidden'); w.innerHTML = '<div class="alert alert-ok">Bienvenue ! Ton compte est activé. Tu peux maintenant <a href="/candidature">déposer ta candidature</a>.</div>'; }
     document.getElementById('logout')!.addEventListener('click', signOut);
 
     // Profil
@@ -85,22 +85,25 @@ const fmt = (s: string) => new Intl.DateTimeFormat('fr-FR', { dateStyle: 'full',
     });
 
     // Candidature
-    const { data: cands } = await sb.from('candidatures').select('type, statut, created_at, note_bureau').eq('user_id', session.user.id).order('created_at', { ascending: false });
+    const { data: cands } = await sb.from('candidatures').select('type, poste, statut, created_at, note_bureau').eq('user_id', session.user.id).order('created_at', { ascending: false });
     const cEl = document.getElementById('cand')!;
     const labels: Record<string, string> = { nouvelle: 'Reçue, en attente', en_cours: 'En cours d’examen', acceptee: 'Acceptée 🎉', refusee: 'Non retenue' };
     cEl.innerHTML = cands && cands.length
-      ? cands.map((c) => `<p><span class="pill">${c.type}</span> déposée le ${new Date(c.created_at).toLocaleDateString('fr-FR')} — <strong>${labels[c.statut] || c.statut}</strong>${c.note_bureau ? `<br><span class="small muted">Message du bureau : ${c.note_bureau}</span>` : ''}</p>`).join('')
-      : '<p class="muted">Aucune candidature pour le moment.</p><a class="btn btn-primary btn-sm" href="/rejoindre">Candidater</a>';
+      ? cands.map((c) => `<p><span class="pill">${c.type === 'bureau' ? `bureau${c.poste ? ' — ' + c.poste : ''}` : c.type}</span> déposée le ${new Date(c.created_at).toLocaleDateString('fr-FR')} — <strong>${labels[c.statut] || c.statut}</strong>${c.note_bureau ? `<br><span class="small muted">Message du bureau : ${c.note_bureau}</span>` : ''}</p>`).join('')
+      : '<p class="muted">Aucune candidature pour le moment.</p><a class="btn btn-primary btn-sm" href="/candidature">Candidater</a>';
 
     // Inscriptions aux séances
-    const { data: regs } = await sb.from('event_registrations').select('event_key').eq('user_id', session.user.id);
+    const { data: regs } = await sb.from('event_signups').select('event_key').eq('user_id', session.user.id);
     const mine = new Set((regs || []).map((r) => r.event_key));
     const paint = () => document.querySelectorAll<HTMLButtonElement>('.reg').forEach((b) => { const on = mine.has(b.dataset.key!); b.textContent = on ? '✓ Inscrit·e — annuler' : 'Je participe'; b.classList.toggle('btn-primary', on); b.classList.toggle('btn-outline', !on); });
     paint();
     document.querySelectorAll<HTMLButtonElement>('.reg').forEach((b) => b.addEventListener('click', async () => {
       const k = b.dataset.key!; b.disabled = true;
-      if (mine.has(k)) { await sb.from('event_registrations').delete().eq('user_id', session.user.id).eq('event_key', k); mine.delete(k); }
-      else { await sb.from('event_registrations').insert({ user_id: session.user.id, event_key: k }); mine.add(k); }
+      if (mine.has(k)) { await sb.from('event_signups').delete().eq('user_id', session.user.id).eq('event_key', k); mine.delete(k); }
+      else {
+        const { error } = await sb.from('event_signups').insert({ user_id: session.user.id, event_key: k, prenom: p?.prenom || '?', nom: p?.nom || '?', classe: p?.classe || '?', email: session.user.email });
+        if (!error || error.code === '23505') mine.add(k); else alert("Inscription impossible : complète d'abord ton prénom, nom et classe.");
+      }
       b.disabled = false; paint();
     }));
 

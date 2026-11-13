@@ -4,8 +4,8 @@ const links = [
   { href: '/agenda', label: 'Séances' },
   { href: '/actualites', label: 'Actualités' },
   { href: '/rapports', label: 'Rapports' },
-  { href: '/jpv-mun', label: 'JPV MUN' },
   { href: '/qui-sommes-nous', label: 'Le bureau' },
+  { href: '/candidature', label: 'Candidature' },
 ];
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 const current = Astro.url.pathname.replace(BASE, '').replace(/\/$/, '') || '/';
@@ -22,7 +22,7 @@ const current = Astro.url.pathname.replace(BASE, '').replace(/\/$/, '') || '/';
     <div class="nav-actions">
       <a class="nav-auth" href="/connexion" data-auth="out">Connexion</a>
       <a class="nav-auth hidden" href="/compte" data-auth="in">Mon espace</a>
-      <a class="btn btn-primary btn-sm nav-cta" href="/rejoindre">Candidater</a>
+      <a class="btn btn-primary btn-sm nav-cta" href="/evenement">S'inscrire</a>
       <button class="icon-btn" id="themeToggle" type="button" aria-label="Basculer clair / sombre"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
       <button class="icon-btn burger" id="burger" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobileNav">Menu</button>
     </div>
@@ -35,7 +35,7 @@ const current = Astro.url.pathname.replace(BASE, '').replace(/\/$/, '') || '/';
     <a href="/contact">Contact</a>
     <a href="/connexion" data-auth="out">Connexion</a>
     <a href="/compte" data-auth="in" class="hidden">Mon espace</a>
-    <a href="/rejoindre" class="btn btn-primary">Candidater</a>
+    <a href="/evenement" class="btn btn-primary">S'inscrire au prochain événement</a>
   </nav>
 </header>
 
@@ -55,7 +55,7 @@ const current = Astro.url.pathname.replace(BASE, '').replace(/\/$/, '') || '/';
   .mobile-nav a { padding: 12px 0; text-decoration: none; font-weight: 700; font-size: 1.2rem; border-bottom: 2px solid var(--pierre); }
   .mobile-nav .btn { margin-top: 14px; border-bottom: 0; }
   .mobile-nav.open { display: flex; }
-  @media (max-width: 1040px) { .nav-links, .nav-auth, .nav-cta { display: none; } .burger { display: inline-block; } }
+  @media (max-width: 1200px) { .nav-links, .nav-auth, .nav-cta { display: none; } .burger { display: inline-block; } }
 </style>
 
 <script>

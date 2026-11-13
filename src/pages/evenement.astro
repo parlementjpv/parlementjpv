@@ -1,0 +1,150 @@
+---
+import Base from '../layouts/Base.astro';
+import NewsletterForm from '../components/NewsletterForm.astro';
+import data from '../data/events.json';
+
+const now = Date.now();
+const upcoming = data.events
+  .filter((e) => new Date(e.end || e.start).getTime() >= now)
+  .sort((a, b) => a.start.localeCompare(b.start));
+const next = upcoming[0];
+const key = (e: { start: string; title: string }) => `${e.start.slice(0, 10)}|${e.title}`;
+const tz = { timeZone: 'Europe/Paris' } as const;
+const longDate = (s: string) => new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', ...tz }).format(new Date(s));
+const hour = (s: string) => new Intl.DateTimeFormat('fr-FR', { timeStyle: 'short', ...tz }).format(new Date(s));
+const day = (s: string) => new Intl.DateTimeFormat('fr-FR', { day: '2-digit', ...tz }).format(new Date(s));
+const month = (s: string) => new Intl.DateTimeFormat('fr-FR', { month: 'long', ...tz }).format(new Date(s));
+---
+<Base title="S'inscrire au prochain événement" description="Inscris-toi en ligne au prochain débat, atelier ou conférence du Parlement JPV.">
+  {next ? (
+    <>
+      <section class="ev-hero">
+        <div class="container ev-grid">
+          <div class="ev-date" aria-hidden="true">
+            <span class="ev-day">{day(next.start)}</span>
+            <span class="ev-month">{month(next.start)}</span>
+          </div>
+          <div>
+            <span class="eyebrow">Prochain événement · {next.type}</span>
+            <h1>{next.title}</h1>
+            <p class="lead">{longDate(next.start)}, {hour(next.start)}{next.end ? `–${hour(next.end)}` : ''}<br />{next.location}</p>
+            {next.tentative && <p class="stamp mt-2">Date indicative</p>}
+            <p class="count mt-2" id="count" data-key={key(next)} hidden></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container ev-form-grid">
+          <div>
+            <h2>Je m'inscris</h2>
+            <p class="muted">Pas besoin de compte. Ton inscription aide le bureau à prévoir la salle et le temps de parole. Tes coordonnées ne sont visibles que par le bureau.</p>
+            {upcoming.length > 1 && <p class="muted">Tu peux aussi choisir un autre événement à venir dans le formulaire.</p>}
+          </div>
+          <form class="form card" id="evForm" novalidate>
+            <div class="field"><label for="ev">Événement</label>
+              <select id="ev" name="event_key">
+                {upcoming.map((e) => <option value={key(e)}>{`${new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short', ...tz }).format(new Date(e.start))} — ${e.title}`}</option>)}
+              </select>
+            </div>
+            <div class="form-row">
+              <div class="field"><label for="ev-prenom">Prénom</label><input id="ev-prenom" name="prenom" required autocomplete="given-name" maxlength="80" /></div>
+              <div class="field"><label for="ev-nom">Nom</label><input id="ev-nom" name="nom" required autocomplete="family-name" maxlength="80" /></div>
+            </div>
+            <div class="form-row">
+              <div class="field"><label for="ev-classe">Classe</label><input id="ev-classe" name="classe" required placeholder="ex. 2nde 3" maxlength="40" /></div>
+              <div class="field"><label for="ev-email">Email</label><input id="ev-email" name="email" type="email" required autocomplete="email" /></div>
+            </div>
+            <input type="text" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
+            <label class="checkbox"><input type="checkbox" name="rgpd" required /><span>J'accepte que le bureau utilise ces informations pour organiser l'événement (<a class="link" href="/confidentialite" target="_blank">confidentialité</a>).</span></label>
+            <div id="evMsg" role="status" aria-live="polite"></div>
+            <button class="btn btn-primary" type="submit">Je m'inscris</button>
+          </form>
+        </div>
+      </section>
+    </>
+  ) : (
+    <section class="section">
+      <div class="container narrow">
+        <span class="eyebrow">Événements</span>
+        <h1>Aucun événement programmé pour l'instant.</h1>
+        <p class="lead">Le nouveau bureau prépare le calendrier. Abonne-toi à la lettre du Parlement pour être prévenu de l'ouverture des inscriptions.</p>
+        <div class="mt-3"><NewsletterForm /></div>
+      </div>
+    </section>
+  )}
+</Base>
+
+<style>
+  .ev-hero { background: var(--nuit); color: #fff; padding: clamp(48px, 7vw, 96px) 0; }
+  :root[data-theme='dark'] .ev-hero { background: #0f1f4b; }
+  .ev-hero h1 { color: #fff; max-width: 16ch; }
+  .ev-hero .eyebrow { color: #ff6b78; } .ev-hero .eyebrow::before { background: #ff6b78; }
+  .ev-hero .lead { color: rgba(255,255,255,0.85); max-width: 40ch; }
+  .ev-hero .stamp { color: #ff6b78; border-color: #ff6b78; mix-blend-mode: normal; }
+  .ev-grid { display: grid; grid-template-columns: auto 1fr; gap: clamp(24px, 5vw, 64px); align-items: center; }
+  .ev-date { display: grid; justify-items: center; border: 4px solid #fff; padding: 18px 26px 14px; line-height: 0.9; }
+  .ev-day { font-size: clamp(5rem, 13vw, 9rem); font-weight: 800; letter-spacing: -0.06em; font-variant-numeric: tabular-nums; }
+  .ev-month { font-size: 1.3rem; font-weight: 700; color: #ff6b78; }
+  .count { font-weight: 700; color: #fff; }
+  .ev-form-grid { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: clamp(28px, 5vw, 64px); align-items: start; }
+  .hp { position: absolute; left: -9999px; }
+  @media (max-width: 760px) { .ev-grid, .ev-form-grid { grid-template-columns: 1fr; } .ev-date { justify-self: start; } }
+</style>
+
+<script>
+  import { getSupabase, supabaseConfigured } from '../lib/supabase';
+  import { getSession, getProfile } from '../lib/auth';
+
+  const form = document.getElementById('evForm') as HTMLFormElement | null;
+  const msg = document.getElementById('evMsg');
+  const countEl = document.getElementById('count');
+  const show = (t: string, k: 'ok' | 'err' | 'info') => { if (msg) msg.innerHTML = `<div class="alert alert-${k}">${t}</div>`; };
+
+  // Présélection depuis l'agenda : /evenement?e=AAAA-MM-JJ|Titre
+  const pre = new URLSearchParams(location.search).get('e');
+  const sel = form?.elements.namedItem('event_key') as HTMLSelectElement | undefined;
+  if (pre && sel && [...sel.options].some((o) => o.value === pre)) sel.value = pre;
+
+  (async () => {
+    if (!form || !supabaseConfigured) { if (form && !supabaseConfigured) show("Les inscriptions ne sont pas encore ouvertes en ligne.", 'info'); return; }
+    const sb = getSupabase();
+
+    const { data: counts } = await sb.rpc('event_counts');
+    const k = countEl?.dataset.key;
+    const n = (counts || []).find((c: { event_key: string; inscrits: number }) => c.event_key === k)?.inscrits || 0;
+    if (countEl && n > 0) { countEl.textContent = `${n} inscrit${n > 1 ? 's' : ''} pour l'instant`; countEl.hidden = false; }
+
+    const session = await getSession();
+    if (session) {
+      const p = await getProfile(session.user.id);
+      (form.elements.namedItem('prenom') as HTMLInputElement).value = p?.prenom || '';
+      (form.elements.namedItem('nom') as HTMLInputElement).value = p?.nom || '';
+      (form.elements.namedItem('classe') as HTMLInputElement).value = p?.classe || '';
+      (form.elements.namedItem('email') as HTMLInputElement).value = session.user.email || '';
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      const fd = new FormData(form);
+      if (fd.get('website')) return; // robot
+      const btn = form.querySelector('button')!; btn.disabled = true; show('Inscription en cours…', 'info');
+      const row = {
+        event_key: String(fd.get('event_key')),
+        prenom: String(fd.get('prenom')).trim(),
+        nom: String(fd.get('nom')).trim(),
+        classe: String(fd.get('classe')).trim(),
+        email: String(fd.get('email')).trim().toLowerCase(),
+        user_id: session?.user.id ?? null,
+      };
+      const { error } = await sb.from('event_signups').insert(row);
+      btn.disabled = false;
+      const title = row.event_key.split('|')[1];
+      if (error?.code === '23505') { show(`Cette adresse est déjà inscrite à « ${title} ».`, 'info'); return; }
+      if (error) { show("L'inscription n'a pas pu être enregistrée. Vérifie les champs et réessaie.", 'err'); return; }
+      form.reset(); if (sel) sel.value = row.event_key;
+      show(`C'est noté, ${row.prenom} : tu es inscrit·e à « ${title} ». À bientôt en salle Samuel Paty.`, 'ok');
+    });
+  })();
+</script>

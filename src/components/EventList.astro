@@ -23,6 +23,7 @@ const year = (s: string) => new Date(s).getFullYear();
           <div class="flex" style="gap:8px;"><span class="pill">{e.type}</span>{e.tentative && <span class="pill pill-gold">Date indicative</span>}</div>
           <h3>{e.title}</h3>
           <div class="meta">{time(e.start)}{e.end ? ` – ${time(e.end)}` : ''} · {e.location}{e.report && <> · <a href={e.report}>Rapport (PDF)</a></>}</div>
+          {new Date(e.start).getTime() >= now && <a class="btn btn-outline btn-sm mt-1" href={`/evenement?e=${encodeURIComponent(`${e.start.slice(0, 10)}|${e.title}`)}`}>S'inscrire</a>}
         </div>
       </article>
     ))}

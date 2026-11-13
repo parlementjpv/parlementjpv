@@ -107,7 +107,7 @@ h4 { font-size: 1.1rem; }
 .stamp { display: inline-block; padding: 8px 14px; border: 3px solid var(--rouge); color: var(--rouge); font-weight: 800; font-size: 0.95rem; line-height: 1.1; letter-spacing: 0.02em; transform: rotate(-3deg); text-transform: uppercase; mix-blend-mode: multiply; }
 :root[data-theme='dark'] .stamp { mix-blend-mode: normal; }
 
-/* ---------- Hero sombre réutilisable (JPV MUN) ---------- */
+/* ---------- Hero sombre réutilisable ---------- */
 .hero { background: var(--nuit); color: #fff; position: relative; overflow: hidden; }
 :root[data-theme='dark'] .hero { background: #0f1f4b; color: #fff; }
 .hero h1, .hero h2 { color: #fff; }
