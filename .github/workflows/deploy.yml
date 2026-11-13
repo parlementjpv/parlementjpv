@@ -31,8 +31,9 @@ jobs:
         env:
           BASE_PATH: ${{ steps.pages.outputs.base_path }}
           SITE_ORIGIN: ${{ steps.pages.outputs.origin }}
-          PUBLIC_SUPABASE_URL: ${{ vars.PUBLIC_SUPABASE_URL || 'https://bisnyrbrllipxstimpkk.supabase.co' }}
-          PUBLIC_SUPABASE_ANON_KEY: ${{ vars.PUBLIC_SUPABASE_ANON_KEY }}
+          PUBLIC_SUPABASE_URL: ${{ vars.PUBLIC_SUPABASE_URL || 'https://waqaeyclhwhnnmvlfoau.supabase.co' }}
+          # Clé publique (protégée par la RLS), sans risque dans le code
+          PUBLIC_SUPABASE_ANON_KEY: ${{ vars.PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhcWFleWNsaHdobm5tdmxmb2F1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ2MDEyMTYsImV4cCI6MjExMDE3NzIxNn0.Dd8OXAxYr98zB95YHAPIgKXfQ5wriej7mLnZVLP8mv8' }}
           PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY }}
       - run: touch dist/.nojekyll
       - uses: actions/upload-pages-artifact@v3

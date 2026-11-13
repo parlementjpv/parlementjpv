@@ -155,6 +155,8 @@ create or replace view public.newsletter_stats as
          count(*) filter (where not confirmed) as en_attente,
          count(*) filter (where unsubscribed_at is not null) as desinscrits
   from public.newsletter_subscribers;
+alter view public.newsletter_stats set (security_invoker = true);
+revoke all on public.newsletter_stats from anon;
 
 -- =====================================================================
 -- APRÈS AVOIR CRÉÉ TON COMPTE SUR LE SITE, promeus-toi admin :

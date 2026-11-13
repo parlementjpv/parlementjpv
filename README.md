@@ -35,7 +35,7 @@ Dashboard Cloudflare → Turnstile → Add site → note *Site key* et *Secret k
 ### 4. Fonctions serveur (Supabase Edge Functions)
 ```bash
 npx supabase login                      # ou SUPABASE_ACCESS_TOKEN=sbp_...
-npx supabase link --project-ref bisnyrbrllipxstimpkk
+npx supabase link --project-ref waqaeyclhwhnnmvlfoau
 npx supabase secrets set RESEND_API_KEY=re_... BUREAU_EMAIL=parlementjpv@gmail.com SITE_URL=https://parlementjpv.github.io "MAIL_FROM=Parlement JPV <onboarding@resend.dev>"
 npx supabase functions deploy           # déploie les 8 fonctions
 ```
