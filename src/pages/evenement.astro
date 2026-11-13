@@ -67,9 +67,13 @@ const month = (s: string) => new Intl.DateTimeFormat('fr-FR', { month: 'long', .
     <section class="section">
       <div class="container narrow">
         <span class="eyebrow">Événements</span>
-        <h1>Aucun événement programmé pour l'instant.</h1>
-        <p class="lead">Le nouveau bureau prépare le calendrier. Abonne-toi à la lettre du Parlement pour être prévenu de l'ouverture des inscriptions.</p>
-        <div class="mt-3"><NewsletterForm /></div>
+        <h1>Nos événements reprennent très bientôt.</h1>
+        <p class="lead">Débats, conférences, concours d'éloquence, visites : le nouveau bureau prépare le programme. Les inscriptions ouvriront ici dès la première date annoncée.</p>
+        <div class="flex mt-3">
+          <a class="btn btn-primary" href="/rejoindre">Rejoindre l'instance</a>
+          <a class="btn btn-outline" href="/agenda">Voir les séances passées</a>
+        </div>
+        <div class="mt-4" style="max-width:520px;"><h2 style="font-size:1.6rem;">Être prévenu par email</h2><NewsletterForm /></div>
       </div>
     </section>
   )}

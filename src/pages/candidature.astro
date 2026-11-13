@@ -34,18 +34,14 @@ import postes from '../data/postes.json';
           <li><b>Le bureau sortant et les professeures référentes</b> étudient les candidatures. Tu reçois une réponse par email.</li>
           <li><b>Le nouveau bureau est désigné</b> en lien avec le CVL, puis présenté à tous sur le site.</li>
         </ol>
-        <p class="muted mt-3">Tu veux simplement participer aux débats sans responsabilité ? Choisis « Devenir membre » dans le formulaire.</p>
+        <p class="muted mt-3">Tu veux simplement participer aux débats, sans poste ? <a class="link" href="/rejoindre">Rejoins l'instance</a> : c'est plus rapide et sans compte.</p>
       </div>
 
       <div class="card">
-        <h2 style="font-size:1.8rem;">Ma candidature</h2>
+        <h2 style="font-size:1.8rem;">Ma candidature au bureau</h2>
         <div id="gate" class="alert alert-info">Pour candidater, <a class="link" href="/connexion?next=/candidature">connecte-toi</a> ou <a class="link" href="/inscription">crée un compte</a>. Ça te permet de suivre la réponse du bureau depuis ton espace.</div>
         <form class="form hidden" id="candForm" novalidate>
-          <fieldset class="choice">
-            <legend>Je candidate</legend>
-            <label><input type="radio" name="type" value="bureau" checked /> <span><b>Au bureau</b><br /><small>Élection en cours</small></span></label>
-            <label><input type="radio" name="type" value="membre" /> <span><b>Comme membre</b><br /><small>Débats, conférences, ateliers</small></span></label>
-          </fieldset>
+          <input type="hidden" name="type" value="bureau" />
           <div class="field" id="posteField"><label for="poste">Poste visé</label>
             <select id="poste" name="poste">
               <option value="Peu importe">N'importe quel poste</option>
@@ -98,11 +94,11 @@ import postes from '../data/postes.json';
   const form = document.getElementById('candForm') as HTMLFormElement, gate = document.getElementById('gate')!, msg = document.getElementById('msg')!, done = document.getElementById('done')!;
   const posteField = document.getElementById('posteField')!, motivLabel = document.getElementById('motivLabel')!;
   const syncType = () => {
-    const bureau = (form.querySelector('input[name="type"]:checked') as HTMLInputElement).value === 'bureau';
+    const bureau = true;
     posteField.classList.toggle('hidden', !bureau);
     motivLabel.textContent = bureau ? 'Pourquoi ce poste, et que ferais-tu cette année ?' : 'Pourquoi veux-tu rejoindre le Parlement JPV ?';
   };
-  form.querySelectorAll('input[name="type"]').forEach((r) => r.addEventListener('change', syncType));
+  
   const statuts: Record<string, string> = { nouvelle: 'reçue', en_cours: "en cours d'examen", acceptee: 'acceptée', refusee: 'non retenue' };
   (async () => {
     if (!supabaseConfigured) return;

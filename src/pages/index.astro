@@ -17,9 +17,9 @@ const motions = data.events.filter((e) => e.type === 'Débat' || e.type === 'Con
         <h1>Le lycée a un parlement.<br />Prends ta place.</h1>
         <p class="lead">Débats chronométrés, conférences, concours d'éloquence, une journée à l'Assemblée nationale. Ouvert à tous les élèves volontaires, de la seconde à la terminale.</p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="/candidature">Je candidate</a>
-          <a class="btn btn-outline" href="/agenda">Voir les séances</a>
-          <span class="stamp hero-stamp">Séance suspendue<br />reprise rentrée 2027</span>
+          <a class="btn btn-primary" href="/rejoindre">Rejoindre l'instance</a>
+          <a class="btn btn-outline" href="/candidature">Candidater au bureau</a>
+          <span class="stamp hero-stamp">Reprise<br />très bientôt</span>
         </div>
       </div>
       <div class="hero-visual">
@@ -66,7 +66,7 @@ const motions = data.events.filter((e) => e.type === 'Débat' || e.type === 'Con
       <div>
         <h2>Prochaines séances</h2>
         <EventList events={data.events} limit={3} upcoming />
-        <a class="link" href="/agenda">Tout l'agenda, séances passées comprises</a>
+        <a class="link" href="/agenda">Les séances passées</a>
       </div>
       <div>
         <h2>Dernières publications</h2>
@@ -103,8 +103,8 @@ const motions = data.events.filter((e) => e.type === 'Débat' || e.type === 'Con
   <section class="section-tight">
     <div class="container">
       <div class="cta-band">
-        <div><h2>Les candidatures sont ouvertes.</h2><p>Crée ton compte en trente secondes, dis-nous pourquoi tu veux débattre. Le bureau te répond par email.</p></div>
-        <a class="btn btn-primary" href="/candidature">Je candidate</a>
+        <div><h2>Le nouveau bureau est en cours d'élection.</h2><p>Tous les postes sont ouverts. Dis-nous lequel tu vises et ce que tu ferais cette année.</p></div>
+        <a class="btn btn-primary" href="/candidature">Candidater au bureau</a>
       </div>
     </div>
   </section>

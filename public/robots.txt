@@ -4,4 +4,5 @@ Disallow: /compte
 Disallow: /bureau
 Disallow: /connexion
 Disallow: /inscription
+Disallow: /bureau
 Sitemap: https://parlementjpv.github.io/sitemap-index.xml

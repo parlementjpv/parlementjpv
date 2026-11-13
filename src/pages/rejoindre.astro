@@ -1,6 +1,111 @@
 ---
-// Ancienne adresse : redirige vers la nouvelle rubrique Candidature
-const to = import.meta.env.BASE_URL.replace(/\/$/, '') + '/candidature';
+import Base from '../layouts/Base.astro';
+const interets = ['Débats', 'Éloquence', 'Conférences', 'Visites', 'Communication', 'Organisation'];
 ---
-<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8" /><meta http-equiv="refresh" content={`0;url=${to}`} /><link rel="canonical" href={to} /><meta name="robots" content="noindex" /><title>Candidature — Parlement JPV</title></head>
-<body><a href={to}>Aller à la page Candidature</a></body></html>
+<Base title="Rejoindre l'instance" description="Rejoins le Parlement JPV : débats, éloquence, conférences et visites. Inscription en ligne, sans compte.">
+  <div class="page-head"><div class="container join-head">
+    <div>
+      <span class="eyebrow">Rejoindre l'instance</span>
+      <h1>Une place t'attend dans l'hémicycle.</h1>
+      <p class="lead">Toutes nos actions reprennent très bientôt. Inscris-toi maintenant : tu seras prévenu en premier des prochains débats, ateliers et conférences.</p>
+    </div>
+    <p class="members" id="members" hidden></p>
+  </div></div>
+
+  <section class="section">
+    <div class="container join-grid">
+      <div>
+        <h2>Ce que ça engage</h2>
+        <ul class="check mt-2">
+          <li>Venir quand tu peux : les séances durent trente minutes, sur l'heure du midi.</li>
+          <li>Préparer un minimum : lire la motion, chercher deux ou trois sources.</li>
+          <li>Respecter la <a class="link" href="/charte">charte</a> : on attaque des idées, jamais des personnes.</li>
+        </ul>
+        <p class="muted mt-3">L'adhésion est gratuite et ouverte à tous les élèves du lycée, de la seconde à la terminale. Pour prendre un poste dans le nouveau bureau, passe plutôt par la <a class="link" href="/candidature">candidature au bureau</a>.</p>
+      </div>
+
+      <form class="form card" id="joinForm" novalidate>
+        <h2 style="font-size:1.8rem;margin:0;">Je rejoins le Parlement JPV</h2>
+        <div class="form-row">
+          <div class="field"><label for="j-prenom">Prénom</label><input id="j-prenom" name="prenom" required autocomplete="given-name" maxlength="80" /></div>
+          <div class="field"><label for="j-nom">Nom</label><input id="j-nom" name="nom" required autocomplete="family-name" maxlength="80" /></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label for="j-classe">Classe</label><input id="j-classe" name="classe" required placeholder="ex. 1re 4" maxlength="40" /></div>
+          <div class="field"><label for="j-email">Email</label><input id="j-email" name="email" type="email" required autocomplete="email" /></div>
+        </div>
+        <fieldset class="tags-field">
+          <legend>Ce qui t'intéresse <small>(facultatif)</small></legend>
+          <div class="tags">
+            {interets.map((i) => <label class="tag"><input type="checkbox" name="interets" value={i} /><span>{i}</span></label>)}
+          </div>
+        </fieldset>
+        <div class="field"><label for="j-msg">Un mot pour le bureau <small>(facultatif)</small></label><textarea id="j-msg" name="message" maxlength="1000" style="min-height:90px;" placeholder="Un sujet que tu aimerais débattre, une idée d'intervenant…"></textarea></div>
+        <input type="text" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
+        <label class="checkbox"><input type="checkbox" name="charte" required /><span>Je m'engage à respecter la <a class="link" href="/charte" target="_blank">charte</a> et j'accepte que le bureau me contacte par email (<a class="link" href="/confidentialite" target="_blank">confidentialité</a>).</span></label>
+        <div id="joinMsg" role="status" aria-live="polite"></div>
+        <button class="btn btn-primary" type="submit">Je rejoins l'instance</button>
+      </form>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .join-head { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: end; }
+  .join-head h1 { max-width: 14ch; }
+  .members { font-size: 1rem; font-weight: 700; text-align: right; margin: 0; }
+  .members b { display: block; font-size: clamp(3rem, 7vw, 5rem); line-height: 0.9; letter-spacing: -0.05em; color: var(--rouge); }
+  .join-grid { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: clamp(28px, 5vw, 64px); align-items: start; }
+  .tags-field { border: 0; padding: 0; margin: 0; }
+  .tags-field legend { font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; }
+  .tags-field small, .field small { font-weight: 400; color: var(--gris); }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag { position: relative; cursor: pointer; }
+  .tag input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .tag span { display: inline-block; padding: 7px 12px; border: 2px solid var(--nuit); font-weight: 600; font-size: 0.92rem; }
+  .tag input:checked + span { background: var(--nuit); color: #fff; }
+  :root[data-theme='dark'] .tag input:checked + span { background: #f1f3fa; color: #0b142e; }
+  .tag input:focus-visible + span { box-shadow: var(--focus); }
+  .hp { position: absolute; left: -9999px; }
+  @media (max-width: 860px) { .join-head, .join-grid { grid-template-columns: 1fr; } .members { text-align: left; } }
+</style>
+
+<script>
+  import { getSupabase, supabaseConfigured } from '../lib/supabase';
+  import { getSession, getProfile } from '../lib/auth';
+  const form = document.getElementById('joinForm') as HTMLFormElement;
+  const msg = document.getElementById('joinMsg')!;
+  const show = (t: string, k: 'ok' | 'err' | 'info') => (msg.innerHTML = `<div class="alert alert-${k}">${t}</div>`);
+  (async () => {
+    if (!supabaseConfigured) { show("Les inscriptions en ligne ne sont pas encore ouvertes.", 'info'); return; }
+    const sb = getSupabase();
+    const { data: n } = await sb.rpc('adhesions_count');
+    if (typeof n === 'number' && n >= 5) { const el = document.getElementById('members')!; el.innerHTML = `<b>${n}</b>élèves ont déjà rejoint l'instance`; el.hidden = false; }
+    const session = await getSession();
+    if (session) {
+      const p = await getProfile(session.user.id);
+      (form.elements.namedItem('prenom') as HTMLInputElement).value = p?.prenom || '';
+      (form.elements.namedItem('nom') as HTMLInputElement).value = p?.nom || '';
+      (form.elements.namedItem('classe') as HTMLInputElement).value = p?.classe || '';
+      (form.elements.namedItem('email') as HTMLInputElement).value = session.user.email || '';
+    }
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      const fd = new FormData(form);
+      if (fd.get('website')) return;
+      const btn = form.querySelector('button[type=submit]') as HTMLButtonElement; btn.disabled = true; show('Envoi…', 'info');
+      const row = {
+        prenom: String(fd.get('prenom')).trim(), nom: String(fd.get('nom')).trim(), classe: String(fd.get('classe')).trim(),
+        email: String(fd.get('email')).trim().toLowerCase(), interets: fd.getAll('interets').map(String),
+        message: String(fd.get('message') || '').trim() || null, user_id: session?.user.id ?? null,
+      };
+      const { error } = await sb.from('adhesions').insert(row);
+      btn.disabled = false;
+      if (error?.code === '23505') { show('Cette adresse fait déjà partie de l\'instance. À très bientôt !', 'info'); return; }
+      if (error) { show("L'inscription n'a pas pu être enregistrée. Vérifie les champs et réessaie.", 'err'); return; }
+      form.reset();
+      show(`Bienvenue au Parlement JPV, ${row.prenom} ! Le bureau te préviendra par email dès la reprise des séances.`, 'ok');
+    });
+  })();
+</script>

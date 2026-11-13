@@ -1,0 +1,20 @@
+---
+// Message commun : les activités reprennent très bientôt.
+interface Props { quoi?: string; titre?: string }
+const { quoi = 'nos actions', titre } = Astro.props;
+const Quoi = quoi.charAt(0).toUpperCase() + quoi.slice(1);
+---
+<div class="reprise">
+  <span class="stamp">Reprise très bientôt</span>
+  <h3>{titre || `${Quoi} reprennent très bientôt.`}</h3>
+  <p>Le nouveau bureau prépare le programme. Rejoins l'instance pour être prévenu dès l'ouverture des inscriptions.</p>
+  <div class="flex">
+    <a class="btn btn-primary btn-sm" href="/rejoindre">Rejoindre l'instance</a>
+    <a class="btn btn-outline btn-sm" href="/#newsletter">Recevoir la lettre</a>
+  </div>
+</div>
+<style>
+  .reprise { border: 3px solid var(--nuit); padding: 26px; margin-top: 8px; }
+  .reprise h3 { font-size: 1.7rem; margin: 18px 0 8px; }
+  .reprise p { color: var(--gris); }
+</style>

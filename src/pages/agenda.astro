@@ -6,9 +6,9 @@ import data from '../data/events.json';
 <Base title="Agenda" description="Calendrier des débats, conférences, concours et visites du Parlement JPV.">
   <div class="page-head">
     <div class="container">
-      <span class="eyebrow">Agenda</span>
-      <h1>Séances et événements</h1>
-      <p class="lead">Débats de 30 minutes sur l'heure de midi, conférences, concours d'éloquence et visites. Ajoute l'agenda à ton calendrier pour ne rien rater.</p>
+      <span class="eyebrow">Séances</span>
+      <h1>Nos séances reprennent très bientôt.</h1>
+      <p class="lead">Débats de 30 minutes sur l'heure de midi, conférences, concours d'éloquence et visites. Le nouveau bureau prépare le programme : ajoute l'agenda à ton calendrier, les dates y apparaîtront dès leur annonce.</p>
       <div class="flex mt-2">
         <a class="btn btn-outline btn-sm" href="/agenda.ics" download>Ajouter à mon calendrier (.ics)</a>
         <a class="btn btn-outline btn-sm" href="/#newsletter">Recevoir les rappels par email</a>
@@ -18,7 +18,7 @@ import data from '../data/events.json';
   <section class="section">
     <div class="container two-col" style="grid-template-columns: 1fr 1fr;">
       <div>
-        <h2>À venir</h2>
+        <h2>Prochaines séances</h2>
         <EventList events={data.events} upcoming />
       </div>
       <div>

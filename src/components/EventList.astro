@@ -1,4 +1,5 @@
 ---
+import Reprise from './Reprise.astro';
 interface Ev { title: string; type: string; start: string; end?: string; location: string; report?: string; tentative?: boolean }
 interface Props { events: Ev[]; limit?: number; upcoming?: boolean; past?: boolean }
 const { events, limit, upcoming = false, past = false } = Astro.props;
@@ -13,7 +14,7 @@ const time = (s: string) => new Intl.DateTimeFormat('fr-FR', { timeStyle: 'short
 const year = (s: string) => new Date(s).getFullYear();
 ---
 {list.length === 0 ? (
-  <p class="muted">Aucune séance programmée. La newsletter annonce la reprise.</p>
+  <Reprise quoi="nos séances" />
 ) : (
   <div>
     {list.map((e) => (
