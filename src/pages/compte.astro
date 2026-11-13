@@ -59,6 +59,7 @@ const fmt = (s: string) => new Intl.DateTimeFormat('fr-FR', { dateStyle: 'full',
   </div></section>
 </Base>
 <script>
+  import { u } from '../lib/url';
   import { api } from '../lib/newsletter';
   import { getSupabase } from '../lib/supabase';
   import { requireSession, getProfile, signOut } from '../lib/auth';
@@ -107,7 +108,7 @@ const fmt = (s: string) => new Intl.DateTimeFormat('fr-FR', { dateStyle: 'full',
     document.getElementById('delAccount')!.addEventListener('click', async () => {
       if (!confirm('Supprimer définitivement ton compte et toutes tes données ?')) return;
       const r = await fetch(api('/api/account-delete'), { method: 'POST', headers: { Authorization: `Bearer ${session.access_token}` } });
-      if (r.ok) { await sb.auth.signOut(); location.href = '/?compte=supprime'; } else alert('Erreur lors de la suppression.');
+      if (r.ok) { await sb.auth.signOut(); location.href = u('/?compte=supprime'); } else alert('Erreur lors de la suppression.');
     });
   })();
 </script>

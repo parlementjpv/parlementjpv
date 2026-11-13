@@ -1,3 +1,4 @@
+import { u } from './url';
 import { getSupabase, supabaseConfigured, type Profile } from './supabase';
 
 /** Met à jour les liens Connexion / Mon espace du header selon la session. */
@@ -24,7 +25,7 @@ export async function getSession() {
 export async function requireSession(next = location.pathname) {
   const session = await getSession();
   if (!session) {
-    location.href = `/connexion?next=${encodeURIComponent(next)}`;
+    location.href = u(`/connexion?next=${encodeURIComponent(next)}`);
     return null;
   }
   return session;
@@ -37,7 +38,7 @@ export async function getProfile(userId: string): Promise<Profile | null> {
 
 export async function signOut() {
   await getSupabase().auth.signOut();
-  location.href = '/';
+  location.href = u('/');
 }
 
 /** Messages d'erreur Supabase traduits. */

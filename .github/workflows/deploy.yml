@@ -2,7 +2,7 @@ name: Déployer sur GitHub Pages
 
 on:
   push:
-    branches: [refonte]
+    branches: [main, refonte]
   workflow_dispatch:
 
 permissions:
@@ -19,17 +19,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - id: pages
+        uses: actions/configure-pages@v5
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run build
+      - name: Build
+        run: npm run build
         env:
-          PUBLIC_SUPABASE_URL: ${{ vars.PUBLIC_SUPABASE_URL }}
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          SITE_ORIGIN: ${{ steps.pages.outputs.origin }}
+          PUBLIC_SUPABASE_URL: ${{ vars.PUBLIC_SUPABASE_URL || 'https://bisnyrbrllipxstimpkk.supabase.co' }}
           PUBLIC_SUPABASE_ANON_KEY: ${{ vars.PUBLIC_SUPABASE_ANON_KEY }}
           PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY }}
-      - run: cp dist/404.html dist/404.html 2>/dev/null; touch dist/.nojekyll
+      - run: touch dist/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

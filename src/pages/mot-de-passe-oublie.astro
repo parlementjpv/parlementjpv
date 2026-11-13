@@ -15,6 +15,7 @@ import Base from '../layouts/Base.astro';
   </div></div>
 </Base>
 <script>
+  import { u } from '../lib/url';
   import { getSupabase } from '../lib/supabase';
   import { frError } from '../lib/auth';
   const form = document.getElementById('resetForm') as HTMLFormElement;
@@ -24,7 +25,7 @@ import Base from '../layouts/Base.astro';
     if (!form.checkValidity()) { form.reportValidity(); return; }
     const email = String(new FormData(form).get('email')).trim();
     const btn = form.querySelector('button')!; btn.disabled = true;
-    const { error } = await getSupabase().auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}/nouveau-mot-de-passe` });
+    const { error } = await getSupabase().auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}${u('/nouveau-mot-de-passe')}` });
     msg.innerHTML = error ? `<div class="alert alert-err">${frError(error.message)}</div>` : '<div class="alert alert-ok">Si un compte existe avec cet email, un lien vient d’être envoyé.</div>';
     btn.disabled = false;
   });

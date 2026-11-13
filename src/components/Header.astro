@@ -7,7 +7,8 @@ const links = [
   { href: '/jpv-mun', label: 'JPV MUN' },
   { href: '/qui-sommes-nous', label: 'Le bureau' },
 ];
-const current = Astro.url.pathname.replace(/\.html$/, '');
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+const current = Astro.url.pathname.replace(BASE, '').replace(/\/$/, '') || '/';
 ---
 <header class="site-header">
   <div class="container nav">

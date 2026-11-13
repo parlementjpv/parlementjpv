@@ -14,6 +14,7 @@ import Base from '../layouts/Base.astro';
   </div></div>
 </Base>
 <script>
+  import { u } from '../lib/url';
   import { getSupabase } from '../lib/supabase';
   import { frError } from '../lib/auth';
   const form = document.getElementById('pwForm') as HTMLFormElement;
@@ -25,6 +26,6 @@ import Base from '../layouts/Base.astro';
     const { error } = await getSupabase().auth.updateUser({ password: String(fd.get('password')) });
     if (error) { msg.innerHTML = `<div class="alert alert-err">${frError(error.message)}</div>`; return; }
     msg.innerHTML = '<div class="alert alert-ok">Mot de passe mis à jour. Redirection…</div>';
-    setTimeout(() => (location.href = '/compte'), 1200);
+    setTimeout(() => (location.href = u('/compte')), 1200);
   });
 </script>

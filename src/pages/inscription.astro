@@ -28,6 +28,7 @@ import Base from '../layouts/Base.astro';
   </div></div>
 </Base>
 <script>
+  import { u } from '../lib/url';
   import { api } from '../lib/newsletter';
   import { getSupabase, supabaseConfigured } from '../lib/supabase';
   import { frError } from '../lib/auth';
@@ -45,7 +46,7 @@ import Base from '../layouts/Base.astro';
         email: String(fd.get('email')).trim(),
         password: String(fd.get('password')),
         options: {
-          emailRedirectTo: `${location.origin}/compte?bienvenue=1`,
+          emailRedirectTo: `${location.origin}${u('/compte')}?bienvenue=1`,
           data: { prenom: fd.get('prenom'), nom: fd.get('nom'), classe: fd.get('classe'), newsletter: fd.get('newsletter') === 'on' },
         },
       });
