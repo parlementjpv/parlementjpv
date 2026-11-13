@@ -6,7 +6,7 @@ const initials = (n: string) => n.split(/\s+/).map((w) => w[0]).join('').slice(0
 <Base title="Qui sommes-nous" description="Présentation du Parlement JPV : mission, valeurs, organisation, bureau et rôles.">
   <div class="page-head">
     <div class="container">
-      <span class="eyebrow">Parlement JPV · Lycée Jean-Pierre Vernant</span>
+      <span class="eyebrow">Le bureau 2025-2026</span>
       <h1>Qui sommes-nous ?</h1>
       <p class="lead">Une initiative lycéenne dédiée à la prise de parole, au débat démocratique et à l'engagement citoyen. Nous organisons des débats, conférences, concours d'éloquence et visites institutionnelles, dans un cadre neutre, ouvert et exigeant.</p>
     </div>
@@ -44,7 +44,7 @@ const initials = (n: string) => n.split(/\s+/).map((w) => w[0]).join('').slice(0
     </div>
   </section>
 
-  <section class="section" style="background: var(--cream);">
+  <section class="section" style="background: var(--pierre);">
     <div class="container">
       <div class="center">
         <span class="eyebrow">Le bureau</span>
@@ -53,7 +53,7 @@ const initials = (n: string) => n.split(/\s+/).map((w) => w[0]).join('').slice(0
       </div>
       <div class="grid grid-2 mt-4">
         {team.map((m) => (
-          <div class="card member">
+          <div class="member">
             <div class="flex">
               {m.photo ? <img class="avatar" src={m.photo} alt={m.name} width="72" height="72" /> : <div class="avatar">{initials(m.name)}</div>}
               <div>
@@ -84,9 +84,9 @@ const initials = (n: string) => n.split(/\s+/).map((w) => w[0]).join('').slice(0
       </div>
       <div class="cta-band mt-4">
         <div><h2>Rejoindre le Parlement JPV</h2><p>Adhésion volontaire : inscription simple, participation aux débats, conférences, ateliers et concours.</p></div>
-        <a class="btn btn-gold" href="/rejoindre">Candidater</a>
+        <a class="btn btn-primary" href="/rejoindre">Candidater</a>
       </div>
     </div>
   </section>
 </Base>
-<style>.role-k { font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); font-weight: 700; margin-bottom: 6px; } .member .avatar { object-fit: cover; }</style>
+<style>.role-k { font-size: 0.95rem; color: var(--rouge); font-weight: 700; margin-bottom: 6px; } .member .avatar { object-fit: cover; }</style>

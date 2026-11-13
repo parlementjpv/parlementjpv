@@ -1,4 +1,4 @@
-/** Mini convertisseur Markdown → HTML sûr (titres, gras, italique, liens, listes, paragraphes). */
+/** Mini convertisseur Markdown HTML sûr (titres, gras, italique, liens, listes, paragraphes). */
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
 const inline = (s: string) =>
   esc(s)

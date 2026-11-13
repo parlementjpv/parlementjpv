@@ -1,0 +1,37 @@
+---
+/* Hémicycle de 120 sièges (= inscrits 2026), en 5 rangs. Les sièges se remplissent au chargement. */
+interface Props { seats?: number }
+const { seats = 120 } = Astro.props;
+const rows = [14, 20, 26, 29, 31];
+const cx = 300, cy = 290;
+const dots: { x: number; y: number; i: number; group: number }[] = [];
+let i = 0;
+rows.forEach((n, r) => {
+  const radius = 110 + r * 42;
+  for (let k = 0; k < n && i < seats; k++) {
+    if (r === rows.length - 1 && k === Math.floor(n / 2)) continue; // siège libre au centre du dernier rang
+    const a = Math.PI + (Math.PI * (k + 0.5)) / n; // de gauche à droite
+    dots.push({ x: cx + radius * Math.cos(a), y: cy + radius * Math.sin(a), i, group: k < n / 2 ? 0 : 1 });
+    i++;
+  }
+});
+---
+<svg class="hemicycle" viewBox="0 0 600 320" role="img" aria-label={`Hémicycle de ${seats} sièges, un par inscrit`}>
+  <g class="tribune"><rect x="262" y="248" width="76" height="46" /><rect x="282" y="232" width="36" height="16" /></g>
+  {dots.map((d) => <circle cx={d.x.toFixed(1)} cy={d.y.toFixed(1)} r="8.5" class:list={['seat', d.group ? 'droite' : 'gauche']} style={`--d:${(d.i * 14)}ms`} />)}
+  <circle class="seat libre" cx={(cx + 278 * Math.cos(Math.PI + (Math.PI * (Math.floor(rows[4] / 2) + 0.5)) / rows[4])).toFixed(1)} cy={(cy + 278 * Math.sin(Math.PI + (Math.PI * (Math.floor(rows[4] / 2) + 0.5)) / rows[4])).toFixed(1)} r="10" />
+  <text x="300" y="306" text-anchor="middle" class="legend">Ta place est libre.</text>
+</svg>
+
+<style>
+  .hemicycle { width: 100%; height: auto; display: block; overflow: visible; }
+  .tribune rect { fill: var(--nuit); }
+  .seat { fill: var(--pierre-fonce); transform-origin: center; animation: fill 0.5s ease forwards; animation-delay: var(--d); }
+  .seat.gauche { --to: var(--bleu); }
+  .seat.droite { --to: var(--rouge); }
+  .seat.libre { fill: none; stroke: var(--nuit); stroke-width: 3; stroke-dasharray: 4 4; animation: blink 1.6s ease-in-out infinite; }
+  .legend { font-family: var(--font); font-weight: 800; font-size: 18px; fill: var(--nuit); }
+  @keyframes fill { to { fill: var(--to); } }
+  @keyframes blink { 50% { opacity: 0.25; } }
+  @media (prefers-reduced-motion: reduce) { .seat { animation: none; fill: var(--to); } .seat.libre { animation: none; fill: none; } }
+</style>

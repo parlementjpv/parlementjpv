@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 ---
 <Base title="Espace bureau" noindex>
   <div class="page-head"><div class="container flex between">
-    <div><span class="eyebrow">Réservé au bureau</span><h1>Tableau de bord</h1></div>
+    <div><span class="eyebrow">Bureau</span><h1>Tableau de bord</h1></div>
     <a class="btn btn-outline btn-sm" href="/compte">← Mon espace</a>
   </div></div>
   <section class="section" id="app" style="display:none;"><div class="container">
@@ -36,7 +36,7 @@ import Base from '../layouts/Base.astro';
               <button class="btn btn-outline btn-sm" type="submit">Enregistrer le brouillon</button>
               <button class="btn btn-outline btn-sm" type="button" id="nlPreview">Aperçu</button>
               <button class="btn btn-outline btn-sm" type="button" id="nlTest">M'envoyer un test</button>
-              <button class="btn btn-gold btn-sm" type="button" id="nlSend">Envoyer à tous les abonnés</button>
+              <button class="btn btn-primary btn-sm" type="button" id="nlSend">Envoyer à tous les abonnés</button>
             </div>
           </form>
         </div>
@@ -54,7 +54,7 @@ import Base from '../layouts/Base.astro';
   </div></section>
   <section class="section" id="denied" style="display:none;"><div class="container narrow center"><h2>Accès réservé</h2><p class="muted">Cette page est réservée aux membres du bureau.</p><a class="btn btn-outline" href="/compte">Retour à mon espace</a></div></section>
 </Base>
-<style>.tab { cursor: pointer; border: 0; font: inherit; font-size: 0.82rem; } .tab.active { background: var(--navy); color: #fff; } .table select, .table input { font: inherit; font-size: 0.85rem; padding: 4px 6px; border-radius: 6px; border: 1px solid var(--line); } .motiv { max-width: 360px; white-space: pre-wrap; font-size: 0.85rem; }</style>
+<style>.tab { cursor: pointer; border: 0; font: inherit; font-size: 0.82rem; } .tab.active { background: var(--nuit); color: #fff; } .table select, .table input { font: inherit; font-size: 0.85rem; padding: 4px 6px; border-radius: 6px; border: 1px solid var(--pierre-fonce); } .motiv { max-width: 360px; white-space: pre-wrap; font-size: 0.85rem; }</style>
 <script>
   import { getSupabase } from '../lib/supabase';
   import { requireSession, getProfile } from '../lib/auth';
@@ -125,7 +125,7 @@ import Base from '../layouts/Base.astro';
     });
     async function listNl() {
       const { data } = await sb.from('newsletters').select('id, subject, sent_at, recipients, created_at').order('created_at', { ascending: false }).limit(30);
-      document.getElementById('nlList')!.innerHTML = (data || []).map((n) => `<div class="flex between" style="padding:6px 0;border-bottom:1px solid var(--line);"><span>${n.sent_at ? '📨' : '📝'} <strong>${esc(n.subject)}</strong><br><span class="muted">${n.sent_at ? `envoyée le ${d(n.sent_at)} à ${n.recipients}` : `brouillon du ${d(n.created_at)}`}</span></span>${n.sent_at ? `<a class="btn btn-outline btn-sm" href="/newsletter/lire?id=${n.id}">Voir</a>` : `<button class="btn btn-outline btn-sm edit" data-id="${n.id}" type="button">Modifier</button>`}</div>`).join('') || '<span class="muted">Aucun numéro.</span>';
+      document.getElementById('nlList')!.innerHTML = (data || []).map((n) => `<div class="flex between" style="padding:6px 0;border-bottom:1px solid var(--pierre-fonce);"><span>${n.sent_at ? '📨' : '📝'} <strong>${esc(n.subject)}</strong><br><span class="muted">${n.sent_at ? `envoyée le ${d(n.sent_at)} à ${n.recipients}` : `brouillon du ${d(n.created_at)}`}</span></span>${n.sent_at ? `<a class="btn btn-outline btn-sm" href="/newsletter/lire?id=${n.id}">Voir</a>` : `<button class="btn btn-outline btn-sm edit" data-id="${n.id}" type="button">Modifier</button>`}</div>`).join('') || '<span class="muted">Aucun numéro.</span>';
       document.querySelectorAll<HTMLButtonElement>('.edit').forEach((b) => b.addEventListener('click', async () => {
         const { data: n } = await sb.from('newsletters').select('*').eq('id', b.dataset.id).single();
         (f.elements.namedItem('id') as HTMLInputElement).value = n.id; (f.elements.namedItem('subject') as HTMLInputElement).value = n.subject;

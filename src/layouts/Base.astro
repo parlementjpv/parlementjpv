@@ -29,7 +29,7 @@ const turnstile = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
   <meta name="description" content={description} />
   <link rel="canonical" href={canonical} />
   <link rel="icon" href="/assets/img/favicon.png" type="image/png" />
-  <meta name="theme-color" content="#0b2545" />
+  <meta name="theme-color" content="#0f1f4b" />
   {noindex && <meta name="robots" content="noindex" />}
   <meta property="og:type" content="website" />
   <meta property="og:title" content={`${title} — Parlement JPV`} />
@@ -40,7 +40,7 @@ const turnstile = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&display=swap" rel="stylesheet" />
   <script is:inline>
     (function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
   </script>
@@ -50,8 +50,8 @@ const turnstile = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
   <a class="skip-link" href="#main">Aller au contenu</a>
   {!minimal && (
     <div class="notice">
-      L'instance est en pause — reprise des séances à la <strong>rentrée 2027</strong> avec un nouveau bureau.
-      <a href="/#newsletter">Être prévenu·e →</a>
+      Séance suspendue jusqu'à la rentrée 2027. Les candidatures et la newsletter restent ouvertes.
+      <a href="/#newsletter">Être prévenu de la reprise</a>
     </div>
   )}
   <Header />

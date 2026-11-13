@@ -13,12 +13,12 @@ const time = (s: string) => new Intl.DateTimeFormat('fr-FR', { timeStyle: 'short
 const year = (s: string) => new Date(s).getFullYear();
 ---
 {list.length === 0 ? (
-  <p class="muted">Aucune séance programmée pour le moment. Abonne-toi à la newsletter pour être prévenu·e.</p>
+  <p class="muted">Aucune séance programmée. La newsletter annonce la reprise.</p>
 ) : (
   <div>
     {list.map((e) => (
       <article class="event">
-        <div class="event-date"><b>{day(e.start)}</b><span>{mon(e.start)} {year(e.start)}</span></div>
+        <div class="event-date"><b>{day(e.start)}</b><span>{`${mon(e.start)} ${year(e.start)}`}</span></div>
         <div>
           <div class="flex" style="gap:8px;"><span class="pill">{e.type}</span>{e.tentative && <span class="pill pill-gold">Date indicative</span>}</div>
           <h3>{e.title}</h3>

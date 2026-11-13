@@ -31,8 +31,8 @@ const cats = ['Tous', ...new Set(posts.map((p) => p.data.category))];
   </section>
 </Base>
 <style>
-  .post { text-decoration: none; display: grid; gap: 8px; align-content: start; } .post h3 { font-size: 1.15rem; margin: 4px 0 0; } .post p { margin: 0; } .post:hover { border-color: var(--gold); }
-  .filter { cursor: pointer; border: 0; font: inherit; font-size: 0.8rem; } .filter.active { background: var(--navy); color: #fff; }
+  .post { text-decoration: none; display: grid; gap: 8px; align-content: start; } .post h3 { font-size: 1.15rem; margin: 4px 0 0; } .post p { margin: 0; } .post:hover { border-color: var(--rouge); }
+  .filter { cursor: pointer; border: 0; font: inherit; font-size: 0.8rem; } .filter.active { background: var(--nuit); color: #fff; }
 </style>
 <script>
   document.querySelectorAll<HTMLButtonElement>('.filter').forEach((b) => b.addEventListener('click', () => {

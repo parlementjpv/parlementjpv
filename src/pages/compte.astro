@@ -7,8 +7,8 @@ const fmt = (s: string) => new Intl.DateTimeFormat('fr-FR', { dateStyle: 'full',
 ---
 <Base title="Mon espace" noindex>
   <div class="page-head"><div class="container flex between">
-    <div><span class="eyebrow">Espace membre</span><h1 id="hello">Mon espace</h1></div>
-    <div class="flex"><a class="btn btn-gold btn-sm hidden" id="bureauLink" href="/bureau">Espace bureau</a><button class="btn btn-outline btn-sm" id="logout" type="button">Se déconnecter</button></div>
+    <div><span class="eyebrow">Ton compte</span><h1 id="hello">Mon espace</h1></div>
+    <div class="flex"><a class="btn btn-primary btn-sm hidden" id="bureauLink" href="/bureau">Espace bureau</a><button class="btn btn-outline btn-sm" id="logout" type="button">Se déconnecter</button></div>
   </div></div>
   <section class="section"><div class="container grid grid-2" style="gap:36px;align-items:start;">
     <div class="grid">
@@ -88,7 +88,7 @@ const fmt = (s: string) => new Intl.DateTimeFormat('fr-FR', { dateStyle: 'full',
     const labels: Record<string, string> = { nouvelle: 'Reçue, en attente', en_cours: 'En cours d’examen', acceptee: 'Acceptée 🎉', refusee: 'Non retenue' };
     cEl.innerHTML = cands && cands.length
       ? cands.map((c) => `<p><span class="pill">${c.type}</span> déposée le ${new Date(c.created_at).toLocaleDateString('fr-FR')} — <strong>${labels[c.statut] || c.statut}</strong>${c.note_bureau ? `<br><span class="small muted">Message du bureau : ${c.note_bureau}</span>` : ''}</p>`).join('')
-      : '<p class="muted">Aucune candidature pour le moment.</p><a class="btn btn-gold btn-sm" href="/rejoindre">Candidater</a>';
+      : '<p class="muted">Aucune candidature pour le moment.</p><a class="btn btn-primary btn-sm" href="/rejoindre">Candidater</a>';
 
     // Inscriptions aux séances
     const { data: regs } = await sb.from('event_registrations').select('event_key').eq('user_id', session.user.id);

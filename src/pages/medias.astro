@@ -8,7 +8,7 @@ const items = [
 ];
 ---
 <Base title="Ils parlent de nous" description="Presse, réseaux sociaux et médias qui parlent du Parlement JPV.">
-  <div class="page-head"><div class="container"><span class="eyebrow">Communication — image publique</span><h1>Ils parlent de nous</h1></div></div>
+  <div class="page-head"><div class="container"><span class="eyebrow">Dans la presse et sur les réseaux</span><h1>Ils parlent de nous</h1></div></div>
   <section class="section"><div class="container grid grid-2">
     {items.map((i) => (
       <div class="card"><h3>{i.t}</h3><p class="muted">{i.d}</p>{i.u ? <a class="btn btn-outline btn-sm" href={i.u} target="_blank" rel="noopener">Ouvrir</a> : <span class="small muted">Lien à venir</span>}</div>

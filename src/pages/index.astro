@@ -2,116 +2,142 @@
 import Base from '../layouts/Base.astro';
 import NewsletterForm from '../components/NewsletterForm.astro';
 import EventList from '../components/EventList.astro';
+import Hemicycle from '../components/Hemicycle.astro';
 import { getCollection } from 'astro:content';
 import data from '../data/events.json';
 
-const posts = (await getCollection('posts', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .slice(0, 3);
+const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).slice(0, 2);
 const fmt = (d: Date) => new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' }).format(d);
+const motions = data.events.filter((e) => e.type === 'Débat' || e.type === 'Concours').map((e) => e.title);
 ---
-<Base title="Accueil">
-  <section class="hero">
-    <div class="container hero-inner">
-      <div>
-        <span class="eyebrow">Lycée Jean-Pierre Vernant — Sèvres</span>
-        <h1>Apprendre à <em>débattre</em>, à écouter, à décider.</h1>
-        <p class="lead">Le Parlement JPV est une instance lycéenne dédiée à l'éloquence, au débat démocratique et à l'engagement citoyen. Débats, conférences, concours et visites institutionnelles, dans un cadre neutre, ouvert et exigeant.</p>
+<Base title="Le lycée a un parlement">
+  <section class="hero-home">
+    <div class="container hero-grid">
+      <div class="hero-text">
+        <h1>Le lycée a un parlement.<br />Prends ta place.</h1>
+        <p class="lead">Débats chronométrés, conférences, concours d'éloquence, une journée à l'Assemblée nationale. Ouvert à tous les élèves volontaires, de la seconde à la terminale.</p>
         <div class="hero-actions">
-          <a class="btn btn-gold" href="/rejoindre">Candidater</a>
-          <a class="btn btn-light" href="/institution">Découvrir l'institution</a>
+          <a class="btn btn-primary" href="/rejoindre">Je candidate</a>
+          <a class="btn btn-outline" href="/agenda">Voir les séances</a>
+          <span class="stamp hero-stamp">Séance suspendue<br />reprise rentrée 2027</span>
         </div>
       </div>
-      <div class="hero-media">
-        <img src="/assets/img/hero.jpg" alt="Un élève argumente lors d'un débat du Parlement JPV" loading="eager" />
+      <div class="hero-visual">
+        <Hemicycle seats={data.stats.inscrits} />
+        <p class="hero-caption"><b>{data.stats.inscrits} sièges</b>, un par élève inscrit en 2026. Bleu ou rouge selon le camp tiré au sort au début de chaque débat.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee" aria-label="Motions débattues">
+    <div class="marquee-track">
+      {[...motions, ...motions].map((m) => <span><i>Motion</i>{m}</span>)}
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="stats">
+        <div class="stat"><strong>{data.stats.inscrits}</strong><span>élèves inscrits</span></div>
+        <div class="stat"><strong>{data.stats.debats}</strong><span>débats tenus</span></div>
+        <div class="stat"><strong>{data.stats.conferences}</strong><span>conférences</span></div>
+        <div class="stat"><strong>30</strong><span>minutes par débat, chrono en main</span></div>
       </div>
     </div>
   </section>
 
   <section class="section-tight">
-    <div class="container">
-      <div class="stats">
-        <div class="stat"><strong>{data.stats.inscrits}</strong><span>inscrits</span></div>
-        <div class="stat"><strong>{data.stats.debats}</strong><span>débats</span></div>
-        <div class="stat"><strong>{data.stats.conferences}</strong><span>conférences</span></div>
-        <div class="stat"><strong>{data.stats.actions}</strong><span>actions en 2026</span></div>
+    <div class="container how">
+      <div class="how-text">
+        <h2>Comment ça marche</h2>
+        <p class="lead">Une séance, c'est trente minutes sur l'heure du déjeuner, en salle Samuel Paty. Pas besoin d'être déjà bon : il faut être préparé.</p>
       </div>
+      <ol class="steps">
+        <li><div><b>Une motion est annoncée.</b> Une semaine avant. Tu lis, tu sources, tu prépares tes trois minutes.</div></li>
+        <li><div><b>Les camps sont tirés au sort.</b> Tu peux devoir défendre l'inverse de ce que tu penses. C'est le but.</div></li>
+        <li><div><b>On débat, chrono en main.</b> Ouverture, réfutation, conclusion. Un modérateur, un adulte présent, zéro attaque personnelle.</div></li>
+        <li><div><b>Un rapport est publié.</b> Les arguments des deux camps, en ligne, pour tout le monde.</div></li>
+      </ol>
     </div>
   </section>
 
   <section class="section">
-    <div class="container">
-      <div class="center">
-        <span class="eyebrow">Nos valeurs</span>
-        <h2>Un cadre, quatre piliers</h2>
+    <div class="container split">
+      <div>
+        <h2>Prochaines séances</h2>
+        <EventList events={data.events} limit={3} upcoming />
+        <a class="link" href="/agenda">Tout l'agenda, séances passées comprises</a>
       </div>
-      <div class="grid grid-4 mt-3">
-        <div class="card"><h3>Neutralité</h3><p class="muted">Pas de promotion idéologique : priorité au débat structuré et aux arguments.</p></div>
-        <div class="card"><h3>Exigence</h3><p class="muted">Argumentation, écoute, rigueur et respect : non négociables.</p></div>
-        <div class="card"><h3>Ouverture</h3><p class="muted">Participation accessible à tous les élèves volontaires, quelle que soit la classe.</p></div>
-        <div class="card"><h3>Cadre</h3><p class="muted">Organisation encadrée par le CVL et des professeures référentes, suivi sur l'année.</p></div>
+      <div>
+        <h2>Dernières publications</h2>
+        {posts.map((p) => (
+          <a class="post-row" href={`/actualites/${p.id}`}>
+            <span class="pill">{p.data.category}</span>
+            <h3>{p.data.title}</h3>
+            <p>{p.data.excerpt}</p>
+            <span class="small muted">{fmt(p.data.date)}</span>
+          </a>
+        ))}
+        <a class="link" href="/actualites">Toutes les actualités</a>
       </div>
     </div>
   </section>
 
-  <section class="section" style="background: var(--cream);">
-    <div class="container grid grid-2" style="gap: 48px; align-items: start;">
-      <div>
-        <span class="eyebrow">Agenda</span>
-        <h2>Les prochaines séances</h2>
-        <EventList events={data.events} limit={4} upcoming />
-        <a class="btn btn-outline mt-2" href="/agenda">Voir tout l'agenda</a>
-      </div>
-      <div>
-        <span class="eyebrow">Actualités</span>
-        <h2>Dernières publications</h2>
-        <div class="grid">
-          {posts.map((p) => (
-            <a class="card post-card" href={`/actualites/${p.id}`}>
-              <span class="pill pill-gold">{p.data.category}</span>
-              <h3>{p.data.title}</h3>
-              <p class="muted small">{p.data.excerpt}</p>
-              <span class="small muted">{fmt(p.data.date)} · {p.data.author}</span>
-            </a>
-          ))}
-        </div>
-        <a class="btn btn-outline mt-2" href="/actualites">Toutes les actualités</a>
-      </div>
+  <section class="section quote-band">
+    <div class="container">
+      <p class="big-quote">« La parole n'a de valeur que si elle s'accompagne d'exigence. »</p>
+      <p class="quote-by">Gustave Jeannin, fondateur du Parlement JPV</p>
     </div>
   </section>
 
   <section class="section" id="newsletter">
-    <div class="container">
-      <div class="nl-band">
-        <div>
-          <span class="eyebrow">Newsletter</span>
-          <h2>Ne manque aucun débat</h2>
-          <p class="muted">Une fois par mois : prochaines séances, ouverture des candidatures, rapports publiés, JPV MUN. Zéro spam, désinscription en un clic.</p>
-        </div>
-        <NewsletterForm />
+    <div class="container nl">
+      <div>
+        <h2>La lettre du Parlement</h2>
+        <p class="lead">Une fois par mois dans ta boîte : les prochaines motions, l'ouverture des candidatures, les rapports publiés. Tu confirmes ton adresse, tu te désinscris en un clic.</p>
       </div>
+      <NewsletterForm />
     </div>
   </section>
 
   <section class="section-tight">
     <div class="container">
       <div class="cta-band">
-        <div>
-          <h2>Envie de prendre la parole ?</h2>
-          <p>Les candidatures pour la rentrée 2027 sont ouvertes. Crée ton compte, dépose ta candidature, le bureau te répond par email.</p>
-        </div>
-        <a class="btn btn-gold" href="/rejoindre">Candidater maintenant</a>
+        <div><h2>Les candidatures sont ouvertes.</h2><p>Crée ton compte en trente secondes, dis-nous pourquoi tu veux débattre. Le bureau te répond par email.</p></div>
+        <a class="btn btn-primary" href="/rejoindre">Je candidate</a>
       </div>
     </div>
   </section>
 </Base>
 
 <style>
-  .post-card { text-decoration: none; display: grid; gap: 8px; }
-  .post-card h3 { font-size: 1.1rem; margin: 4px 0 0; }
-  .post-card p { margin: 0; }
-  .post-card:hover { border-color: var(--gold); }
-  .nl-band { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items: center; padding: 44px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: #fff; }
-  :global(:root[data-theme='dark']) .nl-band { background: #13244a; }
-  @media (max-width: 800px) { .nl-band { grid-template-columns: 1fr; padding: 28px; } }
+  .hero-home { padding: clamp(40px, 6vw, 90px) 0 clamp(32px, 4vw, 60px); position: relative; }
+  .hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(28px, 5vw, 72px); align-items: center; }
+  .hero-text { position: relative; }
+  .hero-text h1 { max-width: 11ch; }
+  .hero-stamp { margin: 18px 0 0 18px; }
+  .hero-caption { font-size: 0.95rem; color: var(--gris); max-width: 44ch; margin: 14px auto 0; text-align: center; }
+  @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } .hero-stamp { margin-left: 0; } }
+
+  .how { display: grid; grid-template-columns: 1fr 1.4fr; gap: clamp(28px, 5vw, 72px); border-top: var(--rule); padding-top: 32px; }
+  .steps { list-style: none; counter-reset: s; margin: 0; padding: 0; display: grid; gap: 0; }
+  .steps li { counter-increment: s; display: grid; grid-template-columns: 64px 1fr; gap: 12px; padding: 18px 0; border-bottom: 2px solid var(--pierre-fonce); font-size: 1.05rem; line-height: 1.4; }
+  .steps li::before { content: counter(s); font-size: 3rem; font-weight: 800; line-height: 0.9; color: var(--rouge); letter-spacing: -0.05em; }
+  .steps b { display: block; font-weight: 800; }
+  @media (max-width: 860px) { .how { grid-template-columns: 1fr; } }
+
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 72px); align-items: start; }
+  @media (max-width: 860px) { .split { grid-template-columns: 1fr; } }
+  .post-row { display: block; text-decoration: none; padding: 20px 0; border-bottom: 2px solid var(--pierre-fonce); }
+  .post-row h3 { margin: 8px 0 6px; }
+  .post-row p { margin: 0 0 6px; color: var(--gris); }
+  .post-row:hover h3 { text-decoration: underline; text-decoration-color: var(--rouge); text-decoration-thickness: 4px; text-underline-offset: 5px; }
+  .link { display: inline-block; margin-top: 18px; font-weight: 700; }
+
+  .quote-band { background: var(--bleu); color: #fff; }
+  .big-quote { font-size: clamp(1.8rem, 4.2vw, 3.4rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.03em; max-width: 24ch; margin: 0 0 14px; }
+  .quote-by { color: rgba(255,255,255,0.75); margin: 0; }
+
+  .nl { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 72px); align-items: center; border-top: var(--rule); border-bottom: var(--rule); padding: 44px 0; }
+  @media (max-width: 860px) { .nl { grid-template-columns: 1fr; } }
 </style>

@@ -5,12 +5,12 @@ const id = `nl-${Math.random().toString(36).slice(2, 8)}`;
 ---
 <form class:list={['nl-form', { compact }]} data-newsletter id={id} novalidate>
   <div class="nl-row">
-    <input type="email" name="email" placeholder="ton.email@exemple.fr" required autocomplete="email" aria-label="Adresse email" />
+    <input type="email" name="email" placeholder="ton adresse email" required autocomplete="email" aria-label="Adresse email" />
     <button class="btn btn-gold btn-sm" type="submit">S'abonner</button>
   </div>
   <label class="checkbox nl-consent">
     <input type="checkbox" name="consent" required />
-    <span>J'accepte de recevoir la newsletter du Parlement JPV. Désinscription en un clic à tout moment.</span>
+    <span>Oui pour la lettre mensuelle. Je peux me désinscrire quand je veux.</span>
   </label>
   <div class="cf-turnstile" data-sitekey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || ''} data-size="flexible"></div>
   <p class="nl-msg small" role="status" aria-live="polite"></p>
@@ -18,14 +18,17 @@ const id = `nl-${Math.random().toString(36).slice(2, 8)}`;
 
 <style>
   .nl-form { display: grid; gap: 10px; }
-  .nl-row { display: flex; gap: 8px; }
-  .nl-row input { flex: 1; min-width: 0; padding: 10px 14px; border-radius: 999px; border: 1.5px solid var(--line); font: inherit; background: #fff; color: var(--ink); }
-  .nl-row input:focus { outline: none; border-color: var(--gold); box-shadow: var(--focus); }
-  .compact .nl-row input { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); color: #fff; }
-  .compact .nl-consent { color: rgba(246,241,230,0.6); font-size: 0.78rem; }
-  .nl-msg { margin: 0; min-height: 1.2em; }
-  .nl-msg.ok { color: #6ee7a8; } .nl-msg.err { color: #fda29b; }
-  :not(.compact) .nl-msg.ok { color: var(--ok); } :not(.compact) .nl-msg.err { color: var(--err); }
+  .nl-row { display: grid; grid-template-columns: 1fr auto; }
+  .nl-row input { min-width: 0; padding: 12px 14px; border: 3px solid var(--nuit); border-right: 0; font: inherit; background: var(--blanc); color: var(--nuit); border-radius: 0; }
+  .nl-row input:focus { outline: none; border-color: var(--rouge); }
+  .nl-row .btn { border-width: 3px; }
+  .compact .nl-row input { background: transparent; border-color: #fff; color: #fff; }
+  .compact .nl-row input::placeholder { color: rgba(255,255,255,0.6); }
+  .compact .nl-row .btn { background: #fff; color: var(--nuit); border-color: #fff; }
+  .compact .nl-consent { color: rgba(255,255,255,0.7); }
+  .nl-msg { margin: 0; min-height: 1.2em; font-weight: 600; }
+  .nl-msg.ok { color: var(--ok); } .nl-msg.err { color: var(--rouge); }
+  .compact .nl-msg.ok { color: #8ef0b6; } .compact .nl-msg.err { color: #ff8c97; }
   .cf-turnstile:empty { display: none; }
 </style>
 
