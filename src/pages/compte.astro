@@ -60,7 +60,7 @@ import Base from '../layouts/Base.astro';
     const p = await getProfile(session.user.id);
     document.getElementById('hello')!.textContent = p?.prenom ? `Bonjour ${p.prenom}` : 'Mon espace';
     if (p && ['bureau', 'admin'].includes(p.role)) document.getElementById('bureauLink')!.classList.remove('hidden');
-    if (new URLSearchParams(location.search).get('bienvenue')) { const w = document.getElementById('welcome')!; w.classList.remove('hidden'); w.innerHTML = '<div class="alert alert-ok">Bienvenue ! Ton compte est activé. Tu peux maintenant <a href="/candidature">déposer ta candidature</a>.</div>'; }
+    if (new URLSearchParams(location.search).get('bienvenue')) { const w = document.getElementById('welcome')!; w.classList.remove('hidden'); w.innerHTML = '<div class="alert alert-ok">Bienvenue ! Ton compte est activé : tu es maintenant membre de l\'instance. Réponds aux prochaines séances juste en dessous.</div>'; }
     document.getElementById('logout')!.addEventListener('click', signOut);
 
     // Profil
