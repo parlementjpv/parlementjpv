@@ -84,13 +84,11 @@ export function layout({ title, body, unsubscribeUrl }: { title: string; body: s
 }
 export const button = (href: string, label: string) => `<p style="margin:24px 0;"><a href="${href}" style="display:inline-block;background:#d62839;color:#fff;font-weight:700;padding:13px 22px;text-decoration:none;">${esc(label)}</a></p>`;
 
-/** Page HTML pour les liens cliqués depuis un email (confirmation / désinscription), puis retour au site. */
-export function page(req: Request, title: string, text: string, ok = true) {
-  const to = `${SITE}/newsletter/${ok ? 'merci' : 'erreur'}`;
-  return new Response(`<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta http-equiv="refresh" content="3;url=${to}"><title>${esc(title)}</title></head>
-  <body style="font-family:sans-serif;background:#0f1f4b;color:#fff;display:grid;place-items:center;min-height:100vh;margin:0;text-align:center;padding:20px;">
-  <div><h1>${esc(title)}</h1><p>${esc(text)}</p><p><a href="${to}" style="color:#ff6b78;">Retour au site</a></p></div></body></html>`,
-    { status: 200, headers: { ...cors(req), 'Content-Type': 'text/html; charset=utf-8' } });
+/** Lien cliqué depuis un email : redirection immédiate vers la bonne page du site
+ *  (Supabase n'affiche pas le HTML servi par les fonctions : il apparaissait en code brut). */
+export function page(_req: Request, dest: 'merci' | 'desinscrit' | 'erreur') {
+  const to = dest === 'merci' ? `${SITE}/newsletter/merci` : dest === 'desinscrit' ? `${SITE}/newsletter/desinscription?fait=1` : `${SITE}/newsletter/erreur`;
+  return new Response(null, { status: 303, headers: { Location: to, 'Cache-Control': 'no-store' } });
 }
 
 export async function readJson(req: Request) { try { return await req.json(); } catch { return null; } }

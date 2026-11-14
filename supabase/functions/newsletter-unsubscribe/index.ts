@@ -11,8 +11,8 @@ Deno.serve(async (req) => {
     return json(req, 200, { message: 'Si cette adresse était abonnée, elle est maintenant désinscrite.' });
   }
   const token = new URL(req.url).searchParams.get('token') || '';
-  if (!/^[a-f0-9]{48}$/.test(token)) return page(req, 'Lien invalide', 'Ce lien de désinscription est invalide.', false);
+  if (!/^[a-f0-9]{48}$/.test(token)) return page(req, 'erreur');
   const { data } = await db.from('newsletter_subscribers').update({ unsubscribed_at: new Date().toISOString() }).eq('token', token).select('email').maybeSingle();
-  if (!data) return page(req, 'Lien invalide', 'Ce lien de désinscription est invalide.', false);
-  return page(req, 'Désinscription effectuée', `${data.email} ne recevra plus la lettre. À bientôt peut-être !`);
+  if (!data) return page(req, 'erreur');
+  return page(req, 'desinscrit');
 });

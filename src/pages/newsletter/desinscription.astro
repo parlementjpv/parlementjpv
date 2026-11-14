@@ -16,6 +16,11 @@ import Base from '../../layouts/Base.astro';
 <script>
   import { postJSON } from '../../lib/newsletter';
   const form = document.getElementById('unsubForm') as HTMLFormElement; const msg = document.getElementById('msg')!;
+  if (new URLSearchParams(location.search).get('fait')) {
+    document.querySelector('h1')!.textContent = 'Désinscription effectuée';
+    form.outerHTML = '<div class="alert alert-ok">Tu ne recevras plus la lettre du Parlement JPV. Tu peux te réinscrire à tout moment depuis le bas de chaque page.</div>';
+    document.querySelector('.auth-card .muted')?.remove();
+  }
   form.addEventListener('submit', async (e) => {
     e.preventDefault(); if (!form.checkValidity()) { form.reportValidity(); return; }
     const r = await postJSON<{ message: string }>('/api/newsletter-unsubscribe', { email: String(new FormData(form).get('email')) });
