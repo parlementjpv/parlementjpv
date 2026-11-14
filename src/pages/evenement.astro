@@ -29,6 +29,7 @@ import NewsletterForm from '../components/NewsletterForm.astro';
           <h1 id="evTitle"></h1>
           <p class="lead" id="evWhen"></p>
           <p class="ev-desc" id="evDesc" hidden></p>
+          <div class="ev-camps" id="evCamps" hidden></div>
           <p class="count" id="evCount" hidden></p>
         </div>
       </div>
@@ -39,6 +40,8 @@ import NewsletterForm from '../components/NewsletterForm.astro';
         <div>
           <h2>Tu viens ?</h2>
           <p class="muted">Ta réponse aide le bureau à prévoir la salle et le temps de parole. Pas besoin de compte ; tes coordonnées ne sont visibles que par le bureau.</p>
+          <p class="muted hidden" id="evCampsInfo">Si tu viens, ton camp est <strong>tiré au sort</strong> au moment de ta réponse, en équilibrant les effectifs. Tu le découvres tout de suite après.</p>
+          <div class="mon-camp hidden" id="monCamp"></div>
           <div id="evOthers" class="mt-3" hidden><h3 style="font-size:1.2rem;">Les autres événements</h3><div id="evOthersList"></div></div>
         </div>
         <form class="form card" id="evForm" novalidate>
@@ -66,7 +69,7 @@ import NewsletterForm from '../components/NewsletterForm.astro';
   </div>
 </Base>
 
-<style>
+<style is:global>
   .ev-hero { background: var(--nuit); color: #fff; padding: clamp(48px, 7vw, 96px) 0; }
   :root[data-theme='dark'] .ev-hero { background: #0f1f4b; }
   .ev-hero h1 { color: #fff; max-width: 18ch; }
@@ -91,6 +94,12 @@ import NewsletterForm from '../components/NewsletterForm.astro';
   .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .hp { position: absolute; left: -9999px; }
   @media (max-width: 760px) { .ev-grid, .ev-form-grid { grid-template-columns: 1fr; } .ev-date { justify-self: start; } }
+  .ev-camps { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 14px; }
+  .ev-camps span { border: 2px solid rgba(255,255,255,0.7); color: #fff; padding: 5px 12px; font-weight: 700; }
+  .ev-camps span b { color: #ff6b78; margin-left: 6px; }
+  .mon-camp { border: 4px solid var(--rouge); padding: 18px 20px; margin-top: 18px; }
+  .mon-camp small { display: block; color: var(--gris); font-weight: 600; }
+  .mon-camp strong { display: block; font-size: 2.2rem; line-height: 1; letter-spacing: -0.03em; color: var(--rouge); margin-top: 4px; }
 </style>
 
 <script>
@@ -121,13 +130,22 @@ import NewsletterForm from '../components/NewsletterForm.astro';
     $('evWhen').innerHTML = `${esc(fmt.long(ev.starts_at))}, ${when(ev)}<br>${esc(ev.location)}`;
     document.title = `${ev.title} — Parlement JPV`;
     if (ev.description) { $('evDesc').textContent = ev.description; $('evDesc').hidden = false; }
+    const showCamp = (camp: string | null | undefined) => {
+      const box = $('monCamp');
+      if (!camp) { box.classList.add('hidden'); return; }
+      box.innerHTML = `<small>Ton camp, tiré au sort</small><strong>${esc(camp)}</strong>`; box.classList.remove('hidden');
+    };
+    if (ev.camps?.length) {
+      $('evCamps').innerHTML = ev.camps.map((k) => `<span>${esc(k)}${c.par_camp?.[k] ? `<b>${c.par_camp[k]}</b>` : ''}</span>`).join('');
+      $('evCamps').hidden = false; $('evCampsInfo').classList.remove('hidden');
+    }
     if (c.oui || ev.capacity) { $('evCount').textContent = `${c.oui} participant${c.oui > 1 ? 's' : ''}${ev.capacity ? ` sur ${ev.capacity} places` : ''}${full ? ' — complet' : ''}`; $('evCount').hidden = false; }
     const others = evs.filter((e) => e.id !== ev.id);
     if (others.length) { $('evOthers').hidden = false; $('evOthersList').innerHTML = others.map((e) => eventRow(e, { counts: counts[e.id] })).join(''); }
 
     const sb = getSupabase();
     const session = await getSession();
-    let existing: { reponse: string } | null = null;
+    let existing: { reponse: string; camp?: string | null } | null = null;
     if (session) {
       const p = await getProfile(session.user.id);
       (form.elements.namedItem('prenom') as HTMLInputElement).value = p?.prenom || '';
@@ -137,12 +155,13 @@ import NewsletterForm from '../components/NewsletterForm.astro';
       (form.elements.namedItem('telephone') as HTMLInputElement).value = p?.telephone || '';
       // Consentement déjà donné à la création du compte
       const rg = form.elements.namedItem('rgpd') as HTMLInputElement; rg.checked = true; (rg.closest('label') as HTMLElement).classList.add('hidden');
-      const { data } = await sb.from('event_signups').select('reponse').eq('event_key', ev.id).eq('user_id', session.user.id).maybeSingle();
+      const { data } = await sb.from('event_signups').select('reponse, camp').eq('event_key', ev.id).eq('user_id', session.user.id).maybeSingle();
       existing = data;
       if (existing) {
         (form.querySelector(`input[value=${existing.reponse}]`) as HTMLInputElement).checked = true;
         show(`Tu as déjà répondu : <strong>${existing.reponse === 'oui' ? 'je viens' : 'je ne viens pas'}</strong>. Tu peux changer ta réponse.`, 'info');
         $('evSubmit').textContent = 'Changer ma réponse';
+        showCamp(existing.camp);
       }
     }
     if (full && existing?.reponse !== 'oui') {
@@ -158,19 +177,23 @@ import NewsletterForm from '../components/NewsletterForm.astro';
       if (fd.get('website')) return;
       const btn = $('evSubmit') as HTMLButtonElement; btn.disabled = true; show('Envoi…', 'info');
       const reponse = String(fd.get('reponse')) as 'oui' | 'non';
-      const row = { event_key: ev.id, reponse, prenom: String(fd.get('prenom')).trim(), nom: String(fd.get('nom')).trim(), classe: String(fd.get('classe')).trim(), email: String(fd.get('email')).trim().toLowerCase(), telephone: String(fd.get('telephone')).trim(), user_id: session?.user.id ?? null };
-      const { error } = existing && session
-        ? await sb.from('event_signups').update({ reponse }).eq('event_key', ev.id).eq('user_id', session.user.id)
-        : await sb.from('event_signups').insert(row);
+      const prenom = String(fd.get('prenom')).trim();
+      const { data: res, error } = await sb.rpc('repondre_evenement', {
+        p_event: ev.id, p_reponse: reponse, p_prenom: prenom, p_nom: String(fd.get('nom')).trim(), p_classe: String(fd.get('classe')).trim(),
+        p_email: String(fd.get('email')).trim().toLowerCase(), p_telephone: String(fd.get('telephone') || '').trim(),
+      });
       btn.disabled = false;
-      if (error?.code === '23505') { show(`Cette adresse a déjà répondu pour « ${esc(ev.title)} ». Pour changer ta réponse, <a class="link" href="${u('/connexion')}?next=${encodeURIComponent(location.pathname + location.search)}">connecte-toi</a>.`, 'info'); return; }
-      if (error) { show("Ta réponse n'a pas pu être enregistrée. Vérifie les champs et réessaie.", 'err'); return; }
+      if (res?.statut === 'deja') { show(`Cette adresse a déjà répondu pour « ${esc(ev.title)} ». Pour changer ta réponse, <a class="link" href="${u('/connexion')}?next=${encodeURIComponent(location.pathname + location.search)}">connecte-toi</a>.`, 'info'); return; }
+      if (error || !res) { show("Ta réponse n'a pas pu être enregistrée. Vérifie les champs et réessaie.", 'err'); return; }
       const before = existing?.reponse;
-      existing = { reponse };
+      existing = { reponse, camp: res.camp };
       if (before !== reponse) { if (reponse === 'oui') c.oui++; else if (before === 'oui') c.oui--; }
+      if (res.camp) c.par_camp = { ...c.par_camp, [res.camp]: (c.par_camp?.[res.camp] || 0) + (before === 'oui' ? 0 : 1) };
       $('evCount').textContent = `${c.oui} participant${c.oui > 1 ? 's' : ''}${ev.capacity ? ` sur ${ev.capacity} places` : ''}`; $('evCount').hidden = false;
       $('evSubmit').textContent = 'Changer ma réponse';
-      show(reponse === 'oui' ? `C'est noté, ${esc(row.prenom)} : on t'attend le ${esc(fmt.long(ev.starts_at))} !` : `C'est noté, ${esc(row.prenom)}. Merci d'avoir prévenu.`, 'ok');
+      showCamp(res.camp);
+      const row = { prenom };
+      show(reponse === 'oui' ? `C'est noté, ${esc(row.prenom)} : on t'attend le ${esc(fmt.long(ev.starts_at))}${res.camp ? ` dans le camp « ${esc(res.camp)} »` : ''} !` : `C'est noté, ${esc(row.prenom)}. Merci d'avoir prévenu.`, 'ok');
     });
   })();
 </script>

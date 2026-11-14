@@ -71,6 +71,18 @@ import Base from '../layouts/Base.astro';
             <div class="field"><label for="ev-loc">Lieu</label><input id="ev-loc" name="location" required maxlength="140" value="Salle Samuel Paty" /></div>
             <div class="field"><label for="ev-cap">Places max <small>(facultatif)</small></label><input id="ev-cap" name="capacity" type="number" min="1" placeholder="illimité" /></div>
           </div>
+          <fieldset class="camps-field">
+            <legend>Camps du débat <small>(les participants sont répartis au hasard, de façon équilibrée)</small></legend>
+            <div class="form-row">
+              <div class="field"><label for="ev-c1">Camp 1</label><input id="ev-c1" name="camp1" maxlength="40" value="Pour" /></div>
+              <div class="field"><label for="ev-c2">Camp 2</label><input id="ev-c2" name="camp2" maxlength="40" value="Contre" /></div>
+            </div>
+            <div class="form-row">
+              <div class="field"><label for="ev-c3">Camp 3 <small>(facultatif)</small></label><input id="ev-c3" name="camp3" maxlength="40" placeholder="ex. Nuancé" /></div>
+              <div class="field"><label for="ev-c4">Camp 4 <small>(facultatif)</small></label><input id="ev-c4" name="camp4" maxlength="40" /></div>
+            </div>
+            <label class="checkbox"><input type="checkbox" name="sansCamps" id="ev-nocamp" /><span>Pas de camps pour cet événement (conférence, visite…)</span></label>
+          </fieldset>
           <div class="field"><label for="ev-desc">Description <small>(facultatif)</small></label><textarea id="ev-desc" name="description" maxlength="2000" style="min-height:90px;" placeholder="La motion, le format, ce qu'il faut préparer…"></textarea></div>
           <div id="evAdminMsg"></div>
           <div class="flex"><button class="btn btn-primary" type="submit" id="evSave">Publier l'événement</button><button class="btn btn-outline hidden" type="button" id="evCancel">Annuler la modification</button></div>
@@ -124,6 +136,13 @@ import Base from '../layouts/Base.astro';
   .mm-tag { cursor: pointer; border: 0; font: inherit; font-size: 0.8rem; } .mm-tag.active { background: var(--nuit); color: #fff; }
   .mm-hist { padding: 6px 0; border-bottom: 1px solid var(--pierre-fonce); } .mm-hist summary { cursor: pointer; }
   .del-user { background: var(--rouge); border-color: var(--rouge); }
+  .camps-field { border: 2px solid var(--pierre-fonce); padding: 12px 14px 4px; margin: 0; }
+  .camps-field legend { font-weight: 800; padding: 0 6px; }
+  .camps-field legend small { font-weight: 400; color: var(--gris); }
+  .camps-field:has(#ev-nocamp:checked) .form-row { opacity: 0.35; pointer-events: none; }
+  .ev-campstats { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+  .ev-campstats span { background: var(--pierre); padding: 3px 10px; font-weight: 700; font-size: 0.9rem; }
+  .ev-campstats b { color: var(--rouge); }
 </style>
 <script>
   import { getSupabase } from '../lib/supabase';
@@ -260,7 +279,10 @@ import Base from '../layouts/Base.astro';
       const fd = new FormData(evForm); const id = String(fd.get('id') || '');
       const date = String(fd.get('date')), start = String(fd.get('start')), end = String(fd.get('end') || '');
       if (end && end < start) { evShow("L'heure de fin doit être après l'heure de début."); return; }
-      const row = { title: String(fd.get('title')).trim(), type: String(fd.get('type')), starts_at: paris(date, start), ends_at: end ? paris(date, end) : null, location: String(fd.get('location')).trim(), capacity: fd.get('capacity') ? Number(fd.get('capacity')) : null, description: String(fd.get('description') || '').trim() || null, created_by: session.user.id };
+      const camps = fd.get('sansCamps') ? [] : ['camp1', 'camp2', 'camp3', 'camp4'].map((k) => String(fd.get(k) || '').trim()).filter(Boolean);
+      if (!fd.get('sansCamps') && camps.length < 2) { evShow('Indique au moins deux camps (Camp 1 et Camp 2), ou coche « Pas de camps ».'); return; }
+      if (new Set(camps.map((k) => k.toLowerCase())).size !== camps.length) { evShow('Deux camps portent le même nom.'); return; }
+      const row = { title: String(fd.get('title')).trim(), type: String(fd.get('type')), starts_at: paris(date, start), ends_at: end ? paris(date, end) : null, location: String(fd.get('location')).trim(), capacity: fd.get('capacity') ? Number(fd.get('capacity')) : null, description: String(fd.get('description') || '').trim() || null, camps, created_by: session.user.id };
       const btn = document.getElementById('evSave') as HTMLButtonElement; btn.disabled = true;
       const { error } = id ? await sb.from('events').update(row).eq('id', id) : await sb.from('events').insert(row);
       btn.disabled = false;
@@ -271,7 +293,7 @@ import Base from '../layouts/Base.astro';
     async function loadEvents() {
       const [{ data: evs }, { data: regs }] = await Promise.all([
         sb.from('events').select('*').order('starts_at', { ascending: false }),
-        sb.from('event_signups').select('event_key, reponse, prenom, nom, classe, email, telephone').order('created_at'),
+        sb.from('event_signups').select('event_key, reponse, camp, prenom, nom, classe, email, telephone').order('created_at'),
       ]);
       const by: Record<string, any[]> = {};
       (regs || []).forEach((r: any) => (by[r.event_key] ||= []).push(r));
@@ -285,7 +307,10 @@ import Base from '../layouts/Base.astro';
           <div class="flex between"><div><span class="pill">${esc(ev.type)}</span> <strong>${esc(ev.title)}</strong><br><span class="small muted">${new Date(ev.starts_at).toLocaleString('fr-FR', { dateStyle: 'full', timeStyle: 'short', timeZone: 'Europe/Paris' })} · ${esc(ev.location)}${past ? ' · passé' : ''}</span></div>
           <div class="flex" style="gap:6px;"><button class="btn btn-outline btn-sm ev-edit" data-id="${ev.id}" type="button">Modifier</button><button class="btn btn-outline btn-sm ev-del" data-id="${ev.id}" type="button">Supprimer</button></div></div>
           <div class="ev-stats"><b>${oui.length}</b> viennent${ev.capacity ? ` / ${ev.capacity} places` : ''} · <b>${non.length}</b> ne viennent pas</div>
-          <details><summary>Voir les réponses</summary><div class="ev-cols"><div><h4>Je viens</h4>${list(oui)}</div><div><h4>Je ne viens pas</h4>${list(non)}</div></div>
+          ${(ev.camps || []).length ? `<div class="ev-campstats">${ev.camps.map((k: string) => `<span>${esc(k)} <b>${oui.filter((r) => r.camp === k).length}</b></span>`).join('')}</div>` : ''}
+          <details><summary>Voir les réponses</summary><div class="ev-cols">${(ev.camps || []).length
+            ? ev.camps.map((k: string) => `<div><h4>Camp « ${esc(k)} »</h4>${list(oui.filter((r) => r.camp === k))}</div>`).join('') + (oui.some((r) => !ev.camps.includes(r.camp)) ? `<div><h4>Sans camp</h4>${list(oui.filter((r) => !ev.camps.includes(r.camp)))}</div>` : '')
+            : `<div><h4>Je viens</h4>${list(oui)}</div>`}<div><h4>Je ne viens pas</h4>${list(non)}</div></div>
           ${rs.length ? `<button class="btn btn-outline btn-sm mt-1 ev-csv" data-id="${ev.id}" type="button">Exporter (CSV)</button>` : ''}</details>
         </div>`;
       }).join('') || '<p class="muted">Aucun événement pour l\'instant. Crée le premier avec le formulaire.</p>';
@@ -300,13 +325,15 @@ import Base from '../layouts/Base.astro';
         const s0 = parisParts(ev.starts_at), e0 = ev.ends_at ? parisParts(ev.ends_at) : null;
         const set = (n: string, v: string) => ((evForm.elements.namedItem(n) as HTMLInputElement).value = v);
         set('id', ev.id); set('title', ev.title); set('type', ev.type); set('date', s0.date); set('start', s0.time); set('end', e0 ? e0.time : ''); set('location', ev.location); set('capacity', ev.capacity ? String(ev.capacity) : ''); set('description', ev.description || '');
+        const cs = ev.camps || []; ['camp1', 'camp2', 'camp3', 'camp4'].forEach((k, i) => set(k, cs[i] || ''));
+        (evForm.elements.namedItem('sansCamps') as HTMLInputElement).checked = cs.length === 0;
         document.getElementById('evFormTitle')!.textContent = 'Modifier l\'événement'; document.getElementById('evSave')!.textContent = 'Enregistrer les modifications'; document.getElementById('evCancel')!.classList.remove('hidden');
         evMsg.innerHTML = ''; evForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }));
       box.querySelectorAll<HTMLButtonElement>('.ev-csv').forEach((b) => b.addEventListener('click', () => {
         const ev: any = (evs || []).find((x: any) => x.id === b.dataset.id); const rs = by[b.dataset.id!] || [];
         const q = (v: unknown) => `"${String(v ?? '').replace(/"/g, '""')}"`;
-        const csv = 'reponse;prenom;nom;classe;email;telephone\n' + rs.map((r: any) => [r.reponse === 'oui' ? 'vient' : 'ne vient pas', r.prenom, r.nom, r.classe, r.email, r.telephone].map(q).join(';')).join('\n');
+        const csv = 'reponse;camp;prenom;nom;classe;email;telephone\n' + rs.map((r: any) => [r.reponse === 'oui' ? 'vient' : 'ne vient pas', r.camp || '', r.prenom, r.nom, r.classe, r.email, r.telephone].map(q).join(';')).join('\n');
         const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv' })); a.download = `reponses-${(ev?.title || 'evenement').toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 40)}.csv`; a.click();
       }));
     }

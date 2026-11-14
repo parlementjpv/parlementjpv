@@ -10,8 +10,9 @@ export interface Ev {
   location: string;
   description: string | null;
   capacity: number | null;
+  camps: string[];
 }
-export interface Counts { oui: number; non: number }
+export interface Counts { oui: number; non: number; par_camp: Record<string, number> }
 
 export const EVENT_TYPES = ['Débat', 'Conférence', 'Atelier', 'Concours', 'Visite', 'Séance', 'Événement'];
 
@@ -43,7 +44,7 @@ export async function fetchCounts(): Promise<Record<string, Counts>> {
   if (!supabaseConfigured) return {};
   const { data } = await getSupabase().rpc('event_counts');
   const out: Record<string, Counts> = {};
-  (data || []).forEach((c: { event_key: string; oui: number; non: number }) => (out[c.event_key] = { oui: Number(c.oui), non: Number(c.non) }));
+  (data || []).forEach((c: any) => (out[c.event_key] = { oui: Number(c.oui), non: Number(c.non), par_camp: c.par_camp || {} }));
   return out;
 }
 
@@ -57,6 +58,7 @@ export function eventRow(e: Ev, opts: { counts?: Counts; respond?: boolean } = {
       <div class="flex" style="gap:8px;"><span class="pill">${esc(e.type)}</span>${n ? `<span class="small muted">${n} participant${n > 1 ? 's' : ''}${e.capacity ? ` / ${e.capacity}` : ''}</span>` : ''}</div>
       <h3>${esc(e.title)}</h3>
       <div class="meta">${when(e)} · ${esc(e.location)}</div>
+      ${e.camps?.length ? `<div class="meta">Camps tirés au sort : ${e.camps.map(esc).join(' / ')}</div>` : ''}
       ${opts.respond === false ? '' : `<a class="btn ${full ? 'btn-outline' : 'btn-primary'} btn-sm mt-1" href="${u('/evenement')}?e=${e.id}">${full ? 'Complet — voir' : 'Je réponds'}</a>`}
     </div>
   </article>`;
