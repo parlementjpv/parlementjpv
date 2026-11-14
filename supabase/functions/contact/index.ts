@@ -1,4 +1,4 @@
-import { admin, resend, json, isEmail, checkTurnstile, esc, layout, FROM, BUREAU_EMAIL, cors, readJson } from '../_shared/lib.ts';
+import { admin, sendMail, json, isEmail, checkTurnstile, esc, layout, FROM, BUREAU_EMAIL, cors, readJson } from '../_shared/lib.ts';
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors(req) });
@@ -10,7 +10,7 @@ Deno.serve(async (req) => {
   if (!(await checkTurnstile(b.turnstileToken, req))) return json(req, 400, { error: 'Vérification anti-robot échouée.' });
   await admin().from('contact_messages').insert({ nom, email, sujet, message });
   try {
-    await resend().emails.send({
+    await sendMail({
       from: FROM, to: BUREAU_EMAIL, replyTo: email, subject: `[Contact] ${sujet} — ${nom}`,
       html: layout({ title: `Nouveau message : ${sujet}`, body: `<p><strong>${esc(nom)}</strong> &lt;${esc(email)}&gt;</p><p style="white-space:pre-wrap;">${esc(message)}</p>` }),
     });

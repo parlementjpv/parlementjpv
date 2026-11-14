@@ -2,7 +2,7 @@
 
 Site du Parlement JPV (lycée Jean-Pierre Vernant, Sèvres) : vitrine, agenda, actualités, rapports, **inscription sécurisée**, **newsletter double opt-in**, **candidatures en ligne**, **espace membre** et **espace bureau**.
 
-Stack 100 % gratuite : [Astro](https://astro.build) (site statique) · [Supabase](https://supabase.com) (auth + base Postgres, UE) · [Resend](https://resend.com) (emails) · GitHub Pages (hébergement) + Supabase Edge Functions (serveur) · Cloudflare Turnstile (anti-robots, facultatif).
+Stack 100 % gratuite : [Astro](https://astro.build) (site statique) · [Supabase](https://supabase.com) (auth + base Postgres, UE) · Gmail (emails, via SMTP) · GitHub Pages (hébergement) + Supabase Edge Functions (serveur) · Cloudflare Turnstile (anti-robots, facultatif).
 
 ```
 src/pages/        pages du site (.astro) — une par URL
@@ -24,10 +24,11 @@ supabase/schema.sql tables + règles de sécurité (RLS)
 5. **Authentication → Email Templates** : traduis en français si tu veux (objet + texte). Pour que ces emails partent via Resend (et pas via le SMTP limité de Supabase), **Project Settings → Auth → SMTP** : host `smtp.resend.com`, port 465, user `resend`, password = ta clé API Resend, sender = `noreply@ton-domaine`.
 6. **Project Settings → API** : note `Project URL`, `anon public` et `service_role` (secret !).
 
-### 2. Resend (envoi d'emails)
-1. Crée un compte, ajoute ton domaine (ou utilise `onboarding@resend.dev` pour tester : envoi uniquement vers ton propre email).
-2. **API Keys → Create** : note la clé `re_…`.
-3. Gratuit : 3 000 emails / mois, 100 / jour.
+### 2. Emails (Gmail)
+Tous les emails (comptes, newsletter, contact, candidatures) partent de parlementjpv@gmail.com.
+1. Compte Google parlementjpv : activer la validation en deux étapes, puis créer un mot de passe d'application (myaccount.google.com/apppasswords).
+2. Supabase → Authentication → Emails → SMTP : `smtp.gmail.com`, port 465, utilisateur `parlementjpv@gmail.com`, mot de passe d'application.
+3. Secrets des fonctions : `SMTP_USER` et `SMTP_PASS` (mêmes valeurs). Limite Gmail : environ 500 emails par jour.
 
 ### 3. Cloudflare Turnstile (facultatif, recommandé)
 Dashboard Cloudflare → Turnstile → Add site → note *Site key* et *Secret key*. Sans ça, les formulaires fonctionnent mais sans protection anti-robots.
@@ -36,7 +37,7 @@ Dashboard Cloudflare → Turnstile → Add site → note *Site key* et *Secret k
 ```bash
 npx supabase login                      # ou SUPABASE_ACCESS_TOKEN=sbp_...
 npx supabase link --project-ref waqaeyclhwhnnmvlfoau
-npx supabase secrets set RESEND_API_KEY=re_... BUREAU_EMAIL=parlementjpv@gmail.com SITE_URL=https://parlementjpv.github.io "MAIL_FROM=Parlement JPV <onboarding@resend.dev>"
+npx supabase secrets set SMTP_USER=parlementjpv@gmail.com SMTP_PASS=xxxxxxxxxxxxxxxx BUREAU_EMAIL=parlementjpv@gmail.com SITE_URL=https://parlementjpv.github.io/parlementjpv
 npx supabase functions deploy           # déploie les 8 fonctions
 ```
 
@@ -75,6 +76,6 @@ npm run dev            # http://localhost:4321  (fonctions serveur en local : `n
 - Plus aucun mot de passe dans le code (la v1 avait les identifiants du bureau en clair dans `Espace-bureau.html`, lisibles par tous).
 - Mots de passe hachés par Supabase Auth, sessions JWT, confirmation d'email, réinitialisation sécurisée.
 - Row Level Security : chaque membre ne lit que ses données ; candidatures, abonnés et messages réservés au bureau ; changement de rôle réservé aux admins et vérifié côté serveur.
-- Clé `service_role` et clé Resend uniquement dans les secrets des Edge Functions, jamais dans le code.
+- Clé `service_role` et mot de passe Gmail uniquement dans les secrets des Edge Functions, jamais dans le code.
 - Newsletter en double opt-in, lien de désinscription dans chaque email + en-tête `List-Unsubscribe` (RGPD / anti-spam).
 - Plus de Google Analytics ni de cookies tiers → plus de bannière cookies nécessaire.

@@ -122,8 +122,8 @@ import Base from '../layouts/Base.astro';
       const id = await save(); if (!id) return;
       if (!confirm(`Envoyer « ${val().subject} » à ${st?.confirmes ?? 0} abonné·e·s ? Cette action est définitive.`)) return;
       show('Envoi en cours…', 'info');
-      const r = await postJSON<{ sent: number }>('/api/newsletter-send', { newsletterId: id }, session.access_token);
-      show(r.ok ? `Envoyé à ${r.data.sent} abonné·e·s.` : r.error!, r.ok ? 'ok' : 'err'); if (r.ok) { f.reset(); await listNl(); }
+      const r = await postJSON<{ sent: number; failed: number }>('/api/newsletter-send', { newsletterId: id }, session.access_token);
+      show(r.ok ? `Envoyé à ${r.data.sent} abonné·e·s.${r.data.failed ? ` ${r.data.failed} adresse(s) en échec.` : ''}` : r.error!, r.ok ? 'ok' : 'err'); if (r.ok) { f.reset(); await listNl(); }
     });
     async function listNl() {
       const { data } = await sb.from('newsletters').select('id, subject, sent_at, recipients, created_at').order('created_at', { ascending: false }).limit(30);

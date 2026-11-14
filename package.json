@@ -10,8 +10,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.0",
-    "astro": "^5.7.0",
-    "resend": "^4.5.0"
+    "astro": "^5.7.0"
   },
   "devDependencies": {
     "@astrojs/sitemap": "^3.7.4",

@@ -1,8 +1,8 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
-import { Resend } from 'npm:resend@4';
+import nodemailer from 'npm:nodemailer@6';
 
 export const SITE = (Deno.env.get('SITE_URL') || 'https://parlementjpv.github.io').replace(/\/$/, '');
-export const FROM = Deno.env.get('MAIL_FROM') || 'Parlement JPV <onboarding@resend.dev>';
+export const FROM = Deno.env.get('MAIL_FROM') || `Parlement JPV <${Deno.env.get('SMTP_USER') || 'parlementjpv@gmail.com'}>`;
 export const BUREAU_EMAIL = Deno.env.get('BUREAU_EMAIL') || 'parlementjpv@gmail.com';
 
 const ALLOWED_ORIGINS = [SITE, 'https://parlementjpv.github.io', 'http://localhost:4321'];
@@ -33,10 +33,17 @@ export async function userFromRequest(req: Request) {
   return { user: data.user, profile };
 }
 
-export function resend() {
-  const key = Deno.env.get('RESEND_API_KEY');
-  if (!key) throw new Error('RESEND_API_KEY manquant');
-  return new Resend(key);
+type Mail = { from?: string; to: string; subject: string; html: string; text?: string; replyTo?: string; headers?: Record<string, string> };
+let transport: ReturnType<typeof nodemailer.createTransport> | null = null;
+
+/** Envoi d'emails via Gmail (SMTP, port 465 SSL). Identifiants dans les secrets SMTP_USER / SMTP_PASS. */
+export async function sendMail(m: Mail) {
+  if (!transport) {
+    const user = Deno.env.get('SMTP_USER'), pass = Deno.env.get('SMTP_PASS');
+    if (!user || !pass) throw new Error('SMTP_USER / SMTP_PASS manquants');
+    transport = nodemailer.createTransport({ host: Deno.env.get('SMTP_HOST') || 'smtp.gmail.com', port: 465, secure: true, auth: { user, pass } });
+  }
+  return await transport.sendMail({ from: m.from || FROM, to: m.to, subject: m.subject, html: m.html, text: m.text, replyTo: m.replyTo, headers: m.headers });
 }
 
 export const json = (req: Request, status: number, body: unknown) =>

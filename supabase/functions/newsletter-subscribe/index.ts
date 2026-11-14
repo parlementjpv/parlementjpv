@@ -1,4 +1,4 @@
-import { admin, resend, json, isEmail, checkTurnstile, layout, button, SITE, FROM, cors, readJson } from '../_shared/lib.ts';
+import { admin, sendMail, json, isEmail, checkTurnstile, layout, button, SITE, FROM, cors, readJson } from '../_shared/lib.ts';
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors(req) });
@@ -21,11 +21,11 @@ Deno.serve(async (req) => {
   }
   const confirmUrl = `${Deno.env.get('SUPABASE_URL')}/functions/v1/newsletter-confirm?token=${token}`;
   try {
-    await resend().emails.send({
+    await sendMail({
       from: FROM, to: email, subject: 'Confirme ton inscription à la lettre du Parlement JPV',
       html: layout({ title: 'Une dernière étape', body: `<p>Pour recevoir la lettre du Parlement JPV, confirme ton adresse en cliquant ci-dessous.</p>${button(confirmUrl, 'Confirmer mon inscription')}<p style="font-size:13px;color:#5d6477;">Si tu n'es pas à l'origine de cette demande, ignore cet email : rien ne te sera envoyé.</p>` }),
       text: `Confirme ton inscription : ${confirmUrl}`,
     });
-  } catch (e) { console.error('resend', e); return json(req, 500, { error: "L'email de confirmation n'a pas pu être envoyé." }); }
+  } catch (e) { console.error('mail', e); return json(req, 500, { error: "L'email de confirmation n'a pas pu être envoyé." }); }
   return json(req, 200, { message: 'Presque fini : clique sur le lien reçu par email pour confirmer ton inscription.' });
 });
