@@ -22,15 +22,14 @@ Deno.serve(async (req) => {
   if (!people?.length) return json(req, 400, { error: 'Destinataires introuvables.' });
 
   const from = `${me.profile?.prenom || ''} ${me.profile?.nom || ''}`.trim() || 'Le bureau';
-  const role = me.profile?.role === 'admin' ? 'administration' : 'bureau';
   const html = (prenom: string) => layout({
     title: subject,
-    body: `<p>Bonjour ${esc(prenom)},</p><div style="white-space:pre-wrap;">${esc(body)}</div><p style="margin-top:24px;color:#5d6477;font-size:14px;">${esc(from)} — ${role} du Parlement JPV<br>Pour répondre, réponds simplement à cet email.</p>`,
+    body: `<p>Bonjour ${esc(prenom)},</p><div style="white-space:pre-wrap;">${esc(body)}</div><p style="margin-top:24px;">Le bureau du Parlement JPV</p><p style="color:#5d6477;font-size:14px;">Pour répondre, réponds simplement à cet email.</p>`,
   });
 
   let sent = 0; const failed: string[] = [];
   for (const p of people) {
-    try { await sendMail({ to: p.email, subject, html: html(p.prenom), text: `Bonjour ${p.prenom},\n\n${body}\n\n${from} — ${role} du Parlement JPV`, replyTo: BUREAU_EMAIL }); sent++; }
+    try { await sendMail({ to: p.email, subject, html: html(p.prenom), text: `Bonjour ${p.prenom},\n\n${body}\n\nLe bureau du Parlement JPV`, replyTo: BUREAU_EMAIL }); sent++; }
     catch (e) { console.error('envoi', p.email, e); failed.push(p.email); }
   }
   await db.from('member_messages').insert({ subject, body, recipients: people.map((p) => p.email), sent_count: sent, sender_id: me.user.id, sender_name: from });
