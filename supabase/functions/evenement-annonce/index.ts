@@ -1,4 +1,5 @@
 import { admin, sendMail, json, esc, layout, button, FROM, cors, readJson, userFromRequest } from '../_shared/lib.ts';
+const SUPA = Deno.env.get('SUPABASE_URL')!;
 import { fiche, lienEvenement, type Ev } from '../_shared/evenement.ts';
 
 // Annonce d'une nouvelle séance à tous les membres de l'instance (une seule fois par événement)
@@ -19,7 +20,7 @@ Deno.serve(async (req) => {
   if (!lock?.length) return json(req, 200, { ok: true, deja: true, envoyes: 0 });
 
   const [{ data: membres }, { data: bannis }] = await Promise.all([
-    db.from('adhesions').select('prenom, email, user_id'),
+    db.from('adhesions').select('prenom, email, user_id, desabo_token').eq('annonces', true),
     db.from('profiles').select('id').eq('banni', true),
   ]);
   const exclus = new Set((bannis || []).map((p) => p.id));
@@ -33,7 +34,9 @@ Deno.serve(async (req) => {
         html: layout({ title: `${m.prenom}, une nouvelle séance est programmée`, body:
           `<p>Le bureau vient de publier une nouvelle séance du Parlement JPV.</p>${fiche(ev)}
            <p>Dis-nous si tu viens : ça prend dix secondes${ev.camps?.length ? ', et ton camp sera tiré au sort' : ''}.</p>
-           ${button(lienEvenement(ev), 'Je réponds')}` }),
+           ${button(lienEvenement(ev), 'Je réponds')}
+           <p style="color:#555;font-size:13px;">Tu reçois cet email parce que tu es membre du Parlement JPV. <a href="${SUPA}/functions/v1/annonces-stop?t=${m.desabo_token}" style="color:#555;">Ne plus recevoir les annonces de séances</a>.</p>` }),
+        headers: { 'List-Unsubscribe': `<${SUPA}/functions/v1/annonces-stop?t=${m.desabo_token}>` },
       });
       envoyes++;
     } catch (e) { console.error(e); echecs.push(m.email); }

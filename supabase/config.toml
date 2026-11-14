@@ -31,3 +31,6 @@ verify_jwt = false
 
 [functions.evenement-annuler]
 verify_jwt = false
+
+[functions.annonces-stop]
+verify_jwt = false

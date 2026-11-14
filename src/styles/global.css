@@ -227,3 +227,4 @@ h4 { font-size: 1.1rem; }
 hr.sep { border: 0; border-top: 2px solid var(--pierre-fonce); margin: 36px 0; }
 
 .resend { margin-top: 10px; }
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }

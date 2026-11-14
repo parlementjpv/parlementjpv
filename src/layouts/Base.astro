@@ -55,9 +55,9 @@ const turnstile = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
   <meta property="og:url" content={canonical} />
   <meta property="og:locale" content="fr_FR" />
   <meta name="twitter:card" content="summary_large_image" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&display=swap" rel="stylesheet" />
+  <!-- Police hébergée sur le site (aucune requête vers Google) -->
+  <link rel="preload" href="/fonts/bricolage-grotesque-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <style is:inline set:html={`@font-face{font-family:'Bricolage Grotesque';font-style:normal;font-display:swap;font-weight:200 800;font-stretch:75% 100%;src:url(${base}/fonts/bricolage-grotesque-latin.woff2) format('woff2');}`}></style>
   <script is:inline>
     (function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);var m=localStorage.getItem('jpv_compte');for(var i=0;i<localStorage.length&&!m;i++){if(/^sb-.*-auth-token$/.test(localStorage.key(i)||''))m='1';}if(m)document.documentElement.classList.add('membre');}catch(e){}})();
   </script>

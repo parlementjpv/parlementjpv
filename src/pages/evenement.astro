@@ -58,9 +58,9 @@ import NewsletterForm from '../components/NewsletterForm.astro';
             <div class="field"><label for="ev-classe">Classe</label><input id="ev-classe" name="classe" required placeholder="ex. 2nde 3" maxlength="40" /></div>
             <div class="field"><label for="ev-email">Email</label><input id="ev-email" name="email" type="email" required autocomplete="email" /></div>
           </div>
-          <div class="field"><label for="ev-tel">Téléphone</label><input id="ev-tel" name="telephone" type="tel" required autocomplete="tel" inputmode="tel" pattern="[+0-9 .()\-]{8,20}" placeholder="06 12 34 56 78" /></div>
+          <div class="field"><label for="ev-tel">Téléphone <small>(facultatif)</small></label><input id="ev-tel" name="telephone" type="tel" autocomplete="tel" inputmode="tel" pattern="[+0-9 .()\-]{8,20}" placeholder="06 12 34 56 78" /></div>
           <input type="text" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
-          <label class="checkbox"><input type="checkbox" name="rgpd" required /><span>J'accepte que le bureau utilise ces informations pour organiser l'événement (<a class="link" href="/confidentialite" target="_blank">confidentialité</a>).</span></label>
+          <label class="checkbox"><input type="checkbox" name="rgpd" required /><span>J'accepte que le bureau utilise ces informations pour organiser l'événement (<a class="link" href="/confidentialite" target="_blank">confidentialité</a>) et, si j'ai moins de 15 ans, j'ai l'accord d'un parent.</span></label>
           <div id="evMsg" role="status" aria-live="polite"></div>
           <button class="btn btn-primary" type="submit" id="evSubmit">Envoyer ma réponse</button>
         </form>

@@ -37,6 +37,11 @@ import Base from '../layouts/Base.astro';
         </form>
       </div>
       <div class="card">
+        <h3>Emails</h3>
+        <label class="checkbox"><input type="checkbox" id="annonces" /><span>Recevoir un email à chaque nouvelle séance publiée</span></label>
+        <p class="small muted" id="amsg" style="margin:6px 0 0;">Les emails liés à tes inscriptions (confirmation, annulation) restent envoyés.</p>
+      </div>
+      <div class="card">
         <h3>Mot de passe</h3>
         <a class="btn btn-outline btn-sm" href="/mot-de-passe-oublie">Changer mon mot de passe</a>
       </div>
@@ -77,6 +82,14 @@ import Base from '../layouts/Base.astro';
       const { error } = await sb.from('profiles').update({ prenom: fd.get('prenom'), nom: fd.get('nom'), classe: fd.get('classe'), telephone: tel }).eq('id', session.user.id);
       if (!error) await sb.from('adhesions').update({ prenom: fd.get('prenom'), nom: fd.get('nom'), classe: fd.get('classe') || '?', telephone: tel }).eq('user_id', session.user.id);
       document.getElementById('pmsg')!.innerHTML = error ? `<div class="alert alert-err">${error.message}</div>` : '<div class="alert alert-ok">Enregistré.</div>';
+    });
+
+    // Annonces de séances
+    const ann = document.getElementById('annonces') as HTMLInputElement;
+    sb.rpc('mes_annonces').then(({ data }) => { ann.checked = data !== false; });
+    ann.addEventListener('change', async () => {
+      const { error } = await sb.rpc('mes_annonces', { p_actif: ann.checked });
+      document.getElementById('amsg')!.textContent = error ? "Le réglage n'a pas pu être enregistré." : ann.checked ? 'Tu recevras les annonces des nouvelles séances.' : "Tu ne recevras plus les annonces de séances. Les emails liés à tes inscriptions restent envoyés.";
     });
 
     // Candidature

@@ -2,30 +2,55 @@
 import Base from '../layouts/Base.astro';
 ---
 <Base title="Politique de confidentialité" noindex>
-  <div class="page-head"><div class="container"><span class="eyebrow">Tes données, en clair</span><h1>Politique de confidentialité</h1><p class="muted small">Dernière mise à jour : novembre 2026</p></div></div>
+  <div class="page-head"><div class="container"><span class="eyebrow">Tes données, en clair</span><h1>Politique de confidentialité</h1><p class="muted small">Dernière mise à jour : 14 novembre 2026</p></div></div>
   <section class="section"><div class="container prose">
-    <h2>1. Qui est responsable ?</h2>
-    <p>Le Parlement JPV (lycée Jean-Pierre Vernant, Sèvres), joignable à <a href="mailto:parlementjpv@gmail.com">parlementjpv@gmail.com</a>, est responsable du traitement des données collectées sur ce site.</p>
-    <h2>2. Quelles données, pour quoi faire ?</h2>
-    <table class="table">
-      <thead><tr><th>Service</th><th>Données</th><th>Finalité</th><th>Base légale</th><th>Durée</th></tr></thead>
+    <h2>1. Qui est responsable de tes données ?</h2>
+    <p>Les données collectées sur ce site sont traitées par le <strong>Parlement JPV</strong>, sous l'autorité du chef d'établissement du lycée Jean-Pierre Vernant (21 rue du Docteur Ledermann, 92310 Sèvres). Seuls les membres du bureau du Parlement JPV y ont accès, et uniquement pour faire fonctionner l'instance.</p>
+    <p>Contact : <a href="mailto:parlementjpv@gmail.com">parlementjpv@gmail.com</a>. Tu peux aussi joindre le délégué à la protection des données de l'académie de Versailles : <a href="mailto:dpd@ac-versailles.fr">dpd@ac-versailles.fr</a>.</p>
+
+    <h2>2. Quelles données, pour quoi faire, combien de temps ?</h2>
+    <div class="table-wrap"><table class="table">
+      <thead><tr><th>Service</th><th>Données</th><th>Pourquoi</th><th>Base légale</th><th>Conservées</th></tr></thead>
       <tbody>
-        <tr><td>Newsletter</td><td>Email, date et IP de confirmation</td><td>Envoi d'informations sur les activités</td><td>Consentement (double opt-in)</td><td>Jusqu'à désinscription</td></tr>
-        <tr><td>Compte membre (= adhésion à l'instance)</td><td>Email, prénom, nom, classe, téléphone</td><td>Accès à l'espace membre, inscription aux séances</td><td>Consentement / exécution du service</td><td>Jusqu'à suppression du compte, au plus tard 3 ans après le dernier accès</td></tr>
-        <tr><td>Adhésion sans compte, réponses aux événements</td><td>Prénom, nom, classe, email, téléphone</td><td>Organisation des séances, contact des membres</td><td>Consentement</td><td>Jusqu'à la fin de l'année scolaire suivante</td></tr>
-        <tr><td>Candidature</td><td>Identité, classe, motivations</td><td>Étude de la candidature par le bureau</td><td>Consentement</td><td>1 an après la décision</td></tr>
-        <tr><td>Contact</td><td>Nom, email, message</td><td>Répondre à votre demande</td><td>Intérêt légitime</td><td>1 an</td></tr>
+        <tr><td>Compte membre (= adhésion à l'instance)</td><td>Email, prénom, nom, classe, centres d'intérêt, téléphone (facultatif), mot de passe chiffré</td><td>Espace membre, réponses aux séances, candidatures</td><td>Consentement</td><td>Jusqu'à la suppression du compte ; supprimé automatiquement après 3 ans sans connexion (30 jours s'il n'est jamais activé)</td></tr>
+        <tr><td>Adhésion sans compte</td><td>Prénom, nom, classe, email, téléphone (facultatif), centres d'intérêt</td><td>Faire partie de l'instance et être contacté par le bureau</td><td>Consentement</td><td>Jusqu'à la fin de l'année scolaire suivante</td></tr>
+        <tr><td>Réponses aux séances</td><td>Prénom, nom, classe, email, téléphone (facultatif), réponse, camp tiré au sort</td><td>Organiser la séance, envoyer la confirmation et prévenir en cas d'annulation</td><td>Consentement</td><td>12 mois après la séance</td></tr>
+        <tr><td>Salles de préparation</td><td>Prénom, arguments, sources, messages, votes, rôle de prise de parole</td><td>Préparer le débat avec son camp</td><td>Consentement</td><td>12 mois après la séance</td></tr>
+        <tr><td>Annonces de séances</td><td>Prénom, email</td><td>Prévenir les membres d'une nouvelle séance</td><td>Intérêt légitime de l'instance (désactivable à tout moment)</td><td>Tant que tu es membre</td></tr>
+        <tr><td>Messages du bureau</td><td>Destinataires, objet, texte du message</td><td>Écrire à des membres précis</td><td>Intérêt légitime</td><td>Historique gardé 1 an</td></tr>
+        <tr><td>Candidature au bureau</td><td>Identité, classe, poste visé, motivation, expérience, disponibilités</td><td>Étude de la candidature par le bureau</td><td>Consentement</td><td>1 an après la décision</td></tr>
+        <tr><td>Newsletter</td><td>Email, date et adresse IP de confirmation</td><td>Envoi de la lettre mensuelle</td><td>Consentement (confirmé par email)</td><td>Jusqu'à la désinscription ; 30 jours si l'inscription n'est jamais confirmée</td></tr>
+        <tr><td>Formulaire de contact</td><td>Nom, email, message</td><td>Répondre à ta demande</td><td>Intérêt légitime</td><td>1 an</td></tr>
       </tbody>
-    </table>
-    <h2>3. Cookies et mesure d'audience</h2>
-    <p>Ce site n'utilise <strong>aucun cookie publicitaire ni traceur tiers</strong>. Le seul stockage local concerne votre préférence de thème (clair/sombre) et votre session de connexion si vous avez un compte. La mesure d'audience, si elle est activée, repose sur un outil sans cookie et sans donnée personnelle (statistiques agrégées).</p>
-    <h2>4. Sécurité</h2>
-    <p>Les mots de passe ne sont jamais stockés en clair (hachage bcrypt par Supabase Auth). Les échanges sont chiffrés (HTTPS). L'accès aux données est restreint par des règles de sécurité au niveau de la base (Row Level Security) : chaque membre ne voit que ses propres données ; seul le bureau accède aux candidatures et à la liste des abonnés.</p>
-    <h2>5. Destinataires et sous-traitants</h2>
-    <p>Les données sont accessibles au bureau du Parlement JPV uniquement. Sous-traitants techniques : GitHub Pages (hébergement), Supabase (base de données et authentification, UE), Google Gmail (envoi d'emails), Cloudflare Turnstile (protection anti-robots, sans cookie). Aucune donnée n'est vendue ni cédée.</p>
-    <h2>6. Vos droits</h2>
-    <p>Vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation, d'opposition et de portabilité. Depuis votre espace membre, vous pouvez modifier vos informations et supprimer votre compte. Pour la newsletter, chaque email contient un lien de désinscription immédiate. Pour toute autre demande : <a href="mailto:parlementjpv@gmail.com">parlementjpv@gmail.com</a>. Vous pouvez également saisir la CNIL (<a href="https://www.cnil.fr" target="_blank" rel="noopener">cnil.fr</a>).</p>
-    <h2>7. Mineurs</h2>
-    <p>Le site s'adresse à des lycéens. Conformément à la loi, les élèves de moins de 15 ans doivent disposer de l'accord d'un titulaire de l'autorité parentale pour créer un compte ; une case dédiée figure dans le formulaire d'inscription.</p>
+    </table></div>
+    <p>Ces durées sont appliquées automatiquement : une tâche supprime chaque nuit les données arrivées à échéance.</p>
+
+    <h2>3. Moins de 15 ans</h2>
+    <p>En France, un mineur peut consentir seul au traitement de ses données en ligne à partir de 15 ans (article 45 de la loi Informatique et Libertés). Si tu as moins de 15 ans, tu dois créer ton compte ou t'inscrire avec l'accord d'un de tes parents : c'est ce que tu confirmes en cochant la case du formulaire. Un parent peut à tout moment nous demander la suppression des données de son enfant.</p>
+
+    <h2>4. Cookies et traceurs</h2>
+    <p>Ce site n'utilise <strong>aucun cookie publicitaire, aucun outil de mesure d'audience et aucun traceur</strong>. Il enregistre seulement dans ton navigateur ton choix de thème (clair ou sombre) et ta session de connexion si tu as un compte. Ces éléments sont indispensables au fonctionnement du site et ne nécessitent pas de consentement. La police de caractères est hébergée sur le site lui-même : ton navigateur ne contacte pas Google pour l'afficher.</p>
+
+    <h2>5. Qui reçoit tes données ?</h2>
+    <p>Uniquement le bureau du Parlement JPV. Les membres d'un camp voient le prénom, l'initiale du nom et la classe des autres membres de leur camp. Aucune donnée n'est vendue, louée ni utilisée à des fins publicitaires.</p>
+    <p>Prestataires techniques qui hébergent ou transportent les données pour notre compte :</p>
+    <ul>
+      <li><strong>Supabase</strong> : base de données et comptes, serveurs dans l'Union européenne (Suède) ;</li>
+      <li><strong>Google (Gmail)</strong> : envoi des emails ;</li>
+      <li><strong>GitHub</strong> : hébergement des pages du site (aucune donnée de formulaire n'y est stockée).</li>
+    </ul>
+    <p>Google et GitHub sont des entreprises américaines. Les transferts éventuels de données vers les États-Unis sont encadrés par le cadre de protection des données UE–États-Unis (Data Privacy Framework), auquel ces entreprises ont adhéré, et par les clauses contractuelles types de la Commission européenne.</p>
+
+    <h2>6. Sécurité</h2>
+    <p>Les échanges sont chiffrés (HTTPS) et les mots de passe ne sont jamais stockés en clair. Dans la base de données, des règles d'accès empêchent chaque membre de voir les données des autres ; seul le bureau accède aux listes de membres, aux réponses et aux candidatures. Chaque salle de préparation n'est accessible qu'avec un lien personnel.</p>
+
+    <h2>7. Tes droits</h2>
+    <p>Tu peux accéder à tes données, les corriger, les supprimer, t'opposer à leur utilisation, en limiter l'usage ou les récupérer. Concrètement :</p>
+    <ul>
+      <li>dans « Mon espace », tu modifies tes informations, désactives les annonces de séances ou supprimes ton compte ;</li>
+      <li>chaque newsletter et chaque annonce contient un lien pour ne plus la recevoir ;</li>
+      <li>pour tout le reste, écris à <a href="mailto:parlementjpv@gmail.com">parlementjpv@gmail.com</a> : nous répondons sous un mois.</li>
+    </ul>
+    <p>Si tu estimes que tes droits ne sont pas respectés, tu peux contacter le délégué à la protection des données de l'académie (<a href="mailto:dpd@ac-versailles.fr">dpd@ac-versailles.fr</a>) ou adresser une réclamation à la CNIL (<a href="https://www.cnil.fr/fr/plaintes" target="_blank" rel="noopener">cnil.fr</a>).</p>
   </div></section>
 </Base>
