@@ -8,7 +8,7 @@ export const BUREAU_EMAIL = Deno.env.get('BUREAU_EMAIL') || 'parlementjpv@gmail.
 const ALLOWED_ORIGINS = [SITE, 'https://parlementjpv.github.io', 'http://localhost:4321'];
 export function cors(req: Request) {
   const origin = req.headers.get('origin') || '';
-  const allow = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  const allow = ALLOWED_ORIGINS.includes(origin) || /^http:\/\/localhost:\d+$/.test(origin) ? origin : ALLOWED_ORIGINS[0];
   return {
     'Access-Control-Allow-Origin': allow,
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',

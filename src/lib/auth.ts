@@ -46,6 +46,7 @@ export async function signOut() {
 export function frError(message: string): string {
   const m = message.toLowerCase();
   if (m.includes('invalid login')) return 'Email ou mot de passe incorrect.';
+  if (m.includes('banned')) return 'Ce compte a été suspendu par le bureau du Parlement JPV. Écris-nous via la page Contact si tu penses que c\'est une erreur.';
   if (m.includes('email not confirmed')) return 'Confirme d’abord ton adresse email (vérifie ta boîte de réception).';
   if (m.includes('already registered') || m.includes('already been registered')) return 'Un compte existe déjà avec cet email.';
   if (m.includes('password should be')) return 'Le mot de passe doit contenir au moins 8 caractères.';
