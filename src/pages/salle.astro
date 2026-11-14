@@ -184,6 +184,7 @@ import Base from '../layouts/Base.astro';
 <script>
   import { getSupabase, supabaseConfigured } from '../lib/supabase';
   import { esc, fmt } from '../lib/events';
+  import { posteBadge } from '../lib/poste';
 
   const $ = (id: string) => document.getElementById(id)!;
   const qs = new URLSearchParams(location.search);
@@ -253,7 +254,7 @@ import Base from '../layouts/Base.astro';
     $('lRoles').innerHTML = etat.roles_liste.map((r: string) => { const x: any = parRole.get(r);
       return `<button class="role${x ? (x.moi ? ' moi' : ' pris') : ''}" data-role="${esc(r)}" type="button" ${etat.bureau || (x && !x.moi) ? 'disabled' : ''}><b>${esc(r)}</b><span>${x ? (x.moi ? 'Toi — clique pour libérer' : esc(x.prenom)) : 'Libre — clique pour le prendre'}</span></button>`; }).join('');
 
-    $('lTeam').innerHTML = etat.equipe.map((m: any) => `<span class="${m.moi ? 'moi' : ''}">${esc(m.prenom)} ${esc(m.nom)} · ${esc(m.classe)}</span>`).join('');
+    $('lTeam').innerHTML = etat.equipe.map((m: any) => `<span class="${m.moi ? 'moi' : ''}">${esc(m.prenom)} ${esc(m.nom)} · ${esc(m.classe)}${posteBadge(m.poste)}</span>`).join('');
     $('sTeamCount').textContent = `${etat.equipe.length} participant${etat.equipe.length > 1 ? 's' : ''}`;
 
     const chat = $('lChat'); const enBas = chat.scrollHeight - chat.scrollTop - chat.clientHeight < 40;

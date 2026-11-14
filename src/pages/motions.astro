@@ -56,6 +56,7 @@ import MembreNav from '../components/MembreNav.astro';
 <script>
   import { getSupabase } from '../lib/supabase';
   import { requireMembre } from '../lib/auth';
+  import { posteBadge } from '../lib/poste';
   const esc = (s: unknown) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
   const $ = (id: string) => document.getElementById(id)!;
   (async () => {
@@ -68,7 +69,7 @@ import MembreNav from '../components/MembreNav.astro';
       $('moList').innerHTML = ms.map((x) => `<article class="motion">
           <button class="mvote${x.mon_vote ? ' on' : ''}" data-id="${x.id}" type="button" ${x.statut === 'debattue' || x.statut === 'ecartee' ? 'disabled' : ''} title="${x.mon_vote ? 'Retirer mon vote' : 'Soutenir cette motion'}"><span>${x.votes}</span><small>${x.mon_vote ? 'soutenue' : 'soutenir'}</small></button>
           <div><h3>${esc(x.texte)}</h3>${x.contexte ? `<p>${esc(x.contexte)}</p>` : ''}
-            <div class="meta">${x.statut !== 'proposee' ? `<span class="st ${x.statut}">${ST[x.statut]}</span>` : ''}<span>Proposée par ${esc(x.auteur_nom)} · ${new Date(x.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}</span>
+            <div class="meta">${x.statut !== 'proposee' ? `<span class="st ${x.statut}">${ST[x.statut]}</span>` : ''}<span>Proposée par ${esc(x.auteur_nom)}${posteBadge(x.auteur_poste)} · ${new Date(x.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}</span>
             ${x.mienne && x.statut === 'proposee' ? `<button class="lnk mdel" data-id="${x.id}" type="button">Retirer ma motion</button>` : ''}</div></div></article>`).join('')
         || `<p class="muted">${filtre === 'ouvertes' ? 'Aucune motion à voter pour l\'instant. Propose la première !' : 'Rien ici pour le moment.'}</p>`;
     };

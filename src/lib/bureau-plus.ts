@@ -2,6 +2,7 @@
 import type { SupabaseClient, Session } from '@supabase/supabase-js';
 import { postJSON } from './newsletter';
 import postes from '../data/postes.json';
+import { posteBadge } from './poste';
 
 const esc = (s: unknown) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
 const $ = (id: string) => document.getElementById(id)!;
@@ -16,7 +17,7 @@ const errFr = (m: string) => Object.entries(ERR).find(([k]) => m.includes(k))?.[
 
 export async function initBureauPlus(sb: SupabaseClient, session: Session, me: { id: string; prenom: string; nom: string; role: string }) {
   initAppel(sb, session);
-  initElections(sb);
+  initElections(sb, session);
   initMotions(sb);
   initEntreNous(sb, me);
 }
@@ -92,7 +93,7 @@ async function initAppel(sb: SupabaseClient, session: Session) {
 }
 
 /* ────────────────────────── Élections ────────────────────────── */
-async function initElections(sb: SupabaseClient) {
+async function initElections(sb: SupabaseClient, session: Session) {
   const box = $('elList'), form = $('elForm') as HTMLFormElement, msg = $('elMsg');
   ($('elPoste') as HTMLSelectElement).innerHTML = '<option value="">— Autre / plusieurs postes —</option>' + (postes as { titre: string }[]).map((p) => `<option>${esc(p.titre)}</option>`).join('');
   const show = (t: string, k = 'err') => (msg.innerHTML = `<div class="alert alert-${k}">${t}</div>`);
@@ -156,7 +157,13 @@ async function initElections(sb: SupabaseClient) {
       const conf = { ouvrir: "Ouvrir le vote ? Les candidats ne pourront plus être modifiés. Seuls les membres dont le compte existe déjà pourront voter, une seule fois, à bulletin secret.", clore: 'Clore le vote maintenant ?', publier: 'Publier les résultats à tous les membres ?' }[b.dataset.a as 'ouvrir'];
       if (!confirm(conf)) return;
       const { error } = await sb.rpc('election_action', { p_election: b.dataset.id, p_action: b.dataset.a });
-      if (error) show(errFr(error.message)); else { show(b.dataset.a === 'ouvrir' ? 'Vote ouvert : les membres peuvent voter depuis « Élections ».' : b.dataset.a === 'clore' ? 'Vote clos.' : 'Résultats publiés.', 'ok'); load(); }
+      if (error) { show(errFr(error.message)); return; }
+      if (b.dataset.a === 'publier') {
+        show('Résultats publiés. Envoi des résultats par email à chaque votant…', 'info');
+        const r = await postJSON<{ envoyes: number; deja?: boolean }>('/api/election-resultats', { id: b.dataset.id }, session.access_token);
+        show(r.ok ? `Résultats publiés et envoyés par email à ${r.data.envoyes} votant${r.data.envoyes > 1 ? 's' : ''}.` : `Résultats publiés, mais l'envoi des emails a échoué : ${esc(r.error)}`, r.ok ? 'ok' : 'err');
+      } else show(b.dataset.a === 'ouvrir' ? 'Vote ouvert : les membres peuvent voter depuis « Élections ».' : 'Vote clos. Publie les résultats pour les envoyer à chaque votant.', 'ok');
+      load();
     }
   });
   load();
@@ -194,7 +201,7 @@ async function initEntreNous(sb: SupabaseClient, me: { id: string; prenom: strin
   const membres = (equipe as any[]) || [];
   const nomDe = (id: string | null) => { const m = membres.find((x) => x.id === id); return m ? `${m.prenom} ${(m.nom || '').slice(0, 1)}.` : '—'; };
   ($('tkAssign') as HTMLSelectElement).innerHTML = '<option value="">Personne</option>' + membres.map((m) => `<option value="${m.id}">${esc(m.prenom)} ${esc(m.nom)}</option>`).join('');
-  $('enEquipe').innerHTML = membres.map((m) => `<span class="pill">${esc(m.prenom)} ${esc(m.nom)}${m.role === 'admin' ? ' · admin' : ''}</span>`).join(' ');
+  $('enEquipe').innerHTML = membres.map((m) => `<span class="pill">${esc(m.prenom)} ${esc(m.nom)}${m.role === 'admin' ? ' · admin' : ''}</span>${posteBadge(m.poste)}`).join(' ');
 
   // Tâches
   const tkForm = $('tkForm') as HTMLFormElement, tkBox = $('tkList');

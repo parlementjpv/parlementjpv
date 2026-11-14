@@ -47,16 +47,16 @@ import postes from '../data/postes.json';
     <div class="container election-grid">
       <div>
         <span class="eyebrow">Le bureau</span>
-        <h2>Le nouveau bureau est en cours d'élection.</h2>
-        <p class="lead">Le bureau 2025-2026 a terminé son mandat. Les candidatures sont ouvertes pour tous les postes : la nouvelle équipe sera présentée ici dès sa désignation.</p>
-        <div class="flex mt-3">
+        <h2 id="buTitre">Le nouveau bureau est en cours d'élection.</h2>
+        <p class="lead" id="buLead">Le bureau 2025-2026 a terminé son mandat. Les candidatures sont ouvertes pour tous les postes : la nouvelle équipe sera présentée ici dès sa désignation.</p>
+        <div class="flex mt-3" id="buCta">
           <a class="btn btn-primary" href="/candidature">Candidater au bureau</a>
           <a class="btn btn-outline" href="/candidature#formulaire">Voir le formulaire</a>
         </div>
       </div>
       <div class="seats" aria-label={`${postes.length} postes à pourvoir`}>
         {postes.map((p) => (
-          <div class="seat-row"><span class="dot" aria-hidden="true"></span><span>{p.titre}</span><span class="state">à pourvoir</span></div>
+          <div class="seat-row" data-poste={p.titre}><span class="dot" aria-hidden="true"></span><span class="seat-poste">{p.titre}</span><span class="state">à pourvoir</span></div>
         ))}
       </div>
     </div>
@@ -81,11 +81,39 @@ import postes from '../data/postes.json';
     </div>
   </section>
 </Base>
+<script>
+  // Le bureau se met à jour tout seul à partir des postes attribués par l'administrateur
+  import { getSupabase, supabaseConfigured } from '../lib/supabase';
+  import { u } from '../lib/url';
+  (async () => {
+    if (!supabaseConfigured) return;
+    const { data } = await getSupabase().rpc('bureau_public');
+    const titulaires = new Map(((data as any[]) || []).map((x) => [x.poste, x]));
+    if (!titulaires.size) return;
+    const esc = (v: unknown) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
+    let vacants = 0;
+    document.querySelectorAll<HTMLElement>('.seat-row[data-poste]').forEach((row) => {
+      const t = titulaires.get(row.dataset.poste);
+      const st = row.querySelector('.state')!;
+      if (t) { row.classList.add('pourvu'); st.innerHTML = `<strong>${esc(t.prenom)} ${esc(t.nom)}</strong>${t.classe ? ` <span class="seat-cl">${esc(t.classe)}</span>` : ''}`; }
+      else vacants++;
+    });
+    const total = document.querySelectorAll('.seat-row[data-poste]').length;
+    document.getElementById('buTitre')!.textContent = vacants ? 'Le bureau se met en place.' : 'Le bureau du Parlement JPV.';
+    document.getElementById('buLead')!.textContent = vacants
+      ? `${total - vacants} poste${total - vacants > 1 ? 's' : ''} sur ${total} déjà pourvu${total - vacants > 1 ? 's' : ''}. Les candidatures restent ouvertes pour les postes encore libres.`
+      : 'Voici les élèves qui font vivre le Parlement cette année. Une question, une idée de séance ? Écris-leur.';
+    if (!vacants) document.getElementById('buCta')!.innerHTML = `<a class="btn btn-primary" href="${u('/contact')}">Contacter le bureau</a>`;
+  })();
+</script>
 <style>.role-k { font-size: 0.95rem; color: var(--rouge); font-weight: 700; margin-bottom: 6px; } .member .avatar { object-fit: cover; }  .election { background: var(--pierre); }
   .election-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(28px, 5vw, 72px); align-items: center; }
   .seats { border-top: var(--rule); }
   .seat-row { display: grid; grid-template-columns: 18px 1fr auto; gap: 14px; align-items: center; padding: 12px 0; border-bottom: 2px solid var(--pierre-fonce); font-weight: 700; }
   .seat-row .dot { width: 14px; height: 14px; border-radius: 50%; border: 3px dashed var(--rouge); }
-  .seat-row .state { font-weight: 600; font-size: 0.85rem; color: var(--rouge); }
+  .seat-row .state { font-weight: 600; font-size: 0.85rem; color: var(--rouge); text-align: right; }
+  .seat-row.pourvu .dot { background: var(--rouge); border: 3px solid var(--rouge); }
+  .seat-row.pourvu .state { color: var(--nuit); font-size: 1rem; }
+  .seat-row :global(.seat-cl) { font-weight: 600; font-size: 0.85rem; color: var(--gris); }
   @media (max-width: 860px) { .election-grid { grid-template-columns: 1fr; } }
 </style>

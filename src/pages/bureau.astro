@@ -179,7 +179,7 @@ import Base from '../layouts/Base.astro';
       </div>
     </div>
     <div class="panel hidden" id="tab-msg"><div class="card" style="overflow:auto;"><table class="table" id="msgTable"><thead><tr><th>Date</th><th>De</th><th>Sujet</th><th>Message</th><th></th></tr></thead><tbody></tbody></table></div></div>
-    <div class="panel hidden" id="tab-membres"><div class="card" style="overflow:auto;"><p class="small muted">Seul un <strong>admin</strong> peut changer les rôles, bannir ou supprimer un compte. Le rôle « bureau » donne accès à cette page. Un compte banni ne peut plus se connecter.</p><table class="table" id="memTable"><thead><tr><th>Nom</th><th>Classe</th><th>Contact</th><th>Inscrit le</th><th>Rôle</th><th></th></tr></thead><tbody></tbody></table></div></div>
+    <div class="panel hidden" id="tab-membres"><div class="card" style="overflow:auto;"><p class="small muted">Seul un <strong>admin</strong> peut changer les rôles, bannir ou supprimer un compte. Le rôle « bureau » donne accès à cette page. Un compte banni ne peut plus se connecter. Le <strong>poste</strong> (Président·e…) s'affiche à côté du nom partout sur le site et met à jour automatiquement la page « Qui sommes-nous » ; donner un poste donne aussi accès à l'espace bureau. Un poste n'a qu'un titulaire : l'attribuer à quelqu'un le retire au précédent.</p><table class="table" id="memTable"><thead><tr><th>Nom</th><th>Classe</th><th>Contact</th><th>Inscrit le</th><th>Rôle</th><th>Poste au bureau</th><th></th></tr></thead><tbody></tbody></table></div></div>
   </div></section>
   <section class="section" id="denied" style="display:none;"><div class="container narrow center"><h2>Accès réservé</h2><p class="muted">Cette page est réservée aux membres du bureau.</p><a class="btn btn-outline" href="/compte">Retour à mon espace</a></div></section>
 </Base>
@@ -258,6 +258,8 @@ import Base from '../layouts/Base.astro';
   const esc = (s: any) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
   const d = (s: string) => new Date(s).toLocaleDateString('fr-FR');
   import { initBureauPlus } from '../lib/bureau-plus';
+  import postesData from '../data/postes.json';
+  const POSTES = (postesData as { titre: string }[]).map((p) => p.titre);
   (async () => {
     const session = await requireSession(); if (!session) return;
     const sb = getSupabase();
@@ -536,7 +538,14 @@ import Base from '../layouts/Base.astro';
         <td class="small">${mail.get(p.id) ? `<a href="mailto:${esc(mail.get(p.id))}">${esc(mail.get(p.id))}</a>` : ''}${p.telephone ? `<br><a href="tel:${esc(p.telephone)}">${esc(p.telephone)}</a>` : ''}</td>
         <td>${d(p.created_at)}</td>
         <td>${isAdmin && p.id !== session.user.id && !p.banni ? `<select class="role" data-id="${p.id}">${['membre', 'bureau', 'admin'].map((r) => `<option ${r === p.role ? 'selected' : ''}>${r}</option>`).join('')}</select>` : `<span class="pill">${p.role}</span>`}</td>
+        <td>${isAdmin && !p.banni ? `<select class="poste-sel" data-id="${p.id}"><option value="">—</option>${POSTES.map((x) => `<option ${x === p.poste ? 'selected' : ''}>${esc(x)}</option>`).join('')}</select>` : (p.poste ? `<span class="poste-badge" style="margin:0">${esc(p.poste)}</span>` : '')}</td>
         <td>${isAdmin && p.id !== session.user.id ? `<div class="flex" style="gap:6px;flex-wrap:nowrap;"><button class="btn btn-outline btn-sm ban" data-id="${p.id}" data-a="${p.banni ? 'unban' : 'ban'}" type="button">${p.banni ? 'Débannir' : 'Bannir'}</button><button class="btn btn-sm del-user" data-id="${p.id}" type="button">Supprimer</button></div>` : ''}</td></tr>`).join('');
+      tbody.querySelectorAll<HTMLSelectElement>('.poste-sel').forEach((s0) => s0.addEventListener('change', async () => {
+        s0.disabled = true;
+        const r = await postJSON<{ ancien: string | null }>('/api/set-role', { userId: s0.dataset.id, poste: s0.value || null }, session.access_token);
+        if (!r.ok) alert(r.error); else if (r.data.ancien) alert(`${r.data.ancien} n'est plus ${s0.value} : un poste n'a qu'un titulaire.`);
+        loadMembers();
+      }));
       tbody.querySelectorAll<HTMLSelectElement>('.role').forEach((s0) => s0.addEventListener('change', async () => {
         const r = await postJSON('/api/set-role', { userId: s0.dataset.id, role: s0.value }, session.access_token);
         if (!r.ok) alert(r.error);

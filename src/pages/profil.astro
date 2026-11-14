@@ -54,6 +54,7 @@ import MembreNav from '../components/MembreNav.astro';
   .pf-head { background: var(--nuit); color: #fff; padding: clamp(36px, 5vw, 64px) 0; }
   .pf-head h1 { color: #fff; font-size: clamp(2.2rem, 5vw, 3.8rem); }
   .pf-head .eyebrow { color: #ff6b78; } .pf-head .eyebrow::before { background: #ff6b78; }
+  .pf-poste { font-size: 1rem; vertical-align: middle; letter-spacing: 0; }
   .pf-sub { color: rgba(255,255,255,0.8); margin: 0; }
   .pf-head-grid { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: end; }
   .pf-big { border: 4px solid #fff; padding: 14px 24px; text-align: center; }
@@ -91,6 +92,7 @@ import MembreNav from '../components/MembreNav.astro';
   import { requireMembre } from '../lib/auth';
   import { badges } from '../lib/badges';
   import { u } from '../lib/url';
+  import { posteBadge } from '../lib/poste';
   const esc = (s: unknown) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
   const $ = (id: string) => document.getElementById(id)!;
   (async () => {
@@ -101,7 +103,7 @@ import MembreNav from '../components/MembreNav.astro';
     if (error || !p) { $('pfNom').textContent = 'Profil introuvable'; return; }
     const ROLE: Record<string, string> = { admin: 'Bureau', bureau: 'Bureau', membre: 'Membre' };
     $('pfKicker').textContent = p.moi ? "Mon profil d'orateur" : "Profil d'orateur";
-    $('pfNom').textContent = `${p.prenom} ${p.nom}`;
+    $('pfNom').innerHTML = `${esc(p.prenom)} ${esc(p.nom)}${p.poste ? ` <span class="poste-badge pf-poste">${esc(p.poste)}</span>` : ''}`;
     $('pfSub').textContent = `${p.classe || ''}${p.classe ? ' · ' : ''}${ROLE[p.role] || 'Membre'} depuis ${new Date(p.membre_depuis).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}`;
     $('pfSeances').textContent = String(p.seances);
     document.title = `${p.prenom} ${p.nom} — Profil d'orateur`;
@@ -134,7 +136,7 @@ import MembreNav from '../components/MembreNav.astro';
     } else $('pfHistWrap').remove();
 
     const list = (cl as any[]) || [];
-    $('pfClassement').innerHTML = list.length ? list.slice(0, 30).map((o, i) => `<a class="cl-row${o.id === m.session.user.id ? ' moi' : ''}" href="${u('/profil')}?u=${o.id}"><span class="cl-rang">${i + 1}</span><span><strong>${esc(o.prenom)} ${esc(o.nom)}</strong> <span class="small muted">${esc(o.classe || '')}</span></span><span class="small">${o.roles} rôle${o.roles > 1 ? 's' : ''}</span><strong>${o.seances} séance${o.seances > 1 ? 's' : ''}</strong></a>`).join('')
+    $('pfClassement').innerHTML = list.length ? list.slice(0, 30).map((o, i) => `<a class="cl-row${o.id === m.session.user.id ? ' moi' : ''}" href="${u('/profil')}?u=${o.id}"><span class="cl-rang">${i + 1}</span><span><strong>${esc(o.prenom)} ${esc(o.nom)}</strong>${posteBadge(o.poste)} <span class="small muted">${esc(o.classe || '')}</span></span><span class="small">${o.roles} rôle${o.roles > 1 ? 's' : ''}</span><strong>${o.seances} séance${o.seances > 1 ? 's' : ''}</strong></a>`).join('')
       : '<p class="muted">Le classement apparaîtra après le premier appel en séance.</p>';
   })();
 </script>

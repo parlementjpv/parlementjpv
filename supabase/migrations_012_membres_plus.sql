@@ -72,7 +72,7 @@ begin
       select * into p from public.profiles where id = uid;
       n := public.absences_comptees(uid);
       if l->>'statut' = 'absent' and n > seuil and not p.banni and p.role <> 'admin' then
-        update public.profiles set banni = true, role = 'membre' where id = uid;
+        update public.profiles set banni = true, role = 'membre', poste = null where id = uid;
         update auth.users set banned_until = now() + interval '100 years' where id = uid;
         out := out || jsonb_build_object('email', em, 'prenom', p.prenom, 'absences', n, 'action', 'exclu');
       elsif l->>'statut' = 'absent' and n = seuil and not p.banni then

@@ -37,3 +37,6 @@ verify_jwt = false
 
 [functions.appel]
 verify_jwt = false
+
+[functions.election-resultats]
+verify_jwt = false

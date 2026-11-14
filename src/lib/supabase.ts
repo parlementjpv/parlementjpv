@@ -26,5 +26,6 @@ export interface Profile {
   newsletter: boolean;
   telephone: string | null;
   banni: boolean;
+  poste?: string | null;
   created_at: string;
 }

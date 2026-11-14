@@ -90,6 +90,7 @@ import Base from '../layouts/Base.astro';
     const sb = getSupabase();
     const p = await getProfile(session.user.id);
     document.getElementById('hello')!.textContent = p?.prenom ? `Bonjour ${p.prenom}` : 'Mon espace';
+    if ((p as any)?.poste) document.getElementById('hello')!.insertAdjacentHTML('beforeend', ` <span class="poste-badge" style="font-size:1rem;vertical-align:middle;letter-spacing:0;">${String((p as any).poste).replace(/[<>&]/g, '')}</span>`);
     if (p && ['bureau', 'admin'].includes(p.role)) document.getElementById('bureauLink')!.classList.remove('hidden');
     if (new URLSearchParams(location.search).get('bienvenue')) { const w = document.getElementById('welcome')!; w.classList.remove('hidden'); w.innerHTML = '<div class="alert alert-ok">Bienvenue ! Ton compte est activé : tu es maintenant membre de l\'instance. Réponds aux prochaines séances juste en dessous.</div>'; }
     document.getElementById('logout')!.addEventListener('click', signOut);

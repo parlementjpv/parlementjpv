@@ -24,6 +24,6 @@ Deno.serve(async (req) => {
   const ban = b.action === 'ban';
   const { error } = await db.auth.admin.updateUserById(b.userId, { ban_duration: ban ? '876000h' : 'none' });
   if (error) return json(req, 500, { error: error.message });
-  await db.from('profiles').update({ banni: ban, ...(ban ? { role: 'membre' } : { absences_depuis: new Date().toISOString() }) }).eq('id', b.userId);
+  await db.from('profiles').update({ banni: ban, ...(ban ? { role: 'membre', poste: null } : { absences_depuis: new Date().toISOString() }) }).eq('id', b.userId);
   return json(req, 200, { ok: true, banni: ban });
 });

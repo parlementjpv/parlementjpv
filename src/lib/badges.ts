@@ -1,7 +1,7 @@
 // Badges du profil d'orateur, calculés à partir des statistiques (aucune donnée supplémentaire stockée)
 export type Profil = {
   seances: number; debats: number; roles: Record<string, number>; arguments_retenus: number; camps: Record<string, number>;
-  motions_proposees: number; motions_retenues: number; votes_elections?: number | null; absences?: number | null; role: string;
+  motions_proposees: number; motions_retenues: number; votes_elections?: number | null; absences?: number | null; role: string; poste?: string | null;
 };
 export type Badge = { id: string; nom: string; desc: string; obtenu: boolean; progres?: string };
 
@@ -26,6 +26,6 @@ export function badges(p: Profil): Badge[] {
     { id: 'motionretenue', nom: 'Ordre du jour', desc: 'Voir une de ses motions retenue par le bureau', obtenu: p.motions_retenues >= 1 },
     { id: 'electeur', nom: 'Citoyen', desc: 'Voter à une élection du bureau', obtenu: (p.votes_elections ?? 0) >= 1 },
     { id: 'assidu', nom: 'Assiduité parfaite', desc: '5 séances sans aucune absence non excusée', obtenu: p.seances >= 5 && p.absences === 0, progres: p.absences ? undefined : palier(p.seances, 5) },
-    { id: 'bureau', nom: 'Au bureau', desc: 'Être membre du bureau', obtenu: p.role === 'bureau' || p.role === 'admin' },
+    { id: 'bureau', nom: p.poste || 'Au bureau', desc: p.poste ? 'Poste au bureau du Parlement' : 'Être membre du bureau', obtenu: !!p.poste || p.role === 'bureau' || p.role === 'admin' },
   ];
 }

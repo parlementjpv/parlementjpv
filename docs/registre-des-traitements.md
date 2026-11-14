@@ -88,7 +88,13 @@
 - **Base légale :** intérêt légitime.
 - **Durée :** liste des votants supprimée 30 jours après la clôture ; totaux conservés.
 
-### 11. Espace interne du bureau
+### 11. Postes du bureau et résultats d'élection
+- **Finalité :** présenter publiquement le bureau sur « Qui sommes-nous » et afficher le poste à côté des noms ; informer chaque votant des résultats.
+- **Données :** poste attribué par l'administrateur ; publiquement : prénom, initiale du nom, classe, poste. Email des votants pour l'envoi unique des résultats (jamais leur choix).
+- **Base légale :** intérêt légitime ; la fonction au bureau est acceptée en candidatant.
+- **Durée :** jusqu'au retrait du poste par l'administrateur (retiré automatiquement en cas de suspension).
+
+### 12. Espace interne du bureau
 - **Finalité :** organiser le travail du bureau (tâches, discussion, notes de réunion).
 - **Données :** contenu rédigé par les membres du bureau, auteur.
 - **Durée :** messages 1 an ; tâches et notes jusqu'à suppression.
