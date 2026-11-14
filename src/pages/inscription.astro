@@ -56,7 +56,8 @@ import Base from '../layouts/Base.astro';
         fetch(api('/api/newsletter-subscribe'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: String(fd.get('email')).trim(), fromSignup: true }) }).catch(() => {});
       }
       form.classList.add('hidden');
-      show('Compte créé ! Vérifie ta boîte mail et clique sur le lien de confirmation pour activer ton compte.', 'ok');
+      if (data.session) { show('Compte créé ! Redirection vers ton espace…', 'ok'); setTimeout(() => (location.href = u('/compte?bienvenue=1')), 900); }
+      else show('Compte créé ! Vérifie ta boîte mail (et les spams) et clique sur le lien de confirmation pour activer ton compte.', 'ok');
     } catch (err: any) {
       show(frError(err.message || String(err)));
       btn.disabled = false;
