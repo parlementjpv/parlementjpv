@@ -52,7 +52,7 @@ import Base from '../layouts/Base.astro';
   import { u } from '../lib/url';
   import { api } from '../lib/newsletter';
   import { getSupabase, supabaseConfigured } from '../lib/supabase';
-  import { frError } from '../lib/auth';
+  import { frError, resendBox } from '../lib/auth';
   const form = document.getElementById('signupForm') as HTMLFormElement;
   const msg = document.getElementById('msg')!;
   const show = (t: string, k = 'err') => (msg.innerHTML = `<div class="alert alert-${k}">${t}</div>`);
@@ -79,9 +79,13 @@ import Base from '../layouts/Base.astro';
       try { localStorage.setItem('jpv_compte', '1'); } catch {}
       form.classList.add('hidden');
       if (data.session) { show('Compte créé ! Redirection vers ton espace…', 'ok'); setTimeout(() => (location.href = u('/compte?bienvenue=1')), 900); }
-      else show('Compte créé ! Vérifie ta boîte mail (et les spams) et clique sur le lien de confirmation pour activer ton compte.', 'ok');
+      else {
+        show('Compte créé ! Vérifie ta boîte mail (et les spams) et clique sur le lien de confirmation pour activer ton compte.', 'ok');
+        msg.appendChild(resendBox(String(fd.get('email'))));
+      }
     } catch (err: any) {
       show(frError(err.message || String(err)));
+      if (/already registered/i.test(err.message || '')) msg.appendChild(resendBox(String(fd.get('email')), "Compte pas encore confirmé ? Renvoyer l'email de confirmation"));
       btn.disabled = false;
     }
   });

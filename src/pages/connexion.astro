@@ -11,6 +11,7 @@ import Base from '../layouts/Base.astro';
       <div id="msg"></div>
       <button class="btn btn-primary" type="submit">Se connecter</button>
       <a class="small center" href="/mot-de-passe-oublie">Mot de passe oublié ?</a>
+      <div id="resendSlot" class="center"></div>
     </form>
     <p class="auth-foot">Pas encore membre ? <a href="/inscription">Créer mon compte et rejoindre l'instance</a></p>
   </div></div>
@@ -18,7 +19,7 @@ import Base from '../layouts/Base.astro';
 <script>
   import { u } from '../lib/url';
   import { getSupabase, supabaseConfigured } from '../lib/supabase';
-  import { frError } from '../lib/auth';
+  import { frError, resendBox } from '../lib/auth';
   const form = document.getElementById('loginForm') as HTMLFormElement;
   const msg = document.getElementById('msg')!;
   const show = (t: string, k = 'err') => (msg.innerHTML = `<div class="alert alert-${k}">${t}</div>`);
@@ -26,13 +27,18 @@ import Base from '../layouts/Base.astro';
   if (new URLSearchParams(location.search).get('expire')) show('Ta connexion a expiré. Reconnecte-toi pour continuer.', 'info');
   const next = new URLSearchParams(location.search).get('next') || u('/compte');
   supabaseConfigured && getSupabase().auth.getUser().then(({ data }) => { if (data.user) location.href = next; });
+  document.getElementById('resendSlot')!.appendChild(resendBox(() => (form.elements.namedItem('email') as HTMLInputElement).value, "Je n'ai pas reçu mon email de confirmation"));
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!form.checkValidity()) { form.reportValidity(); return; }
     const fd = new FormData(form);
     const btn = form.querySelector('button')!; btn.disabled = true; msg.innerHTML = '';
     const { error } = await getSupabase().auth.signInWithPassword({ email: String(fd.get('email')).trim(), password: String(fd.get('password')) });
-    if (error) { show(frError(error.message)); btn.disabled = false; return; }
+    if (error) {
+      show(frError(error.message)); btn.disabled = false;
+      if (/not confirmed/i.test(error.message)) msg.appendChild(resendBox(() => (form.elements.namedItem('email') as HTMLInputElement).value, "Renvoyer l'email de confirmation"));
+      return;
+    }
     try { localStorage.setItem('jpv_compte', '1'); } catch {}
     location.href = next.startsWith('/') ? next : u('/compte');
   });
