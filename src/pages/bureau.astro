@@ -539,7 +539,16 @@ import Base from '../layouts/Base.astro';
         <td>${d(p.created_at)}</td>
         <td>${isAdmin && p.id !== session.user.id && !p.banni ? `<select class="role" data-id="${p.id}">${['membre', 'bureau', 'admin'].map((r) => `<option ${r === p.role ? 'selected' : ''}>${r}</option>`).join('')}</select>` : `<span class="pill">${p.role}</span>`}</td>
         <td>${isAdmin && !p.banni ? `<select class="poste-sel" data-id="${p.id}"><option value="">—</option>${POSTES.map((x) => `<option ${x === p.poste ? 'selected' : ''}>${esc(x)}</option>`).join('')}</select>` : (p.poste ? `<span class="poste-badge" style="margin:0">${esc(p.poste)}</span>` : '')}</td>
-        <td>${isAdmin && p.id !== session.user.id ? `<div class="flex" style="gap:6px;flex-wrap:nowrap;"><button class="btn btn-outline btn-sm ban" data-id="${p.id}" data-a="${p.banni ? 'unban' : 'ban'}" type="button">${p.banni ? 'Débannir' : 'Bannir'}</button><button class="btn btn-sm del-user" data-id="${p.id}" type="button">Supprimer</button></div>` : ''}</td></tr>`).join('');
+        <td>${isAdmin && p.id !== session.user.id ? `<div class="flex" style="gap:6px;flex-wrap:nowrap;">${!p.banni && (p.poste || p.role !== 'membre') ? `<button class="btn btn-outline btn-sm demettre" data-id="${p.id}" type="button">Démettre</button>` : ''}<button class="btn btn-outline btn-sm ban" data-id="${p.id}" data-a="${p.banni ? 'unban' : 'ban'}" type="button">${p.banni ? 'Débannir' : 'Bannir'}</button><button class="btn btn-sm del-user" data-id="${p.id}" type="button">Supprimer</button></div>` : ''}</td></tr>`).join('');
+      tbody.querySelectorAll<HTMLButtonElement>('.demettre').forEach((b) => b.addEventListener('click', async () => {
+        const p: any = (mems || []).find((x: any) => x.id === b.dataset.id);
+        const motif = prompt(`Démettre ${p.prenom} ${p.nom} de ses fonctions${p.poste ? ` (${p.poste})` : ''} ?\n\nIl ou elle perd son poste et l'accès à l'espace bureau, mais reste membre. Un email l'en informe.\n\nMessage à lui transmettre (facultatif) :`, '');
+        if (motif === null) return;
+        b.disabled = true;
+        const r = await postJSON('/api/set-role', { userId: b.dataset.id, action: 'demettre', motif }, session.access_token);
+        if (!r.ok) { alert(r.error); b.disabled = false; return; }
+        loadMembers();
+      }));
       tbody.querySelectorAll<HTMLSelectElement>('.poste-sel').forEach((s0) => s0.addEventListener('change', async () => {
         s0.disabled = true;
         const r = await postJSON<{ ancien: string | null }>('/api/set-role', { userId: s0.dataset.id, poste: s0.value || null }, session.access_token);

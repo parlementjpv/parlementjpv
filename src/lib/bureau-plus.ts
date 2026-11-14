@@ -17,7 +17,7 @@ const errFr = (m: string) => Object.entries(ERR).find(([k]) => m.includes(k))?.[
 
 export async function initBureauPlus(sb: SupabaseClient, session: Session, me: { id: string; prenom: string; nom: string; role: string }) {
   initAppel(sb, session);
-  initElections(sb, session);
+  initElections(sb, session, me.role === 'admin');
   initMotions(sb);
   initEntreNous(sb, me);
 }
@@ -93,7 +93,7 @@ async function initAppel(sb: SupabaseClient, session: Session) {
 }
 
 /* ────────────────────────── Élections ────────────────────────── */
-async function initElections(sb: SupabaseClient, session: Session) {
+async function initElections(sb: SupabaseClient, session: Session, isAdmin: boolean) {
   const box = $('elList'), form = $('elForm') as HTMLFormElement, msg = $('elMsg');
   ($('elPoste') as HTMLSelectElement).innerHTML = '<option value="">— Autre / plusieurs postes —</option>' + (postes as { titre: string }[]).map((p) => `<option>${esc(p.titre)}</option>`).join('');
   const show = (t: string, k = 'err') => (msg.innerHTML = `<div class="alert alert-${k}">${t}</div>`);
@@ -114,7 +114,9 @@ async function initElections(sb: SupabaseClient, session: Session) {
   async function load() {
     const [{ data: els, error }, { data: cands }] = await Promise.all([sb.rpc('elections_liste'), sb.from('candidatures').select('prenom, nom, classe, poste, user_id, motivation').eq('statut', 'acceptee')]);
     if (error) { box.innerHTML = `<p class="muted">${esc(error.message)}</p>`; return; }
-    box.innerHTML = (els || []).map((e: any) => {
+    const tous = (els || []) as any[];
+    const actives = tous.filter((e) => !e.archivee), archives = tous.filter((e) => e.archivee);
+    const carte = (e: any) => {
       const brouillon = e.statut === 'brouillon', close = e.statut === 'close';
       const total = (e.candidats || []).reduce((a: number, c: any) => a + (c.voix || 0), 0) + (e.blancs || 0);
       const sugg = (cands || []).filter((c: any) => !e.poste || !c.poste || c.poste === e.poste);
@@ -124,6 +126,7 @@ async function initElections(sb: SupabaseClient, session: Session) {
             ${brouillon ? `<button class="btn btn-primary btn-sm el-act" data-a="ouvrir" data-id="${e.id}" type="button">Ouvrir le vote</button><button class="btn btn-outline btn-sm el-del" data-id="${e.id}" type="button">Supprimer</button>` : ''}
             ${e.statut === 'ouverte' || e.statut === 'programmee' ? `<button class="btn btn-outline btn-sm el-act" data-a="clore" data-id="${e.id}" type="button">Clore maintenant</button>` : ''}
             ${close && !e.publiee ? `<button class="btn btn-primary btn-sm el-act" data-a="publier" data-id="${e.id}" type="button">Publier les résultats</button>` : ''}
+            ${isAdmin && !brouillon ? `<button class="btn btn-outline btn-sm el-adm" data-a="${e.archivee ? 'desarchiver' : 'archiver'}" data-id="${e.id}" type="button">${e.archivee ? 'Désarchiver' : 'Archiver'}</button><button class="btn btn-sm el-adm" data-a="supprimer" data-id="${e.id}" type="button">Supprimer</button>` : ''}
           </div></div>
         ${!brouillon ? `<div class="ev-stats"><b>${e.votants}</b> votant${e.votants > 1 ? 's' : ''} sur <b>${e.inscrits}</b> inscrits (${e.inscrits ? Math.round((e.votants / e.inscrits) * 100) : 0} %)${close ? (e.publiee ? ' · résultats publiés aux membres' : ' · résultats visibles par le bureau seulement') : ''}</div>` : ''}
         <div class="el-cands">${(e.candidats || []).map((c: any) => `<div class="el-c"><div><strong>${esc(c.nom)}</strong>${c.profession_de_foi ? `<br><span class="small muted">${esc(c.profession_de_foi).slice(0, 200)}${c.profession_de_foi.length > 200 ? '…' : ''}</span>` : ''}</div>
@@ -136,7 +139,9 @@ async function initElections(sb: SupabaseClient, session: Session) {
             <div class="field"><label>Profession de foi <small>(facultatif)</small></label><textarea name="pdf" maxlength="3000" style="min-height:80px;"></textarea></div>
             <button class="btn btn-primary btn-sm" type="submit">Ajouter</button></form></details>` : ''}
       </div>`;
-    }).join('') || '<p class="muted">Aucune élection pour l\'instant.</p>';
+    };
+    box.innerHTML = (actives.map(carte).join('') || '<p class="muted">Aucune élection en cours.</p>')
+      + (archives.length ? `<details class="mt-2"><summary><strong>Archives (${archives.length})</strong> <span class="small muted">— masquées pour les membres</span></summary>${archives.map(carte).join('')}</details>` : '');
 
     box.querySelectorAll<HTMLFormElement>('.el-cform').forEach((f) => {
       const pick = f.elements.namedItem('pick') as HTMLSelectElement | null;
@@ -153,6 +158,15 @@ async function initElections(sb: SupabaseClient, session: Session) {
     const b = (ev.target as HTMLElement).closest('button') as HTMLButtonElement | null; if (!b) return;
     if (b.classList.contains('el-cdel')) { const { error } = await sb.from('election_candidats').delete().eq('id', b.dataset.id!); if (error) show(error.message); load(); }
     if (b.classList.contains('el-del')) { if (!confirm('Supprimer ce brouillon ?')) return; await sb.from('elections').delete().eq('id', b.dataset.id!); load(); }
+    if (b.classList.contains('el-adm')) {
+      const a = b.dataset.a!;
+      const conf = { supprimer: 'Supprimer définitivement cette élection, ses candidats et ses résultats ? C\'est irréversible.', archiver: 'Archiver cette élection ? Elle ne sera plus visible par les membres (ses résultats sont conservés).', desarchiver: 'Rendre cette élection de nouveau visible par les membres ?' }[a as 'supprimer'];
+      if (!confirm(conf)) return;
+      const { error } = await sb.rpc('election_admin', { p_election: b.dataset.id, p_action: a });
+      if (error) show(/reserve_admin/.test(error.message) ? 'Réservé à l\'administrateur.' : error.message);
+      else { show(a === 'supprimer' ? 'Élection supprimée.' : a === 'archiver' ? 'Élection archivée.' : 'Élection désarchivée.', 'ok'); load(); }
+      return;
+    }
     if (b.classList.contains('el-act')) {
       const conf = { ouvrir: "Ouvrir le vote ? Les candidats ne pourront plus être modifiés. Seuls les membres dont le compte existe déjà pourront voter, une seule fois, à bulletin secret.", clore: 'Clore le vote maintenant ?', publier: 'Publier les résultats à tous les membres ?' }[b.dataset.a as 'ouvrir'];
       if (!confirm(conf)) return;

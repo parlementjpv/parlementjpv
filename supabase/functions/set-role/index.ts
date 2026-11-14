@@ -1,4 +1,4 @@
-import { admin, json, userFromRequest, cors, readJson } from '../_shared/lib.ts';
+import { admin, json, userFromRequest, cors, readJson, sendMail, layout, esc, FROM } from '../_shared/lib.ts';
 
 const POSTES = ['Président·e', 'Vice-président·e', 'Secrétaire général·e', 'Trésorier·e', 'Responsable Débat', 'Responsable Éloquence', 'Responsable Conférences', 'Responsable Visites', 'Responsable Communication'];
 
@@ -13,6 +13,27 @@ Deno.serve(async (req) => {
   const db = admin();
   const { data: cible } = await db.from('profiles').select('role, banni').eq('id', b.userId).maybeSingle();
   if (!cible) return json(req, 404, { error: 'Compte introuvable.' });
+
+  // Démettre quelqu'un de ses fonctions : plus de poste, plus d'accès bureau, prévenu par email
+  if (b.action === 'demettre') {
+    if (b.userId === me.user.id) return json(req, 400, { error: 'Tu ne peux pas te démettre toi-même.' });
+    const { data: p } = await db.from('profiles').select('prenom, poste, role').eq('id', b.userId).maybeSingle();
+    if (!p || (p.role === 'membre' && !p.poste)) return json(req, 400, { error: "Cette personne n'a aucune fonction." });
+    const { error } = await db.from('profiles').update({ role: 'membre', poste: null }).eq('id', b.userId);
+    if (error) return json(req, 500, { error: error.message });
+    const { data: adh } = await db.from('adhesions').select('email').eq('user_id', b.userId).maybeSingle();
+    if (adh?.email) {
+      try {
+        await sendMail({ from: FROM, to: adh.email, subject: 'Fin de tes fonctions au bureau du Parlement JPV',
+          html: layout({ title: `${p.prenom}, tes fonctions au bureau prennent fin`, body:
+            `<p>L'administrateur du Parlement JPV a mis fin à tes fonctions${p.poste ? ` de <strong>${esc(p.poste)}</strong>` : ' au bureau'}. Tu n'as plus accès à l'espace bureau.</p>
+             <p>Tu restes membre de l'instance : tu peux toujours participer aux séances, proposer des motions et voter.</p>
+             ${b.motif ? `<p style="border-left:4px solid #d62839;padding-left:12px;white-space:pre-wrap;">${esc(String(b.motif).slice(0, 1000))}</p>` : ''}
+             <p style="color:#555;font-size:14px;">Le bureau du Parlement JPV</p>` }) });
+      } catch (err) { console.error(err); }
+    }
+    return json(req, 200, { ok: true, demis: true });
+  }
 
   if ('poste' in b) {
     const poste = b.poste || null;
