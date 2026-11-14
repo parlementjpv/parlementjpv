@@ -32,6 +32,11 @@ export async function postJSON<T = any>(path: string, body: unknown, accessToken
       body: JSON.stringify(body),
     });
     const data = await res.json().catch(() => ({}));
+    if (res.status === 401 && accessToken) {
+      const { expireSession } = await import('./auth');
+      await expireSession();
+      return { ok: false, data, error: 'Ta connexion a expiré : reconnecte-toi.' };
+    }
     return { ok: res.ok, data, error: res.ok ? undefined : data.error || `Erreur ${res.status}` };
   } catch {
     return { ok: false, data: {} as T, error: 'Impossible de joindre le serveur.' };

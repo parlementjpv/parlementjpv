@@ -29,7 +29,19 @@ export async function requireSession(next = location.pathname) {
     location.href = u(`/connexion?next=${encodeURIComponent(next)}`);
     return null;
   }
+  // Vérifie auprès du serveur que la connexion est toujours valable (session révoquée, compte banni ou supprimé…)
+  const { error } = await getSupabase().auth.getUser();
+  if (error) {
+    await expireSession(next);
+    return null;
+  }
   return session;
+}
+
+/** Connexion plus reconnue par le serveur : on nettoie et on renvoie vers la page de connexion. */
+export async function expireSession(next = location.pathname + location.search) {
+  try { await getSupabase().auth.signOut({ scope: 'local' }); } catch {}
+  location.href = u(`/connexion?expire=1&next=${encodeURIComponent(next)}`);
 }
 
 export async function getProfile(userId: string): Promise<Profile | null> {
