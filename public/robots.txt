@@ -1,8 +1,8 @@
 User-agent: *
 Allow: /
-Disallow: /compte
-Disallow: /bureau
-Disallow: /connexion
-Disallow: /inscription
-Disallow: /bureau
-Sitemap: https://parlementjpv.github.io/sitemap-index.xml
+Disallow: /compte/
+Disallow: /bureau/
+Disallow: /connexion/
+Disallow: /inscription/
+
+Sitemap: https://parlementjpv.github.io/parlementjpv/sitemap-index.xml

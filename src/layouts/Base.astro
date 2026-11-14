@@ -9,6 +9,7 @@ interface Props {
   image?: string;
   noindex?: boolean;
   minimal?: boolean; // pas de bandeau ni de footer complet (pages auth)
+  article?: { date: string; author: string };
 }
 const {
   title,
@@ -16,8 +17,11 @@ const {
   image = '/assets/img/og.jpg',
   noindex = false,
   minimal = false,
+  article,
 } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const home = new URL(base + '/', Astro.site).href;
 const turnstile = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 ---
 <!DOCTYPE html>
@@ -31,6 +35,19 @@ const turnstile = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
   <link rel="icon" href="/assets/img/favicon.png" type="image/png" />
   <meta name="theme-color" content="#0f1f4b" />
   {noindex && <meta name="robots" content="noindex" />}
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      { '@type': 'Organization', '@id': `${home}#org`, name: 'Parlement JPV', alternateName: 'Parlement du lycée Jean-Pierre Vernant', url: home,
+        logo: new URL(base + '/assets/img/logo.png', Astro.site).href, email: 'parlementjpv@gmail.com',
+        description: "Instance lycéenne de débat, d'éloquence et d'engagement citoyen du lycée Jean-Pierre Vernant à Sèvres.",
+        address: { '@type': 'PostalAddress', streetAddress: '21 rue du Docteur Ledermann', postalCode: '92310', addressLocality: 'Sèvres', addressCountry: 'FR' },
+        parentOrganization: { '@type': 'HighSchool', name: 'Lycée Jean-Pierre Vernant', address: { '@type': 'PostalAddress', addressLocality: 'Sèvres', addressCountry: 'FR' } },
+        sameAs: ['https://instagram.com/parlementjpv', 'https://www.linkedin.com/company/parlementjpv/'] },
+      { '@type': 'WebSite', '@id': `${home}#site`, url: home, name: 'Parlement JPV', inLanguage: 'fr-FR', publisher: { '@id': `${home}#org` } },
+      ...(article ? [{ '@type': 'Article', headline: title, datePublished: article.date, author: { '@type': 'Person', name: article.author }, publisher: { '@id': `${home}#org` }, mainEntityOfPage: canonical.href, inLanguage: 'fr-FR' }] : []),
+    ],
+  })} />
   <meta property="og:type" content="website" />
   <meta property="og:title" content={`${title} — Parlement JPV`} />
   <meta property="og:description" content={description} />

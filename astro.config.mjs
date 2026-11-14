@@ -7,5 +7,14 @@ export default defineConfig({
   output: 'static',
   trailingSlash: 'ignore',
   build: { format: 'directory' },
-  integrations: [sitemap({ filter: (p) => !/\/(compte|bureau|connexion|inscription|mot-de-passe|nouveau-mot|newsletter\/(lire|merci|erreur|desinscription))/.test(p) })],
+  integrations: [sitemap({
+    filter: (p) => !/\/(compte|bureau|connexion|inscription|mot-de-passe-oublie|nouveau-mot-de-passe|mentions-legales|confidentialite|newsletter\/(lire|merci|erreur|desinscription))\/?$/.test(p),
+    lastmod: new Date(),
+    serialize(item) {
+      const path = new URL(item.url).pathname.replace(/^\/[^/]+\//, '/');
+      item.changefreq = /\/(evenement|agenda|actualites)\/$/.test(path) ? 'daily' : 'weekly';
+      item.priority = path === '/' ? 1.0 : /\/(rejoindre|evenement|candidature|agenda)\/$/.test(path) ? 0.9 : 0.6;
+      return item;
+    },
+  })],
 });

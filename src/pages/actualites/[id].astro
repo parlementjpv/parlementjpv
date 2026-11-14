@@ -9,7 +9,7 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 const fmt = (d: Date) => new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' }).format(d);
 ---
-<Base title={post.data.title} description={post.data.excerpt} image={post.data.image}>
+<Base title={post.data.title} description={post.data.excerpt} image={post.data.image} article={{ date: post.data.date.toISOString(), author: post.data.author }}>
   <article class="section">
     <div class="container prose" style="margin-inline:auto;">
       <a href="/actualites" class="small muted">← Toutes les actualités</a>
