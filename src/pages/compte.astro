@@ -105,10 +105,10 @@ import Base from '../layouts/Base.astro';
           const { error } = rep.has(id)
             ? await sb.from('event_signups').update({ reponse: r }).eq('event_key', id).eq('user_id', session.user.id)
             : await sb.from('event_signups').insert({ event_key: id, reponse: r, user_id: session.user.id, prenom: p?.prenom || '?', nom: p?.nom || '?', classe: p?.classe || '?', telephone: p?.telephone || null, email: session.user.email });
-          if (error) { b.disabled = false; alert(error.code === '23505' ? 'Ton adresse a déjà répondu à cet événement sans être connectée.' : "Réponse impossible : complète d'abord ton prénom, ton nom et ta classe."); return; }
+          if (error) { b.disabled = false; alert(/camps_complets/.test(error.message) ? 'Tous les camps sont complets pour cet événement.' : /evenement_annule/.test(error.message) ? 'Cet événement a été annulé.' : error.code === '23505' ? 'Ton adresse a déjà répondu à cet événement sans être connectée.' : "Réponse impossible : complète d'abord ton prénom, ton nom et ta classe."); return; }
           const { data: row } = await sb.from('event_signups').select('camp, jeton').eq('event_key', id).eq('user_id', session.user.id).maybeSingle();
           rep.set(id, r); camp.set(id, row?.camp ?? null); jet.set(id, row?.jeton ?? null); paint();
-          if (r === 'oui' && row?.camp && row?.jeton) postJSON('/api/salle-lien', { jeton: row.jeton }).catch(() => {});
+          if (r === 'oui' && row?.jeton) postJSON('/api/salle-lien', { jeton: row.jeton }).catch(() => {});
         }));
       };
       paint();

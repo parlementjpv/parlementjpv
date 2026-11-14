@@ -25,3 +25,9 @@ verify_jwt = false
 
 [functions.salle-lien]
 verify_jwt = false
+
+[functions.evenement-annonce]
+verify_jwt = false
+
+[functions.evenement-annuler]
+verify_jwt = false

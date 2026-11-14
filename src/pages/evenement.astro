@@ -134,7 +134,7 @@ import NewsletterForm from '../components/NewsletterForm.astro';
     const showCamp = (camp: string | null | undefined, jeton?: string | null) => {
       const box = $('monCamp');
       if (!camp) { box.classList.add('hidden'); return; }
-      box.innerHTML = `<small>Ton camp, tiré au sort</small><strong>${esc(camp)}</strong>${jeton ? `<a class="btn btn-primary btn-sm mt-1" href="${u('/salle')}?t=${jeton}">Entrer dans la salle de mon camp</a><span class="small" style="display:block;margin-top:6px;">Ton lien personnel t'a aussi été envoyé par email.</span>` : ''}`; box.classList.remove('hidden');
+      box.innerHTML = `<small>Ton camp, tiré au sort</small><strong>${esc(camp)}</strong>${jeton ? `<a class="btn btn-primary btn-sm mt-1" href="${u('/salle')}?t=${jeton}">Entrer dans la salle de mon camp</a><span class="small" style="display:block;margin-top:6px;">Tu as aussi reçu par email toutes les infos et ton lien personnel.</span>` : ''}`; box.classList.remove('hidden');
     };
     const envoyerLien = (jeton?: string | null) => { if (jeton) postJSON('/api/salle-lien', { jeton }).catch(() => {}); };
     if (ev.camps?.length) {
@@ -185,6 +185,8 @@ import NewsletterForm from '../components/NewsletterForm.astro';
         p_email: String(fd.get('email')).trim().toLowerCase(), p_telephone: String(fd.get('telephone') || '').trim(),
       });
       btn.disabled = false;
+      if (res?.statut === 'complet') { show('Tous les camps sont complets pour cet événement. Tu peux tout de même indiquer que tu ne viens pas.', 'info'); return; }
+      if (res?.statut === 'annule') { show('Cet événement a été annulé.', 'info'); return; }
       if (res?.statut === 'deja') { show(`Cette adresse a déjà répondu pour « ${esc(ev.title)} ». Pour changer ta réponse, <a class="link" href="${u('/connexion')}?next=${encodeURIComponent(location.pathname + location.search)}">connecte-toi</a>.`, 'info'); return; }
       if (error || !res) { show("Ta réponse n'a pas pu être enregistrée. Vérifie les champs et réessaie.", 'err'); return; }
       const before = existing?.reponse;
@@ -196,7 +198,7 @@ import NewsletterForm from '../components/NewsletterForm.astro';
       showCamp(reponse === 'oui' ? res.camp : null, res.jeton);
       if (reponse === 'oui') envoyerLien(res.jeton);
       const row = { prenom };
-      show(reponse === 'oui' ? `C'est noté, ${esc(row.prenom)} : on t'attend le ${esc(fmt.long(ev.starts_at))}${res.camp ? ` dans le camp « ${esc(res.camp)} »` : ''} !` : `C'est noté, ${esc(row.prenom)}. Merci d'avoir prévenu.`, 'ok');
+      show(reponse === 'oui' ? `C'est noté, ${esc(row.prenom)} : on t'attend le ${esc(fmt.long(ev.starts_at))}${res.camp ? ` dans le camp « ${esc(res.camp)} »` : ''} ! Un email récapitulatif t'a été envoyé.` : `C'est noté, ${esc(row.prenom)}. Merci d'avoir prévenu.`, 'ok');
     });
   })();
 </script>

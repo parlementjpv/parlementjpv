@@ -32,12 +32,12 @@ export const when = (e: Ev) => `${fmt.hour(e.starts_at)}${e.ends_at ? ` – ${fm
 export async function fetchUpcoming(): Promise<Ev[]> {
   if (!supabaseConfigured) return [];
   const since = new Date(Date.now() - 3 * 3600 * 1000).toISOString();
-  const { data } = await getSupabase().from('events').select('*').eq('published', true).gte('starts_at', since).order('starts_at');
+  const { data } = await getSupabase().from('events').select('*').eq('published', true).is('annule_at', null).gte('starts_at', since).order('starts_at');
   return (data as Ev[]) || [];
 }
 export async function fetchPast(): Promise<Ev[]> {
   if (!supabaseConfigured) return [];
-  const { data } = await getSupabase().from('events').select('*').eq('published', true).lt('starts_at', new Date().toISOString()).order('starts_at', { ascending: false });
+  const { data } = await getSupabase().from('events').select('*').eq('published', true).is('annule_at', null).lt('starts_at', new Date().toISOString()).order('starts_at', { ascending: false });
   return (data as Ev[]) || [];
 }
 export async function fetchCounts(): Promise<Record<string, Counts>> {

@@ -81,6 +81,7 @@ import Base from '../layouts/Base.astro';
               <div class="field"><label for="ev-c3">Camp 3 <small>(facultatif)</small></label><input id="ev-c3" name="camp3" maxlength="40" placeholder="ex. Nuancé" /></div>
               <div class="field"><label for="ev-c4">Camp 4 <small>(facultatif)</small></label><input id="ev-c4" name="camp4" maxlength="40" /></div>
             </div>
+            <div class="field" style="max-width:260px;"><label for="ev-ppc">Places par camp <small>(facultatif)</small></label><input id="ev-ppc" name="placesParCamp" type="number" min="1" max="200" placeholder="illimité" /></div>
             <label class="checkbox"><input type="checkbox" name="sansCamps" id="ev-nocamp" /><span>Pas de camps pour cet événement (conférence, visite…)</span></label>
           </fieldset>
           <div class="field"><label for="ev-desc">Description <small>(facultatif)</small></label><textarea id="ev-desc" name="description" maxlength="2000" style="min-height:90px;" placeholder="La motion, le format, ce qu'il faut préparer…"></textarea></div>
@@ -140,6 +141,7 @@ import Base from '../layouts/Base.astro';
   .camps-field legend { font-weight: 800; padding: 0 6px; }
   .camps-field legend small { font-weight: 400; color: var(--gris); }
   .camps-field:has(#ev-nocamp:checked) .form-row { opacity: 0.35; pointer-events: none; }
+  .ev-annule { display: inline-block; margin-top: 4px; background: var(--rouge); color: #fff; font-weight: 800; font-size: 0.85rem; padding: 2px 8px; }
   .ev-campstats { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
   .ev-campstats span { background: var(--pierre); padding: 3px 10px; font-weight: 700; font-size: 0.9rem; }
   .ev-campstats b { color: var(--rouge); }
@@ -283,12 +285,15 @@ import Base from '../layouts/Base.astro';
       const camps = fd.get('sansCamps') ? [] : ['camp1', 'camp2', 'camp3', 'camp4'].map((k) => String(fd.get(k) || '').trim()).filter(Boolean);
       if (!fd.get('sansCamps') && camps.length < 2) { evShow('Indique au moins deux camps (Camp 1 et Camp 2), ou coche « Pas de camps ».'); return; }
       if (new Set(camps.map((k) => k.toLowerCase())).size !== camps.length) { evShow('Deux camps portent le même nom.'); return; }
-      const row = { title: String(fd.get('title')).trim(), type: String(fd.get('type')), starts_at: paris(date, start), ends_at: end ? paris(date, end) : null, location: String(fd.get('location')).trim(), capacity: fd.get('capacity') ? Number(fd.get('capacity')) : null, description: String(fd.get('description') || '').trim() || null, camps, created_by: session.user.id };
+      const row = { title: String(fd.get('title')).trim(), type: String(fd.get('type')), starts_at: paris(date, start), ends_at: end ? paris(date, end) : null, location: String(fd.get('location')).trim(), capacity: fd.get('capacity') ? Number(fd.get('capacity')) : null, description: String(fd.get('description') || '').trim() || null, camps, places_par_camp: camps.length && fd.get('placesParCamp') ? Number(fd.get('placesParCamp')) : null, created_by: session.user.id };
       const btn = document.getElementById('evSave') as HTMLButtonElement; btn.disabled = true;
-      const { error } = id ? await sb.from('events').update(row).eq('id', id) : await sb.from('events').insert(row);
+      const { data: saved, error } = id ? await sb.from('events').update(row).eq('id', id).select('id').single() : await sb.from('events').insert(row).select('id').single();
+      if (error) { btn.disabled = false; evShow(`Enregistrement impossible : ${error.message}`); return; }
+      if (id) { btn.disabled = false; evShow('Événement modifié.', 'ok'); resetEv(); await loadEvents(); return; }
+      evShow('Événement publié. Envoi de l\'annonce par email à tous les membres…', 'info');
+      const an = await postJSON('/api/evenement-annonce', { id: saved.id }, session.access_token);
       btn.disabled = false;
-      if (error) { evShow(`Enregistrement impossible : ${error.message}`); return; }
-      evShow(id ? 'Événement modifié.' : `Événement publié : il apparaît maintenant sur le site, et les élèves peuvent répondre.`, 'ok');
+      evShow(an.ok ? `Événement publié et annoncé par email à <strong>${an.data.envoyes}</strong> membre${an.data.envoyes > 1 ? 's' : ''}${an.data.echecs ? ` (${an.data.echecs} échec${an.data.echecs > 1 ? 's' : ''})` : ''}. Chaque membre qui confirme sa présence reçoit automatiquement un email récapitulatif.` : `Événement publié, mais l'annonce par email a échoué : ${an.error}. Utilise « Envoyer l'annonce » dans la liste pour réessayer.`, an.ok ? 'ok' : 'err');
       resetEv(); await loadEvents();
     });
     async function loadEvents() {
@@ -303,12 +308,13 @@ import Base from '../layouts/Base.astro';
       const box = document.getElementById('inscr')!;
       box.innerHTML = (evs || []).map((ev: any) => {
         const rs = by[ev.id] || [], oui = rs.filter((r) => r.reponse === 'oui'), non = rs.filter((r) => r.reponse === 'non');
-        const past = new Date(ev.starts_at).getTime() < now;
-        return `<div class="ev-item${past ? ' past' : ''}">
-          <div class="flex between"><div><span class="pill">${esc(ev.type)}</span> <strong>${esc(ev.title)}</strong><br><span class="small muted">${new Date(ev.starts_at).toLocaleString('fr-FR', { dateStyle: 'full', timeStyle: 'short', timeZone: 'Europe/Paris' })} · ${esc(ev.location)}${past ? ' · passé' : ''}</span></div>
-          <div class="flex" style="gap:6px;"><button class="btn btn-outline btn-sm ev-edit" data-id="${ev.id}" type="button">Modifier</button><button class="btn btn-outline btn-sm ev-del" data-id="${ev.id}" type="button">Supprimer</button></div></div>
-          <div class="ev-stats"><b>${oui.length}</b> viennent${ev.capacity ? ` / ${ev.capacity} places` : ''} · <b>${non.length}</b> ne viennent pas</div>
-          ${(ev.camps || []).length ? `<div class="ev-campstats">${ev.camps.map((k: string) => `<span>${esc(k)} <b>${oui.filter((r) => r.camp === k).length}</b> · <a href="${u('/salle')}?e=${ev.id}&c=${encodeURIComponent(k)}" target="_blank" rel="noopener">voir la salle</a></span>`).join('')}</div>` : ''}
+        const past = new Date(ev.starts_at).getTime() < now, annule = !!ev.annule_at;
+        const actions = annule ? '' : `${!past && !ev.annonce_at ? `<button class="btn btn-outline btn-sm ev-annonce" data-id="${ev.id}" type="button">Envoyer l'annonce</button>` : ''}<button class="btn btn-outline btn-sm ev-edit" data-id="${ev.id}" type="button">Modifier</button>${!past ? `<button class="btn btn-outline btn-sm ev-annul" data-id="${ev.id}" type="button">Annuler l'événement</button>` : ''}`;
+        return `<div class="ev-item${past || annule ? ' past' : ''}">
+          <div class="flex between"><div><span class="pill">${esc(ev.type)}</span> <strong>${esc(ev.title)}</strong><br><span class="small muted">${new Date(ev.starts_at).toLocaleString('fr-FR', { dateStyle: 'full', timeStyle: 'short', timeZone: 'Europe/Paris' })} · ${esc(ev.location)}${past ? ' · passé' : ''}</span>${annule ? `<br><span class="ev-annule">Annulé${ev.annule_motif ? ` — ${esc(ev.annule_motif)}` : ''}</span>` : ''}</div>
+          <div class="flex" style="gap:6px;">${actions}<button class="btn btn-outline btn-sm ev-del" data-id="${ev.id}" type="button">Supprimer</button></div></div>
+          <div class="ev-stats"><b>${oui.length}</b> viennent${ev.capacity ? ` / ${ev.capacity} places` : ''} · <b>${non.length}</b> ne viennent pas${ev.places_par_camp ? ` · ${ev.places_par_camp} places par camp` : ''}${ev.annonce_at ? ` · annoncé aux membres le ${new Date(ev.annonce_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}` : ''}</div>
+          ${(ev.camps || []).length ? `<div class="ev-campstats">${ev.camps.map((k: string) => `<span>${esc(k)} <b>${oui.filter((r) => r.camp === k).length}${ev.places_par_camp ? `/${ev.places_par_camp}` : ''}</b> · <a href="${u('/salle')}?e=${ev.id}&c=${encodeURIComponent(k)}" target="_blank" rel="noopener">voir la salle</a></span>`).join('')}</div>` : ''}
           <details><summary>Voir les réponses</summary><div class="ev-cols">${(ev.camps || []).length
             ? ev.camps.map((k: string) => `<div><h4>Camp « ${esc(k)} »</h4>${list(oui.filter((r) => r.camp === k))}</div>`).join('') + (oui.some((r) => !ev.camps.includes(r.camp)) ? `<div><h4>Sans camp</h4>${list(oui.filter((r) => !ev.camps.includes(r.camp)))}</div>` : '')
             : `<div><h4>Je viens</h4>${list(oui)}</div>`}<div><h4>Je ne viens pas</h4>${list(non)}</div></div>
@@ -321,11 +327,23 @@ import Base from '../layouts/Base.astro';
         const { error } = await sb.from('events').delete().eq('id', b.dataset.id);
         if (error) alert(error.message); else loadEvents();
       }));
+      box.querySelectorAll<HTMLButtonElement>('.ev-annonce').forEach((b) => b.addEventListener('click', async () => {
+        if (!confirm('Envoyer l\'annonce de cet événement par email à tous les membres ?')) return;
+        b.disabled = true; const r = await postJSON('/api/evenement-annonce', { id: b.dataset.id }, session.access_token);
+        alert(r.ok ? (r.data.deja ? 'Cet événement a déjà été annoncé.' : `Annonce envoyée à ${r.data.envoyes} membre(s).`) : r.error); loadEvents();
+      }));
+      box.querySelectorAll<HTMLButtonElement>('.ev-annul').forEach((b) => b.addEventListener('click', async () => {
+        const ev: any = (evs || []).find((x: any) => x.id === b.dataset.id); const n = (by[b.dataset.id!] || []).filter((r) => r.reponse === 'oui').length;
+        const motif = prompt(`Annuler « ${ev?.title} » ?\n\n${n} inscrit${n > 1 ? 's' : ''} recevr${n > 1 ? 'ont' : 'a'} automatiquement un email d'annulation.\n\nMotif à leur indiquer (facultatif) :`, '');
+        if (motif === null) return;
+        b.disabled = true; const r = await postJSON('/api/evenement-annuler', { id: b.dataset.id, motif }, session.access_token);
+        alert(r.ok ? `Événement annulé. ${r.data.envoyes} inscrit(s) prévenu(s) par email.` : r.error); loadEvents();
+      }));
       box.querySelectorAll<HTMLButtonElement>('.ev-edit').forEach((b) => b.addEventListener('click', () => {
         const ev: any = (evs || []).find((x: any) => x.id === b.dataset.id); if (!ev) return;
         const s0 = parisParts(ev.starts_at), e0 = ev.ends_at ? parisParts(ev.ends_at) : null;
         const set = (n: string, v: string) => ((evForm.elements.namedItem(n) as HTMLInputElement).value = v);
-        set('id', ev.id); set('title', ev.title); set('type', ev.type); set('date', s0.date); set('start', s0.time); set('end', e0 ? e0.time : ''); set('location', ev.location); set('capacity', ev.capacity ? String(ev.capacity) : ''); set('description', ev.description || '');
+        set('id', ev.id); set('title', ev.title); set('type', ev.type); set('date', s0.date); set('start', s0.time); set('end', e0 ? e0.time : ''); set('location', ev.location); set('capacity', ev.capacity ? String(ev.capacity) : ''); set('description', ev.description || ''); set('placesParCamp', ev.places_par_camp ? String(ev.places_par_camp) : '');
         const cs = ev.camps || []; ['camp1', 'camp2', 'camp3', 'camp4'].forEach((k, i) => set(k, cs[i] || ''));
         (evForm.elements.namedItem('sansCamps') as HTMLInputElement).checked = cs.length === 0;
         document.getElementById('evFormTitle')!.textContent = 'Modifier l\'événement'; document.getElementById('evSave')!.textContent = 'Enregistrer les modifications'; document.getElementById('evCancel')!.classList.remove('hidden');
