@@ -1,11 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
 ---
-<Base title="Créer un compte" description="Crée ton compte Parlement JPV pour candidater, t'inscrire aux séances et recevoir la newsletter." noindex>
+<Base title="Créer un compte et rejoindre l'instance" description="Crée ton compte Parlement JPV pour candidater, t'inscrire aux séances et recevoir la newsletter." noindex>
   <div class="auth-wrap"><div class="card auth-card">
     <span class="eyebrow">Ton compte</span>
-    <h1>Créer un compte</h1>
-    <p class="muted small">Réservé aux élèves et personnels du lycée Jean-Pierre Vernant. Confirmation par email.</p>
+    <h1>Rejoindre l'instance</h1>
+    <p class="muted small">En créant ton compte, tu deviens membre du Parlement JPV : tu pourras répondre aux événements, candidater au bureau et suivre tes demandes. Réservé aux élèves et personnels du lycée. Un email de confirmation t'est envoyé.</p>
     <form class="form" id="signupForm" novalidate>
       <div class="form-row">
         <div class="field"><label for="prenom">Prénom</label><input id="prenom" name="prenom" required autocomplete="given-name" /></div>
@@ -17,16 +17,37 @@ import Base from '../layouts/Base.astro';
           <option>Seconde</option><option>Première</option><option>Terminale</option><option>Personnel du lycée</option><option>Autre</option>
         </select>
       </div>
-      <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required autocomplete="email" /><small>De préférence ton adresse du lycée.</small></div>
+      <div class="form-row">
+        <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required autocomplete="email" /></div>
+        <div class="field"><label for="telephone">Téléphone</label><input id="telephone" name="telephone" type="tel" required autocomplete="tel" inputmode="tel" pattern="[+0-9 .()\-]{8,20}" placeholder="06 12 34 56 78" /></div>
+      </div>
+      <fieldset class="tags-field">
+        <legend>Ce qui t'intéresse <small>(facultatif)</small></legend>
+        <div class="tags">
+          {['Débats', 'Éloquence', 'Conférences', 'Visites', 'Communication', 'Organisation'].map((i) => <label class="tag"><input type="checkbox" name="interets" value={i} /><span>{i}</span></label>)}
+        </div>
+      </fieldset>
       <div class="field"><label for="password">Mot de passe</label><input id="password" name="password" type="password" required minlength="8" autocomplete="new-password" /><small>8 caractères minimum.</small></div>
       <label class="checkbox"><input type="checkbox" name="newsletter" checked /><span>Je souhaite recevoir la newsletter (désinscription à tout moment).</span></label>
       <label class="checkbox"><input type="checkbox" name="rgpd" required /><span>J'ai lu la <a href="/confidentialite" target="_blank">politique de confidentialité</a> et, si j'ai moins de 15 ans, j'ai l'accord d'un parent.</span></label>
       <div id="msg"></div>
-      <button class="btn btn-primary" type="submit">Créer mon compte</button>
+      <button class="btn btn-primary" type="submit">Créer mon compte et rejoindre l'instance</button>
     </form>
     <p class="auth-foot">Déjà un compte ? <a href="/connexion">Se connecter</a></p>
   </div></div>
 </Base>
+<style>
+  .tags-field { border: 0; padding: 0; margin: 0; }
+  .tags-field legend { font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; }
+  .tags-field small { font-weight: 400; color: var(--gris); }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag { position: relative; cursor: pointer; }
+  .tag input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .tag span { display: inline-block; padding: 6px 11px; border: 2px solid var(--nuit); font-weight: 600; font-size: 0.88rem; }
+  .tag input:checked + span { background: var(--nuit); color: #fff; }
+  .tag input:focus-visible + span { box-shadow: var(--focus); }
+  .auth-card { max-width: 560px; }
+</style>
 <script>
   import { u } from '../lib/url';
   import { api } from '../lib/newsletter';
@@ -47,7 +68,7 @@ import Base from '../layouts/Base.astro';
         password: String(fd.get('password')),
         options: {
           emailRedirectTo: `${location.origin}${u('/compte')}?bienvenue=1`,
-          data: { prenom: fd.get('prenom'), nom: fd.get('nom'), classe: fd.get('classe'), newsletter: fd.get('newsletter') === 'on' },
+          data: { prenom: fd.get('prenom'), nom: fd.get('nom'), classe: fd.get('classe'), telephone: String(fd.get('telephone')).trim(), interets: fd.getAll('interets').map(String), newsletter: fd.get('newsletter') === 'on' },
         },
       });
       if (error) throw error;
@@ -55,6 +76,7 @@ import Base from '../layouts/Base.astro';
       if (fd.get('newsletter') === 'on') {
         fetch(api('/api/newsletter-subscribe'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: String(fd.get('email')).trim(), fromSignup: true }) }).catch(() => {});
       }
+      try { localStorage.setItem('jpv_compte', '1'); } catch {}
       form.classList.add('hidden');
       if (data.session) { show('Compte créé ! Redirection vers ton espace…', 'ok'); setTimeout(() => (location.href = u('/compte?bienvenue=1')), 900); }
       else show('Compte créé ! Vérifie ta boîte mail (et les spams) et clique sur le lien de confirmation pour activer ton compte.', 'ok');

@@ -7,6 +7,7 @@ export async function refreshAuthUI() {
   try {
     const { data } = await getSupabase().auth.getSession();
     const logged = Boolean(data.session);
+    if (logged) { try { localStorage.setItem('jpv_compte', '1'); } catch {} document.documentElement.classList.add('membre'); }
     document.querySelectorAll<HTMLElement>('[data-auth="in"]').forEach((el) => el.classList.toggle('hidden', !logged));
     document.querySelectorAll<HTMLElement>('[data-auth="out"]').forEach((el) => el.classList.toggle('hidden', logged));
   } catch {

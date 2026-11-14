@@ -12,7 +12,7 @@ import NewsletterForm from '../components/NewsletterForm.astro';
       <h1>Nos événements reprennent très bientôt.</h1>
       <p class="lead">Débats, conférences, concours d'éloquence, visites : le nouveau bureau prépare le programme. Les réponses s'ouvriront ici dès la première date annoncée.</p>
       <div class="flex mt-3">
-        <a class="btn btn-primary" href="/rejoindre">Rejoindre l'instance</a>
+        <a class="btn btn-primary hide-member" href="/rejoindre">Rejoindre l'instance</a>
         <a class="btn btn-outline" href="/agenda">Voir les séances passées</a>
       </div>
       <div class="mt-4" style="max-width:520px;"><h2 style="font-size:1.6rem;">Être prévenu par email</h2><NewsletterForm /></div>
@@ -55,6 +55,7 @@ import NewsletterForm from '../components/NewsletterForm.astro';
             <div class="field"><label for="ev-classe">Classe</label><input id="ev-classe" name="classe" required placeholder="ex. 2nde 3" maxlength="40" /></div>
             <div class="field"><label for="ev-email">Email</label><input id="ev-email" name="email" type="email" required autocomplete="email" /></div>
           </div>
+          <div class="field"><label for="ev-tel">Téléphone</label><input id="ev-tel" name="telephone" type="tel" required autocomplete="tel" inputmode="tel" pattern="[+0-9 .()\-]{8,20}" placeholder="06 12 34 56 78" /></div>
           <input type="text" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
           <label class="checkbox"><input type="checkbox" name="rgpd" required /><span>J'accepte que le bureau utilise ces informations pour organiser l'événement (<a class="link" href="/confidentialite" target="_blank">confidentialité</a>).</span></label>
           <div id="evMsg" role="status" aria-live="polite"></div>
@@ -133,6 +134,7 @@ import NewsletterForm from '../components/NewsletterForm.astro';
       (form.elements.namedItem('nom') as HTMLInputElement).value = p?.nom || '';
       (form.elements.namedItem('classe') as HTMLInputElement).value = p?.classe || '';
       (form.elements.namedItem('email') as HTMLInputElement).value = session.user.email || '';
+      (form.elements.namedItem('telephone') as HTMLInputElement).value = p?.telephone || '';
       // Consentement déjà donné à la création du compte
       const rg = form.elements.namedItem('rgpd') as HTMLInputElement; rg.checked = true; (rg.closest('label') as HTMLElement).classList.add('hidden');
       const { data } = await sb.from('event_signups').select('reponse').eq('event_key', ev.id).eq('user_id', session.user.id).maybeSingle();
@@ -156,7 +158,7 @@ import NewsletterForm from '../components/NewsletterForm.astro';
       if (fd.get('website')) return;
       const btn = $('evSubmit') as HTMLButtonElement; btn.disabled = true; show('Envoi…', 'info');
       const reponse = String(fd.get('reponse')) as 'oui' | 'non';
-      const row = { event_key: ev.id, reponse, prenom: String(fd.get('prenom')).trim(), nom: String(fd.get('nom')).trim(), classe: String(fd.get('classe')).trim(), email: String(fd.get('email')).trim().toLowerCase(), user_id: session?.user.id ?? null };
+      const row = { event_key: ev.id, reponse, prenom: String(fd.get('prenom')).trim(), nom: String(fd.get('nom')).trim(), classe: String(fd.get('classe')).trim(), email: String(fd.get('email')).trim().toLowerCase(), telephone: String(fd.get('telephone')).trim(), user_id: session?.user.id ?? null };
       const { error } = existing && session
         ? await sb.from('event_signups').update({ reponse }).eq('event_key', ev.id).eq('user_id', session.user.id)
         : await sb.from('event_signups').insert(row);

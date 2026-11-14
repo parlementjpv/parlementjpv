@@ -147,6 +147,9 @@ h4 { font-size: 1.1rem; }
 .alert-err { border-color: var(--rouge); }
 .alert-info { border-color: var(--bleu); }
 .hidden { display: none !important; }
+.membre .hide-member { display: none !important; }
+.show-member { display: none !important; }
+.membre .show-member { display: revert !important; }
 
 .auth-wrap { min-height: calc(100vh - 160px); display: grid; place-items: center; padding: 48px var(--gutter); background: var(--pierre); }
 .auth-card { width: 100%; max-width: 460px; background: var(--blanc); }

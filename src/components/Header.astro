@@ -21,7 +21,7 @@ const current = Astro.url.pathname.replace(BASE, '').replace(/\/$/, '') || '/';
     <div class="nav-actions">
       <a class="nav-auth" href="/connexion" data-auth="out">Connexion</a>
       <a class="nav-auth hidden" href="/compte" data-auth="in">Mon espace</a>
-      <a class="btn btn-primary btn-sm nav-cta" href="/rejoindre">Rejoindre l'instance</a>
+      <a class="btn btn-primary btn-sm nav-cta hide-member" href="/rejoindre">Rejoindre l'instance</a>
       <button class="icon-btn" id="themeToggle" type="button" aria-label="Basculer clair / sombre"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
       <button class="icon-btn burger" id="burger" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobileNav">Menu</button>
     </div>
@@ -35,7 +35,7 @@ const current = Astro.url.pathname.replace(BASE, '').replace(/\/$/, '') || '/';
     <a href="/connexion" data-auth="out">Connexion</a>
     <a href="/compte" data-auth="in" class="hidden">Mon espace</a>
     <a href="/evenement">Événements</a>
-    <a href="/rejoindre" class="btn btn-primary">Rejoindre l'instance</a>
+    <a href="/rejoindre" class="btn btn-primary hide-member">Rejoindre l'instance</a>
   </nav>
 </header>
 

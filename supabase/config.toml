@@ -16,3 +16,7 @@ verify_jwt = false
 verify_jwt = false
 [functions.set-role]
 verify_jwt = false
+[functions.candidature-decision]
+verify_jwt = false
+[functions.admin-user]
+verify_jwt = false

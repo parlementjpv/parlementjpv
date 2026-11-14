@@ -28,7 +28,10 @@ import Base from '../layouts/Base.astro';
             <div class="field"><label for="prenom">Prénom</label><input id="prenom" name="prenom" required /></div>
             <div class="field"><label for="nom">Nom</label><input id="nom" name="nom" required /></div>
           </div>
-          <div class="field"><label for="classe">Classe</label><input id="classe" name="classe" /></div>
+          <div class="form-row">
+            <div class="field"><label for="classe">Classe</label><input id="classe" name="classe" /></div>
+            <div class="field"><label for="telephone">Téléphone</label><input id="telephone" name="telephone" type="tel" autocomplete="tel" inputmode="tel" pattern="[+0-9 .()\-]{8,20}" placeholder="06 12 34 56 78" /></div>
+          </div>
           <div class="field"><label>Email</label><input id="email" disabled /></div>
           <div id="pmsg"></div>
           <button class="btn btn-primary btn-sm" type="submit">Enregistrer</button>
@@ -66,10 +69,14 @@ import Base from '../layouts/Base.astro';
     (f.elements.namedItem('prenom') as HTMLInputElement).value = p?.prenom || '';
     (f.elements.namedItem('nom') as HTMLInputElement).value = p?.nom || '';
     (f.elements.namedItem('classe') as HTMLInputElement).value = p?.classe || '';
+    (f.elements.namedItem('telephone') as HTMLInputElement).value = p?.telephone || '';
     (document.getElementById('email') as HTMLInputElement).value = session.user.email || '';
     f.addEventListener('submit', async (e) => {
       e.preventDefault(); const fd = new FormData(f);
-      const { error } = await sb.from('profiles').update({ prenom: fd.get('prenom'), nom: fd.get('nom'), classe: fd.get('classe') }).eq('id', session.user.id);
+      if (!f.checkValidity()) { f.reportValidity(); return; }
+      const tel = String(fd.get('telephone') || '').trim() || null;
+      const { error } = await sb.from('profiles').update({ prenom: fd.get('prenom'), nom: fd.get('nom'), classe: fd.get('classe'), telephone: tel }).eq('id', session.user.id);
+      if (!error) await sb.from('adhesions').update({ prenom: fd.get('prenom'), nom: fd.get('nom'), classe: fd.get('classe') || '?', telephone: tel }).eq('user_id', session.user.id);
       document.getElementById('pmsg')!.innerHTML = error ? `<div class="alert alert-err">${error.message}</div>` : '<div class="alert alert-ok">Enregistré.</div>';
     });
 
@@ -96,7 +103,7 @@ import Base from '../layouts/Base.astro';
           b.disabled = true;
           const { error } = rep.has(id)
             ? await sb.from('event_signups').update({ reponse: r }).eq('event_key', id).eq('user_id', session.user.id)
-            : await sb.from('event_signups').insert({ event_key: id, reponse: r, user_id: session.user.id, prenom: p?.prenom || '?', nom: p?.nom || '?', classe: p?.classe || '?', email: session.user.email });
+            : await sb.from('event_signups').insert({ event_key: id, reponse: r, user_id: session.user.id, prenom: p?.prenom || '?', nom: p?.nom || '?', classe: p?.classe || '?', telephone: p?.telephone || null, email: session.user.email });
           if (error) { b.disabled = false; alert(error.code === '23505' ? 'Ton adresse a déjà répondu à cet événement sans être connectée.' : "Réponse impossible : complète d'abord ton prénom, ton nom et ta classe."); return; }
           rep.set(id, r); paint();
         }));

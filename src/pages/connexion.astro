@@ -12,7 +12,7 @@ import Base from '../layouts/Base.astro';
       <button class="btn btn-primary" type="submit">Se connecter</button>
       <a class="small center" href="/mot-de-passe-oublie">Mot de passe oublié ?</a>
     </form>
-    <p class="auth-foot">Pas encore de compte ? <a href="/inscription">Créer un compte</a></p>
+    <p class="auth-foot">Pas encore membre ? <a href="/inscription">Créer mon compte et rejoindre l'instance</a></p>
   </div></div>
 </Base>
 <script>
@@ -32,6 +32,7 @@ import Base from '../layouts/Base.astro';
     const btn = form.querySelector('button')!; btn.disabled = true; msg.innerHTML = '';
     const { error } = await getSupabase().auth.signInWithPassword({ email: String(fd.get('email')).trim(), password: String(fd.get('password')) });
     if (error) { show(frError(error.message)); btn.disabled = false; return; }
+    try { localStorage.setItem('jpv_compte', '1'); } catch {}
     location.href = next.startsWith('/') ? next : u('/compte');
   });
 </script>

@@ -42,14 +42,14 @@ const turnstile = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&display=swap" rel="stylesheet" />
   <script is:inline>
-    (function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+    (function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);var m=localStorage.getItem('jpv_compte');for(var i=0;i<localStorage.length&&!m;i++){if(/^sb-.*-auth-token$/.test(localStorage.key(i)||''))m='1';}if(m)document.documentElement.classList.add('membre');}catch(e){}})();
   </script>
   {turnstile && <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
 </head>
 <body>
   <a class="skip-link" href="#main">Aller au contenu</a>
   {!minimal && (
-    <div class="notice">
+    <div class="notice hide-member">
       Toutes nos actions reprennent très bientôt. Le nouveau bureau est en cours d'élection.
       <a href="/rejoindre">Rejoindre l'instance</a>
     </div>

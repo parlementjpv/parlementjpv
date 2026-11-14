@@ -24,15 +24,22 @@ const interets = ['Débats', 'Éloquence', 'Conférences', 'Visites', 'Communica
         <p class="muted mt-3">L'adhésion est gratuite et ouverte à tous les élèves du lycée, de la seconde à la terminale. Pour prendre un poste dans le nouveau bureau, passe plutôt par la <a class="link" href="/candidature">candidature au bureau</a>.</p>
       </div>
 
-      <form class="form card" id="joinForm" novalidate>
+      <div class="card show-member">
+        <h2 style="font-size:1.8rem;margin-top:0;">Tu fais déjà partie de l'instance.</h2>
+        <p class="muted">Ton compte fait de toi un membre du Parlement JPV. Réponds aux prochains événements et suis tes demandes depuis ton espace.</p>
+        <div class="flex"><a class="btn btn-primary" href="/evenement">Voir les événements</a><a class="btn btn-outline" href="/compte">Mon espace</a></div>
+      </div>
+      <form class="form card hide-member" id="joinForm" novalidate>
+        <p class="alert alert-info" style="margin:0;">Le plus simple : <a class="link" href="/inscription">crée ton compte</a>, tu deviens membre automatiquement et tu pourras répondre aux événements en un clic. Sinon, ce formulaire suffit.</p>
         <h2 style="font-size:1.8rem;margin:0;">Je rejoins le Parlement JPV</h2>
         <div class="form-row">
           <div class="field"><label for="j-prenom">Prénom</label><input id="j-prenom" name="prenom" required autocomplete="given-name" maxlength="80" /></div>
           <div class="field"><label for="j-nom">Nom</label><input id="j-nom" name="nom" required autocomplete="family-name" maxlength="80" /></div>
         </div>
+        <div class="field"><label for="j-classe">Classe</label><input id="j-classe" name="classe" required placeholder="ex. 1re 4" maxlength="40" /></div>
         <div class="form-row">
-          <div class="field"><label for="j-classe">Classe</label><input id="j-classe" name="classe" required placeholder="ex. 1re 4" maxlength="40" /></div>
           <div class="field"><label for="j-email">Email</label><input id="j-email" name="email" type="email" required autocomplete="email" /></div>
+          <div class="field"><label for="j-tel">Téléphone</label><input id="j-tel" name="telephone" type="tel" required autocomplete="tel" inputmode="tel" pattern="[+0-9 .()\-]{8,20}" placeholder="06 12 34 56 78" /></div>
         </div>
         <fieldset class="tags-field">
           <legend>Ce qui t'intéresse <small>(facultatif)</small></legend>
@@ -97,7 +104,7 @@ const interets = ['Débats', 'Éloquence', 'Conférences', 'Visites', 'Communica
       const btn = form.querySelector('button[type=submit]') as HTMLButtonElement; btn.disabled = true; show('Envoi…', 'info');
       const row = {
         prenom: String(fd.get('prenom')).trim(), nom: String(fd.get('nom')).trim(), classe: String(fd.get('classe')).trim(),
-        email: String(fd.get('email')).trim().toLowerCase(), interets: fd.getAll('interets').map(String),
+        email: String(fd.get('email')).trim().toLowerCase(), telephone: String(fd.get('telephone')).trim(), interets: fd.getAll('interets').map(String),
         message: String(fd.get('message') || '').trim() || null, user_id: session?.user.id ?? null,
       };
       const { error } = await sb.from('adhesions').insert(row);

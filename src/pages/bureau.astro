@@ -14,7 +14,8 @@ import Base from '../layouts/Base.astro';
       <div class="stat"><strong id="sMsg">–</strong><span>messages non traités</span></div>
     </div>
     <div class="tabs flex mb-3">
-      <button class="pill tab active" data-tab="cand" type="button">Candidatures au bureau</button>
+      <button class="pill tab active" data-tab="cand" type="button">Candidatures à traiter</button>
+      <button class="pill tab" data-tab="archives" type="button">Archives</button>
       <button class="pill tab" data-tab="adh" type="button">Adhésions</button>
       <button class="pill tab" data-tab="nl" type="button">Newsletter</button>
       <button class="pill tab" data-tab="inscr" type="button">Événements</button>
@@ -22,7 +23,8 @@ import Base from '../layouts/Base.astro';
       <button class="pill tab" data-tab="membres" type="button">Membres & rôles</button>
     </div>
 
-    <div class="panel" id="tab-cand"><div class="card" style="overflow:auto;"><table class="table" id="candTable"><thead><tr><th>Date</th><th>Candidat·e</th><th>Type</th><th>Motivation</th><th>Statut</th><th>Note (visible par le candidat)</th></tr></thead><tbody></tbody></table></div></div>
+    <div class="panel" id="tab-cand"><div class="card" style="overflow:auto;"><p class="small muted">Écris d'abord un message (facultatif), puis accepte ou refuse : le candidat reçoit automatiquement un email avec ta réponse et ton message, et la candidature passe dans les archives.</p><div id="candMsg"></div><table class="table" id="candTable"><thead><tr><th>Date</th><th>Candidat·e</th><th>Poste</th><th>Motivation</th><th>Message au candidat</th><th>Décision</th></tr></thead><tbody></tbody></table></div></div>
+    <div class="panel hidden" id="tab-archives"><div class="card" style="overflow:auto;"><p class="small muted">Candidatures traitées, conservées. « Rouvrir » la remet dans les candidatures à traiter (sans envoyer d'email).</p><table class="table" id="archTable"><thead><tr><th>Décision</th><th>Candidat·e</th><th>Poste</th><th>Motivation</th><th>Message envoyé</th><th></th></tr></thead><tbody></tbody></table></div></div>
 
     <div class="panel hidden" id="tab-nl">
       <div class="grid grid-2" style="align-items:start;">
@@ -76,7 +78,7 @@ import Base from '../layouts/Base.astro';
       </div>
     </div>
     <div class="panel hidden" id="tab-msg"><div class="card" style="overflow:auto;"><table class="table" id="msgTable"><thead><tr><th>Date</th><th>De</th><th>Sujet</th><th>Message</th><th></th></tr></thead><tbody></tbody></table></div></div>
-    <div class="panel hidden" id="tab-membres"><div class="card" style="overflow:auto;"><p class="small muted">Seul un <strong>admin</strong> peut changer les rôles. Le rôle « bureau » donne accès à cette page.</p><table class="table" id="memTable"><thead><tr><th>Nom</th><th>Classe</th><th>Inscrit le</th><th>Rôle</th></tr></thead><tbody></tbody></table></div></div>
+    <div class="panel hidden" id="tab-membres"><div class="card" style="overflow:auto;"><p class="small muted">Seul un <strong>admin</strong> peut changer les rôles et bannir un compte. Le rôle « bureau » donne accès à cette page. Un compte banni ne peut plus se connecter.</p><table class="table" id="memTable"><thead><tr><th>Nom</th><th>Classe</th><th>Contact</th><th>Inscrit le</th><th>Rôle</th><th></th></tr></thead><tbody></tbody></table></div></div>
   </div></section>
   <section class="section" id="denied" style="display:none;"><div class="container narrow center"><h2>Accès réservé</h2><p class="muted">Cette page est réservée aux membres du bureau.</p><a class="btn btn-outline" href="/compte">Retour à mon espace</a></div></section>
 </Base>
@@ -89,6 +91,9 @@ import Base from '../layouts/Base.astro';
   .ev-item summary { cursor: pointer; font-weight: 700; font-size: 0.9rem; }
   .ev-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 0.88rem; margin-top: 8px; }
   .ev-cols h4 { margin-bottom: 4px; }
+  .decide { display: grid; gap: 6px; min-width: 110px; }
+  .table textarea { width: 100%; min-width: 180px; font: inherit; font-size: 0.85rem; padding: 6px; border: 2px solid var(--pierre-fonce); }
+  #memTable tr.banned td { opacity: 0.55; }
 </style>
 <script>
   import { getSupabase } from '../lib/supabase';
@@ -125,17 +130,43 @@ import Base from '../layouts/Base.astro';
     document.getElementById('sMsg')!.textContent = String(nMsg ?? 0);
     document.getElementById('subs')!.innerHTML = `<strong>${st?.confirmes ?? 0}</strong> confirmés · ${st?.en_attente ?? 0} en attente · ${st?.desinscrits ?? 0} désinscrits`;
 
-    // Candidatures
-    const { data: cands } = await sb.from('candidatures').select('*').order('created_at', { ascending: false });
-    const tb = document.querySelector('#candTable tbody')!;
-    tb.innerHTML = (cands || []).map((c) => `<tr>
-      <td>${d(c.created_at)}</td><td><strong>${esc(c.prenom)} ${esc(c.nom)}</strong><br><span class="muted">${esc(c.classe)}<br><a href="mailto:${esc(c.email)}">${esc(c.email)}</a></span></td>
-      <td><span class="pill">${esc(c.type)}</span>${c.poste ? `<br><strong>${esc(c.poste)}</strong>` : ''}</td>
-      <td class="motiv">${esc(c.motivation)}${c.experience ? `<br><em class="muted">Exp. : ${esc(c.experience)}</em>` : ''}${c.disponibilites ? `<br><span class="muted">Dispo : ${esc(c.disponibilites)}</span>` : ''}</td>
-      <td><select data-id="${c.id}" class="statut">${['nouvelle', 'en_cours', 'acceptee', 'refusee'].map((s) => `<option ${s === c.statut ? 'selected' : ''}>${s}</option>`).join('')}</select></td>
-      <td><input data-id="${c.id}" class="note" value="${esc(c.note_bureau || '')}" placeholder="ex. RDV mardi midi au CDI" /></td></tr>`).join('') || '<tr><td colspan="6" class="muted">Aucune candidature.</td></tr>';
-    tb.querySelectorAll<HTMLSelectElement>('.statut').forEach((s) => s.addEventListener('change', async () => { await sb.from('candidatures').update({ statut: s.value }).eq('id', s.dataset.id); }));
-    tb.querySelectorAll<HTMLInputElement>('.note').forEach((i) => i.addEventListener('change', async () => { await sb.from('candidatures').update({ note_bureau: i.value }).eq('id', i.dataset.id); }));
+    // Candidatures : à traiter / archives
+    const STAT: Record<string, string> = { nouvelle: 'Nouvelle', en_cours: 'En cours', acceptee: 'Acceptée', refusee: 'Refusée' };
+    const candMsg = document.getElementById('candMsg')!;
+    const posteOf = (c: any) => c.type === 'bureau' ? `<strong>${esc(c.poste || 'Tout poste')}</strong>` : '<span class="pill">membre</span>';
+    const motivOf = (c: any) => `${esc(c.motivation)}${c.experience ? `<br><em class="muted">Exp. : ${esc(c.experience)}</em>` : ''}${c.disponibilites ? `<br><span class="muted">Dispo : ${esc(c.disponibilites)}</span>` : ''}`;
+    const who = (c: any) => `<strong>${esc(c.prenom)} ${esc(c.nom)}</strong><br><span class="muted">${esc(c.classe)}<br><a href="mailto:${esc(c.email)}">${esc(c.email)}</a>${c.profiles?.telephone ? `<br><a href="tel:${esc(c.profiles.telephone)}">${esc(c.profiles.telephone)}</a>` : ''}</span>`;
+    async function decide(id: string, statut: string, note?: string) {
+      const r = await postJSON<{ emailed: boolean; warning?: string }>('/api/candidature-decision', { id, statut, note }, session.access_token);
+      if (!r.ok) { candMsg.innerHTML = `<div class="alert alert-err">${esc(r.error)}</div>`; return false; }
+      candMsg.innerHTML = r.data.warning ? `<div class="alert alert-err">${esc(r.data.warning)}</div>` : r.data.emailed ? '<div class="alert alert-ok">Décision enregistrée et email envoyé au candidat. La candidature est dans les archives.</div>' : '';
+      return true;
+    }
+    async function loadCands() {
+      const { data: cands } = await sb.from('candidatures').select('*, profiles(telephone)').order('created_at', { ascending: false });
+      const open = (cands || []).filter((c: any) => c.statut === 'nouvelle' || c.statut === 'en_cours');
+      const done = (cands || []).filter((c: any) => c.statut === 'acceptee' || c.statut === 'refusee').sort((a: any, b: any) => (b.decided_at || b.created_at).localeCompare(a.decided_at || a.created_at));
+      document.getElementById('sCand')!.textContent = String(open.length);
+      const tb = document.querySelector('#candTable tbody')!;
+      tb.innerHTML = open.map((c: any) => `<tr>
+        <td>${d(c.created_at)}<br><span class="pill">${STAT[c.statut]}</span></td><td>${who(c)}</td><td>${posteOf(c)}</td><td class="motiv">${motivOf(c)}</td>
+        <td><textarea class="note" data-id="${c.id}" rows="3" placeholder="ex. Rendez-vous mardi midi au CDI">${esc(c.note_bureau || '')}</textarea></td>
+        <td><div class="decide"><button class="btn btn-primary btn-sm dec" data-id="${c.id}" data-s="acceptee" type="button">Accepter</button><button class="btn btn-outline btn-sm dec" data-id="${c.id}" data-s="refusee" type="button">Refuser</button>${c.statut === 'nouvelle' ? `<button class="btn btn-outline btn-sm dec" data-id="${c.id}" data-s="en_cours" type="button">En cours</button>` : ''}</div></td></tr>`).join('') || '<tr><td colspan="6" class="muted">Aucune candidature à traiter.</td></tr>';
+      tb.querySelectorAll<HTMLButtonElement>('.dec').forEach((b) => b.addEventListener('click', async () => {
+        const c: any = open.find((x: any) => x.id === b.dataset.id); const s0 = b.dataset.s!;
+        const note = (tb.querySelector(`.note[data-id="${b.dataset.id}"]`) as HTMLTextAreaElement).value;
+        if (s0 !== 'en_cours' && !confirm(`${s0 === 'acceptee' ? 'Accepter' : 'Refuser'} la candidature de ${c.prenom} ${c.nom} ?\nUn email automatique lui sera envoyé à ${c.email}${note.trim() ? ' avec ton message' : ''}.`)) return;
+        b.disabled = true; if (await decide(b.dataset.id!, s0, note)) loadCands(); else b.disabled = false;
+      }));
+      tb.querySelectorAll<HTMLTextAreaElement>('.note').forEach((t) => t.addEventListener('change', async () => { await sb.from('candidatures').update({ note_bureau: t.value.trim() || null }).eq('id', t.dataset.id); }));
+      const ab = document.querySelector('#archTable tbody')!;
+      ab.innerHTML = done.map((c: any) => `<tr>
+        <td><span class="pill ${c.statut === 'acceptee' ? 'pill-gold' : ''}">${STAT[c.statut]}</span><br><span class="small muted">${c.decided_at ? d(c.decided_at) : ''}</span></td>
+        <td>${who(c)}</td><td>${posteOf(c)}</td><td class="motiv">${motivOf(c)}</td><td class="motiv">${esc(c.note_bureau || '—')}</td>
+        <td><button class="btn btn-outline btn-sm reopen" data-id="${c.id}" type="button">Rouvrir</button></td></tr>`).join('') || '<tr><td colspan="6" class="muted">Aucune candidature archivée.</td></tr>';
+      ab.querySelectorAll<HTMLButtonElement>('.reopen').forEach((b) => b.addEventListener('click', async () => { b.disabled = true; if (await decide(b.dataset.id!, 'en_cours')) loadCands(); }));
+    }
+    await loadCands();
 
     // Newsletter
     const f = document.getElementById('nlForm') as HTMLFormElement, nlMsg = document.getElementById('nlMsg')!, prev = document.getElementById('preview')!;
@@ -176,10 +207,10 @@ import Base from '../layouts/Base.astro';
 
     // Adhésions
     const { data: adh } = await sb.from('adhesions').select('*').order('created_at', { ascending: false });
-    document.querySelector('#adhTable tbody')!.innerHTML = (adh || []).map((a) => `<tr><td>${d(a.created_at)}</td><td><strong>${esc(a.prenom)} ${esc(a.nom)}</strong><br><a href="mailto:${esc(a.email)}">${esc(a.email)}</a></td><td>${esc(a.classe)}</td><td>${(a.interets || []).map((i: string) => `<span class="pill">${esc(i)}</span>`).join(' ')}</td><td class="motiv">${esc(a.message || '')}</td></tr>`).join('') || '<tr><td colspan="5" class="muted">Aucune adhésion pour le moment.</td></tr>';
+    document.querySelector('#adhTable tbody')!.innerHTML = (adh || []).map((a) => `<tr><td>${d(a.created_at)}</td><td><strong>${esc(a.prenom)} ${esc(a.nom)}</strong><br><a href="mailto:${esc(a.email)}">${esc(a.email)}</a>${a.telephone ? `<br><a href="tel:${esc(a.telephone)}">${esc(a.telephone)}</a>` : ''}${a.user_id ? ' <span class="pill">compte</span>' : ''}</td><td>${esc(a.classe)}</td><td>${(a.interets || []).map((i: string) => `<span class="pill">${esc(i)}</span>`).join(' ')}</td><td class="motiv">${esc(a.message || '')}</td></tr>`).join('') || '<tr><td colspan="5" class="muted">Aucune adhésion pour le moment.</td></tr>';
     document.getElementById('exportAdh')!.addEventListener('click', () => {
       const q = (v: unknown) => `"${String(v ?? '').replace(/"/g, '""')}"`;
-      const csv = 'date;prenom;nom;classe;email;interets;message\n' + (adh || []).map((a) => [a.created_at.slice(0, 10), a.prenom, a.nom, a.classe, a.email, (a.interets || []).join(', '), a.message].map(q).join(';')).join('\n');
+      const csv = 'date;prenom;nom;classe;email;telephone;interets;message\n' + (adh || []).map((a) => [a.created_at.slice(0, 10), a.prenom, a.nom, a.classe, a.email, a.telephone, (a.interets || []).join(', '), a.message].map(q).join(';')).join('\n');
       const link = document.createElement('a'); link.href = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv' })); link.download = 'adhesions-parlement-jpv.csv'; link.click();
     });
 
@@ -210,12 +241,12 @@ import Base from '../layouts/Base.astro';
     async function loadEvents() {
       const [{ data: evs }, { data: regs }] = await Promise.all([
         sb.from('events').select('*').order('starts_at', { ascending: false }),
-        sb.from('event_signups').select('event_key, reponse, prenom, nom, classe, email').order('created_at'),
+        sb.from('event_signups').select('event_key, reponse, prenom, nom, classe, email, telephone').order('created_at'),
       ]);
       const by: Record<string, any[]> = {};
       (regs || []).forEach((r: any) => (by[r.event_key] ||= []).push(r));
       const now = Date.now();
-      const list = (rows: any[]) => rows.length ? rows.map((p) => `${esc(p.prenom)} ${esc(p.nom)} (${esc(p.classe)}) <a href="mailto:${esc(p.email)}">${esc(p.email)}</a>`).join('<br>') : '<span class="muted">personne</span>';
+      const list = (rows: any[]) => rows.length ? rows.map((p) => `${esc(p.prenom)} ${esc(p.nom)} (${esc(p.classe)}) <a href="mailto:${esc(p.email)}">${esc(p.email)}</a>${p.telephone ? ` · <a href="tel:${esc(p.telephone)}">${esc(p.telephone)}</a>` : ''}`).join('<br>') : '<span class="muted">personne</span>';
       const box = document.getElementById('inscr')!;
       box.innerHTML = (evs || []).map((ev: any) => {
         const rs = by[ev.id] || [], oui = rs.filter((r) => r.reponse === 'oui'), non = rs.filter((r) => r.reponse === 'non');
@@ -245,7 +276,7 @@ import Base from '../layouts/Base.astro';
       box.querySelectorAll<HTMLButtonElement>('.ev-csv').forEach((b) => b.addEventListener('click', () => {
         const ev: any = (evs || []).find((x: any) => x.id === b.dataset.id); const rs = by[b.dataset.id!] || [];
         const q = (v: unknown) => `"${String(v ?? '').replace(/"/g, '""')}"`;
-        const csv = 'reponse;prenom;nom;classe;email\n' + rs.map((r: any) => [r.reponse === 'oui' ? 'vient' : 'ne vient pas', r.prenom, r.nom, r.classe, r.email].map(q).join(';')).join('\n');
+        const csv = 'reponse;prenom;nom;classe;email;telephone\n' + rs.map((r: any) => [r.reponse === 'oui' ? 'vient' : 'ne vient pas', r.prenom, r.nom, r.classe, r.email, r.telephone].map(q).join(';')).join('\n');
         const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv' })); a.download = `reponses-${(ev?.title || 'evenement').toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 40)}.csv`; a.click();
       }));
     }
@@ -257,12 +288,33 @@ import Base from '../layouts/Base.astro';
     mt.innerHTML = (msgs || []).map((m) => `<tr style="${m.traite ? 'opacity:.55' : ''}"><td>${d(m.created_at)}</td><td>${esc(m.nom)}<br><a href="mailto:${esc(m.email)}">${esc(m.email)}</a></td><td>${esc(m.sujet)}</td><td class="motiv">${esc(m.message)}</td><td><button class="btn btn-outline btn-sm done" data-id="${m.id}" type="button">${m.traite ? 'Traité' : 'Marquer traité'}</button></td></tr>`).join('') || '<tr><td colspan="5" class="muted">Aucun message.</td></tr>';
     mt.querySelectorAll<HTMLButtonElement>('.done').forEach((b) => b.addEventListener('click', async () => { await sb.from('contact_messages').update({ traite: true }).eq('id', b.dataset.id); b.textContent = 'Traité'; b.closest('tr')!.style.opacity = '.55'; }));
 
-    // Membres
-    const { data: mems } = await sb.from('profiles').select('*').order('created_at', { ascending: false });
-    document.querySelector('#memTable tbody')!.innerHTML = (mems || []).map((p) => `<tr><td>${esc(p.prenom)} ${esc(p.nom)}</td><td>${esc(p.classe || '')}</td><td>${d(p.created_at)}</td><td>${isAdmin ? `<select class="role" data-id="${p.id}">${['membre', 'bureau', 'admin'].map((r) => `<option ${r === p.role ? 'selected' : ''}>${r}</option>`).join('')}</select>` : `<span class="pill">${p.role}</span>`}</td></tr>`).join('');
-    document.querySelectorAll<HTMLSelectElement>('.role').forEach((s) => s.addEventListener('change', async () => {
-      const r = await postJSON('/api/set-role', { userId: s.dataset.id, role: s.value }, session.access_token);
-      if (!r.ok) alert(r.error);
-    }));
+    // Membres : rôles et bannissement
+    async function loadMembers() {
+      const [{ data: mems }, { data: adhs }] = await Promise.all([
+        sb.from('profiles').select('*').order('created_at', { ascending: false }),
+        sb.from('adhesions').select('user_id, email').not('user_id', 'is', null),
+      ]);
+      const mail = new Map((adhs || []).map((a: any) => [a.user_id, a.email]));
+      const tbody = document.querySelector('#memTable tbody')!;
+      tbody.innerHTML = (mems || []).map((p: any) => `<tr class="${p.banni ? 'banned' : ''}">
+        <td><strong>${esc(p.prenom)} ${esc(p.nom)}</strong>${p.banni ? ' <span class="pill pill-gold">banni</span>' : ''}</td><td>${esc(p.classe || '')}</td>
+        <td class="small">${mail.get(p.id) ? `<a href="mailto:${esc(mail.get(p.id))}">${esc(mail.get(p.id))}</a>` : ''}${p.telephone ? `<br><a href="tel:${esc(p.telephone)}">${esc(p.telephone)}</a>` : ''}</td>
+        <td>${d(p.created_at)}</td>
+        <td>${isAdmin && p.id !== session.user.id && !p.banni ? `<select class="role" data-id="${p.id}">${['membre', 'bureau', 'admin'].map((r) => `<option ${r === p.role ? 'selected' : ''}>${r}</option>`).join('')}</select>` : `<span class="pill">${p.role}</span>`}</td>
+        <td>${isAdmin && p.id !== session.user.id ? `<button class="btn btn-outline btn-sm ban" data-id="${p.id}" data-a="${p.banni ? 'unban' : 'ban'}" type="button">${p.banni ? 'Débannir' : 'Bannir'}</button>` : ''}</td></tr>`).join('');
+      tbody.querySelectorAll<HTMLSelectElement>('.role').forEach((s0) => s0.addEventListener('change', async () => {
+        const r = await postJSON('/api/set-role', { userId: s0.dataset.id, role: s0.value }, session.access_token);
+        if (!r.ok) alert(r.error);
+      }));
+      tbody.querySelectorAll<HTMLButtonElement>('.ban').forEach((b) => b.addEventListener('click', async () => {
+        const p: any = (mems || []).find((x: any) => x.id === b.dataset.id); const ban = b.dataset.a === 'ban';
+        if (!confirm(ban ? `Bannir ${p.prenom} ${p.nom} ? Le compte ne pourra plus se connecter et perd ses rôles.` : `Débannir ${p.prenom} ${p.nom} ? Le compte pourra de nouveau se connecter (en simple membre).`)) return;
+        b.disabled = true;
+        const r = await postJSON('/api/admin-user', { userId: b.dataset.id, action: b.dataset.a }, session.access_token);
+        if (!r.ok) { alert(r.error); b.disabled = false; return; }
+        loadMembers();
+      }));
+    }
+    await loadMembers();
   })();
 </script>
