@@ -1,154 +1,174 @@
 ---
 import Base from '../layouts/Base.astro';
 import NewsletterForm from '../components/NewsletterForm.astro';
-import data from '../data/events.json';
-
-const now = Date.now();
-const upcoming = data.events
-  .filter((e) => new Date(e.end || e.start).getTime() >= now)
-  .sort((a, b) => a.start.localeCompare(b.start));
-const next = upcoming[0];
-const key = (e: { start: string; title: string }) => `${e.start.slice(0, 10)}|${e.title}`;
-const tz = { timeZone: 'Europe/Paris' } as const;
-const longDate = (s: string) => new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', ...tz }).format(new Date(s));
-const hour = (s: string) => new Intl.DateTimeFormat('fr-FR', { timeStyle: 'short', ...tz }).format(new Date(s));
-const day = (s: string) => new Intl.DateTimeFormat('fr-FR', { day: '2-digit', ...tz }).format(new Date(s));
-const month = (s: string) => new Intl.DateTimeFormat('fr-FR', { month: 'long', ...tz }).format(new Date(s));
 ---
-<Base title="S'inscrire au prochain événement" description="Inscris-toi en ligne au prochain débat, atelier ou conférence du Parlement JPV.">
-  {next ? (
-    <>
-      <section class="ev-hero">
-        <div class="container ev-grid">
-          <div class="ev-date" aria-hidden="true">
-            <span class="ev-day">{day(next.start)}</span>
-            <span class="ev-month">{month(next.start)}</span>
-          </div>
-          <div>
-            <span class="eyebrow">Prochain événement · {next.type}</span>
-            <h1>{next.title}</h1>
-            <p class="lead">{longDate(next.start)}, {hour(next.start)}{next.end ? `–${hour(next.end)}` : ''}<br />{next.location}</p>
-            {next.tentative && <p class="stamp mt-2">Date indicative</p>}
-            <p class="count mt-2" id="count" data-key={key(next)} hidden></p>
-          </div>
-        </div>
-      </section>
+<Base title="Événements" description="Les prochains débats, ateliers et conférences du Parlement JPV : dis-nous si tu viens.">
+  <div id="evLoading" class="section"><div class="container"><p class="muted">Chargement des événements…</p></div></div>
 
-      <section class="section">
-        <div class="container ev-form-grid">
-          <div>
-            <h2>Je m'inscris</h2>
-            <p class="muted">Pas besoin de compte. Ton inscription aide le bureau à prévoir la salle et le temps de parole. Tes coordonnées ne sont visibles que par le bureau.</p>
-            {upcoming.length > 1 && <p class="muted">Tu peux aussi choisir un autre événement à venir dans le formulaire.</p>}
-          </div>
-          <form class="form card" id="evForm" novalidate>
-            <div class="field"><label for="ev">Événement</label>
-              <select id="ev" name="event_key">
-                {upcoming.map((e) => <option value={key(e)}>{`${new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short', ...tz }).format(new Date(e.start))} — ${e.title}`}</option>)}
-              </select>
-            </div>
-            <div class="form-row">
-              <div class="field"><label for="ev-prenom">Prénom</label><input id="ev-prenom" name="prenom" required autocomplete="given-name" maxlength="80" /></div>
-              <div class="field"><label for="ev-nom">Nom</label><input id="ev-nom" name="nom" required autocomplete="family-name" maxlength="80" /></div>
-            </div>
-            <div class="form-row">
-              <div class="field"><label for="ev-classe">Classe</label><input id="ev-classe" name="classe" required placeholder="ex. 2nde 3" maxlength="40" /></div>
-              <div class="field"><label for="ev-email">Email</label><input id="ev-email" name="email" type="email" required autocomplete="email" /></div>
-            </div>
-            <input type="text" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
-            <label class="checkbox"><input type="checkbox" name="rgpd" required /><span>J'accepte que le bureau utilise ces informations pour organiser l'événement (<a class="link" href="/confidentialite" target="_blank">confidentialité</a>).</span></label>
-            <div id="evMsg" role="status" aria-live="polite"></div>
-            <button class="btn btn-primary" type="submit">Je m'inscris</button>
-          </form>
+  <!-- Aucun événement : message de reprise -->
+  <section class="section" id="evEmpty" hidden>
+    <div class="container narrow">
+      <span class="eyebrow">Événements</span>
+      <h1>Nos événements reprennent très bientôt.</h1>
+      <p class="lead">Débats, conférences, concours d'éloquence, visites : le nouveau bureau prépare le programme. Les réponses s'ouvriront ici dès la première date annoncée.</p>
+      <div class="flex mt-3">
+        <a class="btn btn-primary" href="/rejoindre">Rejoindre l'instance</a>
+        <a class="btn btn-outline" href="/agenda">Voir les séances passées</a>
+      </div>
+      <div class="mt-4" style="max-width:520px;"><h2 style="font-size:1.6rem;">Être prévenu par email</h2><NewsletterForm /></div>
+    </div>
+  </section>
+
+  <!-- Un événement sélectionné -->
+  <div id="evMain" hidden>
+    <section class="ev-hero">
+      <div class="container ev-grid">
+        <div class="ev-date" aria-hidden="true"><span class="ev-day" id="evDay"></span><span class="ev-month" id="evMonth"></span></div>
+        <div>
+          <span class="eyebrow" id="evKicker"></span>
+          <h1 id="evTitle"></h1>
+          <p class="lead" id="evWhen"></p>
+          <p class="ev-desc" id="evDesc" hidden></p>
+          <p class="count" id="evCount" hidden></p>
         </div>
-      </section>
-    </>
-  ) : (
-    <section class="section">
-      <div class="container narrow">
-        <span class="eyebrow">Événements</span>
-        <h1>Nos événements reprennent très bientôt.</h1>
-        <p class="lead">Débats, conférences, concours d'éloquence, visites : le nouveau bureau prépare le programme. Les inscriptions ouvriront ici dès la première date annoncée.</p>
-        <div class="flex mt-3">
-          <a class="btn btn-primary" href="/rejoindre">Rejoindre l'instance</a>
-          <a class="btn btn-outline" href="/agenda">Voir les séances passées</a>
-        </div>
-        <div class="mt-4" style="max-width:520px;"><h2 style="font-size:1.6rem;">Être prévenu par email</h2><NewsletterForm /></div>
       </div>
     </section>
-  )}
+
+    <section class="section">
+      <div class="container ev-form-grid">
+        <div>
+          <h2>Tu viens ?</h2>
+          <p class="muted">Ta réponse aide le bureau à prévoir la salle et le temps de parole. Pas besoin de compte ; tes coordonnées ne sont visibles que par le bureau.</p>
+          <div id="evOthers" class="mt-3" hidden><h3 style="font-size:1.2rem;">Les autres événements</h3><div id="evOthersList"></div></div>
+        </div>
+        <form class="form card" id="evForm" novalidate>
+          <fieldset class="answer">
+            <legend class="sr-only">Ta réponse</legend>
+            <label><input type="radio" name="reponse" value="oui" checked /><span>Je viens</span></label>
+            <label><input type="radio" name="reponse" value="non" /><span>Je ne viens pas</span></label>
+          </fieldset>
+          <div class="form-row">
+            <div class="field"><label for="ev-prenom">Prénom</label><input id="ev-prenom" name="prenom" required autocomplete="given-name" maxlength="80" /></div>
+            <div class="field"><label for="ev-nom">Nom</label><input id="ev-nom" name="nom" required autocomplete="family-name" maxlength="80" /></div>
+          </div>
+          <div class="form-row">
+            <div class="field"><label for="ev-classe">Classe</label><input id="ev-classe" name="classe" required placeholder="ex. 2nde 3" maxlength="40" /></div>
+            <div class="field"><label for="ev-email">Email</label><input id="ev-email" name="email" type="email" required autocomplete="email" /></div>
+          </div>
+          <input type="text" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
+          <label class="checkbox"><input type="checkbox" name="rgpd" required /><span>J'accepte que le bureau utilise ces informations pour organiser l'événement (<a class="link" href="/confidentialite" target="_blank">confidentialité</a>).</span></label>
+          <div id="evMsg" role="status" aria-live="polite"></div>
+          <button class="btn btn-primary" type="submit" id="evSubmit">Envoyer ma réponse</button>
+        </form>
+      </div>
+    </section>
+  </div>
 </Base>
 
 <style>
   .ev-hero { background: var(--nuit); color: #fff; padding: clamp(48px, 7vw, 96px) 0; }
   :root[data-theme='dark'] .ev-hero { background: #0f1f4b; }
-  .ev-hero h1 { color: #fff; max-width: 16ch; }
+  .ev-hero h1 { color: #fff; max-width: 18ch; }
   .ev-hero .eyebrow { color: #ff6b78; } .ev-hero .eyebrow::before { background: #ff6b78; }
   .ev-hero .lead { color: rgba(255,255,255,0.85); max-width: 40ch; }
-  .ev-hero .stamp { color: #ff6b78; border-color: #ff6b78; mix-blend-mode: normal; }
+  .ev-desc { color: rgba(255,255,255,0.8); max-width: 60ch; white-space: pre-line; }
   .ev-grid { display: grid; grid-template-columns: auto 1fr; gap: clamp(24px, 5vw, 64px); align-items: center; }
   .ev-date { display: grid; justify-items: center; border: 4px solid #fff; padding: 18px 26px 14px; line-height: 0.9; }
   .ev-day { font-size: clamp(5rem, 13vw, 9rem); font-weight: 800; letter-spacing: -0.06em; font-variant-numeric: tabular-nums; }
   .ev-month { font-size: 1.3rem; font-weight: 700; color: #ff6b78; }
   .count { font-weight: 700; color: #fff; }
   .ev-form-grid { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: clamp(28px, 5vw, 64px); align-items: start; }
+  .answer { border: 0; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .answer label { position: relative; cursor: pointer; }
+  .answer input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .answer span { display: block; text-align: center; padding: 14px; border: 3px solid var(--nuit); font-weight: 800; font-size: 1.1rem; }
+  .answer label:first-of-type input:checked + span { background: var(--rouge); border-color: var(--rouge); color: #fff; }
+  .answer label:last-of-type input:checked + span { background: var(--nuit); color: #fff; }
+  .answer input:disabled + span { opacity: 0.4; cursor: not-allowed; }
+  :root[data-theme='dark'] .answer label:last-of-type input:checked + span { background: #f1f3fa; color: #0b142e; }
+  .answer input:focus-visible + span { box-shadow: var(--focus); }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .hp { position: absolute; left: -9999px; }
   @media (max-width: 760px) { .ev-grid, .ev-form-grid { grid-template-columns: 1fr; } .ev-date { justify-self: start; } }
 </style>
 
 <script>
-  import { getSupabase, supabaseConfigured } from '../lib/supabase';
+  import { getSupabase } from '../lib/supabase';
   import { getSession, getProfile } from '../lib/auth';
+  import { fetchUpcoming, fetchCounts, fmt, when, esc, eventRow, type Ev } from '../lib/events';
+  import { u } from '../lib/url';
 
-  const form = document.getElementById('evForm') as HTMLFormElement | null;
-  const msg = document.getElementById('evMsg');
-  const countEl = document.getElementById('count');
-  const show = (t: string, k: 'ok' | 'err' | 'info') => { if (msg) msg.innerHTML = `<div class="alert alert-${k}">${t}</div>`; };
-
-  // Présélection depuis l'agenda : /evenement?e=AAAA-MM-JJ|Titre
-  const pre = new URLSearchParams(location.search).get('e');
-  const sel = form?.elements.namedItem('event_key') as HTMLSelectElement | undefined;
-  if (pre && sel && [...sel.options].some((o) => o.value === pre)) sel.value = pre;
+  const $ = (id: string) => document.getElementById(id)!;
+  const form = $('evForm') as HTMLFormElement, msg = $('evMsg');
+  const show = (t: string, k: 'ok' | 'err' | 'info') => (msg.innerHTML = `<div class="alert alert-${k}">${t}</div>`);
 
   (async () => {
-    if (!form || !supabaseConfigured) { if (form && !supabaseConfigured) show("Les inscriptions ne sont pas encore ouvertes en ligne.", 'info'); return; }
+    const evs = await fetchUpcoming();
+    $('evLoading').hidden = true;
+    if (!evs.length) { $('evEmpty').hidden = false; return; }
+    const wanted = new URLSearchParams(location.search).get('e');
+    const ev: Ev = evs.find((e) => e.id === wanted) || evs[0];
+    const counts = await fetchCounts();
+    const c = counts[ev.id] || { oui: 0, non: 0 };
+    const full = ev.capacity ? c.oui >= ev.capacity : false;
+
+    $('evMain').hidden = false;
+    $('evDay').textContent = fmt.day(ev.starts_at);
+    $('evMonth').textContent = fmt.month(ev.starts_at);
+    $('evKicker').textContent = `${ev === evs[0] ? 'Prochain événement' : 'Événement'} · ${ev.type}`;
+    $('evTitle').textContent = ev.title;
+    $('evWhen').innerHTML = `${esc(fmt.long(ev.starts_at))}, ${when(ev)}<br>${esc(ev.location)}`;
+    document.title = `${ev.title} — Parlement JPV`;
+    if (ev.description) { $('evDesc').textContent = ev.description; $('evDesc').hidden = false; }
+    if (c.oui || ev.capacity) { $('evCount').textContent = `${c.oui} participant${c.oui > 1 ? 's' : ''}${ev.capacity ? ` sur ${ev.capacity} places` : ''}${full ? ' — complet' : ''}`; $('evCount').hidden = false; }
+    const others = evs.filter((e) => e.id !== ev.id);
+    if (others.length) { $('evOthers').hidden = false; $('evOthersList').innerHTML = others.map((e) => eventRow(e, { counts: counts[e.id] })).join(''); }
+
     const sb = getSupabase();
-
-    const { data: counts } = await sb.rpc('event_counts');
-    const k = countEl?.dataset.key;
-    const n = (counts || []).find((c: { event_key: string; inscrits: number }) => c.event_key === k)?.inscrits || 0;
-    if (countEl && n > 0) { countEl.textContent = `${n} inscrit${n > 1 ? 's' : ''} pour l'instant`; countEl.hidden = false; }
-
     const session = await getSession();
+    let existing: { reponse: string } | null = null;
     if (session) {
       const p = await getProfile(session.user.id);
       (form.elements.namedItem('prenom') as HTMLInputElement).value = p?.prenom || '';
       (form.elements.namedItem('nom') as HTMLInputElement).value = p?.nom || '';
       (form.elements.namedItem('classe') as HTMLInputElement).value = p?.classe || '';
       (form.elements.namedItem('email') as HTMLInputElement).value = session.user.email || '';
+      // Consentement déjà donné à la création du compte
+      const rg = form.elements.namedItem('rgpd') as HTMLInputElement; rg.checked = true; (rg.closest('label') as HTMLElement).classList.add('hidden');
+      const { data } = await sb.from('event_signups').select('reponse').eq('event_key', ev.id).eq('user_id', session.user.id).maybeSingle();
+      existing = data;
+      if (existing) {
+        (form.querySelector(`input[value=${existing.reponse}]`) as HTMLInputElement).checked = true;
+        show(`Tu as déjà répondu : <strong>${existing.reponse === 'oui' ? 'je viens' : 'je ne viens pas'}</strong>. Tu peux changer ta réponse.`, 'info');
+        $('evSubmit').textContent = 'Changer ma réponse';
+      }
+    }
+    if (full && existing?.reponse !== 'oui') {
+      (form.querySelector('input[value=oui]') as HTMLInputElement).disabled = true;
+      (form.querySelector('input[value=non]') as HTMLInputElement).checked = true;
+      show('Cet événement est complet. Tu peux tout de même indiquer que tu ne viens pas.', 'info');
     }
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (!form.checkValidity()) { form.reportValidity(); return; }
       const fd = new FormData(form);
-      if (fd.get('website')) return; // robot
-      const btn = form.querySelector('button')!; btn.disabled = true; show('Inscription en cours…', 'info');
-      const row = {
-        event_key: String(fd.get('event_key')),
-        prenom: String(fd.get('prenom')).trim(),
-        nom: String(fd.get('nom')).trim(),
-        classe: String(fd.get('classe')).trim(),
-        email: String(fd.get('email')).trim().toLowerCase(),
-        user_id: session?.user.id ?? null,
-      };
-      const { error } = await sb.from('event_signups').insert(row);
+      if (fd.get('website')) return;
+      const btn = $('evSubmit') as HTMLButtonElement; btn.disabled = true; show('Envoi…', 'info');
+      const reponse = String(fd.get('reponse')) as 'oui' | 'non';
+      const row = { event_key: ev.id, reponse, prenom: String(fd.get('prenom')).trim(), nom: String(fd.get('nom')).trim(), classe: String(fd.get('classe')).trim(), email: String(fd.get('email')).trim().toLowerCase(), user_id: session?.user.id ?? null };
+      const { error } = existing && session
+        ? await sb.from('event_signups').update({ reponse }).eq('event_key', ev.id).eq('user_id', session.user.id)
+        : await sb.from('event_signups').insert(row);
       btn.disabled = false;
-      const title = row.event_key.split('|')[1];
-      if (error?.code === '23505') { show(`Cette adresse est déjà inscrite à « ${title} ».`, 'info'); return; }
-      if (error) { show("L'inscription n'a pas pu être enregistrée. Vérifie les champs et réessaie.", 'err'); return; }
-      form.reset(); if (sel) sel.value = row.event_key;
-      show(`C'est noté, ${row.prenom} : tu es inscrit·e à « ${title} ». À bientôt en salle Samuel Paty.`, 'ok');
+      if (error?.code === '23505') { show(`Cette adresse a déjà répondu pour « ${esc(ev.title)} ». Pour changer ta réponse, <a class="link" href="${u('/connexion')}?next=${encodeURIComponent(location.pathname + location.search)}">connecte-toi</a>.`, 'info'); return; }
+      if (error) { show("Ta réponse n'a pas pu être enregistrée. Vérifie les champs et réessaie.", 'err'); return; }
+      const before = existing?.reponse;
+      existing = { reponse };
+      if (before !== reponse) { if (reponse === 'oui') c.oui++; else if (before === 'oui') c.oui--; }
+      $('evCount').textContent = `${c.oui} participant${c.oui > 1 ? 's' : ''}${ev.capacity ? ` sur ${ev.capacity} places` : ''}`; $('evCount').hidden = false;
+      $('evSubmit').textContent = 'Changer ma réponse';
+      show(reponse === 'oui' ? `C'est noté, ${esc(row.prenom)} : on t'attend le ${esc(fmt.long(ev.starts_at))} !` : `C'est noté, ${esc(row.prenom)}. Merci d'avoir prévenu.`, 'ok');
     });
   })();
 </script>

@@ -1,9 +1,5 @@
 ---
 import Base from '../layouts/Base.astro';
-import data from '../data/events.json';
-const upcoming = data.events.filter((e) => new Date(e.start).getTime() >= Date.now()).sort((a, b) => a.start.localeCompare(b.start)).slice(0, 6);
-const key = (e: any) => `${e.start.slice(0, 10)}|${e.title}`;
-const fmt = (s: string) => new Intl.DateTimeFormat('fr-FR', { dateStyle: 'full', timeStyle: 'short', timeZone: 'Europe/Paris' }).format(new Date(s));
 ---
 <Base title="Mon espace" noindex>
   <div class="page-head"><div class="container flex between">
@@ -19,16 +15,8 @@ const fmt = (s: string) => new Intl.DateTimeFormat('fr-FR', { dateStyle: 'full',
       </div>
       <div class="card">
         <h3>Prochaines séances</h3>
-        <p class="muted small">Inscris-toi en un clic : le bureau connaît le nombre de participants à l'avance.</p>
-        <div id="events">
-          {upcoming.map((e) => (
-            <div class="event" data-key={key(e)}>
-              <div class="event-date"><b>{new Date(e.start).getDate()}</b><span>{new Intl.DateTimeFormat('fr-FR', { month: 'short' }).format(new Date(e.start))}</span></div>
-              <div><span class="pill">{e.type}</span><h3>{e.title}</h3><div class="meta">{fmt(e.start)} · {e.location}</div>
-                <button class="btn btn-outline btn-sm mt-1 reg" type="button" data-key={key(e)}>Je participe</button></div>
-            </div>
-          ))}
-          {upcoming.length === 0 && <p class="muted">Aucune séance programmée.</p>}
+        <p class="muted small">Réponds en un clic : le bureau sait à l'avance combien vous serez.</p>
+        <div id="events"><p class="muted small">Chargement…</p></div>
         </div>
       </div>
     </div>
@@ -63,6 +51,7 @@ const fmt = (s: string) => new Intl.DateTimeFormat('fr-FR', { dateStyle: 'full',
   import { api } from '../lib/newsletter';
   import { getSupabase } from '../lib/supabase';
   import { requireSession, getProfile, signOut } from '../lib/auth';
+  import { fetchUpcoming, fmt, when, esc } from '../lib/events';
   (async () => {
     const session = await requireSession(); if (!session) return;
     const sb = getSupabase();
@@ -92,20 +81,28 @@ const fmt = (s: string) => new Intl.DateTimeFormat('fr-FR', { dateStyle: 'full',
       ? cands.map((c) => `<p><span class="pill">${c.type === 'bureau' ? `bureau${c.poste ? ' — ' + c.poste : ''}` : c.type}</span> déposée le ${new Date(c.created_at).toLocaleDateString('fr-FR')} — <strong>${labels[c.statut] || c.statut}</strong>${c.note_bureau ? `<br><span class="small muted">Message du bureau : ${c.note_bureau}</span>` : ''}</p>`).join('')
       : '<p class="muted">Aucune candidature pour le moment.</p><a class="btn btn-primary btn-sm" href="/candidature">Candidater</a>';
 
-    // Inscriptions aux séances
-    const { data: regs } = await sb.from('event_signups').select('event_key').eq('user_id', session.user.id);
-    const mine = new Set((regs || []).map((r) => r.event_key));
-    const paint = () => document.querySelectorAll<HTMLButtonElement>('.reg').forEach((b) => { const on = mine.has(b.dataset.key!); b.textContent = on ? '✓ Inscrit·e — annuler' : 'Je participe'; b.classList.toggle('btn-primary', on); b.classList.toggle('btn-outline', !on); });
-    paint();
-    document.querySelectorAll<HTMLButtonElement>('.reg').forEach((b) => b.addEventListener('click', async () => {
-      const k = b.dataset.key!; b.disabled = true;
-      if (mine.has(k)) { await sb.from('event_signups').delete().eq('user_id', session.user.id).eq('event_key', k); mine.delete(k); }
-      else {
-        const { error } = await sb.from('event_signups').insert({ user_id: session.user.id, event_key: k, prenom: p?.prenom || '?', nom: p?.nom || '?', classe: p?.classe || '?', email: session.user.email });
-        if (!error || error.code === '23505') mine.add(k); else alert("Inscription impossible : complète d'abord ton prénom, nom et classe.");
-      }
-      b.disabled = false; paint();
-    }));
+    // Prochains événements : je viens / je ne viens pas
+    const evBox = document.getElementById('events')!;
+    const evs = await fetchUpcoming();
+    if (!evs.length) evBox.innerHTML = '<p class="muted">Aucun événement programmé pour l\'instant : nos séances reprennent très bientôt.</p>';
+    else {
+      const { data: mine } = await sb.from('event_signups').select('event_key, reponse').eq('user_id', session.user.id);
+      const rep = new Map((mine || []).map((r) => [r.event_key, r.reponse]));
+      const paint = () => {
+        evBox.innerHTML = evs.map((e) => `<div class="event"><div class="event-date"><b>${fmt.day(e.starts_at)}</b><span>${esc(fmt.monShort(e.starts_at))}</span></div><div><span class="pill">${esc(e.type)}</span><h3>${esc(e.title)}</h3><div class="meta">${esc(fmt.long(e.starts_at))}, ${when(e)} · ${esc(e.location)}</div>
+          <div class="flex mt-1" style="gap:8px;"><button class="btn btn-sm ${rep.get(e.id) === 'oui' ? 'btn-primary' : 'btn-outline'} rsvp" data-id="${e.id}" data-r="oui" type="button">${rep.get(e.id) === 'oui' ? '✓ ' : ''}Je viens</button><button class="btn btn-sm ${rep.get(e.id) === 'non' ? 'btn-primary' : 'btn-outline'} rsvp" data-id="${e.id}" data-r="non" type="button">${rep.get(e.id) === 'non' ? '✓ ' : ''}Je ne viens pas</button></div></div></div>`).join('');
+        evBox.querySelectorAll<HTMLButtonElement>('.rsvp').forEach((b) => b.addEventListener('click', async () => {
+          const id = b.dataset.id!, r = b.dataset.r as 'oui' | 'non';
+          b.disabled = true;
+          const { error } = rep.has(id)
+            ? await sb.from('event_signups').update({ reponse: r }).eq('event_key', id).eq('user_id', session.user.id)
+            : await sb.from('event_signups').insert({ event_key: id, reponse: r, user_id: session.user.id, prenom: p?.prenom || '?', nom: p?.nom || '?', classe: p?.classe || '?', email: session.user.email });
+          if (error) { b.disabled = false; alert(error.code === '23505' ? 'Ton adresse a déjà répondu à cet événement sans être connectée.' : "Réponse impossible : complète d'abord ton prénom, ton nom et ta classe."); return; }
+          rep.set(id, r); paint();
+        }));
+      };
+      paint();
+    }
 
     // Suppression
     document.getElementById('delAccount')!.addEventListener('click', async () => {

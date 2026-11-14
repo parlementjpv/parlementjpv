@@ -1,13 +1,15 @@
 ---
 import Base from '../layouts/Base.astro';
 import EventList from '../components/EventList.astro';
+import LiveEvents from '../components/LiveEvents.astro';
+import Reprise from '../components/Reprise.astro';
 import data from '../data/events.json';
 ---
 <Base title="Agenda" description="Calendrier des débats, conférences, concours et visites du Parlement JPV.">
   <div class="page-head">
     <div class="container">
       <span class="eyebrow">Séances</span>
-      <h1>Nos séances reprennent très bientôt.</h1>
+      <h1 id="agTitle">Nos séances reprennent très bientôt.</h1>
       <p class="lead">Débats de 30 minutes sur l'heure de midi, conférences, concours d'éloquence et visites. Le nouveau bureau prépare le programme : ajoute l'agenda à ton calendrier, les dates y apparaîtront dès leur annonce.</p>
       <div class="flex mt-2">
         <a class="btn btn-outline btn-sm" href="/agenda.ics" download>Ajouter à mon calendrier (.ics)</a>
@@ -19,12 +21,17 @@ import data from '../data/events.json';
     <div class="container two-col" style="grid-template-columns: 1fr 1fr;">
       <div>
         <h2>Prochaines séances</h2>
-        <EventList events={data.events} upcoming />
+        <LiveEvents><Reprise quoi="nos séances" /></LiveEvents>
       </div>
       <div>
         <h2>Séances passées</h2>
+        <LiveEvents mode="past" />
         <EventList events={data.events} past />
       </div>
     </div>
   </section>
 </Base>
+<script>
+  import { fetchUpcoming } from '../lib/events';
+  fetchUpcoming().then((evs) => { if (evs.length) document.getElementById('agTitle')!.textContent = 'Les séances du Parlement'; });
+</script>

@@ -1,0 +1,23 @@
+---
+// Liste des événements créés par le bureau (chargés depuis la base au chargement de la page).
+// Tant qu'il n'y en a pas, le contenu par défaut (slot) reste affiché.
+interface Props { mode?: 'upcoming' | 'past'; limit?: number }
+const { mode = 'upcoming', limit = 0 } = Astro.props;
+---
+<div class="live-events" data-mode={mode} data-limit={limit}>
+  <div class="live-list"></div>
+  <div class="live-fallback"><slot /></div>
+</div>
+
+<script>
+  import { fetchUpcoming, fetchPast, fetchCounts, eventRow } from '../lib/events';
+  document.querySelectorAll<HTMLElement>('.live-events').forEach(async (box) => {
+    const mode = box.dataset.mode, limit = Number(box.dataset.limit || 0);
+    let evs = mode === 'past' ? await fetchPast() : await fetchUpcoming();
+    if (limit) evs = evs.slice(0, limit);
+    if (!evs.length) return;
+    const counts = mode === 'past' ? {} : await fetchCounts();
+    box.querySelector('.live-list')!.innerHTML = evs.map((e) => eventRow(e, { counts: counts[e.id], respond: mode !== 'past' })).join('');
+    if (mode !== 'past') (box.querySelector('.live-fallback') as HTMLElement).hidden = true;
+  });
+</script>

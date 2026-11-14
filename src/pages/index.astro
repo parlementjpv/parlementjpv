@@ -1,7 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
 import NewsletterForm from '../components/NewsletterForm.astro';
-import EventList from '../components/EventList.astro';
+import LiveEvents from '../components/LiveEvents.astro';
+import Reprise from '../components/Reprise.astro';
 import Hemicycle from '../components/Hemicycle.astro';
 import { getCollection } from 'astro:content';
 import data from '../data/events.json';
@@ -65,8 +66,8 @@ const motions = data.events.filter((e) => e.type === 'Débat' || e.type === 'Con
     <div class="container split">
       <div>
         <h2>Prochaines séances</h2>
-        <EventList events={data.events} limit={3} upcoming />
-        <a class="link" href="/agenda">Les séances passées</a>
+        <LiveEvents limit={3}><Reprise quoi="nos séances" /></LiveEvents>
+        <a class="link" href="/agenda">Toutes les séances</a>
       </div>
       <div>
         <h2>Dernières publications</h2>
