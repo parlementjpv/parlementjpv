@@ -24,6 +24,13 @@ import Base from '../layouts/Base.astro';
   const show = (t: string, k = 'err') => (msg.innerHTML = `<div class="alert alert-${k}">${t}</div>`);
   if (!supabaseConfigured) show('Le serveur de connexion n’est pas encore configuré.', 'info');
   if (new URLSearchParams(location.search).get('expire')) show('Ta connexion a expiré. Reconnecte-toi pour continuer.', 'info');
+  const lien = new URLSearchParams(location.search).get('lien');
+  if (lien) {
+    show(lien === 'otp_expired'
+      ? "Ce lien d'activation n'est plus valable : il a déjà été utilisé, ou un email plus récent l'a remplacé (chaque renvoi annule les liens précédents). Tape ton adresse ci-dessus et demande un nouvel email, puis clique sur le lien du <strong>dernier</strong> email reçu."
+      : "Le lien n'a pas pu être utilisé. Tape ton adresse ci-dessus et demande un nouvel email d'activation.", 'info');
+    msg.appendChild(resendBox(() => (form.elements.namedItem('email') as HTMLInputElement).value, "Recevoir un nouvel email d'activation"));
+  }
   const next = new URLSearchParams(location.search).get('next') || u('/compte');
   supabaseConfigured && getSupabase().auth.getUser().then(({ data }) => { if (data.user) location.href = next; });
   form.addEventListener('submit', async (e) => {
