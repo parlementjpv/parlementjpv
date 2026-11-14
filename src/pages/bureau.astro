@@ -7,28 +7,32 @@ import Base from '../layouts/Base.astro';
     <a class="btn btn-outline btn-sm" href="/compte">← Mon espace</a>
   </div></div>
   <section class="section" id="app" style="display:none;"><div class="container">
-    <div class="stats mb-3">
-      <div class="stat"><strong id="sAbo">–</strong><span>abonnés newsletter</span></div>
-      <div class="stat"><strong id="sCand">–</strong><span>candidatures à traiter</span></div>
-      <div class="stat"><strong id="sMembres">–</strong><span>membres de l'instance</span></div>
-      <div class="stat"><strong id="sMsg">–</strong><span>messages non traités</span></div>
-    </div>
-    <div class="tabs flex mb-3">
-      <button class="pill tab active" data-tab="cand" type="button">Candidatures à traiter</button>
-      <button class="pill tab" data-tab="archives" type="button">Archives</button>
-      <button class="pill tab" data-tab="adh" type="button">Adhésions</button>
-      <button class="pill tab" data-tab="nl" type="button">Newsletter</button>
-      <button class="pill tab" data-tab="inscr" type="button">Événements</button>
-      <button class="pill tab" data-tab="appel" type="button">Appel</button>
-      <button class="pill tab" data-tab="elections" type="button">Élections</button>
-      <button class="pill tab" data-tab="motions" type="button">Motions</button>
-      <button class="pill tab" data-tab="entre" type="button">Entre nous</button>
-      <button class="pill tab" data-tab="ecrire" type="button">Écrire aux membres</button>
-      <button class="pill tab" data-tab="msg" type="button">Messages reçus</button>
-      <button class="pill tab" data-tab="membres" type="button">Membres & rôles</button>
-    </div>
-
-    <div class="panel" id="tab-cand"><div class="card" style="overflow:auto;"><p class="small muted">Écris d'abord un message (facultatif), puis accepte ou refuse : le candidat reçoit automatiquement un email avec ta réponse et ton message, et la candidature passe dans les archives.</p><div id="candMsg"></div><table class="table" id="candTable"><thead><tr><th>Date</th><th>Candidat·e</th><th>Poste</th><th>Motivation</th><th>Message au candidat</th><th>Décision</th></tr></thead><tbody></tbody></table></div></div>
+    <nav class="bu-menu" id="buMenu" aria-label="Menu du bureau">
+      <section class="bu-group"><h2 class="bu-group-t">Séances</h2><div class="bu-tiles">
+        <button class="bu-tile tab" data-tab="inscr" type="button"><span class="bu-tile-t">Événements</span><span class="bu-tile-d">Créer une séance, l'annoncer, voir qui vient, annuler</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
+        <button class="bu-tile tab" data-tab="appel" type="button"><span class="bu-tile-t">Appel</span><span class="bu-tile-d">Pointer les présents le jour de la séance</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
+      </div></section>
+      <section class="bu-group"><h2 class="bu-group-t">Membres</h2><div class="bu-tiles">
+        <button class="bu-tile tab" data-tab="cand" type="button"><strong class="bu-count" id="sCand">–</strong><span class="bu-tile-t">Candidatures à traiter</span><span class="bu-tile-d">Accepter ou refuser, email automatique</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
+        <button class="bu-tile tab" data-tab="archives" type="button"><span class="bu-tile-t">Archives</span><span class="bu-tile-d">Les candidatures déjà traitées</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
+        <button class="bu-tile tab" data-tab="adh" type="button"><strong class="bu-count" id="sMembres">–</strong><span class="bu-tile-t">Adhésions</span><span class="bu-tile-d">La liste des membres de l'instance</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
+        <button class="bu-tile tab" data-tab="membres" type="button"><span class="bu-tile-t">Membres & rôles</span><span class="bu-tile-d">Rôles, postes, suspensions</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
+      </div></section>
+      <section class="bu-group"><h2 class="bu-group-t">Vie de l'instance</h2><div class="bu-tiles">
+        <button class="bu-tile tab" data-tab="elections" type="button"><span class="bu-tile-t">Élections</span><span class="bu-tile-d">Votes du bureau à bulletin secret</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
+        <button class="bu-tile tab" data-tab="motions" type="button"><span class="bu-tile-t">Motions</span><span class="bu-tile-d">Les sujets proposés par les membres</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
+      </div></section>
+      <section class="bu-group"><h2 class="bu-group-t">Communication</h2><div class="bu-tiles">
+        <button class="bu-tile tab" data-tab="nl" type="button"><strong class="bu-count" id="sAbo">–</strong><span class="bu-tile-t">Newsletter</span><span class="bu-tile-d">Rédiger et envoyer la lettre</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
+        <button class="bu-tile tab" data-tab="ecrire" type="button"><span class="bu-tile-t">Écrire aux membres</span><span class="bu-tile-d">Un email à des membres choisis</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
+        <button class="bu-tile tab" data-tab="msg" type="button"><strong class="bu-count" id="sMsg">–</strong><span class="bu-tile-t">Messages reçus</span><span class="bu-tile-d">Le formulaire de contact</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
+      </div></section>
+      <section class="bu-group"><h2 class="bu-group-t">Entre nous</h2><div class="bu-tiles">
+        <button class="bu-tile tab" data-tab="entre" type="button"><span class="bu-tile-t">Entre nous</span><span class="bu-tile-d">Tâches, discussion et notes du bureau</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
+      </div></section>
+    </nav>
+    <div class="bu-bar hidden" id="buBar"><button class="btn btn-outline btn-sm" id="buBack" type="button">← Menu du bureau</button><h2 id="buTitle"></h2></div>
+    <div class="panel hidden" id="tab-cand"><div class="card" style="overflow:auto;"><p class="small muted">Écris d'abord un message (facultatif), puis accepte ou refuse : le candidat reçoit automatiquement un email avec ta réponse et ton message, et la candidature passe dans les archives.</p><div id="candMsg"></div><table class="table" id="candTable"><thead><tr><th>Date</th><th>Candidat·e</th><th>Poste</th><th>Motivation</th><th>Message au candidat</th><th>Décision</th></tr></thead><tbody></tbody></table></div></div>
     <div class="panel hidden" id="tab-archives"><div class="card" style="overflow:auto;"><p class="small muted">Candidatures traitées, conservées. « Rouvrir » la remet dans les candidatures à traiter (sans envoyer d'email).</p><table class="table" id="archTable"><thead><tr><th>Décision</th><th>Candidat·e</th><th>Poste</th><th>Motivation</th><th>Message envoyé</th><th></th></tr></thead><tbody></tbody></table></div></div>
 
     <div class="panel hidden" id="tab-nl">
@@ -184,6 +188,21 @@ import Base from '../layouts/Base.astro';
   <section class="section" id="denied" style="display:none;"><div class="container narrow center"><h2>Accès réservé</h2><p class="muted">Cette page est réservée aux membres du bureau.</p><a class="btn btn-outline" href="/compte">Retour à mon espace</a></div></section>
 </Base>
 <style is:global>
+  .bu-menu { display: grid; gap: 34px; }
+  .bu-group-t { font-size: 1rem; font-weight: 800; color: var(--rouge); margin: 0 0 10px; letter-spacing: 0; }
+  .bu-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+  .bu-tile { position: relative; display: grid; align-content: start; gap: 6px; text-align: left; min-height: 150px; padding: 22px 22px 18px; border: 3px solid var(--nuit); border-left-width: 10px; background: var(--blanc); color: var(--nuit); font: inherit; cursor: pointer; transition: transform 0.15s ease, background 0.15s ease; }
+  .bu-tile:hover { transform: translateY(-3px); background: var(--pierre); }
+  .bu-tile:focus-visible { outline: 3px solid var(--rouge); outline-offset: 3px; }
+  .bu-tile-t { font-size: 1.45rem; font-weight: 800; line-height: 1.1; letter-spacing: -0.01em; padding-right: 60px; }
+  .bu-tile-d { font-size: 0.95rem; color: var(--gris); }
+  .bu-go { margin-top: auto; padding-top: 10px; font-weight: 700; font-size: 0.9rem; text-decoration: underline; text-decoration-color: var(--rouge); text-underline-offset: 4px; }
+  .bu-count { position: absolute; top: 16px; right: 18px; font-size: 2.2rem; line-height: 1; font-weight: 800; color: var(--rouge); }
+  .bu-count.zero { color: var(--pierre-fonce); }
+  .bu-bar { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin-bottom: 22px; padding-bottom: 14px; border-bottom: var(--rule); }
+  .bu-bar h2 { margin: 0; font-size: clamp(1.6rem, 3vw, 2.2rem); }
+  @media (prefers-reduced-motion: reduce) { .bu-tile { transition: none; } .bu-tile:hover { transform: none; } }
+
   .ap-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 2px solid var(--pierre-fonce); flex-wrap: wrap; }
   .ap-btns { display: flex; gap: 0; }
   .ap-b { border: 2px solid var(--nuit); background: transparent; color: var(--nuit); font: inherit; font-weight: 700; font-size: 0.85rem; padding: 6px 12px; cursor: pointer; margin-left: -2px; }
@@ -213,7 +232,7 @@ import Base from '../layouts/Base.astro';
   .nt-titre { width: 100%; font: inherit; font-weight: 800; font-size: 1.1rem; padding: 8px 10px; border: 3px solid var(--nuit); margin-bottom: 8px; background: var(--blanc); color: var(--nuit); }
   .nt-ed { width: 100%; min-height: 260px; font: inherit; padding: 10px; border: 3px solid var(--nuit); background: var(--blanc); color: var(--nuit); }
   @media (max-width: 760px) { .tk-board { grid-template-columns: 1fr; } }
-.tab { cursor: pointer; border: 0; font: inherit; font-size: 0.82rem; } .tab.active { background: var(--nuit); color: #fff; } .table select, .table input { font: inherit; font-size: 0.85rem; padding: 4px 6px; border-radius: 6px; border: 1px solid var(--pierre-fonce); } .motiv { max-width: 360px; white-space: pre-wrap; font-size: 0.85rem; }  .ev-admin { grid-template-columns: minmax(300px, 1fr) minmax(320px, 1.2fr); align-items: start; }
+.table select, .table input { font: inherit; font-size: 0.85rem; padding: 4px 6px; border-radius: 6px; border: 1px solid var(--pierre-fonce); } .motiv { max-width: 360px; white-space: pre-wrap; font-size: 0.85rem; }  .ev-admin { grid-template-columns: minmax(300px, 1fr) minmax(320px, 1.2fr); align-items: start; }
   @media (max-width: 900px) { .ev-admin { grid-template-columns: 1fr; } }
   .ev-item { padding: 16px 0; border-bottom: 2px solid var(--pierre-fonce); }
   .ev-item.past { opacity: 0.6; }
@@ -270,11 +289,22 @@ import Base from '../layouts/Base.astro';
     initBureauPlus(sb, session, me as any).catch((e) => console.error(e));
 
     // Tabs
-    document.querySelectorAll<HTMLButtonElement>('.tab').forEach((t) => t.addEventListener('click', () => {
-      document.querySelectorAll('.tab').forEach((x) => x.classList.remove('active')); t.classList.add('active');
+    // Menu du bureau : grandes cases ; chaque case ouvre sa section, « ← Menu du bureau » revient
+    const menu = document.getElementById('buMenu')!, bar = document.getElementById('buBar')!;
+    const ouvrir = (k: string | null, push = true) => {
+      const tile = k ? document.querySelector<HTMLButtonElement>(`.bu-tile[data-tab="${k}"]`) : null;
       document.querySelectorAll('.panel').forEach((p) => p.classList.add('hidden'));
-      document.getElementById(`tab-${t.dataset.tab}`)!.classList.remove('hidden');
-    }));
+      if (!tile) { menu.classList.remove('hidden'); bar.classList.add('hidden'); if (push) history.pushState(null, '', location.pathname); return; }
+      menu.classList.add('hidden'); bar.classList.remove('hidden');
+      document.getElementById('buTitle')!.textContent = tile.querySelector('.bu-tile-t')!.textContent;
+      document.getElementById(`tab-${k}`)!.classList.remove('hidden');
+      if (push) history.pushState(null, '', `#${k}`);
+      window.scrollTo({ top: menu.parentElement!.offsetTop - 80 });
+    };
+    document.querySelectorAll<HTMLButtonElement>('.bu-tile').forEach((t) => t.addEventListener('click', () => ouvrir(t.dataset.tab!)));
+    document.getElementById('buBack')!.addEventListener('click', () => ouvrir(null));
+    window.addEventListener('popstate', () => ouvrir(location.hash.slice(1) || null, false));
+    ouvrir(location.hash.slice(1) || null, false);
 
     // Stats
     const [{ data: st }, { count: nCand }, { count: nMem }, { count: nMsg }] = await Promise.all([
@@ -287,6 +317,7 @@ import Base from '../layouts/Base.astro';
     document.getElementById('sCand')!.textContent = String(nCand ?? 0);
     document.getElementById('sMembres')!.textContent = String(nMem ?? 0);
     document.getElementById('sMsg')!.textContent = String(nMsg ?? 0);
+    document.querySelectorAll('.bu-count').forEach((c) => c.classList.toggle('zero', c.textContent === '0'));
     document.getElementById('subs')!.innerHTML = `<strong>${st?.confirmes ?? 0}</strong> confirmés · ${st?.en_attente ?? 0} en attente · ${st?.desinscrits ?? 0} désinscrits`;
 
     // Candidatures : à traiter / archives

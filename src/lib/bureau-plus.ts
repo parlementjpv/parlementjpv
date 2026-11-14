@@ -202,7 +202,7 @@ async function initMotions(sb: SupabaseClient) {
     const b = (e.target as HTMLElement).closest('button') as HTMLButtonElement | null; if (!b) return;
     if (b.classList.contains('mo-del')) { if (!confirm('Supprimer cette motion ?')) return; await sb.from('motions').delete().eq('id', b.dataset.id!); load(); }
     if (b.classList.contains('mo-ev')) {
-      (document.querySelector('.tab[data-tab="inscr"]') as HTMLButtonElement)?.click();
+      (document.querySelector('.bu-tile[data-tab="inscr"]') as HTMLButtonElement)?.click();
       const t = document.querySelector('#evCreate [name="title"]') as HTMLInputElement | null; if (t) { t.value = b.dataset.t!; t.focus(); }
     }
   });
