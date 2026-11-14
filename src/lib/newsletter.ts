@@ -1,3 +1,4 @@
+import { getSupabase, supabaseConfigured } from './supabase';
 /** Appels aux fonctions serveur (Supabase Edge Functions) — jamais de clé secrète côté navigateur. */
 const FN_BASE = `${(import.meta.env.PUBLIC_SUPABASE_URL || '').replace(/\/$/, '')}/functions/v1`;
 /** Transforme '/api/xxx' en URL complète de la fonction serveur. */
@@ -20,6 +21,11 @@ export async function subscribeNewsletter(email: string, turnstileToken = ''): P
 
 export async function postJSON<T = any>(path: string, body: unknown, accessToken?: string): Promise<{ ok: boolean; data: T; error?: string }> {
   try {
+    if (accessToken && supabaseConfigured) {
+      // Le jeton capturé au chargement de la page expire au bout d'une heure : on prend toujours le plus récent.
+      const { data } = await getSupabase().auth.getSession();
+      if (data.session?.access_token) accessToken = data.session.access_token;
+    }
     const res = await fetch(api(path), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}) },

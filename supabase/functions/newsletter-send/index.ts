@@ -4,7 +4,8 @@ Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors(req) });
   if (req.method !== 'POST') return json(req, 405, { error: 'Méthode non autorisée' });
   const me = await userFromRequest(req);
-  if (!me || !['bureau', 'admin'].includes(me.profile?.role)) return json(req, 403, { error: 'Accès réservé au bureau.' });
+  if (!me) return json(req, 401, { error: 'Ta session a expiré : recharge la page puis réessaie.' });
+  if (!['bureau', 'admin'].includes(me.profile?.role)) return json(req, 403, { error: 'Accès réservé au bureau.' });
   const body = await readJson(req); if (!body) return json(req, 400, { error: 'Requête invalide' });
   const { newsletterId, test } = body;
   const db = admin();

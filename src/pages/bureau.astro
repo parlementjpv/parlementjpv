@@ -104,7 +104,7 @@ import Base from '../layouts/Base.astro';
   </div></section>
   <section class="section" id="denied" style="display:none;"><div class="container narrow center"><h2>Accès réservé</h2><p class="muted">Cette page est réservée aux membres du bureau.</p><a class="btn btn-outline" href="/compte">Retour à mon espace</a></div></section>
 </Base>
-<style>.tab { cursor: pointer; border: 0; font: inherit; font-size: 0.82rem; } .tab.active { background: var(--nuit); color: #fff; } .table select, .table input { font: inherit; font-size: 0.85rem; padding: 4px 6px; border-radius: 6px; border: 1px solid var(--pierre-fonce); } .motiv { max-width: 360px; white-space: pre-wrap; font-size: 0.85rem; }  .ev-admin { grid-template-columns: minmax(300px, 1fr) minmax(320px, 1.2fr); align-items: start; }
+<style is:global>.tab { cursor: pointer; border: 0; font: inherit; font-size: 0.82rem; } .tab.active { background: var(--nuit); color: #fff; } .table select, .table input { font: inherit; font-size: 0.85rem; padding: 4px 6px; border-radius: 6px; border: 1px solid var(--pierre-fonce); } .motiv { max-width: 360px; white-space: pre-wrap; font-size: 0.85rem; }  .ev-admin { grid-template-columns: minmax(300px, 1fr) minmax(320px, 1.2fr); align-items: start; }
   @media (max-width: 900px) { .ev-admin { grid-template-columns: 1fr; } }
   .ev-item { padding: 16px 0; border-bottom: 2px solid var(--pierre-fonce); }
   .ev-item.past { opacity: 0.6; }
