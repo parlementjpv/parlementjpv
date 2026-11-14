@@ -21,7 +21,7 @@ supabase/schema.sql tables + règles de sécurité (RLS)
 2. **SQL Editor → New query** : colle tout `supabase/schema.sql` → *Run*.
 3. **Authentication → Providers → Email** : laisse *Confirm email* activé.
 4. **Authentication → URL Configuration** : Site URL = l'URL du site ; Redirect URLs = `https://TON-SITE/*`.
-5. **Authentication → Email Templates** : traduis en français si tu veux (objet + texte). Pour que ces emails partent via Resend (et pas via le SMTP limité de Supabase), **Project Settings → Auth → SMTP** : host `smtp.resend.com`, port 465, user `resend`, password = ta clé API Resend, sender = `noreply@ton-domaine`.
+5. **Authentication → Emails** : SMTP Gmail (voir étape 2) ; modèles d'emails déjà en français.
 6. **Project Settings → API** : note `Project URL`, `anon public` et `service_role` (secret !).
 
 ### 2. Emails (Gmail)
