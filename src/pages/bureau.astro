@@ -19,7 +19,8 @@ import Base from '../layouts/Base.astro';
       <button class="pill tab" data-tab="adh" type="button">Adhésions</button>
       <button class="pill tab" data-tab="nl" type="button">Newsletter</button>
       <button class="pill tab" data-tab="inscr" type="button">Événements</button>
-      <button class="pill tab" data-tab="msg" type="button">Messages</button>
+      <button class="pill tab" data-tab="ecrire" type="button">Écrire aux membres</button>
+      <button class="pill tab" data-tab="msg" type="button">Messages reçus</button>
       <button class="pill tab" data-tab="membres" type="button">Membres & rôles</button>
     </div>
 
@@ -77,8 +78,29 @@ import Base from '../layouts/Base.astro';
         <div class="card"><h3>Événements et réponses</h3><div id="inscr">—</div></div>
       </div>
     </div>
+    <div class="panel hidden" id="tab-ecrire">
+      <div class="grid ecrire">
+        <div class="card">
+          <h3 style="margin-top:0;">1. Choisir les destinataires</h3>
+          <input class="input" id="mmSearch" type="search" placeholder="Rechercher un nom, une classe, un email…" />
+          <div class="flex mt-1" id="mmFilters" style="gap:6px;"></div>
+          <div class="flex between mt-1"><span class="small muted" id="mmCount">0 sélectionné</span><span class="flex" style="gap:6px;"><button class="btn btn-outline btn-sm" id="mmAll" type="button">Tout cocher (liste affichée)</button><button class="btn btn-outline btn-sm" id="mmNone" type="button">Tout décocher</button></span></div>
+          <div class="mm-list mt-1" id="mmList"></div>
+        </div>
+        <form class="card form" id="mmForm">
+          <h3 style="margin:0;">2. Écrire le message</h3>
+          <div class="field"><label for="mmSubject">Objet</label><input id="mmSubject" required maxlength="200" placeholder="ex. Réunion des orateurs jeudi midi" /></div>
+          <div class="field"><label for="mmBody">Message</label><textarea id="mmBody" required maxlength="10000" style="min-height:200px;" placeholder="Le message commence automatiquement par « Bonjour [prénom], » et se termine par ta signature."></textarea></div>
+          <p class="small muted" style="margin:0;">Chaque membre reçoit un email personnel envoyé par parlementjpv@gmail.com. Ses réponses arrivent dans cette boîte.</p>
+          <div id="mmMsg"></div>
+          <button class="btn btn-primary" type="submit" id="mmSend">Envoyer</button>
+          <h3 class="mt-2" style="font-size:1.1rem;">Messages envoyés</h3>
+          <div id="mmHistory" class="small">—</div>
+        </form>
+      </div>
+    </div>
     <div class="panel hidden" id="tab-msg"><div class="card" style="overflow:auto;"><table class="table" id="msgTable"><thead><tr><th>Date</th><th>De</th><th>Sujet</th><th>Message</th><th></th></tr></thead><tbody></tbody></table></div></div>
-    <div class="panel hidden" id="tab-membres"><div class="card" style="overflow:auto;"><p class="small muted">Seul un <strong>admin</strong> peut changer les rôles et bannir un compte. Le rôle « bureau » donne accès à cette page. Un compte banni ne peut plus se connecter.</p><table class="table" id="memTable"><thead><tr><th>Nom</th><th>Classe</th><th>Contact</th><th>Inscrit le</th><th>Rôle</th><th></th></tr></thead><tbody></tbody></table></div></div>
+    <div class="panel hidden" id="tab-membres"><div class="card" style="overflow:auto;"><p class="small muted">Seul un <strong>admin</strong> peut changer les rôles, bannir ou supprimer un compte. Le rôle « bureau » donne accès à cette page. Un compte banni ne peut plus se connecter.</p><table class="table" id="memTable"><thead><tr><th>Nom</th><th>Classe</th><th>Contact</th><th>Inscrit le</th><th>Rôle</th><th></th></tr></thead><tbody></tbody></table></div></div>
   </div></section>
   <section class="section" id="denied" style="display:none;"><div class="container narrow center"><h2>Accès réservé</h2><p class="muted">Cette page est réservée aux membres du bureau.</p><a class="btn btn-outline" href="/compte">Retour à mon espace</a></div></section>
 </Base>
@@ -94,6 +116,14 @@ import Base from '../layouts/Base.astro';
   .decide { display: grid; gap: 6px; min-width: 110px; }
   .table textarea { width: 100%; min-width: 180px; font: inherit; font-size: 0.85rem; padding: 6px; border: 2px solid var(--pierre-fonce); }
   #memTable tr.banned td { opacity: 0.55; }
+  .ecrire { grid-template-columns: minmax(300px, 1fr) minmax(320px, 1.1fr); align-items: start; }
+  @media (max-width: 900px) { .ecrire { grid-template-columns: 1fr; } }
+  .mm-list { max-height: 460px; overflow-y: auto; border-top: 2px solid var(--pierre-fonce); }
+  .mm-row { display: flex; gap: 10px; align-items: flex-start; padding: 8px 2px; border-bottom: 1px solid var(--pierre-fonce); cursor: pointer; }
+  .mm-row input { margin-top: 4px; accent-color: var(--rouge); width: 18px; height: 18px; flex: none; }
+  .mm-tag { cursor: pointer; border: 0; font: inherit; font-size: 0.8rem; } .mm-tag.active { background: var(--nuit); color: #fff; }
+  .mm-hist { padding: 6px 0; border-bottom: 1px solid var(--pierre-fonce); } .mm-hist summary { cursor: pointer; }
+  .del-user { background: var(--rouge); border-color: var(--rouge); }
 </style>
 <script>
   import { getSupabase } from '../lib/supabase';
@@ -288,6 +318,49 @@ import Base from '../layouts/Base.astro';
     mt.innerHTML = (msgs || []).map((m) => `<tr style="${m.traite ? 'opacity:.55' : ''}"><td>${d(m.created_at)}</td><td>${esc(m.nom)}<br><a href="mailto:${esc(m.email)}">${esc(m.email)}</a></td><td>${esc(m.sujet)}</td><td class="motiv">${esc(m.message)}</td><td><button class="btn btn-outline btn-sm done" data-id="${m.id}" type="button">${m.traite ? 'Traité' : 'Marquer traité'}</button></td></tr>`).join('') || '<tr><td colspan="5" class="muted">Aucun message.</td></tr>';
     mt.querySelectorAll<HTMLButtonElement>('.done').forEach((b) => b.addEventListener('click', async () => { await sb.from('contact_messages').update({ traite: true }).eq('id', b.dataset.id); b.textContent = 'Traité'; b.closest('tr')!.style.opacity = '.55'; }));
 
+    // Écrire aux membres
+    {
+      const { data: people } = await sb.from('adhesions').select('id, prenom, nom, classe, email, interets').order('nom');
+      const all = people || [];
+      const chosen = new Set<string>();
+      let filter = '', tag = '';
+      const tags = [...new Set(all.flatMap((a: any) => a.interets || []))].sort();
+      const fBox = document.getElementById('mmFilters')!;
+      fBox.innerHTML = ['Tous', ...tags].map((t, i) => `<button class="pill mm-tag${i === 0 ? ' active' : ''}" data-t="${i === 0 ? '' : esc(t)}" type="button">${esc(t)}</button>`).join('');
+      const visible = () => all.filter((a: any) => (!tag || (a.interets || []).includes(tag)) && (!filter || `${a.prenom} ${a.nom} ${a.classe} ${a.email}`.toLowerCase().includes(filter)));
+      const count = () => (document.getElementById('mmCount')!.textContent = `${chosen.size} sélectionné${chosen.size > 1 ? 's' : ''}`);
+      const paint = () => {
+        const v = visible();
+        document.getElementById('mmList')!.innerHTML = v.map((a: any) => `<label class="mm-row"><input type="checkbox" value="${a.id}" ${chosen.has(a.id) ? 'checked' : ''} /><span><strong>${esc(a.prenom)} ${esc(a.nom)}</strong> <span class="muted">${esc(a.classe)}</span><br><span class="small muted">${esc(a.email)}</span></span></label>`).join('') || '<p class="muted small">Aucun membre ne correspond.</p>';
+        document.querySelectorAll<HTMLInputElement>('#mmList input').forEach((c) => c.addEventListener('change', () => { c.checked ? chosen.add(c.value) : chosen.delete(c.value); count(); }));
+        count();
+      };
+      document.getElementById('mmSearch')!.addEventListener('input', (e) => { filter = (e.target as HTMLInputElement).value.trim().toLowerCase(); paint(); });
+      fBox.querySelectorAll<HTMLButtonElement>('.mm-tag').forEach((b) => b.addEventListener('click', () => { fBox.querySelectorAll('.mm-tag').forEach((x) => x.classList.remove('active')); b.classList.add('active'); tag = b.dataset.t || ''; paint(); }));
+      document.getElementById('mmAll')!.addEventListener('click', () => { visible().forEach((a: any) => chosen.add(a.id)); paint(); });
+      document.getElementById('mmNone')!.addEventListener('click', () => { chosen.clear(); paint(); });
+      paint();
+      const mmMsg = document.getElementById('mmMsg')!;
+      const loadHistory = async () => {
+        const { data } = await sb.from('member_messages').select('subject, sent_count, sender_name, created_at, recipients').order('created_at', { ascending: false }).limit(20);
+        document.getElementById('mmHistory')!.innerHTML = (data || []).map((m: any) => `<details class="mm-hist"><summary><strong>${esc(m.subject)}</strong> — ${m.sent_count} destinataire${m.sent_count > 1 ? 's' : ''}, ${new Date(m.created_at).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' })} par ${esc(m.sender_name || '?')}</summary><span class="muted">${(m.recipients || []).map(esc).join(', ')}</span></details>`).join('') || '<span class="muted">Aucun message envoyé.</span>';
+      };
+      loadHistory();
+      document.getElementById('mmForm')!.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const subject = (document.getElementById('mmSubject') as HTMLInputElement).value.trim(), body = (document.getElementById('mmBody') as HTMLTextAreaElement).value.trim();
+        if (!chosen.size) { mmMsg.innerHTML = '<div class="alert alert-err">Coche au moins un destinataire.</div>'; return; }
+        if (!subject || !body) { mmMsg.innerHTML = "<div class=\"alert alert-err\">Écris l'objet et le message.</div>"; return; }
+        if (!confirm(`Envoyer « ${subject} » à ${chosen.size} membre${chosen.size > 1 ? 's' : ''} par email ?`)) return;
+        const btn = document.getElementById('mmSend') as HTMLButtonElement; btn.disabled = true; mmMsg.innerHTML = '<div class="alert alert-info">Envoi en cours…</div>';
+        const r = await postJSON<{ sent: number; failed: string[] }>('/api/member-message', { ids: [...chosen], subject, body }, session.access_token);
+        btn.disabled = false;
+        if (!r.ok) { mmMsg.innerHTML = `<div class="alert alert-err">${esc(r.error)}</div>`; return; }
+        mmMsg.innerHTML = `<div class="alert alert-ok">Envoyé à ${r.data.sent} membre${r.data.sent > 1 ? 's' : ''}.${r.data.failed.length ? ` Échec pour : ${r.data.failed.map(esc).join(', ')}.` : ''}</div>`;
+        (document.getElementById('mmForm') as HTMLFormElement).reset(); chosen.clear(); paint(); loadHistory();
+      });
+    }
+
     // Membres : rôles et bannissement
     async function loadMembers() {
       const [{ data: mems }, { data: adhs }] = await Promise.all([
@@ -301,10 +374,18 @@ import Base from '../layouts/Base.astro';
         <td class="small">${mail.get(p.id) ? `<a href="mailto:${esc(mail.get(p.id))}">${esc(mail.get(p.id))}</a>` : ''}${p.telephone ? `<br><a href="tel:${esc(p.telephone)}">${esc(p.telephone)}</a>` : ''}</td>
         <td>${d(p.created_at)}</td>
         <td>${isAdmin && p.id !== session.user.id && !p.banni ? `<select class="role" data-id="${p.id}">${['membre', 'bureau', 'admin'].map((r) => `<option ${r === p.role ? 'selected' : ''}>${r}</option>`).join('')}</select>` : `<span class="pill">${p.role}</span>`}</td>
-        <td>${isAdmin && p.id !== session.user.id ? `<button class="btn btn-outline btn-sm ban" data-id="${p.id}" data-a="${p.banni ? 'unban' : 'ban'}" type="button">${p.banni ? 'Débannir' : 'Bannir'}</button>` : ''}</td></tr>`).join('');
+        <td>${isAdmin && p.id !== session.user.id ? `<div class="flex" style="gap:6px;flex-wrap:nowrap;"><button class="btn btn-outline btn-sm ban" data-id="${p.id}" data-a="${p.banni ? 'unban' : 'ban'}" type="button">${p.banni ? 'Débannir' : 'Bannir'}</button><button class="btn btn-sm del-user" data-id="${p.id}" type="button">Supprimer</button></div>` : ''}</td></tr>`).join('');
       tbody.querySelectorAll<HTMLSelectElement>('.role').forEach((s0) => s0.addEventListener('change', async () => {
         const r = await postJSON('/api/set-role', { userId: s0.dataset.id, role: s0.value }, session.access_token);
         if (!r.ok) alert(r.error);
+      }));
+      tbody.querySelectorAll<HTMLButtonElement>('.del-user').forEach((b) => b.addEventListener('click', async () => {
+        const p: any = (mems || []).find((x: any) => x.id === b.dataset.id);
+        if (!confirm(`Supprimer définitivement le compte de ${p.prenom} ${p.nom} ?\n\nSon profil, son adhésion, ses candidatures et ses réponses aux événements seront effacés. C'est irréversible.`)) return;
+        b.disabled = true;
+        const r = await postJSON('/api/admin-user', { userId: b.dataset.id, action: 'delete' }, session.access_token);
+        if (!r.ok) { alert(r.error); b.disabled = false; return; }
+        loadMembers();
       }));
       tbody.querySelectorAll<HTMLButtonElement>('.ban').forEach((b) => b.addEventListener('click', async () => {
         const p: any = (mems || []).find((x: any) => x.id === b.dataset.id); const ban = b.dataset.a === 'ban';
