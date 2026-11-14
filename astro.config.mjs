@@ -8,7 +8,7 @@ export default defineConfig({
   trailingSlash: 'ignore',
   build: { format: 'directory' },
   integrations: [sitemap({
-    filter: (p) => !/\/(compte|bureau|connexion|inscription|mot-de-passe-oublie|nouveau-mot-de-passe|mentions-legales|confidentialite|newsletter\/(lire|merci|erreur|desinscription))\/?$/.test(p),
+    filter: (p) => !/\/(compte|bureau|profil|motions|elections|salle|connexion|inscription|mot-de-passe-oublie|nouveau-mot-de-passe|mentions-legales|confidentialite|newsletter\/(lire|merci|erreur|desinscription))\/?$/.test(p),
     lastmod: new Date(),
     serialize(item) {
       const path = new URL(item.url).pathname.replace(/^\/[^/]+\//, '/');

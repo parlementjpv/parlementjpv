@@ -19,6 +19,10 @@ import Base from '../layouts/Base.astro';
       <button class="pill tab" data-tab="adh" type="button">Adhésions</button>
       <button class="pill tab" data-tab="nl" type="button">Newsletter</button>
       <button class="pill tab" data-tab="inscr" type="button">Événements</button>
+      <button class="pill tab" data-tab="appel" type="button">Appel</button>
+      <button class="pill tab" data-tab="elections" type="button">Élections</button>
+      <button class="pill tab" data-tab="motions" type="button">Motions</button>
+      <button class="pill tab" data-tab="entre" type="button">Entre nous</button>
       <button class="pill tab" data-tab="ecrire" type="button">Écrire aux membres</button>
       <button class="pill tab" data-tab="msg" type="button">Messages reçus</button>
       <button class="pill tab" data-tab="membres" type="button">Membres & rôles</button>
@@ -106,12 +110,110 @@ import Base from '../layouts/Base.astro';
         </form>
       </div>
     </div>
+    <div class="panel hidden" id="tab-appel">
+      <div class="card">
+        <div class="flex between" style="gap:12px;flex-wrap:wrap;">
+          <div class="field" style="min-width:260px;flex:1;margin:0;"><label for="apEvent">Séance</label><select id="apEvent"></select></div>
+          <div class="flex" style="gap:6px;align-self:end;"><button class="btn btn-outline btn-sm" id="apAll" type="button">Non pointés → présents</button><button class="btn btn-outline btn-sm" id="apAbs" type="button">Non pointés → absents</button></div>
+        </div>
+        <p class="small muted mt-1">Pointe chaque inscrit. Une personne qui avait répondu « Je ne viens pas » n'apparaît pas et n'est jamais comptée absente. Au-delà de <strong id="apSeuil">3</strong> absences non excusées, le compte est <strong>suspendu automatiquement</strong> et la personne est prévenue par email ; à la dernière absence tolérée, elle reçoit un avertissement. L'appel alimente aussi les profils d'orateur (séances, camp, rôles tenus, arguments retenus). <span id="apDone"></span></p>
+        <p class="small"><strong id="apCount"></strong></p>
+        <div id="apList"></div>
+        <div class="field mt-2"><label for="apAdd">Ajouter un membre présent qui ne s'était pas inscrit</label><input id="apAdd" placeholder="Nom, prénom ou classe…" autocomplete="off" /></div>
+        <div id="apAddRes" class="flex" style="gap:6px;flex-wrap:wrap;"></div>
+        <div id="apMsg" class="mt-2"></div>
+        <button class="btn btn-primary mt-1" id="apSave" type="button">Enregistrer l'appel</button>
+      </div>
+    </div>
+    <div class="panel hidden" id="tab-elections">
+      <div class="grid ev-admin">
+        <form class="form card" id="elForm">
+          <h3>Nouvelle élection</h3>
+          <div class="field"><label for="elPoste">Poste</label><select id="elPoste" name="poste"></select></div>
+          <div class="field"><label for="elTitre">Titre</label><input id="elTitre" name="titre" required maxlength="120" placeholder="Élection : Président·e" /></div>
+          <div class="field"><label for="elDesc">Informations pour les électeurs <small>(facultatif)</small></label><textarea id="elDesc" name="description" maxlength="2000" style="min-height:80px;"></textarea></div>
+          <div class="form-row">
+            <div class="field"><label for="elOuv">Ouverture <small>(vide = à l'ouverture)</small></label><input id="elOuv" name="ouverture" type="datetime-local" /></div>
+            <div class="field"><label for="elFerm">Clôture</label><input id="elFerm" name="fermeture" type="datetime-local" required /></div>
+          </div>
+          <button class="btn btn-primary" type="submit">Créer en brouillon</button>
+          <div class="small muted mt-1"><strong>Bulletin secret :</strong> le site enregistre qui a voté (pour empêcher de voter deux fois) et des compteurs de voix, mais jamais le choix d'un électeur. Même le bureau et les administrateurs ne peuvent pas savoir qui a voté pour qui. Peuvent voter : les membres non suspendus dont le compte existait à l'ouverture du vote, une seule fois.</div>
+        </form>
+        <div class="card"><h3>Élections</h3><div id="elMsg"></div><div id="elList"></div></div>
+      </div>
+    </div>
+    <div class="panel hidden" id="tab-motions"><div class="card" style="overflow:auto;"><p class="small muted">Motions proposées par les membres, classées par nombre de votes. « Retenue » : choisie pour une prochaine séance ; « Débattue » : déjà traitée (compte dans le profil d'orateur de son auteur).</p><div id="moList"></div></div></div>
+    <div class="panel hidden" id="tab-entre">
+      <p class="small muted">Réservé au bureau · <span id="enEquipe"></span></p>
+      <div class="grid ev-admin">
+        <div class="card">
+          <h3>Tâches</h3>
+          <form class="form" id="tkForm">
+            <div class="field"><input name="titre" required maxlength="200" placeholder="Nouvelle tâche (ex. réserver la salle Samuel Paty)" /></div>
+            <div class="form-row">
+              <div class="field"><label for="tkAssign">Pour</label><select id="tkAssign" name="assigne"></select></div>
+              <div class="field"><label for="tkEch">Avant le</label><input id="tkEch" name="echeance" type="date" /></div>
+            </div>
+            <div class="field"><textarea name="details" maxlength="2000" style="min-height:50px;" placeholder="Détails (facultatif)"></textarea></div>
+            <button class="btn btn-primary btn-sm" type="submit">Ajouter la tâche</button>
+          </form>
+          <div class="tk-board mt-2" id="tkList"></div>
+        </div>
+        <div style="display:grid;gap:24px;align-content:start;">
+          <div class="card">
+            <h3>Discussion du bureau</h3>
+            <div class="chat" id="enChat"></div>
+            <form class="chat-form" id="enChatForm"><input id="enChatIn" maxlength="2000" placeholder="Écrire au bureau…" autocomplete="off" /><button class="btn btn-primary btn-sm" type="submit">Envoyer</button></form>
+          </div>
+          <div class="card">
+            <div class="flex between"><h3 style="margin:0;">Notes partagées</h3><button class="btn btn-outline btn-sm" id="ntNew" type="button">+ Nouvelle note</button></div>
+            <p class="small muted">Ordres du jour, comptes rendus de réunion, contacts utiles…</p>
+            <div id="ntList" class="nt-list"></div>
+            <div id="ntZone" class="hidden mt-2">
+              <input id="ntTitre" class="nt-titre" maxlength="200" />
+              <textarea id="ntEditor" class="nt-ed" maxlength="50000"></textarea>
+              <div class="flex between mt-1"><span class="small muted" id="ntInfo"></span><div class="flex" style="gap:6px;"><button class="btn btn-outline btn-sm" id="ntDel" type="button">Supprimer</button><button class="btn btn-primary btn-sm" id="ntSave" type="button">Enregistrer</button></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="panel hidden" id="tab-msg"><div class="card" style="overflow:auto;"><table class="table" id="msgTable"><thead><tr><th>Date</th><th>De</th><th>Sujet</th><th>Message</th><th></th></tr></thead><tbody></tbody></table></div></div>
     <div class="panel hidden" id="tab-membres"><div class="card" style="overflow:auto;"><p class="small muted">Seul un <strong>admin</strong> peut changer les rôles, bannir ou supprimer un compte. Le rôle « bureau » donne accès à cette page. Un compte banni ne peut plus se connecter.</p><table class="table" id="memTable"><thead><tr><th>Nom</th><th>Classe</th><th>Contact</th><th>Inscrit le</th><th>Rôle</th><th></th></tr></thead><tbody></tbody></table></div></div>
   </div></section>
   <section class="section" id="denied" style="display:none;"><div class="container narrow center"><h2>Accès réservé</h2><p class="muted">Cette page est réservée aux membres du bureau.</p><a class="btn btn-outline" href="/compte">Retour à mon espace</a></div></section>
 </Base>
-<style is:global>.tab { cursor: pointer; border: 0; font: inherit; font-size: 0.82rem; } .tab.active { background: var(--nuit); color: #fff; } .table select, .table input { font: inherit; font-size: 0.85rem; padding: 4px 6px; border-radius: 6px; border: 1px solid var(--pierre-fonce); } .motiv { max-width: 360px; white-space: pre-wrap; font-size: 0.85rem; }  .ev-admin { grid-template-columns: minmax(300px, 1fr) minmax(320px, 1.2fr); align-items: start; }
+<style is:global>
+  .ap-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 2px solid var(--pierre-fonce); flex-wrap: wrap; }
+  .ap-btns { display: flex; gap: 0; }
+  .ap-b { border: 2px solid var(--nuit); background: transparent; color: var(--nuit); font: inherit; font-weight: 700; font-size: 0.85rem; padding: 6px 12px; cursor: pointer; margin-left: -2px; }
+  .ap-b.on.ap-present { background: var(--ok, #1f7a4d); border-color: var(--ok, #1f7a4d); color: #fff; }
+  .ap-b.on.ap-absent { background: var(--rouge); border-color: var(--rouge); color: #fff; }
+  .ap-b.on.ap-excuse { background: var(--nuit); color: #fff; }
+  .el-cands { display: grid; gap: 6px; margin: 8px 0; }
+  .el-c { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: var(--pierre); padding: 8px 12px; }
+  .el-res { white-space: nowrap; }
+  .lnk { background: none; border: 0; padding: 0; font: inherit; font-size: 0.85rem; font-weight: 700; color: var(--nuit); text-decoration: underline; text-decoration-color: var(--rouge); text-underline-offset: 3px; cursor: pointer; }
+  .tk-board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .tk-col h4 { font-size: 0.95rem; border-bottom: 3px solid var(--nuit); padding-bottom: 4px; }
+  .tk { border: 2px solid var(--pierre-fonce); padding: 8px 10px; margin-bottom: 8px; background: var(--blanc); }
+  .tk.tk-moi { border-color: var(--rouge); }
+  .tk p { margin: 4px 0; white-space: pre-wrap; }
+  .tk-late { color: var(--rouge); font-weight: 700; }
+  .tk-act { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .chat { max-height: 320px; overflow-y: auto; display: grid; gap: 8px; padding: 4px 0 10px; }
+  .msg { max-width: 85%; background: var(--pierre); padding: 8px 12px; }
+  .msg.mien { justify-self: end; background: var(--nuit); color: #fff; }
+  .msg b { display: block; font-size: 0.8rem; } .msg p { margin: 0; white-space: pre-wrap; } .msg time { display: block; font-size: 0.72rem; opacity: 0.65; }
+  .chat-form { display: grid; grid-template-columns: 1fr auto; }
+  .chat-form input { padding: 10px 12px; border: 3px solid var(--nuit); border-right: 0; font: inherit; background: var(--blanc); color: var(--nuit); }
+  .nt-list { display: grid; gap: 6px; }
+  .nt-item { text-align: left; border: 2px solid var(--pierre-fonce); background: transparent; color: var(--nuit); font: inherit; padding: 8px 10px; cursor: pointer; display: grid; }
+  .nt-item.on { border-color: var(--nuit); background: var(--pierre); }
+  .nt-titre { width: 100%; font: inherit; font-weight: 800; font-size: 1.1rem; padding: 8px 10px; border: 3px solid var(--nuit); margin-bottom: 8px; background: var(--blanc); color: var(--nuit); }
+  .nt-ed { width: 100%; min-height: 260px; font: inherit; padding: 10px; border: 3px solid var(--nuit); background: var(--blanc); color: var(--nuit); }
+  @media (max-width: 760px) { .tk-board { grid-template-columns: 1fr; } }
+.tab { cursor: pointer; border: 0; font: inherit; font-size: 0.82rem; } .tab.active { background: var(--nuit); color: #fff; } .table select, .table input { font: inherit; font-size: 0.85rem; padding: 4px 6px; border-radius: 6px; border: 1px solid var(--pierre-fonce); } .motiv { max-width: 360px; white-space: pre-wrap; font-size: 0.85rem; }  .ev-admin { grid-template-columns: minmax(300px, 1fr) minmax(320px, 1.2fr); align-items: start; }
   @media (max-width: 900px) { .ev-admin { grid-template-columns: 1fr; } }
   .ev-item { padding: 16px 0; border-bottom: 2px solid var(--pierre-fonce); }
   .ev-item.past { opacity: 0.6; }
@@ -155,6 +257,7 @@ import Base from '../layouts/Base.astro';
   import { mdToHtml, mdToText } from '../lib/markdown';
   const esc = (s: any) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
   const d = (s: string) => new Date(s).toLocaleDateString('fr-FR');
+  import { initBureauPlus } from '../lib/bureau-plus';
   (async () => {
     const session = await requireSession(); if (!session) return;
     const sb = getSupabase();
@@ -162,6 +265,7 @@ import Base from '../layouts/Base.astro';
     if (!me || !['bureau', 'admin'].includes(me.role)) { document.getElementById('denied')!.style.display = ''; return; }
     document.getElementById('app')!.style.display = '';
     const isAdmin = me.role === 'admin';
+    initBureauPlus(sb, session, me as any).catch((e) => console.error(e));
 
     // Tabs
     document.querySelectorAll<HTMLButtonElement>('.tab').forEach((t) => t.addEventListener('click', () => {

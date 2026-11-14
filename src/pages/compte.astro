@@ -1,7 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
+import MembreNav from '../components/MembreNav.astro';
 ---
 <Base title="Mon espace" noindex>
+  <MembreNav actif="espace" />
   <div class="page-head"><div class="container flex between">
     <div><span class="eyebrow">Ton compte</span><h1 id="hello">Mon espace</h1></div>
     <div class="flex"><a class="btn btn-primary btn-sm hidden" id="bureauLink" href="/bureau">Espace bureau</a><button class="btn btn-outline btn-sm" id="logout" type="button">Se déconnecter</button></div>

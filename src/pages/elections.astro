@@ -1,0 +1,83 @@
+---
+import Base from '../layouts/Base.astro';
+import MembreNav from '../components/MembreNav.astro';
+---
+<Base title="Élections du bureau" noindex>
+  <MembreNav actif="elections" />
+  <div class="page-head"><div class="container">
+    <span class="eyebrow">Réservé aux membres</span>
+    <h1>Élections du bureau</h1>
+    <p class="lead">Chaque membre vote une seule fois, à bulletin secret. Le site enregistre que tu as voté, jamais pour qui : ni le bureau ni les administrateurs ne peuvent le savoir.</p>
+  </div></div>
+  <section class="section-tight"><div class="container" id="elBox"><p class="muted">Chargement…</p></div></section>
+</Base>
+
+<style is:global>
+  .elec { border: 4px solid var(--nuit); padding: clamp(18px, 3vw, 28px); margin-bottom: 28px; }
+  .elec-head { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: start; margin-bottom: 12px; }
+  .elec h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); margin: 4px 0; }
+  .elec-st { display: inline-block; font-weight: 800; font-size: 0.8rem; padding: 3px 10px; background: var(--pierre); }
+  .elec-st.ouverte { background: var(--rouge); color: #fff; }
+  .elec-part { text-align: right; font-weight: 600; }
+  .elec-part b { font-size: 1.8rem; display: block; line-height: 1; }
+  .bulletins { display: grid; gap: 10px; margin: 16px 0; }
+  .bulletin { display: grid; grid-template-columns: 28px 1fr; gap: 12px; border: 3px solid var(--pierre-fonce); padding: 14px 16px; cursor: pointer; align-items: start; }
+  .bulletin:has(input:checked) { border-color: var(--nuit); background: var(--pierre); }
+  .bulletin input { width: 22px; height: 22px; accent-color: var(--rouge); margin-top: 2px; }
+  .bulletin b { font-size: 1.15rem; display: block; }
+  .bulletin details { margin-top: 6px; } .bulletin summary { font-size: 0.85rem; font-weight: 700; cursor: pointer; }
+  .bulletin details p { white-space: pre-wrap; margin: 6px 0 0; font-size: 0.95rem; }
+  .bulletin.blanc b { color: var(--gris); }
+  .resultat { display: grid; grid-template-columns: minmax(140px, 1fr) 2fr 96px; gap: 12px; align-items: center; margin-bottom: 10px; }
+  .resultat > :last-child { text-align: right; } .resultat .trk { background: var(--pierre); height: 22px; } .resultat i { display: block; height: 100%; background: var(--nuit); }
+  .resultat.elu i { background: var(--rouge); } .resultat.elu b:first-child::after { content: ' — élu·e'; color: var(--rouge); }
+  .a-vote { border-left: 6px solid var(--ok, #1f7a4d); background: var(--pierre); padding: 12px 16px; font-weight: 600; }
+</style>
+
+<script>
+  import { getSupabase } from '../lib/supabase';
+  import { requireMembre } from '../lib/auth';
+  const esc = (s: unknown) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
+  const dt = (s: string) => new Date(s).toLocaleString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' });
+  (async () => {
+    const m = await requireMembre(); if (!m) return;
+    const sb = getSupabase(); const box = document.getElementById('elBox')!;
+    const ST: Record<string, string> = { programmee: 'Bientôt', ouverte: 'Vote ouvert', close: 'Terminée' };
+    async function load() {
+      const { data, error } = await sb.rpc('elections_liste');
+      const els = ((data as any[]) || []).filter((e) => e.statut !== 'brouillon');
+      if (error) { box.innerHTML = '<p class="muted">Les élections n\'ont pas pu être chargées.</p>'; return; }
+      box.innerHTML = els.map((e) => {
+        const ouverte = e.statut === 'ouverte', close = e.statut === 'close';
+        const total = (e.candidats || []).reduce((a: number, c: any) => a + (c.voix || 0), 0) + (e.blancs || 0);
+        const maxVoix = Math.max(0, ...(e.candidats || []).map((c: any) => c.voix || 0));
+        let corps = '';
+        if (ouverte && e.a_vote) corps = `<p class="a-vote">✓ Tu as voté. Merci ! Les résultats seront publiés après la clôture, ${esc(dt(e.fermeture))}.</p>`;
+        else if (ouverte && !e.peut_voter) corps = '<p class="a-vote" style="border-color:var(--rouge);">Ton compte a été créé après l\'ouverture de ce vote : tu pourras voter à la prochaine élection.</p>';
+        else if (ouverte) corps = `<form class="vote-form" data-id="${e.id}">
+            <div class="bulletins">${(e.candidats || []).map((c: any) => `<label class="bulletin"><input type="radio" name="choix" value="${c.id}" required /><span><b>${esc(c.nom)}</b>${c.profession_de_foi ? `<details><summary>Lire la profession de foi</summary><p>${esc(c.profession_de_foi)}</p></details>` : ''}</span></label>`).join('')}
+              <label class="bulletin blanc"><input type="radio" name="choix" value="blanc" required /><span><b>Vote blanc</b></span></label></div>
+            <button class="btn btn-primary" type="submit">Voter</button> <span class="small muted">Un seul vote, définitif.</span></form>`;
+        else if (e.statut === 'programmee') corps = `<p>Le vote ouvrira ${esc(dt(e.ouverture))}.</p><div class="bulletins">${(e.candidats || []).map((c: any) => `<div class="bulletin" style="cursor:default;grid-template-columns:1fr;"><span><b>${esc(c.nom)}</b>${c.profession_de_foi ? `<details><summary>Lire la profession de foi</summary><p>${esc(c.profession_de_foi)}</p></details>` : ''}</span></div>`).join('')}</div>`;
+        else if (close && e.blancs != null) corps = `<div class="mt-2">${(e.candidats || []).slice().sort((a: any, b: any) => b.voix - a.voix).map((c: any) => `<div class="resultat${c.voix === maxVoix && maxVoix > 0 && (e.candidats || []).filter((x: any) => x.voix === maxVoix).length === 1 ? ' elu' : ''}"><b>${esc(c.nom)}</b><div class="trk"><i style="width:${total ? (c.voix / total) * 100 : 0}%"></i></div><b>${c.voix} · ${total ? Math.round((c.voix / total) * 100) : 0} %</b></div>`).join('')}
+            <div class="resultat"><span class="muted">Votes blancs</span><div class="trk"><i style="width:${total ? (e.blancs / total) * 100 : 0}%;background:var(--pierre-fonce)"></i></div><span>${e.blancs}</span></div></div>`;
+        else if (close) corps = '<p class="muted">Le vote est clos. Les résultats seront publiés par le bureau très bientôt.</p>';
+        return `<article class="elec"><div class="elec-head"><div><span class="elec-st ${e.statut}">${ST[e.statut] || e.statut}</span>${e.poste ? ` <span class="small muted">${esc(e.poste)}</span>` : ''}<h2>${esc(e.titre)}</h2>
+            <span class="small muted">${ouverte ? `Clôture ${esc(dt(e.fermeture))}` : close ? `Clos ${esc(dt(e.fermeture))}` : ''}</span></div>
+            ${ouverte || close ? `<div class="elec-part"><b>${e.votants}</b>votant${e.votants > 1 ? 's' : ''} sur ${e.inscrits}</div>` : ''}</div>
+          ${e.description ? `<p>${esc(e.description)}</p>` : ''}${corps}</article>`;
+      }).join('') || '<p class="muted">Aucune élection en cours. Le bureau ouvrira ici les prochains votes ; tu pourras voter en un clic.</p>';
+    }
+    box.addEventListener('submit', async (ev) => {
+      const f = ev.target as HTMLFormElement; if (!f.classList.contains('vote-form')) return; ev.preventDefault();
+      const choix = (f.querySelector('input[name=choix]:checked') as HTMLInputElement | null)?.value; if (!choix) return;
+      const nom = choix === 'blanc' ? 'vote blanc' : (f.querySelector(`input[value="${choix}"]`)!.closest('label')!.querySelector('b')!.textContent);
+      if (!confirm(`Confirmer ton vote : ${nom} ?\n\nTon vote est secret et définitif.`)) return;
+      const btn = f.querySelector('button') as HTMLButtonElement; btn.disabled = true;
+      const { error } = await sb.rpc('election_voter', { p_election: f.dataset.id, p_candidat: choix === 'blanc' ? null : choix });
+      if (error) alert(/deja_vote/.test(error.message) ? 'Tu as déjà voté à cette élection.' : /vote_ferme/.test(error.message) ? 'Le vote est clos.' : /non_inscrit/.test(error.message) ? "Ton compte a été créé après l'ouverture du vote." : "Ton vote n'a pas pu être enregistré.");
+      load();
+    });
+    load();
+  })();
+</script>

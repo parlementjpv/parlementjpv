@@ -34,3 +34,6 @@ verify_jwt = false
 
 [functions.annonces-stop]
 verify_jwt = false
+
+[functions.appel]
+verify_jwt = false

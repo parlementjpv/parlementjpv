@@ -1,0 +1,93 @@
+---
+import Base from '../layouts/Base.astro';
+import MembreNav from '../components/MembreNav.astro';
+---
+<Base title="Banque de motions" noindex>
+  <MembreNav actif="motions" />
+  <div class="page-head"><div class="container">
+    <span class="eyebrow">Réservé aux membres</span>
+    <h1>Banque de motions</h1>
+    <p class="lead">Propose les sujets que tu veux débattre et vote pour ceux des autres. Le bureau choisit les prochaines séances parmi les motions les plus soutenues.</p>
+  </div></div>
+
+  <section class="section-tight">
+    <div class="container mo-grid">
+      <div>
+        <div class="mo-filters" id="moFilters">
+          <button class="pill tab active" data-f="ouvertes" type="button">À voter</button>
+          <button class="pill tab" data-f="retenue" type="button">Retenues</button>
+          <button class="pill tab" data-f="debattue" type="button">Déjà débattues</button>
+        </div>
+        <div id="moList" class="mt-2"><p class="muted">Chargement…</p></div>
+      </div>
+      <aside class="card mo-form">
+        <h3>Proposer une motion</h3>
+        <form class="form" id="moForm">
+          <div class="field"><label for="moTexte">La motion</label><textarea id="moTexte" name="texte" required minlength="10" maxlength="300" style="min-height:90px;" placeholder="Cette chambre abaisserait le droit de vote à 16 ans."></textarea><small class="muted"><span id="moCount">0</span>/300 · formule-la comme une affirmation qu'un camp défend et l'autre combat.</small></div>
+          <div class="field"><label for="moCtx">Pourquoi ce sujet ? <small>(facultatif)</small></label><textarea id="moCtx" name="contexte" maxlength="1000" style="min-height:70px;"></textarea></div>
+          <div id="moMsg"></div>
+          <button class="btn btn-primary" type="submit">Proposer</button>
+        </form>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<style is:global>
+  .mo-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 32px; align-items: start; }
+  .mo-form { position: sticky; top: 90px; }
+  .mo-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tab { cursor: pointer; border: 0; font: inherit; font-size: 0.85rem; } .tab.active { background: var(--nuit); color: #fff; }
+  .motion { display: grid; grid-template-columns: 64px 1fr; gap: 14px; padding: 16px 0; border-bottom: 2px solid var(--pierre-fonce); }
+  .mvote { display: grid; justify-items: center; align-content: center; border: 3px solid var(--nuit); background: transparent; color: var(--nuit); font: inherit; font-weight: 800; padding: 8px 0; cursor: pointer; height: fit-content; }
+  .mvote span { font-size: 1.5rem; line-height: 1; }
+  .mvote small { font-size: 0.7rem; }
+  .mvote.on { background: var(--rouge); border-color: var(--rouge); color: #fff; }
+  .mvote:disabled { cursor: default; opacity: 0.7; }
+  .motion h3 { font-size: 1.25rem; margin: 0 0 4px; line-height: 1.2; }
+  .motion p { margin: 0 0 6px; color: var(--gris); }
+  .motion .meta { font-size: 0.85rem; color: var(--gris); display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .st { font-size: 0.75rem; font-weight: 800; padding: 2px 8px; background: var(--pierre); color: var(--nuit); }
+  .st.retenue { background: var(--rouge); color: #fff; }
+  .lnk { background: none; border: 0; padding: 0; font: inherit; font-size: 0.85rem; font-weight: 700; color: var(--nuit); text-decoration: underline; text-decoration-color: var(--rouge); text-underline-offset: 3px; cursor: pointer; }
+  @media (max-width: 860px) { .mo-grid { grid-template-columns: 1fr; } .mo-form { position: static; order: -1; } }
+</style>
+
+<script>
+  import { getSupabase } from '../lib/supabase';
+  import { requireMembre } from '../lib/auth';
+  const esc = (s: unknown) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
+  const $ = (id: string) => document.getElementById(id)!;
+  (async () => {
+    const m = await requireMembre(); if (!m) return;
+    const sb = getSupabase();
+    let filtre = 'ouvertes'; let data: any[] = [];
+    const ST: Record<string, string> = { proposee: 'Proposée', retenue: 'Retenue pour une séance', debattue: 'Débattue', ecartee: 'Écartée' };
+    const paint = () => {
+      const ms = data.filter((x) => filtre === 'ouvertes' ? x.statut === 'proposee' : x.statut === filtre).sort((a, b) => b.votes - a.votes || b.created_at.localeCompare(a.created_at));
+      $('moList').innerHTML = ms.map((x) => `<article class="motion">
+          <button class="mvote${x.mon_vote ? ' on' : ''}" data-id="${x.id}" type="button" ${x.statut === 'debattue' || x.statut === 'ecartee' ? 'disabled' : ''} title="${x.mon_vote ? 'Retirer mon vote' : 'Soutenir cette motion'}"><span>${x.votes}</span><small>${x.mon_vote ? 'soutenue' : 'soutenir'}</small></button>
+          <div><h3>${esc(x.texte)}</h3>${x.contexte ? `<p>${esc(x.contexte)}</p>` : ''}
+            <div class="meta">${x.statut !== 'proposee' ? `<span class="st ${x.statut}">${ST[x.statut]}</span>` : ''}<span>Proposée par ${esc(x.auteur_nom)} · ${new Date(x.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}</span>
+            ${x.mienne && x.statut === 'proposee' ? `<button class="lnk mdel" data-id="${x.id}" type="button">Retirer ma motion</button>` : ''}</div></div></article>`).join('')
+        || `<p class="muted">${filtre === 'ouvertes' ? 'Aucune motion à voter pour l\'instant. Propose la première !' : 'Rien ici pour le moment.'}</p>`;
+    };
+    const load = async () => { const { data: d } = await sb.rpc('motions_liste'); data = (d as any[]) || []; paint(); };
+    $('moFilters').addEventListener('click', (e) => { const b = (e.target as HTMLElement).closest('.tab') as HTMLElement | null; if (!b) return; filtre = b.dataset.f!; document.querySelectorAll('#moFilters .tab').forEach((t) => t.classList.toggle('active', t === b)); paint(); });
+    $('moList').addEventListener('click', async (e) => {
+      const b = (e.target as HTMLElement).closest('button') as HTMLButtonElement | null; if (!b) return;
+      if (b.classList.contains('mvote')) { b.disabled = true; await sb.rpc('motion_voter', { p_motion: b.dataset.id }); await load(); }
+      if (b.classList.contains('mdel') && confirm('Retirer ta motion ?')) { await sb.from('motions').delete().eq('id', b.dataset.id!); await load(); }
+    });
+    const ta = $('moTexte') as HTMLTextAreaElement; ta.addEventListener('input', () => ($('moCount').textContent = String(ta.value.length)));
+    const f = $('moForm') as HTMLFormElement;
+    f.addEventListener('submit', async (e) => {
+      e.preventDefault(); if (!f.checkValidity()) { f.reportValidity(); return; }
+      const fd = new FormData(f);
+      const { error } = await sb.rpc('motion_proposer', { p_texte: String(fd.get('texte')), p_contexte: String(fd.get('contexte') || '') });
+      $('moMsg').innerHTML = error ? `<div class="alert alert-err">${/trop_de_motions/.test(error.message) ? 'Tu as déjà proposé 5 motions aujourd\'hui : reviens demain.' : 'La motion n\'a pas pu être enregistrée.'}</div>` : '<div class="alert alert-ok">Motion proposée ! Elle compte déjà ton vote.</div>';
+      if (!error) { f.reset(); $('moCount').textContent = '0'; filtre = 'ouvertes'; document.querySelectorAll('#moFilters .tab').forEach((t, i) => t.classList.toggle('active', i === 0)); await load(); }
+    });
+    load();
+  })();
+</script>

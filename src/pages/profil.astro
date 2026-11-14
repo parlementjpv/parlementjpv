@@ -1,0 +1,140 @@
+---
+import Base from '../layouts/Base.astro';
+import MembreNav from '../components/MembreNav.astro';
+---
+<Base title="Profil d'orateur" noindex>
+  <MembreNav actif="profil" />
+  <section class="pf-head">
+    <div class="container pf-head-grid">
+      <div>
+        <span class="eyebrow" id="pfKicker">Profil d'orateur</span>
+        <h1 id="pfNom">…</h1>
+        <p class="pf-sub" id="pfSub"></p>
+      </div>
+      <div class="pf-big"><strong id="pfSeances">–</strong><span>séances</span></div>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container">
+      <div class="stats" id="pfStats"></div>
+      <div id="pfAbs"></div>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container">
+      <div class="pf-sec-head"><h2>Badges</h2><span class="muted small" id="pfBadgeCount"></span></div>
+      <div class="badges" id="pfBadges"></div>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container pf-two">
+      <div>
+        <div class="pf-sec-head"><h2>Rôles tenus</h2></div>
+        <div id="pfRoles"></div>
+      </div>
+      <div id="pfHistWrap">
+        <div class="pf-sec-head"><h2>Historique</h2></div>
+        <div id="pfHist"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container">
+      <div class="pf-sec-head"><h2>Les orateurs du Parlement</h2><span class="muted small">Classés par séances</span></div>
+      <div id="pfClassement" class="classement"></div>
+    </div>
+  </section>
+</Base>
+
+<style is:global>
+  .pf-head { background: var(--nuit); color: #fff; padding: clamp(36px, 5vw, 64px) 0; }
+  .pf-head h1 { color: #fff; font-size: clamp(2.2rem, 5vw, 3.8rem); }
+  .pf-head .eyebrow { color: #ff6b78; } .pf-head .eyebrow::before { background: #ff6b78; }
+  .pf-sub { color: rgba(255,255,255,0.8); margin: 0; }
+  .pf-head-grid { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: end; }
+  .pf-big { border: 4px solid #fff; padding: 14px 24px; text-align: center; }
+  .pf-big strong { display: block; font-size: clamp(3rem, 7vw, 5rem); line-height: 0.9; letter-spacing: -0.05em; color: #ff6b78; }
+  .pf-big span { font-weight: 700; }
+  .pf-sec-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; border-bottom: var(--rule); padding-bottom: 8px; margin-bottom: 14px; }
+  .pf-sec-head h2 { font-size: 1.7rem; margin: 0; }
+  .badges { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
+  .badge { border: 3px solid var(--nuit); padding: 12px 14px; position: relative; }
+  .badge b { display: block; font-size: 1.05rem; line-height: 1.15; }
+  .badge span { font-size: 0.85rem; color: var(--gris); }
+  .badge.on { background: var(--nuit); color: #fff; }
+  .badge.on span { color: rgba(255,255,255,0.75); }
+  .badge.on::after { content: '★'; position: absolute; top: 8px; right: 10px; color: #ff6b78; font-size: 1.1rem; }
+  .badge.off { border-style: dashed; border-color: var(--pierre-fonce); opacity: 0.75; }
+  .badge em { display: inline-block; margin-top: 6px; font-style: normal; font-weight: 800; font-size: 0.8rem; background: var(--pierre); color: var(--nuit); padding: 1px 8px; }
+  .pf-two { display: grid; grid-template-columns: 1fr 1.2fr; gap: 32px; align-items: start; }
+  .role-bar { display: grid; grid-template-columns: 120px 1fr 36px; gap: 10px; align-items: center; margin-bottom: 8px; font-weight: 600; }
+  .role-bar i { display: block; height: 14px; background: var(--rouge); }
+  .role-bar .trk { background: var(--pierre); }
+  .hist-row { display: grid; grid-template-columns: 90px 1fr auto; gap: 10px; padding: 9px 0; border-bottom: 2px solid var(--pierre-fonce); align-items: baseline; }
+  .hist-st { font-weight: 800; font-size: 0.85rem; }
+  .hist-st.present { color: var(--ok, #1f7a4d); } .hist-st.absent { color: var(--rouge); } .hist-st.excuse { color: var(--gris); }
+  .abs-alert { border-left: 6px solid var(--rouge); background: var(--pierre); padding: 12px 16px; margin-top: 14px; }
+  .classement { display: grid; gap: 0; }
+  .cl-row { display: grid; grid-template-columns: 44px 1fr auto auto; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 2px solid var(--pierre-fonce); color: inherit; text-decoration: none; }
+  .cl-row:hover { background: var(--pierre); }
+  .cl-rang { font-weight: 800; font-size: 1.3rem; text-align: center; }
+  .cl-row.moi { border-left: 6px solid var(--rouge); padding-left: 8px; }
+  @media (max-width: 800px) { .pf-two, .pf-head-grid { grid-template-columns: 1fr; } .pf-big { justify-self: start; } }
+</style>
+
+<script>
+  import { getSupabase } from '../lib/supabase';
+  import { requireMembre } from '../lib/auth';
+  import { badges } from '../lib/badges';
+  import { u } from '../lib/url';
+  const esc = (s: unknown) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
+  const $ = (id: string) => document.getElementById(id)!;
+  (async () => {
+    const m = await requireMembre(); if (!m) return;
+    const sb = getSupabase();
+    const cible = new URLSearchParams(location.search).get('u');
+    const [{ data: p, error }, { data: cl }] = await Promise.all([sb.rpc('profil_orateur', { p_user: cible || null }), sb.rpc('orateurs_classement')]);
+    if (error || !p) { $('pfNom').textContent = 'Profil introuvable'; return; }
+    const ROLE: Record<string, string> = { admin: 'Bureau', bureau: 'Bureau', membre: 'Membre' };
+    $('pfKicker').textContent = p.moi ? "Mon profil d'orateur" : "Profil d'orateur";
+    $('pfNom').textContent = `${p.prenom} ${p.nom}`;
+    $('pfSub').textContent = `${p.classe || ''}${p.classe ? ' · ' : ''}${ROLE[p.role] || 'Membre'} depuis ${new Date(p.membre_depuis).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}`;
+    $('pfSeances').textContent = String(p.seances);
+    document.title = `${p.prenom} ${p.nom} — Profil d'orateur`;
+
+    const nbRoles = Object.values(p.roles || {}).reduce((a: number, n: any) => a + Number(n), 0);
+    const stats: [number | string, string][] = [[p.debats, 'débats'], [nbRoles, 'prises de parole'], [p.arguments_retenus, 'arguments retenus'], [p.motions_proposees, 'motions proposées']];
+    $('pfStats').innerHTML = stats.map(([n, l]) => `<div class="stat"><strong>${n}</strong><span>${l}</span></div>`).join('');
+
+    if (p.moi && p.absences != null) {
+      const reste = (p.seuil_absences ?? 3) - p.absences;
+      $('pfAbs').innerHTML = p.absences > 0
+        ? `<div class="abs-alert"><strong>${p.absences} absence${p.absences > 1 ? 's' : ''} non excusée${p.absences > 1 ? 's' : ''}</strong>${p.excuses ? ` · ${p.excuses} excusée${p.excuses > 1 ? 's' : ''}` : ''}. ${reste > 0 ? `Encore ${reste} absence${reste > 1 ? 's' : ''} tolérée${reste > 1 ? 's' : ''} ; au-delà, ton compte est suspendu.` : 'La prochaine absence non excusée suspendra ton compte.'} Si tu ne peux pas venir, réponds « Je ne viens pas » avant la séance : ça ne compte pas.</div>`
+        : '';
+    }
+
+    const bs = badges(p); const n = bs.filter((b) => b.obtenu).length;
+    $('pfBadgeCount').textContent = `${n} sur ${bs.length}`;
+    const visibles = p.moi ? bs : bs.filter((b) => b.obtenu);
+    $('pfBadges').innerHTML = [...visibles].sort((a, b) => Number(b.obtenu) - Number(a.obtenu)).map((b) => `<div class="badge ${b.obtenu ? 'on' : 'off'}"><b>${esc(b.nom)}</b><span>${esc(b.desc)}</span>${!b.obtenu && b.progres ? `<br><em>${esc(b.progres)}</em>` : ''}</div>`).join('') || '<p class="muted">Pas encore de badge.</p>';
+
+    const roles = Object.entries(p.roles || {}).sort((a: any, b: any) => b[1] - a[1]) as [string, number][];
+    const max = Math.max(1, ...roles.map(([, v]) => v));
+    $('pfRoles').innerHTML = roles.length ? roles.map(([r, v]) => `<div class="role-bar"><span>${esc(r)}</span><div class="trk"><i style="width:${(v / max) * 100}%"></i></div><b>${v}</b></div>`).join('')
+      : `<p class="muted">${p.moi ? 'Aucun rôle tenu pour l\'instant. Dans la salle de préparation de ton camp, prends un rôle de prise de parole : il sera compté ici après l\'appel.' : 'Aucun rôle tenu pour l\'instant.'}</p>`;
+
+    if (p.historique) {
+      const ST: Record<string, string> = { present: 'Présent', absent: 'Absent', excuse: 'Excusé' };
+      $('pfHist').innerHTML = p.historique.length ? p.historique.map((h: any) => `<div class="hist-row"><span class="small muted">${new Date(h.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: '2-digit' })}</span><span><strong>${esc(h.titre)}</strong>${h.camp ? ` <span class="small muted">· ${esc(h.camp)}</span>` : ''}${h.roles?.length ? `<br><span class="small">${h.roles.map(esc).join(', ')}</span>` : ''}</span><span class="hist-st ${h.statut}">${ST[h.statut]}</span></div>`).join('')
+        : '<p class="muted">Ton historique apparaîtra après le premier appel en séance.</p>';
+    } else $('pfHistWrap').remove();
+
+    const list = (cl as any[]) || [];
+    $('pfClassement').innerHTML = list.length ? list.slice(0, 30).map((o, i) => `<a class="cl-row${o.id === m.session.user.id ? ' moi' : ''}" href="${u('/profil')}?u=${o.id}"><span class="cl-rang">${i + 1}</span><span><strong>${esc(o.prenom)} ${esc(o.nom)}</strong> <span class="small muted">${esc(o.classe || '')}</span></span><span class="small">${o.roles} rôle${o.roles > 1 ? 's' : ''}</span><strong>${o.seances} séance${o.seances > 1 ? 's' : ''}</strong></a>`).join('')
+      : '<p class="muted">Le classement apparaîtra après le premier appel en séance.</p>';
+  })();
+</script>

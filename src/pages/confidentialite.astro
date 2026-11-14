@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 ---
 <Base title="Politique de confidentialité" noindex>
-  <div class="page-head"><div class="container"><span class="eyebrow">Tes données, en clair</span><h1>Politique de confidentialité</h1><p class="muted small">Dernière mise à jour : 14 novembre 2026</p></div></div>
+  <div class="page-head"><div class="container"><span class="eyebrow">Tes données, en clair</span><h1>Politique de confidentialité</h1><p class="muted small">Dernière mise à jour : 14 novembre 2026 (v2)</p></div></div>
   <section class="section"><div class="container prose">
     <h2>1. Qui est responsable de tes données ?</h2>
     <p>Les données collectées sur ce site sont traitées par le <strong>Parlement JPV</strong>, sous l'autorité du chef d'établissement du lycée Jean-Pierre Vernant (21 rue du Docteur Ledermann, 92310 Sèvres). Seuls les membres du bureau du Parlement JPV y ont accès, et uniquement pour faire fonctionner l'instance.</p>
@@ -18,6 +18,10 @@ import Base from '../layouts/Base.astro';
         <tr><td>Salles de préparation</td><td>Prénom, arguments, sources, messages, votes, rôle de prise de parole</td><td>Préparer le débat avec son camp</td><td>Consentement</td><td>12 mois après la séance</td></tr>
         <tr><td>Annonces de séances</td><td>Prénom, email</td><td>Prévenir les membres d'une nouvelle séance</td><td>Intérêt légitime de l'instance (désactivable à tout moment)</td><td>Tant que tu es membre</td></tr>
         <tr><td>Messages du bureau</td><td>Destinataires, objet, texte du message</td><td>Écrire à des membres précis</td><td>Intérêt légitime</td><td>Historique gardé 1 an</td></tr>
+        <tr><td>Appel en séance et profil d'orateur</td><td>Présence, absence ou excuse à chaque séance, camp, rôles de prise de parole tenus, nombre d'arguments retenus ; badges calculés à partir de ces informations</td><td>Suivre la participation, appliquer la règle d'assiduité (suspension du compte au-delà du nombre d'absences non excusées fixé par le bureau, après avertissement par email), afficher le profil d'orateur</td><td>Intérêt légitime de l'instance</td><td>Tant que tu es membre (12 mois pour les participants sans compte)</td></tr>
+        <tr><td>Banque de motions</td><td>Texte proposé, prénom et initiale de l'auteur, votes</td><td>Choisir les sujets des prochains débats</td><td>Consentement</td><td>Tant que la motion est conservée par le bureau</td></tr>
+        <tr><td>Élections du bureau</td><td>Le fait d'avoir voté (jamais le choix)</td><td>Empêcher de voter deux fois ; le choix n'est enregistré que dans un compteur anonyme</td><td>Intérêt légitime (organisation d'un vote)</td><td>30 jours après la clôture ; seuls les totaux sont gardés</td></tr>
+        <tr><td>Espace interne du bureau</td><td>Tâches, messages et notes des membres du bureau</td><td>Organiser le travail du bureau</td><td>Intérêt légitime</td><td>Messages : 1 an ; tâches et notes jusqu'à suppression</td></tr>
         <tr><td>Candidature au bureau</td><td>Identité, classe, poste visé, motivation, expérience, disponibilités</td><td>Étude de la candidature par le bureau</td><td>Consentement</td><td>1 an après la décision</td></tr>
         <tr><td>Newsletter</td><td>Email, date et adresse IP de confirmation</td><td>Envoi de la lettre mensuelle</td><td>Consentement (confirmé par email)</td><td>Jusqu'à la désinscription ; 30 jours si l'inscription n'est jamais confirmée</td></tr>
         <tr><td>Formulaire de contact</td><td>Nom, email, message</td><td>Répondre à ta demande</td><td>Intérêt légitime</td><td>1 an</td></tr>
@@ -32,7 +36,7 @@ import Base from '../layouts/Base.astro';
     <p>Ce site n'utilise <strong>aucun cookie publicitaire, aucun outil de mesure d'audience et aucun traceur</strong>. Il enregistre seulement dans ton navigateur ton choix de thème (clair ou sombre) et ta session de connexion si tu as un compte. Ces éléments sont indispensables au fonctionnement du site et ne nécessitent pas de consentement. La police de caractères est hébergée sur le site lui-même : ton navigateur ne contacte pas Google pour l'afficher.</p>
 
     <h2>5. Qui reçoit tes données ?</h2>
-    <p>Uniquement le bureau du Parlement JPV. Les membres d'un camp voient le prénom, l'initiale du nom et la classe des autres membres de leur camp. Aucune donnée n'est vendue, louée ni utilisée à des fins publicitaires.</p>
+    <p>Uniquement le bureau du Parlement JPV. Les membres d'un camp voient le prénom, l'initiale du nom et la classe des autres membres de leur camp. Les membres connectés voient le prénom, l'initiale du nom, la classe, le nombre de séances, les rôles tenus et les badges des autres membres (profil d'orateur) ; les absences ne sont visibles que par toi et par le bureau. Aucune donnée n'est vendue, louée ni utilisée à des fins publicitaires.</p>
     <p>Prestataires techniques qui hébergent ou transportent les données pour notre compte :</p>
     <ul>
       <li><strong>Supabase</strong> : base de données et comptes, serveurs dans l'Union européenne (Suède) ;</li>

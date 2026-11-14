@@ -72,11 +72,35 @@
 - **Base légale :** intérêt légitime.
 - **Durée :** 1 an.
 
+### 8. Appel en séance et profil d'orateur
+- **Finalité :** suivre la présence aux séances, appliquer la règle d'assiduité (avertissement par email à la dernière absence tolérée, suspension automatique du compte au-delà du seuil fixé dans les réglages, 3 par défaut), calculer le profil d'orateur et ses badges.
+- **Données :** statut (présent, absent, excusé) par séance, camp, rôles de prise de parole, nombre d'arguments retenus.
+- **Base légale :** intérêt légitime de l'instance ; règle annoncée dans la politique de confidentialité et dans l'email d'avertissement. Un admin peut réactiver un compte suspendu (le compteur d'absences repart alors de zéro).
+- **Destinataires :** bureau ; l'intéressé ; les autres membres voient seulement séances, rôles et badges (jamais les absences).
+- **Durée :** tant que la personne est membre ; 12 mois pour les participants sans compte.
+
+### 9. Banque de motions
+- **Finalité :** proposer et classer les sujets de débat.
+- **Données :** texte, auteur (prénom et initiale), votes de soutien.
+- **Base légale :** consentement.
+- **Durée :** tant que le bureau conserve la motion.
+
+### 10. Élections du bureau
+- **Finalité :** élire les membres du bureau à bulletin secret.
+- **Données :** liste des électeurs ayant voté (pour empêcher le double vote) ; les choix ne sont enregistrés que sous forme de compteurs, sans aucun lien avec l'électeur — aucun bulletin individuel n'existe.
+- **Base légale :** intérêt légitime.
+- **Durée :** liste des votants supprimée 30 jours après la clôture ; totaux conservés.
+
+### 11. Espace interne du bureau
+- **Finalité :** organiser le travail du bureau (tâches, discussion, notes de réunion).
+- **Données :** contenu rédigé par les membres du bureau, auteur.
+- **Durée :** messages 1 an ; tâches et notes jusqu'à suppression.
+
 ## Mesures de sécurité
 - HTTPS sur tout le site ; mots de passe hachés (bcrypt) par Supabase Auth.
 - Règles d'accès en base (Row Level Security) : chaque membre ne voit que ses propres données ; listes et réponses réservées au bureau ; actions sensibles (bannir, supprimer un compte) réservées à l'administrateur.
 - Salles de préparation accessibles uniquement par jeton personnel aléatoire ; isolement vérifié entre camps.
-- Purge automatique quotidienne (tâche `purge-donnees`, 3 h 17) appliquant les durées ci-dessus.
+- Purge automatique quotidienne (tâches `purge-donnees` à 3 h 17 et `purge-complements` à 3 h 27) appliquant les durées ci-dessus.
 - Aucun cookie publicitaire, aucun outil de mesure d'audience, police de caractères hébergée sur le site.
 
 ## Gestion des incidents

@@ -96,3 +96,12 @@ export function resendBox(email: string | (() => string), label = "Je n'ai pas r
   });
   return box;
 }
+
+/** Pages réservées aux membres : session valide + compte non suspendu. */
+export async function requireMembre() {
+  const session = await requireSession();
+  if (!session) return null;
+  const profile = await getProfile(session.user.id);
+  if (!profile || (profile as any).banni) { location.href = u('/compte'); return null; }
+  return { session, profile };
+}

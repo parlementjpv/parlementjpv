@@ -1,0 +1,21 @@
+---
+const { actif } = Astro.props as { actif: 'espace' | 'profil' | 'motions' | 'elections' };
+const liens = [
+  { k: 'espace', href: '/compte', label: 'Mon espace' },
+  { k: 'profil', href: '/profil', label: "Profil d'orateur" },
+  { k: 'motions', href: '/motions', label: 'Motions' },
+  { k: 'elections', href: '/elections', label: 'Élections' },
+];
+---
+<nav class="membre-nav" aria-label="Espace membres">
+  <div class="container">
+    {liens.map((l) => <a href={l.href} aria-current={l.k === actif ? 'page' : undefined}>{l.label}</a>)}
+  </div>
+</nav>
+<style>
+  .membre-nav { background: var(--nuit); border-bottom: 4px solid var(--rouge); }
+  .membre-nav .container { display: flex; gap: 4px; overflow-x: auto; }
+  .membre-nav a { color: #fff; text-decoration: none; font-weight: 700; font-size: 0.95rem; padding: 12px 14px; white-space: nowrap; border-bottom: 4px solid transparent; margin-bottom: -4px; }
+  .membre-nav a:hover { background: rgba(255,255,255,0.08); }
+  .membre-nav a[aria-current='page'] { border-bottom-color: #fff; }
+</style>
