@@ -148,6 +148,7 @@ import Base from '../layouts/Base.astro';
   import { getSupabase } from '../lib/supabase';
   import { requireSession, getProfile } from '../lib/auth';
   import { postJSON } from '../lib/newsletter';
+  import { u } from '../lib/url';
   import { mdToHtml, mdToText } from '../lib/markdown';
   const esc = (s: any) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
   const d = (s: string) => new Date(s).toLocaleDateString('fr-FR');
@@ -307,7 +308,7 @@ import Base from '../layouts/Base.astro';
           <div class="flex between"><div><span class="pill">${esc(ev.type)}</span> <strong>${esc(ev.title)}</strong><br><span class="small muted">${new Date(ev.starts_at).toLocaleString('fr-FR', { dateStyle: 'full', timeStyle: 'short', timeZone: 'Europe/Paris' })} · ${esc(ev.location)}${past ? ' · passé' : ''}</span></div>
           <div class="flex" style="gap:6px;"><button class="btn btn-outline btn-sm ev-edit" data-id="${ev.id}" type="button">Modifier</button><button class="btn btn-outline btn-sm ev-del" data-id="${ev.id}" type="button">Supprimer</button></div></div>
           <div class="ev-stats"><b>${oui.length}</b> viennent${ev.capacity ? ` / ${ev.capacity} places` : ''} · <b>${non.length}</b> ne viennent pas</div>
-          ${(ev.camps || []).length ? `<div class="ev-campstats">${ev.camps.map((k: string) => `<span>${esc(k)} <b>${oui.filter((r) => r.camp === k).length}</b></span>`).join('')}</div>` : ''}
+          ${(ev.camps || []).length ? `<div class="ev-campstats">${ev.camps.map((k: string) => `<span>${esc(k)} <b>${oui.filter((r) => r.camp === k).length}</b> · <a href="${u('/salle')}?e=${ev.id}&c=${encodeURIComponent(k)}" target="_blank" rel="noopener">voir la salle</a></span>`).join('')}</div>` : ''}
           <details><summary>Voir les réponses</summary><div class="ev-cols">${(ev.camps || []).length
             ? ev.camps.map((k: string) => `<div><h4>Camp « ${esc(k)} »</h4>${list(oui.filter((r) => r.camp === k))}</div>`).join('') + (oui.some((r) => !ev.camps.includes(r.camp)) ? `<div><h4>Sans camp</h4>${list(oui.filter((r) => !ev.camps.includes(r.camp)))}</div>` : '')
             : `<div><h4>Je viens</h4>${list(oui)}</div>`}<div><h4>Je ne viens pas</h4>${list(non)}</div></div>

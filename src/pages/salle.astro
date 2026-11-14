@@ -1,0 +1,314 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Salle de préparation" noindex>
+  <div class="section" id="sLoading"><div class="container"><p class="muted">Ouverture de la salle…</p></div></div>
+
+  <section class="section" id="sDenied" hidden>
+    <div class="container narrow">
+      <span class="eyebrow">Salle de préparation</span>
+      <h1>Ce lien ne donne accès à aucune salle.</h1>
+      <p class="lead">La salle d'un camp est réservée aux participants qui ont répondu « Je viens ». Utilise le lien reçu par email, ou réponds d'abord à l'événement.</p>
+      <div class="flex mt-3"><a class="btn btn-primary" href="/evenement">Voir les événements</a><a class="btn btn-outline" href="/compte">Mon espace</a></div>
+    </div>
+  </section>
+
+  <div id="sMain" hidden>
+    <section class="s-head">
+      <div class="container s-head-grid">
+        <div>
+          <span class="eyebrow" id="sKicker"></span>
+          <h1 id="sTitle"></h1>
+          <p class="s-when" id="sWhen"></p>
+          <p class="s-bureau hidden" id="sBureau">Vue du bureau — lecture seule</p>
+        </div>
+        <div class="s-camp">
+          <small>Ton camp</small>
+          <strong id="sCamp"></strong>
+          <span id="sCountdown"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-tight">
+      <div class="container">
+        <div class="ready" id="sReady"></div>
+      </div>
+    </section>
+
+    <section class="section-tight">
+      <div class="container s-grid">
+        <div class="s-col">
+          <!-- Arguments -->
+          <div class="s-block" id="b-arguments">
+            <div class="s-block-head"><h2>Nos arguments</h2><span class="muted small">Votez pour classer, retenez les meilleurs</span></div>
+            <details class="s-add">
+              <summary>+ Proposer un argument</summary>
+              <form class="form" id="fArg">
+                <div class="field"><label for="aTitre">L'idée en une phrase</label><input id="aTitre" maxlength="200" required placeholder="ex. Le vote à 16 ans renforce l'engagement civique durable" /></div>
+                <div class="field"><label for="aContenu">Explication et exemple</label><textarea id="aContenu" maxlength="3000" required placeholder="Pourquoi c'est vrai, un exemple concret, un chiffre…"></textarea></div>
+                <div class="field"><label for="aSource">Source <small>(lien, livre, étude — facultatif mais précieux)</small></label><input id="aSource" maxlength="500" placeholder="https://…" /></div>
+                <button class="btn btn-primary btn-sm" type="submit">Ajouter l'argument</button>
+              </form>
+            </details>
+            <div id="lArguments"></div>
+          </div>
+
+          <!-- Objections -->
+          <div class="s-block" id="b-objections">
+            <div class="s-block-head"><h2>Ce que l'autre camp va dire</h2><span class="muted small">Anticipez, et préparez la réponse</span></div>
+            <details class="s-add">
+              <summary>+ Anticiper une objection</summary>
+              <form class="form" id="fObj">
+                <div class="field"><label for="oContenu">L'argument adverse</label><textarea id="oContenu" maxlength="3000" required style="min-height:80px;" placeholder="ex. « À 16 ans, on est trop influençable. »"></textarea></div>
+                <div class="field"><label for="oReponse">Notre réponse <small>(facultatif, à compléter ensemble)</small></label><textarea id="oReponse" maxlength="3000" style="min-height:80px;"></textarea></div>
+                <button class="btn btn-primary btn-sm" type="submit">Ajouter l'objection</button>
+              </form>
+            </details>
+            <div id="lObjections"></div>
+          </div>
+        </div>
+
+        <div class="s-col">
+          <!-- Prises de parole -->
+          <div class="s-block">
+            <div class="s-block-head"><h2>Prises de parole</h2><span class="muted small">Clique pour prendre ou libérer un rôle</span></div>
+            <div class="roles" id="lRoles"></div>
+          </div>
+
+          <!-- Équipe -->
+          <div class="s-block">
+            <div class="s-block-head"><h2>L'équipe</h2><span class="muted small" id="sTeamCount"></span></div>
+            <div class="team" id="lTeam"></div>
+          </div>
+
+          <!-- Discussion -->
+          <div class="s-block">
+            <div class="s-block-head"><h2>Discussion du camp</h2><span class="muted small">Visible uniquement par ton camp</span></div>
+            <div class="chat" id="lChat"></div>
+            <form class="chat-form" id="fMsg">
+              <input id="mContenu" maxlength="1000" required placeholder="Écris à ton camp…" autocomplete="off" />
+              <button class="btn btn-primary btn-sm" type="submit">Envoyer</button>
+            </form>
+          </div>
+
+          <div class="s-block s-method">
+            <h3>La méthode en 30 secondes</h3>
+            <ul class="check">
+              <li><b>Un argument = une idée + une preuve + un exemple.</b> Sans source, il ne tient pas face à la réfutation.</li>
+              <li><b>Trois arguments solides valent mieux que dix moyens.</b> Votez, puis retenez les trois meilleurs.</li>
+              <li><b>Préparez la réfutation avant le débat.</b> Chaque objection anticipée doit avoir sa réponse.</li>
+              <li><b>Répartissez la parole.</b> Chaque rôle a un titulaire, chacun prépare sa minute.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    <p class="container small muted" id="sSync"></p>
+  </div>
+</Base>
+
+<style is:global>
+  .s-head { background: var(--nuit); color: #fff; padding: clamp(36px, 5vw, 64px) 0; }
+  .s-head h1 { color: #fff; font-size: clamp(2rem, 4.5vw, 3.4rem); max-width: 20ch; }
+  .s-head .eyebrow { color: #ff6b78; } .s-head .eyebrow::before { background: #ff6b78; }
+  .s-when { color: rgba(255,255,255,0.8); margin: 0; }
+  .s-bureau { display: inline-block; margin-top: 10px; background: #ff6b78; color: var(--nuit); font-weight: 800; padding: 3px 10px; }
+  .s-head-grid { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: end; }
+  .s-camp { border: 4px solid #fff; padding: 16px 22px; text-align: center; min-width: 200px; }
+  .s-camp small { display: block; font-weight: 700; color: rgba(255,255,255,0.75); }
+  .s-camp strong { display: block; font-size: clamp(2.2rem, 5vw, 3.4rem); line-height: 1; letter-spacing: -0.04em; color: #ff6b78; margin: 4px 0; }
+  .s-camp span { font-size: 0.9rem; font-weight: 600; }
+  .ready { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; border-top: var(--rule); border-bottom: var(--rule); padding: 16px 0; }
+  .ready-pct { font-size: 3rem; font-weight: 800; line-height: 1; letter-spacing: -0.05em; }
+  .ready-bar { height: 12px; background: var(--pierre); margin-bottom: 8px; }
+  .ready-bar i { display: block; height: 100%; background: var(--rouge); transition: width 0.4s ease; }
+  .ready-items { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 0.92rem; font-weight: 600; }
+  .ready-items .ok { color: var(--ok); } .ready-items .ko { color: var(--gris); }
+  .s-grid { display: grid; grid-template-columns: 1.25fr 1fr; gap: 28px; align-items: start; }
+  .s-col { display: grid; gap: 28px; min-width: 0; }
+  .s-block-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; border-bottom: var(--rule); padding-bottom: 8px; margin-bottom: 12px; }
+  .s-block-head h2 { font-size: 1.6rem; margin: 0; }
+  .s-add { border: 2px dashed var(--pierre-fonce); padding: 10px 14px; margin-bottom: 14px; }
+  .s-add summary { cursor: pointer; font-weight: 800; color: var(--rouge); }
+  .s-add[open] summary { margin-bottom: 12px; }
+  .post { display: grid; grid-template-columns: 54px 1fr; gap: 12px; padding: 14px 0; border-bottom: 2px solid var(--pierre-fonce); }
+  .post.retenu { background: linear-gradient(90deg, rgba(214,40,57,0.07), transparent 70%); }
+  .vote { display: grid; justify-items: center; align-content: start; border: 2px solid var(--nuit); background: transparent; color: var(--nuit); font: inherit; font-weight: 800; padding: 6px 0; cursor: pointer; }
+  .vote span { font-size: 1.3rem; line-height: 1; }
+  .vote small { font-size: 0.7rem; font-weight: 700; }
+  .vote.on { background: var(--rouge); border-color: var(--rouge); color: #fff; }
+  .vote:disabled { cursor: default; }
+  .post h3 { font-size: 1.15rem; margin: 0 0 4px; }
+  .post p { margin: 0 0 6px; white-space: pre-wrap; }
+  .post .meta { font-size: 0.85rem; color: var(--gris); display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .post .meta a { color: inherit; }
+  .tag-retenu { background: var(--rouge); color: #fff; font-size: 0.75rem; font-weight: 800; padding: 2px 8px; }
+  .lnk { background: none; border: 0; padding: 0; font: inherit; font-size: 0.85rem; font-weight: 700; color: var(--nuit); text-decoration: underline; text-decoration-color: var(--rouge); text-underline-offset: 3px; cursor: pointer; }
+  .objection { padding: 14px 0; border-bottom: 2px solid var(--pierre-fonce); }
+  .objection .adv { font-weight: 700; margin: 0 0 8px; }
+  .objection .adv::before { content: 'Eux : '; color: var(--rouge); }
+  .objection .rep { border-left: 4px solid var(--ok); padding-left: 10px; margin: 0 0 6px; white-space: pre-wrap; }
+  .objection .rep::before { content: 'Nous : '; font-weight: 800; color: var(--ok); }
+  .objection .rep.vide { border-color: var(--rouge); color: var(--gris); }
+  .objection .rep.vide::before { content: 'À préparer : '; color: var(--rouge); }
+  .rep-form { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-top: 6px; }
+  .rep-form textarea { min-height: 60px; font: inherit; padding: 8px; border: 2px solid var(--nuit); }
+  .roles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .role { text-align: left; border: 2px solid var(--nuit); background: transparent; color: var(--nuit); font: inherit; padding: 10px 12px; cursor: pointer; }
+  .role b { display: block; }
+  .role span { font-size: 0.88rem; color: var(--gris); }
+  .role.pris { background: var(--pierre); }
+  .role.moi { background: var(--rouge); border-color: var(--rouge); color: #fff; }
+  .role.moi span { color: #fff; }
+  .role:disabled { cursor: not-allowed; }
+  .team { display: flex; flex-wrap: wrap; gap: 6px; }
+  .team span { border: 2px solid var(--pierre-fonce); padding: 4px 10px; font-weight: 600; font-size: 0.92rem; }
+  .team span.moi { border-color: var(--rouge); color: var(--rouge); }
+  .chat { max-height: 340px; overflow-y: auto; display: grid; gap: 8px; padding: 4px 0 10px; }
+  .msg { max-width: 85%; background: var(--pierre); padding: 8px 12px; }
+  .msg.mien { justify-self: end; background: var(--nuit); color: #fff; }
+  .msg b { display: block; font-size: 0.8rem; }
+  .msg p { margin: 0; white-space: pre-wrap; }
+  .msg time { display: block; font-size: 0.72rem; opacity: 0.65; }
+  .chat-form { display: grid; grid-template-columns: 1fr auto; gap: 0; }
+  .chat-form input { padding: 10px 12px; border: 3px solid var(--nuit); border-right: 0; font: inherit; background: var(--blanc); color: var(--nuit); }
+  .s-method { background: var(--pierre); padding: 18px 20px; }
+  .s-method h3 { font-size: 1.2rem; }
+  .s-method li { font-size: 0.93rem; }
+  .vide-msg { color: var(--gris); font-size: 0.95rem; }
+  .lecture-seule .s-add, .lecture-seule .chat-form, .lecture-seule .rep-form, .lecture-seule .lnk-act { display: none !important; }
+  @media (max-width: 900px) { .s-grid, .s-head-grid { grid-template-columns: 1fr; } .s-camp { justify-self: start; } }
+</style>
+
+<script>
+  import { getSupabase, supabaseConfigured } from '../lib/supabase';
+  import { esc, fmt } from '../lib/events';
+
+  const $ = (id: string) => document.getElementById(id)!;
+  const qs = new URLSearchParams(location.search);
+  const jeton = qs.get('t');
+  const bEvent = qs.get('e'), bCamp = qs.get('c');
+  const bureauMode = !jeton && bEvent && bCamp;
+  let etat: any = null;
+  let busy = false;
+
+  async function charger() {
+    const sb = getSupabase();
+    const { data, error } = bureauMode
+      ? await sb.rpc('salle_etat_bureau', { p_event: bEvent, p_camp: bCamp })
+      : await sb.rpc('salle_etat', { p_jeton: jeton });
+    if (error || !data) return null;
+    return data;
+  }
+
+  const ago = (d: string) => {
+    const s = (Date.now() - new Date(d).getTime()) / 1000;
+    if (s < 60) return "à l'instant"; if (s < 3600) return `il y a ${Math.floor(s / 60)} min`;
+    if (s < 86400) return `il y a ${Math.floor(s / 3600)} h`; return new Date(d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+  };
+
+  function rendre() {
+    const e = etat.evenement, posts = etat.posts as any[];
+    $('sKicker').textContent = `Salle de préparation · ${e.type}`;
+    $('sTitle').textContent = e.titre;
+    $('sWhen').textContent = `${fmt.long(e.debut)}, ${fmt.hour(e.debut)} · ${e.lieu}`;
+    $('sCamp').textContent = etat.camp;
+    if (etat.bureau) { $('sBureau').classList.remove('hidden'); document.body.classList.add('lecture-seule'); (document.querySelector('.s-camp small') as HTMLElement).textContent = 'Camp'; }
+    const jours = Math.ceil((new Date(e.debut).getTime() - Date.now()) / 86400000);
+    $('sCountdown').textContent = jours > 1 ? `Débat dans ${jours} jours` : jours === 1 ? 'Débat demain' : jours === 0 ? "Débat aujourd'hui" : 'Débat passé';
+    document.title = `Salle « ${etat.camp} » — ${e.titre}`;
+
+    // Indicateur de préparation
+    const args = posts.filter((p) => p.kind === 'argument'), objs = posts.filter((p) => p.kind === 'objection'), msgs = posts.filter((p) => p.kind === 'message');
+    const retenus = args.filter((p) => p.retenu).length, sources = args.filter((p) => p.retenu && p.source).length;
+    const repondues = objs.filter((p) => p.reponse).length, roles = etat.roles.length, nbRoles = etat.roles_liste.length;
+    const items = [
+      { ok: retenus >= 3, t: `${Math.min(retenus, 3)}/3 arguments retenus`, w: Math.min(retenus, 3) / 3 },
+      { ok: retenus > 0 && sources >= retenus, t: `${sources}/${Math.max(retenus, 1)} arguments retenus sourcés`, w: retenus ? sources / retenus : 0 },
+      { ok: objs.length >= 2 && repondues === objs.length, t: `${repondues}/${Math.max(objs.length, 2)} objections avec réponse`, w: Math.min(repondues, Math.max(objs.length, 2)) / Math.max(objs.length, 2) },
+      { ok: roles === nbRoles, t: `${roles}/${nbRoles} prises de parole attribuées`, w: roles / nbRoles },
+    ];
+    const pct = Math.round((items.reduce((a, i) => a + i.w, 0) / items.length) * 100);
+    $('sReady').innerHTML = `<div class="ready-pct">${pct}%</div><div><div class="ready-bar"><i style="width:${pct}%"></i></div><div class="ready-items">${items.map((i) => `<span class="${i.ok ? 'ok' : 'ko'}">${i.ok ? '✓' : '○'} ${i.t}</span>`).join('')}</div></div>`;
+
+    // Arguments : retenus d'abord, puis par votes
+    const triArgs = [...args].sort((a, b) => Number(b.retenu) - Number(a.retenu) || b.votes - a.votes || a.date.localeCompare(b.date));
+    $('lArguments').innerHTML = triArgs.map((p) => `<article class="post${p.retenu ? ' retenu' : ''}">
+        <button class="vote${p.mon_vote ? ' on' : ''}" data-vote="${p.id}" type="button" ${etat.bureau ? 'disabled' : ''} title="${p.mon_vote ? 'Retirer mon vote' : 'Voter pour cet argument'}"><span>${p.votes}</span><small>vote${p.votes > 1 ? 's' : ''}</small></button>
+        <div><h3>${p.retenu ? '<span class="tag-retenu">Retenu</span> ' : ''}${esc(p.titre || '')}</h3><p>${esc(p.contenu)}</p>
+          <div class="meta">${p.source ? (/^https?:\/\//.test(p.source) ? `<a href="${esc(p.source)}" target="_blank" rel="noopener nofollow">Source</a>` : `<span>Source : ${esc(p.source)}</span>`) : '<span style="color:var(--rouge)">Sans source</span>'}
+          <span>${esc(p.auteur)} · ${ago(p.date)}</span>
+          <button class="lnk lnk-act" data-act="retenu" data-id="${p.id}" type="button">${p.retenu ? 'Ne plus retenir' : 'Retenir'}</button>
+          ${p.mien ? `<button class="lnk lnk-act" data-act="supprimer" data-id="${p.id}" type="button">Supprimer</button>` : ''}</div></div></article>`).join('')
+      || '<p class="vide-msg">Aucun argument pour l\'instant. Lance-toi : propose la première idée.</p>';
+
+    $('lObjections').innerHTML = objs.map((p) => `<article class="objection"><p class="adv">${esc(p.contenu)}</p>
+        <p class="rep${p.reponse ? '' : ' vide'}">${p.reponse ? esc(p.reponse) : 'aucune réponse pour l\'instant'}</p>
+        <div class="meta small muted">${esc(p.auteur)} · ${ago(p.date)} · <button class="lnk lnk-act" data-rep="${p.id}" type="button">${p.reponse ? 'Améliorer la réponse' : 'Écrire la réponse'}</button>${p.mien ? ` · <button class="lnk lnk-act" data-act="supprimer" data-id="${p.id}" type="button">Supprimer</button>` : ''}</div>
+        <form class="rep-form hidden" data-form="${p.id}"><textarea maxlength="3000">${esc(p.reponse || '')}</textarea><button class="btn btn-primary btn-sm" type="submit">Enregistrer</button></form></article>`).join('')
+      || '<p class="vide-msg">Mettez-vous à la place de l\'autre camp : quel est son meilleur argument ?</p>';
+
+    const parRole = new Map(etat.roles.map((r: any) => [r.role, r]));
+    $('lRoles').innerHTML = etat.roles_liste.map((r: string) => { const x: any = parRole.get(r);
+      return `<button class="role${x ? (x.moi ? ' moi' : ' pris') : ''}" data-role="${esc(r)}" type="button" ${etat.bureau || (x && !x.moi) ? 'disabled' : ''}><b>${esc(r)}</b><span>${x ? (x.moi ? 'Toi — clique pour libérer' : esc(x.prenom)) : 'Libre — clique pour le prendre'}</span></button>`; }).join('');
+
+    $('lTeam').innerHTML = etat.equipe.map((m: any) => `<span class="${m.moi ? 'moi' : ''}">${esc(m.prenom)} ${esc(m.nom)} · ${esc(m.classe)}</span>`).join('');
+    $('sTeamCount').textContent = `${etat.equipe.length} participant${etat.equipe.length > 1 ? 's' : ''}`;
+
+    const chat = $('lChat'); const enBas = chat.scrollHeight - chat.scrollTop - chat.clientHeight < 40;
+    chat.innerHTML = msgs.map((m) => `<div class="msg${m.mien ? ' mien' : ''}">${m.mien ? '' : `<b>${esc(m.auteur)}</b>`}<p>${esc(m.contenu)}</p><time>${ago(m.date)}</time></div>`).join('') || '<p class="vide-msg">Pas encore de message. Dis bonjour à ton camp !</p>';
+    if (enBas) chat.scrollTop = chat.scrollHeight;
+  }
+
+  async function action(fn: string, args: Record<string, unknown>) {
+    if (busy) return; busy = true;
+    const { error } = await getSupabase().rpc(fn, { p_jeton: jeton, ...args });
+    busy = false;
+    if (error) { alert(/role_pris/.test(error.message) ? 'Ce rôle vient d\'être pris par quelqu\'un d\'autre.' : /trop_rapide/.test(error.message) ? 'Doucement ! Attends quelques secondes avant de reposter.' : "L'action n'a pas pu être enregistrée."); }
+    await rafraichir();
+  }
+
+  async function rafraichir() {
+    const d = await charger(); if (!d) return;
+    etat = d; rendre(); $('sSync').textContent = `Mise à jour automatique · dernière synchronisation ${new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
+  }
+
+  (async () => {
+    if (!supabaseConfigured || (!jeton && !bureauMode)) { $('sLoading').hidden = true; $('sDenied').hidden = false; return; }
+    etat = await charger();
+    $('sLoading').hidden = true;
+    if (!etat) { $('sDenied').hidden = false; return; }
+    $('sMain').hidden = false; rendre();
+
+    // Interactions (délégation)
+    document.addEventListener('click', async (ev) => {
+      const t = (ev.target as HTMLElement).closest('button') as HTMLButtonElement | null; if (!t || etat.bureau) return;
+      if (t.dataset.vote) return action('salle_voter', { p_post: t.dataset.vote });
+      if (t.dataset.role) return action('salle_role', { p_role: t.dataset.role });
+      if (t.dataset.act === 'retenu') return action('salle_modifier', { p_post: t.dataset.id, p_champ: 'retenu', p_valeur: '' });
+      if (t.dataset.act === 'supprimer') { if (confirm('Supprimer ce que tu as écrit ?')) return action('salle_modifier', { p_post: t.dataset.id, p_champ: 'supprimer', p_valeur: '' }); return; }
+      if (t.dataset.rep) { document.querySelector(`[data-form="${t.dataset.rep}"]`)?.classList.toggle('hidden'); }
+    });
+    document.addEventListener('submit', async (ev) => {
+      const f = ev.target as HTMLFormElement; if (!f.dataset.form) return; ev.preventDefault();
+      await action('salle_modifier', { p_post: f.dataset.form, p_champ: 'reponse', p_valeur: (f.querySelector('textarea') as HTMLTextAreaElement).value });
+    });
+    $('fArg').addEventListener('submit', async (ev) => { ev.preventDefault(); const f = ev.target as HTMLFormElement;
+      await action('salle_poster', { p_kind: 'argument', p_titre: ($('aTitre') as HTMLInputElement).value, p_contenu: ($('aContenu') as HTMLTextAreaElement).value, p_source: ($('aSource') as HTMLInputElement).value });
+      f.reset(); (f.closest('details') as HTMLDetailsElement).open = false; });
+    $('fObj').addEventListener('submit', async (ev) => { ev.preventDefault(); const f = ev.target as HTMLFormElement;
+      await action('salle_poster', { p_kind: 'objection', p_contenu: ($('oContenu') as HTMLTextAreaElement).value, p_reponse: ($('oReponse') as HTMLTextAreaElement).value });
+      f.reset(); (f.closest('details') as HTMLDetailsElement).open = false; });
+    $('fMsg').addEventListener('submit', async (ev) => { ev.preventDefault(); const i = $('mContenu') as HTMLInputElement; const v = i.value.trim(); if (!v) return; i.value = '';
+      await action('salle_poster', { p_kind: 'message', p_contenu: v }); const c = $('lChat'); c.scrollTop = c.scrollHeight; });
+
+    // Rafraîchissement automatique (sans perturber une saisie en cours)
+    setInterval(() => {
+      if (document.hidden || busy) return;
+      const a = document.activeElement as HTMLElement | null;
+      if (a && a.closest('.rep-form, .s-add')) return;
+      rafraichir();
+    }, 6000);
+  })();
+</script>

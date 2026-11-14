@@ -22,3 +22,6 @@ verify_jwt = false
 verify_jwt = false
 [functions.member-message]
 verify_jwt = false
+
+[functions.salle-lien]
+verify_jwt = false

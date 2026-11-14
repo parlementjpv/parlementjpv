@@ -107,6 +107,7 @@ import NewsletterForm from '../components/NewsletterForm.astro';
   import { getSession, getProfile } from '../lib/auth';
   import { fetchUpcoming, fetchCounts, fmt, when, esc, eventRow, type Ev } from '../lib/events';
   import { u } from '../lib/url';
+  import { postJSON } from '../lib/newsletter';
 
   const $ = (id: string) => document.getElementById(id)!;
   const form = $('evForm') as HTMLFormElement, msg = $('evMsg');
@@ -130,11 +131,12 @@ import NewsletterForm from '../components/NewsletterForm.astro';
     $('evWhen').innerHTML = `${esc(fmt.long(ev.starts_at))}, ${when(ev)}<br>${esc(ev.location)}`;
     document.title = `${ev.title} — Parlement JPV`;
     if (ev.description) { $('evDesc').textContent = ev.description; $('evDesc').hidden = false; }
-    const showCamp = (camp: string | null | undefined) => {
+    const showCamp = (camp: string | null | undefined, jeton?: string | null) => {
       const box = $('monCamp');
       if (!camp) { box.classList.add('hidden'); return; }
-      box.innerHTML = `<small>Ton camp, tiré au sort</small><strong>${esc(camp)}</strong>`; box.classList.remove('hidden');
+      box.innerHTML = `<small>Ton camp, tiré au sort</small><strong>${esc(camp)}</strong>${jeton ? `<a class="btn btn-primary btn-sm mt-1" href="${u('/salle')}?t=${jeton}">Entrer dans la salle de mon camp</a><span class="small" style="display:block;margin-top:6px;">Ton lien personnel t'a aussi été envoyé par email.</span>` : ''}`; box.classList.remove('hidden');
     };
+    const envoyerLien = (jeton?: string | null) => { if (jeton) postJSON('/api/salle-lien', { jeton }).catch(() => {}); };
     if (ev.camps?.length) {
       $('evCamps').innerHTML = ev.camps.map((k) => `<span>${esc(k)}${c.par_camp?.[k] ? `<b>${c.par_camp[k]}</b>` : ''}</span>`).join('');
       $('evCamps').hidden = false; $('evCampsInfo').classList.remove('hidden');
@@ -145,7 +147,7 @@ import NewsletterForm from '../components/NewsletterForm.astro';
 
     const sb = getSupabase();
     const session = await getSession();
-    let existing: { reponse: string; camp?: string | null } | null = null;
+    let existing: { reponse: string; camp?: string | null; jeton?: string | null } | null = null;
     if (session) {
       const p = await getProfile(session.user.id);
       (form.elements.namedItem('prenom') as HTMLInputElement).value = p?.prenom || '';
@@ -155,13 +157,13 @@ import NewsletterForm from '../components/NewsletterForm.astro';
       (form.elements.namedItem('telephone') as HTMLInputElement).value = p?.telephone || '';
       // Consentement déjà donné à la création du compte
       const rg = form.elements.namedItem('rgpd') as HTMLInputElement; rg.checked = true; (rg.closest('label') as HTMLElement).classList.add('hidden');
-      const { data } = await sb.from('event_signups').select('reponse, camp').eq('event_key', ev.id).eq('user_id', session.user.id).maybeSingle();
+      const { data } = await sb.from('event_signups').select('reponse, camp, jeton').eq('event_key', ev.id).eq('user_id', session.user.id).maybeSingle();
       existing = data;
       if (existing) {
         (form.querySelector(`input[value=${existing.reponse}]`) as HTMLInputElement).checked = true;
         show(`Tu as déjà répondu : <strong>${existing.reponse === 'oui' ? 'je viens' : 'je ne viens pas'}</strong>. Tu peux changer ta réponse.`, 'info');
         $('evSubmit').textContent = 'Changer ma réponse';
-        showCamp(existing.camp);
+        showCamp(existing.reponse === 'oui' ? existing.camp : null, existing.jeton);
       }
     }
     if (full && existing?.reponse !== 'oui') {
@@ -191,7 +193,8 @@ import NewsletterForm from '../components/NewsletterForm.astro';
       if (res.camp) c.par_camp = { ...c.par_camp, [res.camp]: (c.par_camp?.[res.camp] || 0) + (before === 'oui' ? 0 : 1) };
       $('evCount').textContent = `${c.oui} participant${c.oui > 1 ? 's' : ''}${ev.capacity ? ` sur ${ev.capacity} places` : ''}`; $('evCount').hidden = false;
       $('evSubmit').textContent = 'Changer ma réponse';
-      showCamp(res.camp);
+      showCamp(reponse === 'oui' ? res.camp : null, res.jeton);
+      if (reponse === 'oui') envoyerLien(res.jeton);
       const row = { prenom };
       show(reponse === 'oui' ? `C'est noté, ${esc(row.prenom)} : on t'attend le ${esc(fmt.long(ev.starts_at))}${res.camp ? ` dans le camp « ${esc(res.camp)} »` : ''} !` : `C'est noté, ${esc(row.prenom)}. Merci d'avoir prévenu.`, 'ok');
     });

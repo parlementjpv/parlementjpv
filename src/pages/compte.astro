@@ -50,7 +50,7 @@ import Base from '../layouts/Base.astro';
 </Base>
 <script>
   import { u } from '../lib/url';
-  import { api } from '../lib/newsletter';
+  import { api, postJSON } from '../lib/newsletter';
   import { getSupabase } from '../lib/supabase';
   import { requireSession, getProfile, signOut } from '../lib/auth';
   import { fetchUpcoming, fmt, when, esc } from '../lib/events';
@@ -92,12 +92,13 @@ import Base from '../layouts/Base.astro';
     const evs = await fetchUpcoming();
     if (!evs.length) evBox.innerHTML = '<p class="muted">Aucun événement programmé pour l\'instant : nos séances reprennent très bientôt.</p>';
     else {
-      const { data: mine } = await sb.from('event_signups').select('event_key, reponse, camp').eq('user_id', session.user.id);
+      const { data: mine } = await sb.from('event_signups').select('event_key, reponse, camp, jeton').eq('user_id', session.user.id);
       const rep = new Map((mine || []).map((r) => [r.event_key, r.reponse]));
       const camp = new Map((mine || []).map((r) => [r.event_key, r.camp]));
+      const jet = new Map((mine || []).map((r) => [r.event_key, r.jeton]));
       const paint = () => {
         evBox.innerHTML = evs.map((e) => `<div class="event"><div class="event-date"><b>${fmt.day(e.starts_at)}</b><span>${esc(fmt.monShort(e.starts_at))}</span></div><div><span class="pill">${esc(e.type)}</span><h3>${esc(e.title)}</h3><div class="meta">${esc(fmt.long(e.starts_at))}, ${when(e)} · ${esc(e.location)}</div>
-          <div class="flex mt-1" style="gap:8px;"><button class="btn btn-sm ${rep.get(e.id) === 'oui' ? 'btn-primary' : 'btn-outline'} rsvp" data-id="${e.id}" data-r="oui" type="button">${rep.get(e.id) === 'oui' ? '✓ ' : ''}Je viens</button><button class="btn btn-sm ${rep.get(e.id) === 'non' ? 'btn-primary' : 'btn-outline'} rsvp" data-id="${e.id}" data-r="non" type="button">${rep.get(e.id) === 'non' ? '✓ ' : ''}Je ne viens pas</button></div>${rep.get(e.id) === 'oui' && camp.get(e.id) ? `<p class="mt-1" style="margin-bottom:0;">Ton camp, tiré au sort : <strong style="color:var(--rouge);">${esc(camp.get(e.id))}</strong></p>` : ''}</div></div>`).join('');
+          <div class="flex mt-1" style="gap:8px;"><button class="btn btn-sm ${rep.get(e.id) === 'oui' ? 'btn-primary' : 'btn-outline'} rsvp" data-id="${e.id}" data-r="oui" type="button">${rep.get(e.id) === 'oui' ? '✓ ' : ''}Je viens</button><button class="btn btn-sm ${rep.get(e.id) === 'non' ? 'btn-primary' : 'btn-outline'} rsvp" data-id="${e.id}" data-r="non" type="button">${rep.get(e.id) === 'non' ? '✓ ' : ''}Je ne viens pas</button></div>${rep.get(e.id) === 'oui' && camp.get(e.id) ? `<p class="mt-1" style="margin-bottom:0;">Ton camp, tiré au sort : <strong style="color:var(--rouge);">${esc(camp.get(e.id))}</strong></p>${jet.get(e.id) ? `<a class="btn btn-primary btn-sm mt-1" href="${u('/salle')}?t=${jet.get(e.id)}">Salle de préparation de mon camp</a>` : ''}` : ''}</div></div>`).join('');
         evBox.querySelectorAll<HTMLButtonElement>('.rsvp').forEach((b) => b.addEventListener('click', async () => {
           const id = b.dataset.id!, r = b.dataset.r as 'oui' | 'non';
           b.disabled = true;
@@ -105,8 +106,9 @@ import Base from '../layouts/Base.astro';
             ? await sb.from('event_signups').update({ reponse: r }).eq('event_key', id).eq('user_id', session.user.id)
             : await sb.from('event_signups').insert({ event_key: id, reponse: r, user_id: session.user.id, prenom: p?.prenom || '?', nom: p?.nom || '?', classe: p?.classe || '?', telephone: p?.telephone || null, email: session.user.email });
           if (error) { b.disabled = false; alert(error.code === '23505' ? 'Ton adresse a déjà répondu à cet événement sans être connectée.' : "Réponse impossible : complète d'abord ton prénom, ton nom et ta classe."); return; }
-          const { data: row } = await sb.from('event_signups').select('camp').eq('event_key', id).eq('user_id', session.user.id).maybeSingle();
-          rep.set(id, r); camp.set(id, row?.camp ?? null); paint();
+          const { data: row } = await sb.from('event_signups').select('camp, jeton').eq('event_key', id).eq('user_id', session.user.id).maybeSingle();
+          rep.set(id, r); camp.set(id, row?.camp ?? null); jet.set(id, row?.jeton ?? null); paint();
+          if (r === 'oui' && row?.camp && row?.jeton) postJSON('/api/salle-lien', { jeton: row.jeton }).catch(() => {});
         }));
       };
       paint();
