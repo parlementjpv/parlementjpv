@@ -28,7 +28,6 @@ const current = Astro.url.pathname.replace(BASE, '').replace(/\/$/, '') || '/';
   </div>
   <nav class="mobile-nav" id="mobileNav" aria-label="Navigation mobile">
     {links.map((l) => <a href={l.href}>{l.label}</a>)}
-    <a href="/galerie">Galerie</a>
     <a href="/charte">Charte</a>
     <a href="/newsletter">Newsletter</a>
     <a href="/contact">Contact</a>
