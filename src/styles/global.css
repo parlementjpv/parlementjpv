@@ -225,3 +225,5 @@ h4 { font-size: 1.1rem; }
 .flex { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
 .between { justify-content: space-between; }
 hr.sep { border: 0; border-top: 2px solid var(--pierre-fonce); margin: 36px 0; }
+
+.resend { margin-top: 10px; }

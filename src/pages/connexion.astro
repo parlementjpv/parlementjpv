@@ -11,7 +11,6 @@ import Base from '../layouts/Base.astro';
       <div id="msg"></div>
       <button class="btn btn-primary" type="submit">Se connecter</button>
       <a class="small center" href="/mot-de-passe-oublie">Mot de passe oublié ?</a>
-      <div id="resendSlot" class="center"></div>
     </form>
     <p class="auth-foot">Pas encore membre ? <a href="/inscription">Créer mon compte et rejoindre l'instance</a></p>
   </div></div>
@@ -27,7 +26,6 @@ import Base from '../layouts/Base.astro';
   if (new URLSearchParams(location.search).get('expire')) show('Ta connexion a expiré. Reconnecte-toi pour continuer.', 'info');
   const next = new URLSearchParams(location.search).get('next') || u('/compte');
   supabaseConfigured && getSupabase().auth.getUser().then(({ data }) => { if (data.user) location.href = next; });
-  document.getElementById('resendSlot')!.appendChild(resendBox(() => (form.elements.namedItem('email') as HTMLInputElement).value, "Je n'ai pas reçu mon email de confirmation"));
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!form.checkValidity()) { form.reportValidity(); return; }
