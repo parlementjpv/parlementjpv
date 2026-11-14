@@ -96,7 +96,7 @@ import Base from '../layouts/Base.astro';
             <h3>La méthode en 30 secondes</h3>
             <ul class="check">
               <li><b>Un argument = une idée + une preuve + un exemple.</b> Sans source, il ne tient pas face à la réfutation.</li>
-              <li><b>Trois arguments solides valent mieux que dix moyens.</b> Votez, puis retenez les trois meilleurs.</li>
+              <li><b>Proposez autant d'arguments que vous voulez.</b> Votez, puis retenez les plus solides : chaque argument retenu ouvre un rôle de prise de parole.</li>
               <li><b>Préparez la réfutation avant le débat.</b> Chaque objection anticipée doit avoir sa réponse.</li>
               <li><b>Répartissez la parole.</b> Chaque rôle a un titulaire, chacun prépare sa minute.</li>
             </ul>
@@ -224,7 +224,7 @@ import Base from '../layouts/Base.astro';
     const retenus = args.filter((p) => p.retenu).length, sources = args.filter((p) => p.retenu && p.source).length;
     const repondues = objs.filter((p) => p.reponse).length, roles = etat.roles.length, nbRoles = etat.roles_liste.length;
     const items = [
-      { ok: retenus >= 3, t: `${Math.min(retenus, 3)}/3 arguments retenus`, w: Math.min(retenus, 3) / 3 },
+      { ok: retenus > 0, t: `${retenus} argument${retenus > 1 ? 's' : ''} retenu${retenus > 1 ? 's' : ''}`, w: retenus > 0 ? 1 : 0 },
       { ok: retenus > 0 && sources >= retenus, t: `${sources}/${Math.max(retenus, 1)} arguments retenus sourcés`, w: retenus ? sources / retenus : 0 },
       { ok: objs.length >= 2 && repondues === objs.length, t: `${repondues}/${Math.max(objs.length, 2)} objections avec réponse`, w: Math.min(repondues, Math.max(objs.length, 2)) / Math.max(objs.length, 2) },
       { ok: roles === nbRoles, t: `${roles}/${nbRoles} prises de parole attribuées`, w: roles / nbRoles },

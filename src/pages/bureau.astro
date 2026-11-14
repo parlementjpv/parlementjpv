@@ -73,14 +73,8 @@ import Base from '../layouts/Base.astro';
           </div>
           <fieldset class="camps-field">
             <legend>Camps du débat <small>(les participants sont répartis au hasard, de façon équilibrée)</small></legend>
-            <div class="form-row">
-              <div class="field"><label for="ev-c1">Camp 1</label><input id="ev-c1" name="camp1" maxlength="40" value="Pour" /></div>
-              <div class="field"><label for="ev-c2">Camp 2</label><input id="ev-c2" name="camp2" maxlength="40" value="Contre" /></div>
-            </div>
-            <div class="form-row">
-              <div class="field"><label for="ev-c3">Camp 3 <small>(facultatif)</small></label><input id="ev-c3" name="camp3" maxlength="40" placeholder="ex. Nuancé" /></div>
-              <div class="field"><label for="ev-c4">Camp 4 <small>(facultatif)</small></label><input id="ev-c4" name="camp4" maxlength="40" /></div>
-            </div>
+            <div class="camps-list" id="campsList"></div>
+            <button class="btn btn-outline btn-sm" id="campAdd" type="button">+ Ajouter un camp</button>
             <div class="field" style="max-width:260px;"><label for="ev-ppc">Places par camp <small>(facultatif)</small></label><input id="ev-ppc" name="placesParCamp" type="number" min="1" max="200" placeholder="illimité" /></div>
             <label class="checkbox"><input type="checkbox" name="sansCamps" id="ev-nocamp" /><span>Pas de camps pour cet événement (conférence, visite…)</span></label>
           </fieldset>
@@ -140,7 +134,14 @@ import Base from '../layouts/Base.astro';
   .camps-field { border: 2px solid var(--pierre-fonce); padding: 12px 14px 4px; margin: 0; }
   .camps-field legend { font-weight: 800; padding: 0 6px; }
   .camps-field legend small { font-weight: 400; color: var(--gris); }
-  .camps-field:has(#ev-nocamp:checked) .form-row { opacity: 0.35; pointer-events: none; }
+  .camps-field:has(#ev-nocamp:checked) :is(.camps-list, #campAdd, .field) { opacity: 0.35; pointer-events: none; }
+  .camps-list { display: grid; gap: 8px; margin-bottom: 10px; }
+  .camp-row { display: grid; grid-template-columns: 70px 1fr 40px; gap: 8px; align-items: center; }
+  .camp-n { font-weight: 700; font-size: 0.9rem; }
+  .camp-row input { padding: 9px 11px; border: 3px solid var(--nuit); font: inherit; background: var(--blanc); color: var(--nuit); }
+  .camp-del { height: 40px; border: 2px solid var(--nuit); background: transparent; color: var(--nuit); font-size: 1.3rem; cursor: pointer; }
+  .camp-del:disabled { opacity: 0.25; cursor: default; }
+  #campAdd { margin-bottom: 12px; }
   .ev-annule { display: inline-block; margin-top: 4px; background: var(--rouge); color: #fff; font-weight: 800; font-size: 0.85rem; padding: 2px 8px; }
   .ev-campstats { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
   .ev-campstats span { background: var(--pierre); padding: 3px 10px; font-weight: 700; font-size: 0.9rem; }
@@ -275,15 +276,26 @@ import Base from '../layouts/Base.astro';
       return new Date(guess.getTime() - offset * 60000).toISOString();
     };
     const parisParts = (iso: string) => { const f = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Paris', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }).format(new Date(iso)); return { date: f.slice(0, 10), time: f.slice(11, 16) }; };
-    const resetEv = () => { evForm.reset(); (evForm.elements.namedItem('id') as HTMLInputElement).value = ''; document.getElementById('evFormTitle')!.textContent = 'Créer un nouvel événement'; document.getElementById('evSave')!.textContent = "Publier l'événement"; document.getElementById('evCancel')!.classList.add('hidden'); };
+    const campsList = document.getElementById('campsList')!;
+    const campRow = (v = '') => {
+      const d = document.createElement('div'); d.className = 'camp-row';
+      d.innerHTML = `<label class="camp-n"></label><input name="camp" maxlength="40" value="${esc(v)}" placeholder="Nom du camp" /><button class="camp-del" type="button" aria-label="Retirer ce camp">×</button>`;
+      (d.querySelector('.camp-del') as HTMLButtonElement).onclick = () => { if (campsList.children.length > 2) { d.remove(); numCamps(); } };
+      campsList.appendChild(d); numCamps();
+    };
+    const numCamps = () => [...campsList.children].forEach((c, i) => { (c.querySelector('.camp-n') as HTMLElement).textContent = `Camp ${i + 1}`; (c.querySelector('.camp-del') as HTMLButtonElement).disabled = campsList.children.length <= 2; });
+    const setCamps = (vals: string[]) => { campsList.innerHTML = ''; vals.forEach((v) => campRow(v)); };
+    setCamps(['Pour', 'Contre']);
+    document.getElementById('campAdd')!.addEventListener('click', () => { campRow(); (campsList.lastElementChild!.querySelector('input') as HTMLInputElement).focus(); });
+    const resetEv = () => { evForm.reset(); setCamps(['Pour', 'Contre']); (evForm.elements.namedItem('id') as HTMLInputElement).value = ''; document.getElementById('evFormTitle')!.textContent = 'Créer un nouvel événement'; document.getElementById('evSave')!.textContent = "Publier l'événement"; document.getElementById('evCancel')!.classList.add('hidden'); };
     document.getElementById('evCancel')!.addEventListener('click', () => { resetEv(); evMsg.innerHTML = ''; });
     evForm.addEventListener('submit', async (e) => {
       e.preventDefault(); if (!evForm.checkValidity()) { evForm.reportValidity(); return; }
       const fd = new FormData(evForm); const id = String(fd.get('id') || '');
       const date = String(fd.get('date')), start = String(fd.get('start')), end = String(fd.get('end') || '');
       if (end && end < start) { evShow("L'heure de fin doit être après l'heure de début."); return; }
-      const camps = fd.get('sansCamps') ? [] : ['camp1', 'camp2', 'camp3', 'camp4'].map((k) => String(fd.get(k) || '').trim()).filter(Boolean);
-      if (!fd.get('sansCamps') && camps.length < 2) { evShow('Indique au moins deux camps (Camp 1 et Camp 2), ou coche « Pas de camps ».'); return; }
+      const camps = fd.get('sansCamps') ? [] : fd.getAll('camp').map((k) => String(k).trim()).filter(Boolean);
+      if (!fd.get('sansCamps') && camps.length < 2) { evShow('Indique au moins deux camps, ou coche « Pas de camps ».'); return; }
       if (new Set(camps.map((k) => k.toLowerCase())).size !== camps.length) { evShow('Deux camps portent le même nom.'); return; }
       const row = { title: String(fd.get('title')).trim(), type: String(fd.get('type')), starts_at: paris(date, start), ends_at: end ? paris(date, end) : null, location: String(fd.get('location')).trim(), capacity: fd.get('capacity') ? Number(fd.get('capacity')) : null, description: String(fd.get('description') || '').trim() || null, camps, places_par_camp: camps.length && fd.get('placesParCamp') ? Number(fd.get('placesParCamp')) : null, created_by: session.user.id };
       const btn = document.getElementById('evSave') as HTMLButtonElement; btn.disabled = true;
@@ -344,7 +356,7 @@ import Base from '../layouts/Base.astro';
         const s0 = parisParts(ev.starts_at), e0 = ev.ends_at ? parisParts(ev.ends_at) : null;
         const set = (n: string, v: string) => ((evForm.elements.namedItem(n) as HTMLInputElement).value = v);
         set('id', ev.id); set('title', ev.title); set('type', ev.type); set('date', s0.date); set('start', s0.time); set('end', e0 ? e0.time : ''); set('location', ev.location); set('capacity', ev.capacity ? String(ev.capacity) : ''); set('description', ev.description || ''); set('placesParCamp', ev.places_par_camp ? String(ev.places_par_camp) : '');
-        const cs = ev.camps || []; ['camp1', 'camp2', 'camp3', 'camp4'].forEach((k, i) => set(k, cs[i] || ''));
+        const cs = ev.camps || []; setCamps(cs.length ? cs : ['Pour', 'Contre']);
         (evForm.elements.namedItem('sansCamps') as HTMLInputElement).checked = cs.length === 0;
         document.getElementById('evFormTitle')!.textContent = 'Modifier l\'événement'; document.getElementById('evSave')!.textContent = 'Enregistrer les modifications'; document.getElementById('evCancel')!.classList.remove('hidden');
         evMsg.innerHTML = ''; evForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
