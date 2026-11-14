@@ -1,6 +1,6 @@
 # Registre des activités de traitement — Parlement JPV
 
-*Article 30 du RGPD. Document interne, à tenir à jour par le bureau et à transmettre au chef d'établissement et au délégué à la protection des données de l'académie si demandé.*
+*Article 30 du RGPD. Document interne, à tenir à jour par le bureau.*
 
 **Dernière mise à jour :** 14 novembre 2026
 
@@ -8,11 +8,8 @@
 
 | | |
 |---|---|
-| **Organisme** | Parlement JPV, instance de débat des élèves du lycée Jean-Pierre Vernant |
-| **Établissement de rattachement** | Lycée Jean-Pierre Vernant (EPLE), 21 rue du Docteur Ledermann, 92310 Sèvres — UAI 0920802X |
-| **Responsable de traitement** | Chef d'établissement du lycée Jean-Pierre Vernant (le Parlement JPV n'a pas de personnalité juridique) |
-| **Mise en œuvre** | Bureau du Parlement JPV — parlementjpv@gmail.com |
-| **Délégué à la protection des données** | DPD de l'académie de Versailles — dpd@ac-versailles.fr |
+| **Organisme** | Parlement JPV, instance de débat créée par des élèves du lycée Jean-Pierre Vernant (Sèvres) |
+| **Responsable de traitement** | Bureau du Parlement JPV — parlementjpv@gmail.com |
 | **Site concerné** | https://parlementjpv.github.io/parlementjpv/ |
 
 ## Sous-traitants
@@ -104,11 +101,9 @@
 - Aucun cookie publicitaire, aucun outil de mesure d'audience, police de caractères hébergée sur le site.
 
 ## Gestion des incidents
-En cas de fuite ou d'accès non autorisé aux données : prévenir immédiatement le chef d'établissement et le DPD académique (dpd@ac-versailles.fr), qui notifie la CNIL dans les 72 heures si nécessaire (art. 33 RGPD).
+En cas de fuite ou d'accès non autorisé aux données : le bureau notifie la CNIL dans les 72 heures si nécessaire (art. 33 RGPD) et prévient les personnes concernées si le risque est élevé (art. 34).
 
 ## À faire par le bureau
-- [ ] Faire valider le site et ce registre par le chef d'établissement.
-- [ ] Transmettre ce registre au DPD académique pour avis.
 - [ ] Désigner nommément le directeur de la publication (président, au moins 16 ans) et le professeur référent codirecteur.
 - [ ] Rappeler aux membres du bureau leur obligation de confidentialité sur les données des membres.
 - [ ] Mettre à jour ce registre à chaque nouvelle fonctionnalité qui collecte des données.

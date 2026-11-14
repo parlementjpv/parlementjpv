@@ -1,9 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
-import MembreNav from '../components/MembreNav.astro';
 ---
 <Base title="Mon espace" noindex>
-  <MembreNav actif="espace" />
   <div class="page-head"><div class="container flex between">
     <div><span class="eyebrow">Ton compte</span><h1 id="hello">Mon espace</h1></div>
     <div class="flex"><a class="btn btn-primary btn-sm hidden" id="bureauLink" href="/bureau">Espace bureau</a><button class="btn btn-outline btn-sm" id="logout" type="button">Se déconnecter</button></div>
@@ -20,6 +18,21 @@ import MembreNav from '../components/MembreNav.astro';
         <p class="muted small">Réponds en un clic : le bureau sait à l'avance combien vous serez.</p>
         <div id="events"><p class="muted small">Chargement…</p></div>
       </div>
+      <a class="card tuile" href="/motions">
+        <span class="tuile-k">Motions</span>
+        <strong id="tMotions">Propose et soutiens les sujets des prochains débats</strong>
+        <span class="tuile-go">Voir les motions</span>
+      </a>
+      <a class="card tuile" href="/elections">
+        <span class="tuile-k">Vote</span>
+        <strong id="tVote">Élections du bureau à bulletin secret</strong>
+        <span class="tuile-go">Aller voter</span>
+      </a>
+      <a class="card tuile" href="/profil">
+        <span class="tuile-k">Profil d'orateur</span>
+        <strong id="tProfil">Tes séances, tes rôles et tes badges</strong>
+        <span class="tuile-go">Voir mon profil</span>
+      </a>
     </div>
     <div class="grid">
       <div class="card">
@@ -55,6 +68,17 @@ import MembreNav from '../components/MembreNav.astro';
     </div>
   </div></section>
 </Base>
+<style is:global>
+  a.card.tuile { display: grid; gap: 6px; text-decoration: none; color: var(--nuit); border-left-width: 10px; transition: transform 0.15s ease; }
+  a.card.tuile * { text-decoration: none; }
+  a.card.tuile:hover { transform: translateX(4px); }
+  a.card.tuile:focus-visible { outline: 3px solid var(--rouge); outline-offset: 3px; }
+  a.card.tuile .tuile-k { font-weight: 800; font-size: 0.85rem; color: var(--rouge); }
+  a.card.tuile strong { display: block; font-size: 1.3rem; line-height: 1.2; letter-spacing: -0.01em; }
+  a.card.tuile .tuile-go { font-weight: 700; font-size: 0.92rem; text-decoration: underline; text-decoration-color: var(--rouge); text-underline-offset: 4px; }
+  a.card.tuile.tuile-chaud { border-color: var(--rouge); background: var(--pierre); }
+  @media (prefers-reduced-motion: reduce) { a.card.tuile { transition: none; } a.card.tuile:hover { transform: none; } }
+</style>
 <script>
   import { u } from '../lib/url';
   import { api, postJSON } from '../lib/newsletter';
@@ -85,6 +109,13 @@ import MembreNav from '../components/MembreNav.astro';
       if (!error) await sb.from('adhesions').update({ prenom: fd.get('prenom'), nom: fd.get('nom'), classe: fd.get('classe') || '?', telephone: tel }).eq('user_id', session.user.id);
       document.getElementById('pmsg')!.innerHTML = error ? `<div class="alert alert-err">${error.message}</div>` : '<div class="alert alert-ok">Enregistré.</div>';
     });
+
+    // Cases Motions / Vote / Profil : un aperçu en direct
+    sb.rpc('motions_liste').then(({ data }) => { const n = ((data as any[]) || []).filter((x) => x.statut === 'proposee' && !x.mon_vote).length; if (n) document.getElementById('tMotions')!.textContent = `${n} motion${n > 1 ? 's' : ''} à découvrir et soutenir`; });
+    sb.rpc('elections_liste').then(({ data }) => { const els = (data as any[]) || []; const o = els.find((e) => e.statut === 'ouverte' && !e.a_vote && e.peut_voter); const v = els.find((e) => e.statut === 'ouverte' && e.a_vote);
+      if (o) { document.getElementById('tVote')!.textContent = `Vote ouvert : ${o.titre}`; document.getElementById('tVote')!.closest('.tuile')!.classList.add('tuile-chaud'); }
+      else if (v) document.getElementById('tVote')!.textContent = `Tu as voté : ${v.titre}`; });
+    sb.rpc('profil_orateur').then(({ data }) => { if (data?.seances) document.getElementById('tProfil')!.textContent = `${data.seances} séance${data.seances > 1 ? 's' : ''}${Object.keys(data.roles || {}).length ? ` · ${Object.values(data.roles).reduce((a: number, n: any) => a + Number(n), 0)} prise(s) de parole` : ''}`; });
 
     // Annonces de séances
     const ann = document.getElementById('annonces') as HTMLInputElement;
