@@ -256,7 +256,7 @@ import Base from '../layouts/Base.astro';
       </div>
     </div>
     <div class="panel hidden" id="tab-msg"><div class="card" style="overflow:auto;"><table class="table" id="msgTable"><thead><tr><th>Date</th><th>De</th><th>Sujet</th><th>Message</th><th></th></tr></thead><tbody></tbody></table></div></div>
-    <div class="panel hidden" id="tab-membres"><div class="card" style="overflow:auto;"><p class="small muted">Seul un <strong>admin</strong> peut changer les rôles, bannir ou supprimer un compte. Le rôle « bureau » donne accès à cette page. Un compte banni ne peut plus se connecter. Le <strong>poste</strong> (Président·e…) s'affiche à côté du nom partout sur le site et met à jour automatiquement la page « Qui sommes-nous » ; donner un poste donne aussi accès à l'espace bureau. Un poste n'a qu'un titulaire : l'attribuer à quelqu'un le retire au précédent.</p><table class="table" id="memTable"><thead><tr><th>Nom</th><th>Classe</th><th>Contact</th><th>Inscrit le</th><th>Rôle</th><th>Poste au bureau</th><th></th></tr></thead><tbody></tbody></table></div></div>
+    <div class="panel hidden" id="tab-membres"><div class="card" style="overflow:auto;"><p class="small muted">Seul un <strong>admin</strong> peut changer les rôles, bannir ou supprimer un compte. Le rôle « bureau » donne accès à cette page. Un compte banni ne peut plus se connecter. Le <strong>poste</strong> (Président·e…) s'affiche à côté du nom partout sur le site et met à jour automatiquement la page « Qui sommes-nous » ; donner un poste donne aussi accès à l'espace bureau. Un poste n'a qu'un titulaire : l'attribuer à quelqu'un le retire au précédent. Les admins peuvent télécharger le certificat de membre de chacun (colonne « Certificat »).</p><table class="table" id="memTable"><thead><tr><th>Nom</th><th>Classe</th><th>Contact</th><th>Inscrit le</th><th>Rôle</th><th>Poste au bureau</th><th class="cert-col">Certificat</th><th></th></tr></thead><tbody></tbody></table></div></div>
   </div></section>
   <section class="section" id="denied" style="display:none;"><div class="container narrow center"><h2>Accès réservé</h2><p class="muted">Cette page est réservée aux membres du bureau.</p><a class="btn btn-outline" href="/compte">Retour à mon espace</a></div></section>
 </Base>
@@ -335,6 +335,7 @@ import Base from '../layouts/Base.astro';
   .decide { display: grid; gap: 6px; min-width: 110px; }
   .table textarea { width: 100%; min-width: 180px; font: inherit; font-size: 0.85rem; padding: 6px; border: 2px solid var(--pierre-fonce); }
   #memTable tr.banned td { opacity: 0.55; }
+  html:not(.est-admin) #memTable .cert-col { display: none; }
   .ecrire { grid-template-columns: minmax(300px, 1fr) minmax(320px, 1.1fr); align-items: start; }
   @media (max-width: 900px) { .ecrire { grid-template-columns: 1fr; } }
   .mm-list { max-height: 460px; overflow-y: auto; border-top: 2px solid var(--pierre-fonce); }
@@ -368,6 +369,7 @@ import Base from '../layouts/Base.astro';
   const esc = (s: any) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
   const d = (s: string) => new Date(s).toLocaleDateString('fr-FR');
   import { initBureauPlus } from '../lib/bureau-plus';
+  import { telechargerCertificat } from '../lib/certificat';
   import postesData from '../data/postes.json';
   const POSTES = (postesData as { titre: string }[]).map((p) => p.titre);
   (async () => {
@@ -377,6 +379,7 @@ import Base from '../layouts/Base.astro';
     if (!me || !['bureau', 'admin'].includes(me.role)) { document.getElementById('denied')!.style.display = ''; return; }
     document.getElementById('app')!.style.display = '';
     const isAdmin = me.role === 'admin';
+    document.documentElement.classList.toggle('est-admin', isAdmin);
     initBureauPlus(sb, session, me as any).catch((e) => console.error(e));
     if (isAdmin) {
       document.getElementById('buAdminGroup')!.classList.remove('hidden');
@@ -675,7 +678,13 @@ import Base from '../layouts/Base.astro';
         <td>${d(p.created_at)}</td>
         <td>${isAdmin && p.id !== session.user.id && !p.banni ? `<select class="role" data-id="${p.id}">${['membre', 'bureau', 'admin'].map((r) => `<option ${r === p.role ? 'selected' : ''}>${r}</option>`).join('')}</select>` : `<span class="pill">${p.role}</span>`}</td>
         <td>${isAdmin && !p.banni ? `<select class="poste-sel" data-id="${p.id}"><option value="">—</option>${POSTES.map((x) => `<option ${x === p.poste ? 'selected' : ''}>${esc(x)}</option>`).join('')}</select>` : (p.poste ? `<span class="poste-badge" style="margin:0">${esc(p.poste)}</span>` : '')}</td>
+        <td class="cert-col">${!p.banni ? `<button class="btn btn-outline btn-sm dl-cert" data-id="${p.id}" type="button" aria-label="Télécharger le certificat de ${esc(p.prenom)} ${esc(p.nom)}">PDF</button>` : ''}</td>
         <td>${isAdmin && p.id !== session.user.id ? `<div class="flex" style="gap:6px;flex-wrap:nowrap;">${!p.banni && (p.poste || p.role !== 'membre') ? `<button class="btn btn-outline btn-sm demettre" data-id="${p.id}" type="button">Démettre</button>` : ''}<button class="btn btn-outline btn-sm ban" data-id="${p.id}" data-a="${p.banni ? 'unban' : 'ban'}" type="button">${p.banni ? 'Débannir' : 'Bannir'}</button><button class="btn btn-sm del-user" data-id="${p.id}" type="button">Supprimer</button></div>` : ''}</td></tr>`).join('');
+      tbody.querySelectorAll<HTMLButtonElement>('.dl-cert').forEach((b) => b.addEventListener('click', async () => {
+        b.disabled = true; b.textContent = '…';
+        try { await telechargerCertificat(session.access_token, b.dataset.id); } catch { alert("Le certificat n'a pas pu être généré."); }
+        b.disabled = false; b.textContent = 'PDF';
+      }));
       tbody.querySelectorAll<HTMLButtonElement>('.demettre').forEach((b) => b.addEventListener('click', async () => {
         const p: any = (mems || []).find((x: any) => x.id === b.dataset.id);
         const motif = prompt(`Démettre ${p.prenom} ${p.nom} de ses fonctions${p.poste ? ` (${p.poste})` : ''} ?\n\nIl ou elle perd son poste et l'accès à l'espace bureau, mais reste membre. Un email l'en informe.\n\nMessage à lui transmettre (facultatif) :`, '');
