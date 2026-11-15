@@ -11,7 +11,7 @@ export async function certificatPdf(userId: string): Promise<{ pdf: Uint8Array; 
   const [{ count: seances }, { data: sig }, { data: pres }] = await Promise.all([
     db.from('presences').select('*', { count: 'exact', head: true }).eq('user_id', userId).eq('statut', 'present'),
     db.from('signatures').select('image, signed_at').eq('user_id', userId).maybeSingle(),
-    db.from('profiles').select('prenom, nom').ilike('poste', 'Président%').eq('banni', false).limit(1),
+    db.from('profiles').select('prenom, nom, poste').ilike('poste', 'Président%').eq('banni', false).limit(1),
   ]);
   const president = pres?.[0];
 
@@ -27,7 +27,7 @@ export async function certificatPdf(userId: string): Promise<{ pdf: Uint8Array; 
   pg.drawRectangle({ x: 24, y: H - 40, width: tiers, height: 16, color: nuit });
   pg.drawRectangle({ x: 24 + 2 * tiers, y: H - 40, width: tiers, height: 16, color: rouge });
   try {
-    const logo = await doc.embedPng(await (await fetch(`${SITE}/assets/img/icon-192.png`)).arrayBuffer());
+    const logo = await doc.embedPng(await (await fetch(`${SITE}/assets/img/logo-certificat.png`)).arrayBuffer());
     pg.drawImage(logo, { x: 64, y: H - 150, width: 78, height: 78 });
   } catch { /* logo facultatif */ }
   const centre = (t: string, y: number, f = reg, s = 14, c = nuit) => pg.drawText(t, { x: (W - f.widthOfTextAtSize(t, s)) / 2, y, size: s, font: f, color: c });
@@ -55,7 +55,8 @@ export async function certificatPdf(userId: string): Promise<{ pdf: Uint8Array; 
   }
   pg.drawLine({ start: { x: 70, y: yLigne }, end: { x: 300, y: yLigne }, thickness: 1.2, color: nuit });
 
-  pg.drawText(president ? 'Pour le bureau, la présidence' : 'Pour le bureau', { x: 340, y: yLigne + 70, size: 10, font: reg, color: gris });
+  const now = new Date(), an = now.getFullYear(), annee = now.getMonth() >= 8 ? `${an}-${an + 1}` : `${an - 1}-${an}`;
+  pg.drawText(president ? `Présidence ${annee}` : `Pour le bureau, année ${annee}`, { x: 340, y: yLigne + 70, size: 10, font: reg, color: gris });
   pg.drawText(president ? `${president.prenom} ${president.nom}` : 'Le bureau du Parlement JPV', { x: 340, y: yLigne + 10, size: 15, font: bold, color: nuit });
   pg.drawLine({ start: { x: 340, y: yLigne }, end: { x: 560, y: yLigne }, thickness: 1.2, color: nuit });
   pg.drawText(`Fait à Sèvres, le ${date(new Date().toISOString())}`, { x: 70, y: 92, size: 11, font: reg, color: nuit });
