@@ -46,3 +46,6 @@ verify_jwt = false
 
 [functions.inscription]
 verify_jwt = false
+
+[functions.election-annonce]
+verify_jwt = false

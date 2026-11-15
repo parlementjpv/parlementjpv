@@ -6,6 +6,7 @@ import Base from '../layouts/Base.astro';
     <div><span class="eyebrow">Ton compte</span><h1 id="hello">Mon espace</h1></div>
     <div class="flex"><a class="btn btn-primary btn-sm hidden" id="bureauLink" href="/bureau">Espace bureau</a><button class="btn btn-outline btn-sm" id="logout" type="button">Se déconnecter</button></div>
   </div></div>
+  <div class="container"><a class="vote-alerte hidden" id="voteAlerte" href="/elections"></a></div>
   <section class="section"><div class="container grid grid-2" style="gap:36px;align-items:start;">
     <div class="grid">
       <div class="card hidden" id="welcome"></div>
@@ -23,7 +24,7 @@ import Base from '../layouts/Base.astro';
         <strong id="tMotions">Propose et soutiens les sujets des prochains débats</strong>
         <span class="tuile-go">Voir les motions</span>
       </a>
-      <a class="card tuile" href="/elections">
+      <a class="card tuile hidden" id="tuileVote" href="/elections">
         <span class="tuile-k">Vote</span>
         <strong id="tVote">Élections du bureau à bulletin secret</strong>
         <span class="tuile-go">Aller voter</span>
@@ -37,7 +38,8 @@ import Base from '../layouts/Base.astro';
     <div class="grid">
       <div class="card">
         <h3>Mes informations</h3>
-        <form class="form" id="profileForm">
+        <button class="btn btn-outline btn-sm" id="editInfos" type="button" aria-expanded="false" aria-controls="profileForm">Modifier mes informations</button>
+        <form class="form hidden mt-1" id="profileForm">
           <div class="form-row">
             <div class="field"><label for="prenom">Prénom</label><input id="prenom" name="prenom" required /></div>
             <div class="field"><label for="nom">Nom</label><input id="nom" name="nom" required /></div>
@@ -48,7 +50,7 @@ import Base from '../layouts/Base.astro';
           </div>
           <div class="field"><label>Email</label><input id="email" disabled /></div>
           <div id="pmsg"></div>
-          <button class="btn btn-primary btn-sm" type="submit">Enregistrer</button>
+          <div class="flex" style="gap:8px;"><button class="btn btn-primary btn-sm" type="submit">Enregistrer</button><button class="btn btn-outline btn-sm" id="cancelInfos" type="button">Annuler</button></div>
         </form>
       </div>
       <div class="card">
@@ -77,6 +79,14 @@ import Base from '../layouts/Base.astro';
   a.card.tuile strong { display: block; font-size: 1.3rem; line-height: 1.2; letter-spacing: -0.01em; }
   a.card.tuile .tuile-go { font-weight: 700; font-size: 0.92rem; text-decoration: underline; text-decoration-color: var(--rouge); text-underline-offset: 4px; }
   a.card.tuile.tuile-chaud { border-color: var(--rouge); background: var(--pierre); }
+  a.vote-alerte { margin-top: 32px; display: grid; gap: 6px; padding: 22px 24px; background: var(--rouge); color: #fff; text-decoration: none; border: 3px solid var(--rouge); }
+  a.vote-alerte.hidden { display: none; }
+  a.vote-alerte * { color: #fff; text-decoration: none; }
+  a.vote-alerte .va-k { font-weight: 800; font-size: 0.9rem; }
+  a.vote-alerte strong { display: block; font-size: clamp(1.6rem, 4vw, 2.2rem); line-height: 1.05; letter-spacing: -0.02em; }
+  a.vote-alerte .va-go { justify-self: start; margin-top: 6px; background: #fff; color: var(--rouge); font-weight: 800; padding: 8px 16px; }
+  a.vote-alerte:hover .va-go { background: var(--nuit); color: #fff; }
+  a.vote-alerte:focus-visible { outline: 3px solid var(--nuit); outline-offset: 3px; }
   @media (prefers-reduced-motion: reduce) { a.card.tuile { transition: none; } a.card.tuile:hover { transform: none; } }
 </style>
 <script>
@@ -97,6 +107,10 @@ import Base from '../layouts/Base.astro';
 
     // Profil
     const f = document.getElementById('profileForm') as HTMLFormElement;
+    const editBtn = document.getElementById('editInfos') as HTMLButtonElement;
+    const toggleInfos = (open: boolean) => { f.classList.toggle('hidden', !open); editBtn.classList.toggle('hidden', open); editBtn.setAttribute('aria-expanded', String(open)); if (open) (f.elements.namedItem('prenom') as HTMLInputElement).focus(); else document.getElementById('pmsg')!.innerHTML = ''; };
+    editBtn.addEventListener('click', () => toggleInfos(true));
+    document.getElementById('cancelInfos')!.addEventListener('click', () => toggleInfos(false));
     (f.elements.namedItem('prenom') as HTMLInputElement).value = p?.prenom || '';
     (f.elements.namedItem('nom') as HTMLInputElement).value = p?.nom || '';
     (f.elements.namedItem('classe') as HTMLInputElement).value = p?.classe || '';
@@ -108,14 +122,28 @@ import Base from '../layouts/Base.astro';
       const tel = String(fd.get('telephone') || '').trim() || null;
       const { error } = await sb.from('profiles').update({ prenom: fd.get('prenom'), nom: fd.get('nom'), classe: fd.get('classe'), telephone: tel }).eq('id', session.user.id);
       if (!error) await sb.from('adhesions').update({ prenom: fd.get('prenom'), nom: fd.get('nom'), classe: fd.get('classe') || '?', telephone: tel }).eq('user_id', session.user.id);
-      document.getElementById('pmsg')!.innerHTML = error ? `<div class="alert alert-err">${error.message}</div>` : '<div class="alert alert-ok">Enregistré.</div>';
+      if (error) { document.getElementById('pmsg')!.innerHTML = `<div class="alert alert-err">${error.message}</div>`; return; }
+      toggleInfos(false); editBtn.insertAdjacentHTML('afterend', '<span class="small muted" id="savedNote" style="margin-left:10px;">Informations enregistrées.</span>'); setTimeout(() => document.getElementById('savedNote')?.remove(), 4000);
     });
 
     // Cases Motions / Vote / Profil : un aperçu en direct
     sb.rpc('motions_liste').then(({ data }) => { const n = ((data as any[]) || []).filter((x) => x.statut === 'proposee' && !x.mon_vote).length; if (n) document.getElementById('tMotions')!.textContent = `${n} motion${n > 1 ? 's' : ''} à découvrir et soutenir`; });
-    sb.rpc('elections_liste').then(({ data }) => { const els = (data as any[]) || []; const o = els.find((e) => e.statut === 'ouverte' && !e.a_vote && e.peut_voter); const v = els.find((e) => e.statut === 'ouverte' && e.a_vote);
-      if (o) { document.getElementById('tVote')!.textContent = `Vote ouvert : ${o.titre}`; document.getElementById('tVote')!.closest('.tuile')!.classList.add('tuile-chaud'); }
-      else if (v) document.getElementById('tVote')!.textContent = `Tu as voté : ${v.titre}`; });
+    sb.rpc('elections_liste').then(({ data }) => {
+      const els = ((data as any[]) || []).filter((e) => e.statut === 'ouverte' || e.statut === 'programmee');
+      if (!els.length) return; // aucun vote en cours : pas de case Vote
+      const tuile = document.getElementById('tuileVote')!, tVote = document.getElementById('tVote')!;
+      tuile.classList.remove('hidden');
+      const aVoter = els.find((e) => e.statut === 'ouverte' && !e.a_vote && e.peut_voter);
+      const prog = els.find((e) => e.statut === 'programmee');
+      const fin = (d: string | null) => d ? new Date(d).toLocaleString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }) : '';
+      if (aVoter) {
+        const a = document.getElementById('voteAlerte')!;
+        a.innerHTML = `<span class="va-k">Vote ouvert</span><strong>${esc(aVoter.titre)}</strong>${aVoter.fermeture ? `<span>Tu peux voter jusqu'au ${esc(fin(aVoter.fermeture))}.</span>` : ''}<span class="va-go">Je vote</span>`;
+        a.classList.remove('hidden');
+        tVote.textContent = `Vote ouvert : ${aVoter.titre}`; tuile.classList.add('tuile-chaud');
+      } else if (els.some((e) => e.statut === 'ouverte' && e.a_vote)) tVote.textContent = `Tu as voté : ${els.find((e) => e.a_vote).titre}`;
+      else if (prog) tVote.textContent = `Vote à venir : ${prog.titre}, ouverture le ${fin(prog.ouverture)}`;
+    });
     sb.rpc('profil_orateur').then(({ data }) => { if (data?.seances) document.getElementById('tProfil')!.textContent = `${data.seances} séance${data.seances > 1 ? 's' : ''}${Object.keys(data.roles || {}).length ? ` · ${Object.values(data.roles).reduce((a: number, n: any) => a + Number(n), 0)} prise(s) de parole` : ''}`; });
 
     // Annonces de séances
@@ -127,12 +155,14 @@ import Base from '../layouts/Base.astro';
     });
 
     // Candidature
-    const { data: cands } = await sb.from('candidatures').select('type, poste, statut, created_at, note_bureau').eq('user_id', session.user.id).order('created_at', { ascending: false });
+    const { data: cands } = await sb.from('candidatures').select('type, poste, statut, created_at, decided_at, note_bureau').eq('user_id', session.user.id).order('created_at', { ascending: false });
     const cEl = document.getElementById('cand')!;
+    const SEMAINE = 7 * 24 * 3600 * 1000;
+    const visibles = (cands || []).filter((c: any) => !['acceptee', 'refusee'].includes(c.statut) || Date.now() - new Date(c.decided_at || c.created_at).getTime() < SEMAINE);
     const labels: Record<string, string> = { nouvelle: 'Reçue, en attente', en_cours: 'En cours d’examen', acceptee: 'Acceptée 🎉', refusee: 'Non retenue' };
-    cEl.innerHTML = cands && cands.length
-      ? cands.map((c) => `<p><span class="pill">${c.type === 'bureau' ? `bureau${c.poste ? ' — ' + c.poste : ''}` : c.type}</span> déposée le ${new Date(c.created_at).toLocaleDateString('fr-FR')} — <strong>${labels[c.statut] || c.statut}</strong>${c.note_bureau ? `<br><span class="small muted">Message du bureau : ${c.note_bureau}</span>` : ''}</p>`).join('')
-      : '<p class="muted">Aucune candidature pour le moment.</p><a class="btn btn-primary btn-sm" href="/candidature">Candidater</a>';
+    cEl.innerHTML = visibles.length
+      ? visibles.map((c) => `<p><span class="pill">${c.type === 'bureau' ? `bureau${c.poste ? ' — ' + c.poste : ''}` : c.type}</span> déposée le ${new Date(c.created_at).toLocaleDateString('fr-FR')} — <strong>${labels[c.statut] || c.statut}</strong>${c.note_bureau ? `<br><span class="small muted">Message du bureau : ${c.note_bureau}</span>` : ''}</p>`).join('')
+      : '<p class="muted">Aucune candidature en cours.</p><a class="btn btn-primary btn-sm" href="/candidature">Candidater</a>';
 
     // Prochains événements : je viens / je ne viens pas
     const evBox = document.getElementById('events')!;

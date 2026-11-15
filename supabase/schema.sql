@@ -1455,3 +1455,5 @@ end $$;
 drop trigger if exists journal_articles on public.articles;
 create trigger journal_articles after insert or update or delete on public.articles for each row execute procedure public.journal_articles();
 alter table public.articles add column if not exists categorie text not null default 'Actualité' check (char_length(categorie) <= 40);
+-- 018 — Annonce par email de l'ouverture d'un vote (une seule fois par élection)
+alter table public.elections add column if not exists annonce_envoyee_at timestamptz;

@@ -179,7 +179,11 @@ async function initElections(sb: SupabaseClient, session: Session, isAdmin: bool
         show('Résultats publiés. Envoi des résultats par email à chaque votant…', 'info');
         const r = await postJSON<{ envoyes: number; deja?: boolean }>('/api/election-resultats', { id: b.dataset.id }, session.access_token);
         show(r.ok ? `Résultats publiés et envoyés par email à ${r.data.envoyes} votant${r.data.envoyes > 1 ? 's' : ''}.` : `Résultats publiés, mais l'envoi des emails a échoué : ${esc(r.error)}`, r.ok ? 'ok' : 'err');
-      } else show(b.dataset.a === 'ouvrir' ? 'Vote ouvert : les membres peuvent voter depuis « Élections ».' : 'Vote clos. Publie les résultats pour les envoyer à chaque votant.', 'ok');
+      } else if (b.dataset.a === 'ouvrir') {
+        show('Vote ouvert. Envoi de l\'annonce par email à tous les membres…', 'info');
+        const r = await postJSON<{ envoyes: number; deja?: boolean }>('/api/election-annonce', { id: b.dataset.id }, session.access_token);
+        show(r.ok ? `Vote ouvert et annoncé par email à ${r.data.envoyes} membre${r.data.envoyes > 1 ? 's' : ''}. Il s'affiche en rouge dans l'espace de chacun.` : `Vote ouvert, mais l'envoi des emails a échoué : ${esc(r.error)}`, r.ok ? 'ok' : 'err');
+      } else show('Vote clos. Publie les résultats pour les envoyer à chaque votant.', 'ok');
       load();
     }
   });

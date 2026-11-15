@@ -58,7 +58,15 @@ const current = Astro.url.pathname.replace(BASE, '').replace(/\/$/, '') || '/';
   .mobile-nav .btn { margin-top: 14px; border-bottom: 0; }
   .mobile-nav.open { display: flex; }
   @media (max-width: 1200px) { .nav-links, .nav-cta, .nav-sep { display: none; } .burger { display: inline-block; } .nav-actions { gap: 8px; } }
-  @media (max-width: 420px) { .nav-auth { padding: 6px 10px; font-size: 0.9rem; } }
+  @media (max-width: 600px) {
+    .nav { gap: 10px; padding-top: 8px; padding-bottom: 8px; }
+    .brand { gap: 8px; font-size: 0.92rem; }
+    .brand svg { width: 28px; height: 28px; }
+    .nav-actions { gap: 6px; }
+    .nav-auth { border-width: 2px; padding: 5px 10px; font-size: 0.85rem; }
+    .icon-btn { padding: 5px 8px; font-size: 0.85rem; }
+  }
+  @media (max-width: 360px) { .brand span { display: none; } }
 </style>
 
 <script>
