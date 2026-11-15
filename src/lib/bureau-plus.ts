@@ -86,10 +86,10 @@ async function initAppel(sb: SupabaseClient, session: Session) {
     const reste = rows.filter((r) => !r.statut).length;
     if (reste && !confirm(`${reste} personne(s) ne sont pas pointées et ne seront pas enregistrées. Continuer ?`)) return;
     const b = $('apSave') as HTMLButtonElement; b.disabled = true; msg.innerHTML = '<div class="alert alert-info">Enregistrement…</div>';
-    const r = await postJSON<{ exclus: string[]; avertis: string[] }>('/api/appel', { event: sel.value, lignes }, session.access_token);
+    const r = await postJSON<{ exclus: string[]; avertis: string[]; invites?: number }>('/api/appel', { event: sel.value, lignes }, session.access_token);
     b.disabled = false;
     if (!r.ok) { msg.innerHTML = `<div class="alert alert-err">${esc(r.error)}</div>`; return; }
-    msg.innerHTML = `<div class="alert alert-ok">Appel enregistré. Les profils d'orateur sont à jour.${r.data.avertis.length ? `<br>Avertissement envoyé par email à : <strong>${r.data.avertis.map(esc).join(', ')}</strong> (prochaine absence = suspension).` : ''}${r.data.exclus.length ? `<br>Compte suspendu automatiquement et prévenu par email : <strong>${r.data.exclus.map(esc).join(', ')}</strong>. Un admin peut le réactiver dans « Membres & rôles ».` : ''}</div>`;
+    msg.innerHTML = `<div class="alert alert-ok">Appel enregistré. Les profils d'orateur sont à jour.${r.data.invites ? `<br>${r.data.invites} présent${r.data.invites > 1 ? 's ont' : ' a'} reçu par email l'invitation à élire le meilleur orateur (vote ouvert 3 jours).` : ''}${r.data.avertis.length ? `<br>Avertissement envoyé par email à : <strong>${r.data.avertis.map(esc).join(', ')}</strong> (prochaine absence = suspension).` : ''}${r.data.exclus.length ? `<br>Compte suspendu automatiquement et prévenu par email : <strong>${r.data.exclus.map(esc).join(', ')}</strong>. Un admin peut le réactiver dans « Membres & rôles ».` : ''}</div>`;
     load();
   });
   load();

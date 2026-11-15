@@ -10,6 +10,8 @@ import Base from '../layouts/Base.astro';
   <section class="section"><div class="container grid grid-2" style="gap:36px;align-items:start;">
     <div class="grid">
       <div class="card hidden" id="welcome"></div>
+      <div class="card mo-card hidden" id="moVote"></div>
+      <div class="card mo-card hidden" id="moLaureat"></div>
       <div class="card">
         <h3>Ma candidature</h3>
         <div id="cand"><p class="muted small">Chargement…</p></div>
@@ -79,6 +81,15 @@ import Base from '../layouts/Base.astro';
   a.card.tuile strong { display: block; font-size: 1.3rem; line-height: 1.2; letter-spacing: -0.01em; }
   a.card.tuile .tuile-go { font-weight: 700; font-size: 0.92rem; text-decoration: underline; text-decoration-color: var(--rouge); text-underline-offset: 4px; }
   a.card.tuile.tuile-chaud { border-color: var(--rouge); background: var(--pierre); }
+  .mo-card { border: 3px solid var(--nuit); }
+  .mo-card .mo-k { font-weight: 800; color: var(--rouge); font-size: 0.9rem; margin: 0 0 4px; }
+  .mo-card h3 { margin: 0 0 6px; }
+  .mo-liste { display: grid; gap: 8px; margin: 14px 0 10px; }
+  .mo-opt { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; text-align: left; padding: 10px 14px; border: 2px solid var(--nuit); background: transparent; color: inherit; font: inherit; cursor: pointer; }
+  .mo-opt:hover { background: var(--pierre); }
+  .mo-opt:focus-visible { outline: 3px solid var(--rouge); outline-offset: 2px; }
+  .mo-opt.choisi { background: var(--nuit); color: #fff; }
+  .mo-opt.choisi .muted { color: rgba(255,255,255,0.75); }
   a.vote-alerte { margin-top: 32px; display: grid; gap: 6px; padding: 22px 24px; background: var(--rouge); color: #fff; text-decoration: none; border: 3px solid var(--rouge); }
   a.vote-alerte.hidden { display: none; }
   a.vote-alerte * { color: #fff; text-decoration: none; }
@@ -128,6 +139,43 @@ import Base from '../layouts/Base.astro';
 
     // Cases Motions / Vote / Profil : un aperçu en direct
     sb.rpc('motions_liste').then(({ data }) => { const n = ((data as any[]) || []).filter((x) => x.statut === 'proposee' && !x.mon_vote).length; if (n) document.getElementById('tMotions')!.textContent = `${n} motion${n > 1 ? 's' : ''} à découvrir et soutenir`; });
+    // Vote du meilleur orateur (présents à une séance, 3 jours)
+    const moVote = document.getElementById('moVote')!;
+    const finFmt = (d: string) => new Date(d).toLocaleString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
+    const rendreVote = (v: any) => {
+      moVote.innerHTML = `<p class="mo-k">Meilleur orateur</p><h3>${esc(v.titre)}</h3>
+        <p class="small muted">${v.mon_vote ? 'Ton vote est enregistré. Tu peux le changer' : 'Qui t\'a le plus convaincu ? Vote anonyme, réservé aux présents. Ouvert'} jusqu'au ${esc(finFmt(v.fin))}.</p>
+        <div class="mo-liste" role="group" aria-label="Choisir le meilleur orateur">${v.candidats.map((c: any) => `<button type="button" class="mo-opt${c.id === v.mon_vote ? ' choisi' : ''}" data-id="${c.id}" aria-pressed="${c.id === v.mon_vote}"><span><strong>${esc(c.prenom)} ${esc(c.nom)}</strong> <span class="small muted">${esc(c.classe || '')}${c.camp ? ` · ${esc(c.camp)}` : ''}</span></span><span class="small">${c.id === v.mon_vote ? 'Mon vote' : 'Voter'}</span></button>`).join('')}</div>
+        <div id="moMsg" aria-live="polite"></div>`;
+      moVote.querySelectorAll<HTMLButtonElement>('.mo-opt').forEach((b) => b.addEventListener('click', async () => {
+        moVote.querySelectorAll<HTMLButtonElement>('.mo-opt').forEach((x) => (x.disabled = true));
+        const { error } = await sb.rpc('voter_meilleur_orateur', { p_event: v.event, p_orateur: b.dataset.id });
+        if (error) {
+          const M: Record<string, string> = { vote_clos: 'Le vote est clos.', pas_present: 'Seuls les présents à la séance peuvent voter.', orateur_absent: "Cette personne n'était pas présente." };
+          document.getElementById('moMsg')!.innerHTML = `<div class="alert alert-err">${M[Object.keys(M).find((k) => error.message.includes(k)) || ''] || 'Le vote n\'a pas pu être enregistré.'}</div>`;
+          moVote.querySelectorAll<HTMLButtonElement>('.mo-opt').forEach((x) => (x.disabled = false));
+          return;
+        }
+        v.mon_vote = b.dataset.id; rendreVote(v);
+        document.getElementById('moMsg')!.innerHTML = '<div class="alert alert-ok">Vote enregistré.</div>';
+      }));
+    };
+    sb.rpc('votes_orateur_ouverts').then(({ data }) => {
+      const v = ((data as any[]) || []).find((x) => x.candidats.length);
+      if (!v) return;
+      rendreVote(v); moVote.classList.remove('hidden');
+    });
+    sb.rpc('derniers_meilleurs_orateurs', { p_limite: 1 }).then(({ data }) => {
+      const d = ((data as any[]) || [])[0];
+      if (!d?.laureats?.length || Date.now() - new Date(d.date).getTime() > 21 * 86400000) return;
+      const el = document.getElementById('moLaureat')!;
+      const moi = d.laureats.some((l: any) => l.id === session.user.id);
+      el.innerHTML = `<p class="mo-k">Meilleur orateur · ${esc(d.titre)}</p><h3>${moi ? 'Bravo, c\'est toi !' : d.laureats.map((l: any) => `${esc(l.prenom)} ${esc(l.nom)}`).join(' et ')}</h3>
+        <p class="small muted">${moi ? 'Les présents t\'ont élu meilleur orateur de la séance. Le titre est ajouté à ton profil.' : `Élu${d.laureats.length > 1 ? 's' : ''} par les présents avec ${d.laureats[0].voix} voix.`}</p>
+        <a class="btn btn-outline btn-sm" href="${u('/profil')}${moi ? '' : `?u=${d.laureats[0].id}`}">Voir le profil</a>`;
+      el.classList.remove('hidden');
+    });
+
     sb.rpc('elections_liste').then(({ data }) => {
       const els = ((data as any[]) || []).filter((e) => e.statut === 'ouverte' || e.statut === 'programmee');
       if (!els.length) return; // aucun vote en cours : pas de case Vote

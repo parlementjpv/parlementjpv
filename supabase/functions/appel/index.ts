@@ -36,7 +36,27 @@ Deno.serve(async (req) => {
       }
     } catch (e) { console.error(e); }
   }
+  // Invitation des présents à élire le meilleur orateur (une seule fois par séance)
+  let invites = 0;
+  const { data: presents } = await db.from('presences').select('user_id, email, prenom').eq('event_key', b.event).eq('statut', 'present').not('user_id', 'is', null);
+  if ((presents || []).length >= 2) {
+    const { data: lock } = await db.from('events').update({ vote_orateur_annonce_at: new Date().toISOString() }).eq('id', b.event).is('vote_orateur_annonce_at', null).select('id');
+    if (lock?.length) {
+      const fin = new Date(new Date(ev.starts_at).getTime() + 3 * 86400000).toLocaleString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' });
+      for (const pr of presents!) {
+        try {
+          await sendMail({ from: FROM, to: pr.email, subject: `Qui a été le meilleur orateur ? — ${ev.title}`,
+            html: layout({ title: `${pr.prenom ? pr.prenom + ', qui' : 'Qui'} a été le meilleur orateur ?`, body:
+              `<p>Merci d'être venu à <strong>${esc(ev.title)}</strong> (${esc(quand)}).</p>
+               <p>Vote maintenant pour la personne qui t'a le plus convaincu. Seuls les présents votent, le vote est anonyme, et le ou la lauréat·e obtient le titre de meilleur orateur sur son profil.</p>
+               <p>Le vote ferme le <strong>${esc(fin)}</strong>.</p>
+               ${button(`${SITE}/compte`, 'Je vote')}` }) });
+          invites++;
+        } catch (e) { console.error(e); }
+      }
+    }
+  }
   const n = (s: string) => b.lignes.filter((l: any) => l.statut === s).length;
   await journal(me.user.id, 'Séances', `a fait l'appel de « ${ev.title} » : ${n('present')} présents, ${n('absent')} absents, ${n('excuse')} excusés${notifs.some((x) => x.action === 'exclu') ? ` — suspendu${notifs.filter((x) => x.action === 'exclu').length > 1 ? 's' : ''} : ${notifs.filter((x) => x.action === 'exclu').map((x) => x.prenom).join(', ')}` : ''}`);
-  return json(req, 200, { ok: true, seuil: data?.seuil, exclus: notifs.filter((n) => n.action === 'exclu').map((n) => n.prenom), avertis: notifs.filter((n) => n.action !== 'exclu').map((n) => n.prenom) });
+  return json(req, 200, { ok: true, invites, seuil: data?.seuil, exclus: notifs.filter((n) => n.action === 'exclu').map((n) => n.prenom), avertis: notifs.filter((n) => n.action !== 'exclu').map((n) => n.prenom) });
 });

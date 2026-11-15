@@ -1,7 +1,7 @@
 // Badges du profil d'orateur, calculés à partir des statistiques (aucune donnée supplémentaire stockée)
 export type Profil = {
   seances: number; debats: number; roles: Record<string, number>; arguments_retenus: number; camps: Record<string, number>;
-  motions_proposees: number; motions_retenues: number; votes_elections?: number | null; absences?: number | null; role: string; poste?: string | null;
+  motions_proposees: number; motions_retenues: number; meilleur_orateur?: number; votes_orateur?: number | null; votes_elections?: number | null; absences?: number | null; role: string; poste?: string | null;
 };
 export type Badge = { id: string; nom: string; desc: string; obtenu: boolean; progres?: string };
 
@@ -21,6 +21,9 @@ export function badges(p: Profil): Badge[] {
     { id: 'polyvalent', nom: 'Toutes les casquettes', desc: 'Tenir les 4 types de rôle (ouverture, argument, réfutation, conclusion)', obtenu: typesRoles === 4, progres: palier(typesRoles, 4) },
     { id: 'argument', nom: 'Argument en or', desc: 'Voir un de ses arguments retenu par son camp', obtenu: p.arguments_retenus >= 1 },
     { id: 'stratege', nom: 'Stratège', desc: '10 arguments retenus par son camp', obtenu: p.arguments_retenus >= 10, progres: palier(p.arguments_retenus, 10) },
+    { id: 'meilleur', nom: 'Meilleur orateur', desc: 'Être élu meilleur orateur d\'une séance par les présents', obtenu: (p.meilleur_orateur ?? 0) >= 1 },
+    { id: 'tribun', nom: 'Tribun', desc: 'Être élu 5 fois meilleur orateur', obtenu: (p.meilleur_orateur ?? 0) >= 5, progres: palier(p.meilleur_orateur ?? 0, 5) },
+    { id: 'jure', nom: 'Juré', desc: 'Voter pour le meilleur orateur après une séance', obtenu: (p.votes_orateur ?? 0) >= 1 },
     { id: 'deuxcamps', nom: "Avocat du diable", desc: 'Défendre au moins deux camps différents', obtenu: Object.keys(p.camps || {}).length >= 2 },
     { id: 'motion', nom: 'Faiseur de motions', desc: 'Proposer une motion', obtenu: p.motions_proposees >= 1 },
     { id: 'motionretenue', nom: 'Ordre du jour', desc: 'Voir une de ses motions retenue par le bureau', obtenu: p.motions_retenues >= 1 },

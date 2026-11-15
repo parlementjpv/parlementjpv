@@ -44,7 +44,7 @@ import MembreNav from '../components/MembreNav.astro';
 
   <section class="section-tight">
     <div class="container">
-      <div class="pf-sec-head"><h2>Les orateurs du Parlement</h2><span class="muted small">Classés par séances</span></div>
+      <div class="pf-sec-head"><h2>Les orateurs du Parlement</h2><span class="muted small">Classés par titres de meilleur orateur, puis par séances</span></div>
       <div id="pfClassement" class="classement"></div>
     </div>
   </section>
@@ -109,7 +109,7 @@ import MembreNav from '../components/MembreNav.astro';
     document.title = `${p.prenom} ${p.nom} — Profil d'orateur`;
 
     const nbRoles = Object.values(p.roles || {}).reduce((a: number, n: any) => a + Number(n), 0);
-    const stats: [number | string, string][] = [[p.debats, 'débats'], [nbRoles, 'prises de parole'], [p.arguments_retenus, 'arguments retenus'], [p.motions_proposees, 'motions proposées']];
+    const stats: [number | string, string][] = [[p.meilleur_orateur ?? 0, `titre${(p.meilleur_orateur ?? 0) > 1 ? 's' : ''} de meilleur orateur`], [p.debats, 'débats'], [nbRoles, 'prises de parole'], [p.arguments_retenus, 'arguments retenus']];
     $('pfStats').innerHTML = stats.map(([n, l]) => `<div class="stat"><strong>${n}</strong><span>${l}</span></div>`).join('');
 
     if (p.moi && p.absences != null) {
@@ -131,12 +131,12 @@ import MembreNav from '../components/MembreNav.astro';
 
     if (p.historique) {
       const ST: Record<string, string> = { present: 'Présent', absent: 'Absent', excuse: 'Excusé' };
-      $('pfHist').innerHTML = p.historique.length ? p.historique.map((h: any) => `<div class="hist-row"><span class="small muted">${new Date(h.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: '2-digit' })}</span><span><strong>${esc(h.titre)}</strong>${h.camp ? ` <span class="small muted">· ${esc(h.camp)}</span>` : ''}${h.roles?.length ? `<br><span class="small">${h.roles.map(esc).join(', ')}</span>` : ''}</span><span class="hist-st ${h.statut}">${ST[h.statut]}</span></div>`).join('')
+      $('pfHist').innerHTML = p.historique.length ? p.historique.map((h: any) => `<div class="hist-row"><span class="small muted">${new Date(h.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: '2-digit' })}</span><span><strong>${esc(h.titre)}</strong>${h.camp ? ` <span class="small muted">· ${esc(h.camp)}</span>` : ''}${h.meilleur ? ' <span class="poste-badge">Meilleur orateur</span>' : ''}${h.roles?.length ? `<br><span class="small">${h.roles.map(esc).join(', ')}</span>` : ''}</span><span class="hist-st ${h.statut}">${ST[h.statut]}</span></div>`).join('')
         : '<p class="muted">Ton historique apparaîtra après le premier appel en séance.</p>';
     } else $('pfHistWrap').remove();
 
     const list = (cl as any[]) || [];
-    $('pfClassement').innerHTML = list.length ? list.slice(0, 30).map((o, i) => `<a class="cl-row${o.id === m.session.user.id ? ' moi' : ''}" href="${u('/profil')}?u=${o.id}"><span class="cl-rang">${i + 1}</span><span><strong>${esc(o.prenom)} ${esc(o.nom)}</strong>${posteBadge(o.poste)} <span class="small muted">${esc(o.classe || '')}</span></span><span class="small">${o.roles} rôle${o.roles > 1 ? 's' : ''}</span><strong>${o.seances} séance${o.seances > 1 ? 's' : ''}</strong></a>`).join('')
+    $('pfClassement').innerHTML = list.length ? list.slice(0, 30).map((o, i) => `<a class="cl-row${o.id === m.session.user.id ? ' moi' : ''}" href="${u('/profil')}?u=${o.id}"><span class="cl-rang">${i + 1}</span><span><strong>${esc(o.prenom)} ${esc(o.nom)}</strong>${posteBadge(o.poste)} <span class="small muted">${esc(o.classe || '')}</span></span><span class="small">${o.titres ? `<strong>${o.titres} titre${o.titres > 1 ? 's' : ''}</strong> · ` : ''}${o.roles} rôle${o.roles > 1 ? 's' : ''}</span><strong>${o.seances} séance${o.seances > 1 ? 's' : ''}</strong></a>`).join('')
       : '<p class="muted">Le classement apparaîtra après le premier appel en séance.</p>';
   })();
 </script>
