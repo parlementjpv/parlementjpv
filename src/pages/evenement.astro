@@ -169,7 +169,7 @@ import data from '../data/events.json';
       (form.elements.namedItem('nom') as HTMLInputElement).value = p?.nom || '';
       (form.elements.namedItem('classe') as HTMLInputElement).value = p?.classe || '';
       (form.elements.namedItem('email') as HTMLInputElement).value = session.user.email || '';
-      (form.elements.namedItem('telephone') as HTMLInputElement).value = p?.telephone || '';
+      sb.rpc('mes_coordonnees').then(({ data }) => { (form.elements.namedItem('telephone') as HTMLInputElement).value = data?.telephone || ''; });
       // Consentement déjà donné à la création du compte
       const rg = form.elements.namedItem('rgpd') as HTMLInputElement; rg.checked = true; (rg.closest('label') as HTMLElement).classList.add('hidden');
       const { data } = await sb.from('event_signups').select('reponse, camp, jeton').eq('event_key', ev.id).eq('user_id', session.user.id).maybeSingle();

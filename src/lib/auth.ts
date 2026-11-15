@@ -52,7 +52,7 @@ export async function expireSession(next = location.pathname + location.search) 
 }
 
 export async function getProfile(userId: string): Promise<Profile | null> {
-  const { data } = await getSupabase().from('profiles').select('*').eq('id', userId).maybeSingle();
+  const { data } = await getSupabase().from('profiles').select('id, prenom, nom, classe, niveau, classe_num, role, newsletter, created_at, banni, absences_depuis, poste, guide_envoye_at, certificat_code').eq('id', userId).maybeSingle();
   return (data as Profile) ?? null;
 }
 

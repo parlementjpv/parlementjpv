@@ -15,7 +15,18 @@ Deno.serve(async (req) => {
   const { data: ev } = await db.from('events').select('title, starts_at').eq('id', b.event).maybeSingle();
   if (!ev) return json(req, 404, { error: 'Événement introuvable.' });
   if (new Date(ev.starts_at).getTime() - Date.now() > 6 * 3600 * 1000) return json(req, 400, { error: "L'appel ne peut être fait qu'à partir du jour de la séance." });
-  const { data, error } = await db.rpc('enregistrer_appel', { p_event: b.event, p_lignes: b.lignes });
+  // Le bureau n'a pas accès aux emails : chaque ligne arrive avec une clé (md5 de l'email) que l'on retraduit ici
+  const cles = [...new Set<string>(b.lignes.map((l: any) => String(l.cle || '')).filter((c: string) => /^[0-9a-f]{32}$/.test(c)))];
+  const emails = new Map<string, string>();
+  for (const t of ['event_signups', 'presences', 'adhesions'] as const) {
+    const manquantes = cles.filter((c) => !emails.has(c));
+    if (!manquantes.length) break;
+    const { data: rows } = await db.from(t).select('email, email_cle').in('email_cle', manquantes);
+    (rows || []).forEach((r: { email: string; email_cle: string }) => emails.set(r.email_cle, r.email.toLowerCase()));
+  }
+  const lignes = b.lignes.map((l: any) => ({ ...l, email: emails.get(String(l.cle)) })).filter((l: any) => l.email).map(({ cle: _c, ...l }: any) => l);
+  if (!lignes.length) return json(req, 400, { error: 'Aucune personne reconnue dans cet appel.' });
+  const { data, error } = await db.rpc('enregistrer_appel', { p_event: b.event, p_lignes: lignes });
   if (error) { console.error(error); return json(req, 500, { error: "L'appel n'a pas pu être enregistré." }); }
   const quand = new Date(ev.starts_at).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'Europe/Paris' });
   const notifs = (data?.notifications || []) as { email: string; prenom: string; absences: number; action: string }[];
@@ -58,7 +69,7 @@ Deno.serve(async (req) => {
       await pushUtilisateurs(presents!.map((pr) => pr.user_id), { titre: 'Qui a été le meilleur orateur ?', texte: `${ev.title} : vote pour la personne qui t'a le plus convaincu (3 jours).`, url: `${SITE}/compte`, tag: `orateur-${b.event}` });
     }
   }
-  const n = (s: string) => b.lignes.filter((l: any) => l.statut === s).length;
+  const n = (s: string) => lignes.filter((l: any) => l.statut === s).length;
   await journal(me.user.id, 'Séances', `a fait l'appel de « ${ev.title} » : ${n('present')} présents, ${n('absent')} absents, ${n('excuse')} excusés${notifs.some((x) => x.action === 'exclu') ? ` — suspendu${notifs.filter((x) => x.action === 'exclu').length > 1 ? 's' : ''} : ${notifs.filter((x) => x.action === 'exclu').map((x) => x.prenom).join(', ')}` : ''}`);
   return json(req, 200, { ok: true, invites, seuil: data?.seuil, exclus: notifs.filter((n) => n.action === 'exclu').map((n) => n.prenom), avertis: notifs.filter((n) => n.action !== 'exclu').map((n) => n.prenom) });
 });

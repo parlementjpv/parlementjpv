@@ -20,6 +20,7 @@ import Base from '../layouts/Base.astro';
       </div></section>
       <section class="bu-group"><h2 class="bu-group-t">Vie de l'instance</h2><div class="bu-tiles">
         <button class="bu-tile tab" data-tab="elections" type="button"><span class="bu-tile-t">Élections</span><span class="bu-tile-d">Votes du bureau à bulletin secret</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
+        <button class="bu-tile tab" data-tab="tournoi" type="button"><strong class="bu-count" id="sTournoi">–</strong><span class="bu-tile-t">Tournoi d'éloquence</span><span class="bu-tile-d">Inscriptions, tirage au sort, duels et résultats</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
         <button class="bu-tile tab" data-tab="motions" type="button"><span class="bu-tile-t">Motions</span><span class="bu-tile-d">Les sujets proposés par les membres</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
       </div></section>
       <section class="bu-group"><h2 class="bu-group-t">Communication</h2><div class="bu-tiles">
@@ -33,6 +34,7 @@ import Base from '../layouts/Base.astro';
         <button class="bu-tile tab" data-tab="entre" type="button"><span class="bu-tile-t">Entre nous</span><span class="bu-tile-d">Tâches, discussion et notes du bureau</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
       </div></section>
       <section class="bu-group hidden" id="buAdminGroup"><h2 class="bu-group-t">Administration</h2><div class="bu-tiles">
+        <button class="bu-tile tab" data-tab="etat" type="button"><span class="bu-tile-t">État</span><span class="bu-tile-d">Effectifs par classe, coordonnées, export</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
         <button class="bu-tile tab" data-tab="journal" type="button"><span class="bu-tile-t">Journal du bureau</span><span class="bu-tile-d">Qui a fait quoi, et quand</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
       </div></section>
     </nav>
@@ -60,7 +62,7 @@ import Base from '../layouts/Base.astro';
         <div class="grid">
           <div class="card"><h3>Aperçu</h3><div id="preview" class="prose muted small">—</div></div>
           <div class="card"><h3>Numéros</h3><div id="nlList" class="small">—</div></div>
-          <div class="card"><h3>Abonnés</h3><div id="subs" class="small">—</div><button class="btn btn-outline btn-sm mt-2" id="exportSubs" type="button">Exporter (CSV)</button></div>
+          <div class="card"><h3>Abonnés</h3><div id="subs" class="small">—</div><button class="btn btn-outline btn-sm mt-2 admin-only" id="exportSubs" type="button">Exporter (CSV)</button></div>
         </div>
       </div>
     </div>
@@ -244,6 +246,35 @@ import Base from '../layouts/Base.astro';
         </div>
       </div>
     </div>
+    <div class="panel hidden" id="tab-tournoi">
+      <form class="card form" id="tnForm">
+        <h3 style="margin:0;">Nouveau tournoi</h3>
+        <p class="small muted" style="margin:0;">Les membres s'inscrivent depuis la page Tournoi ou Mon espace. Quand tu clos les inscriptions, le site tire au sort un tableau à élimination directe (avec qualifiés d'office si le nombre d'inscrits n'est pas une puissance de 2) et prévient chaque participant.</p>
+        <div class="field"><label for="tnNom">Nom</label><input id="tnNom" name="nom" required minlength="3" maxlength="120" placeholder="ex. Tournoi d'éloquence 2026-2027" /></div>
+        <div class="field"><label for="tnDesc">Présentation <span class="small muted">(facultatif)</span></label><textarea id="tnDesc" name="description" maxlength="2000" style="min-height:90px;" placeholder="Format, durée des plaidoiries, prix…"></textarea></div>
+        <div class="form-row">
+          <div class="field"><label for="tnFin">Fin des inscriptions <span class="small muted">(facultatif)</span></label><input id="tnFin" name="fin" type="datetime-local" /></div>
+          <div class="field"><label for="tnMax">Nombre de places <span class="small muted">(facultatif)</span></label><input id="tnMax" name="max" type="number" min="2" max="64" placeholder="ex. 16" /></div>
+        </div>
+        <div id="tnMsg" aria-live="polite"></div>
+        <button class="btn btn-primary" type="submit">Ouvrir les inscriptions</button>
+      </form>
+      <div id="tnList" class="tn-list mt-3"></div>
+    </div>
+    <div class="panel hidden" id="tab-etat">
+      <div id="etBox" class="et">
+        <p class="small muted" style="margin-top:0;">Visible uniquement par les administrateurs : les autres membres du bureau n'ont accès ni aux emails ni aux numéros de téléphone. Clique sur une classe pour voir ses membres.</p>
+        <div class="et-kpi" id="etKpi"></div>
+        <div class="card mt-2" style="overflow:auto;"><table class="table et-table" id="etTable"></table></div>
+        <div class="card mt-2" id="etDetailBox" style="overflow:auto;">
+          <div class="flex between" style="gap:10px;flex-wrap:wrap;"><h3 id="etTitre" style="margin:0;">Tous les membres</h3>
+            <div class="flex" style="gap:6px;flex-wrap:wrap;"><button class="btn btn-outline btn-sm hidden" id="etTout" type="button">Voir tout le monde</button><button class="btn btn-outline btn-sm" id="etExport" type="button">Exporter (CSV)</button></div></div>
+          <div class="form-row mt-1"><div class="field"><label for="etQ">Rechercher</label><input id="etQ" placeholder="un nom, une classe, un email…" /></div>
+            <label class="small" style="display:flex;gap:6px;align-items:center;margin-top:22px;"><input type="checkbox" id="etSusp" /> Inclure les comptes suspendus</label></div>
+          <table class="table mt-1" id="etDetailT"><thead><tr><th>Nom</th><th>Classe</th><th>Contact</th><th>Inscrit le</th><th>Séances</th><th>Dernière venue</th><th></th></tr></thead><tbody id="etDetail"></tbody></table>
+        </div>
+      </div>
+    </div>
     <div class="panel hidden" id="tab-journal">
       <div class="card">
         <p class="small muted" style="margin-top:0;">Toutes les actions du bureau, de la plus récente à la plus ancienne. Visible uniquement par l'administrateur ; conservé un an. Les votes et les actions des simples membres ne sont jamais enregistrés ici.</p>
@@ -256,13 +287,29 @@ import Base from '../layouts/Base.astro';
       </div>
     </div>
     <div class="panel hidden" id="tab-msg"><div class="card" style="overflow:auto;"><table class="table" id="msgTable"><thead><tr><th>Date</th><th>De</th><th>Sujet</th><th>Message</th><th></th></tr></thead><tbody></tbody></table></div></div>
-    <div class="panel hidden" id="tab-membres"><div class="card" style="overflow:auto;"><p class="small muted">Seul un <strong>admin</strong> peut changer les rôles, bannir ou supprimer un compte. Le rôle « bureau » donne accès à cette page. Un compte banni ne peut plus se connecter. Le <strong>poste</strong> (Président·e…) s'affiche à côté du nom partout sur le site et met à jour automatiquement la page « Qui sommes-nous » ; donner un poste donne aussi accès à l'espace bureau. Un poste n'a qu'un titulaire : l'attribuer à quelqu'un le retire au précédent. Les admins peuvent télécharger le certificat de membre de chacun (colonne « Certificat »).</p><table class="table" id="memTable"><thead><tr><th>Nom</th><th>Classe</th><th>Contact</th><th>Inscrit le</th><th>Rôle</th><th>Poste au bureau</th><th class="cert-col">Certificat</th><th></th></tr></thead><tbody></tbody></table></div></div>
+    <div class="panel hidden" id="tab-membres"><div class="card" style="overflow:auto;"><p class="small muted">Seul un <strong>admin</strong> peut changer les rôles, bannir ou supprimer un compte. Le rôle « bureau » donne accès à cette page. Un compte banni ne peut plus se connecter. Le <strong>poste</strong> (Président·e…) s'affiche à côté du nom partout sur le site et met à jour automatiquement la page « Qui sommes-nous » ; donner un poste donne aussi accès à l'espace bureau. Un poste n'a qu'un titulaire : l'attribuer à quelqu'un le retire au précédent. Les admins peuvent télécharger le certificat de membre de chacun (colonne « Certificat »).</p><table class="table" id="memTable"><thead><tr><th>Nom</th><th>Classe</th><th class="admin-only">Contact</th><th>Inscrit le</th><th>Rôle</th><th>Poste au bureau</th><th class="cert-col">Certificat</th><th></th></tr></thead><tbody></tbody></table></div></div>
   </div></section>
   <section class="section" id="denied" style="display:none;"><div class="container narrow center"><h2>Accès réservé</h2><p class="muted">Cette page est réservée aux membres du bureau.</p><a class="btn btn-outline" href="/compte">Retour à mon espace</a></div></section>
 </Base>
 <style is:global>
   .bu-menu { display: grid; gap: 34px; }
   .bu-group-t { font-size: 1rem; font-weight: 800; color: var(--rouge); margin: 0 0 10px; letter-spacing: 0; }
+  .et-kpi { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+  .et-k { border: 3px solid var(--nuit); padding: 14px 16px; display: grid; gap: 2px; }
+  .et-k strong { font-size: 1.9rem; line-height: 1; }
+  .et-k span { font-size: 0.85rem; color: var(--gris); }
+  .et-niv th { background: var(--nuit); color: #fff; text-align: left; }
+  .et-row { cursor: pointer; }
+  .et-row:hover td, .et-row:focus td { background: var(--pierre); }
+  .et-row:focus { outline: 3px solid var(--rouge); outline-offset: -3px; }
+  .et-bar { display: inline-block; height: 10px; width: calc(var(--w) * 0.9); min-width: 4px; max-width: 160px; background: var(--rouge); vertical-align: middle; margin-right: 6px; }
+  #etDetailT tr.banned td { opacity: 0.55; }
+  .tn-list { display: grid; gap: 18px; }
+  .tb-outils { border-top: 2px solid var(--pierre); padding: 8px 12px; display: grid; gap: 8px; font-size: 0.9rem; }
+  .tb-outils summary { cursor: pointer; font-weight: 700; }
+  .tb-outils .form { gap: 6px; margin-top: 6px; }
+  .tb-outils input { font-size: 0.85rem; padding: 6px 8px; }
+  .tb-gagne { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
   .nb-apercu { display: grid; gap: 2px; padding: 12px 14px; border: 2px solid var(--nuit); background: var(--pierre); font-size: 0.95rem; }
   .nb-app { font-size: 0.75rem; font-weight: 800; color: var(--rouge); }
   .bu-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
@@ -335,7 +382,7 @@ import Base from '../layouts/Base.astro';
   .decide { display: grid; gap: 6px; min-width: 110px; }
   .table textarea { width: 100%; min-width: 180px; font: inherit; font-size: 0.85rem; padding: 6px; border: 2px solid var(--pierre-fonce); }
   #memTable tr.banned td { opacity: 0.55; }
-  html:not(.est-admin) #memTable .cert-col { display: none; }
+  html:not(.est-admin) #memTable .cert-col, html:not(.est-admin) .admin-only { display: none !important; }
   .ecrire { grid-template-columns: minmax(300px, 1fr) minmax(320px, 1.1fr); align-items: start; }
   @media (max-width: 900px) { .ecrire { grid-template-columns: 1fr; } }
   .mm-list { max-height: 460px; overflow-y: auto; border-top: 2px solid var(--pierre-fonce); }
@@ -370,6 +417,8 @@ import Base from '../layouts/Base.astro';
   const d = (s: string) => new Date(s).toLocaleDateString('fr-FR');
   import { initBureauPlus } from '../lib/bureau-plus';
   import { telechargerCertificat } from '../lib/certificat';
+  import { initTournoi } from '../lib/bureau-tournoi';
+  import { initEtat } from '../lib/etat';
   import postesData from '../data/postes.json';
   const POSTES = (postesData as { titre: string }[]).map((p) => p.titre);
   (async () => {
@@ -380,9 +429,16 @@ import Base from '../layouts/Base.astro';
     document.getElementById('app')!.style.display = '';
     const isAdmin = me.role === 'admin';
     document.documentElement.classList.toggle('est-admin', isAdmin);
+    // Emails et téléphones : réservés aux administrateurs (la base les refuse au reste du bureau)
+    const coords: any = isAdmin ? ((await sb.rpc('coordonnees_admin')).data || {}) : {};
+    const idx = (k: string) => new Map<string, { email: string | null; telephone: string | null }>((coords[k] || []).map((x: any) => [x.id, x]));
+    const cMem = idx('membres'), cAdh = idx('adhesions'), cSg = idx('signups'), cCand = idx('candidatures');
+    const contact = (c?: { email: string | null; telephone: string | null }) => !c ? '' : `${c.email ? `<a href="mailto:${esc(c.email)}">${esc(c.email)}</a>` : ''}${c.telephone ? `${c.email ? '<br>' : ''}<a href="tel:${esc(c.telephone)}">${esc(c.telephone)}</a>` : ''}`;
     initBureauPlus(sb, session, me as any).catch((e) => console.error(e));
+    initTournoi(sb, session).catch((e) => console.error(e));
     if (isAdmin) {
       document.getElementById('buAdminGroup')!.classList.remove('hidden');
+      initEtat(sb).catch((e) => console.error(e));
       const { data: jn } = await sb.from('journal').select('*').order('at', { ascending: false }).limit(1000);
       const lignes = (jn || []) as any[];
       const qui = document.getElementById('jnQui') as HTMLSelectElement;
@@ -417,8 +473,8 @@ import Base from '../layouts/Base.astro';
     // Stats
     const [{ data: st }, { count: nCand }, { count: nMem }, { count: nMsg }] = await Promise.all([
       sb.from('newsletter_stats').select('*').single(),
-      sb.from('candidatures').select('*', { count: 'exact', head: true }).in('statut', ['nouvelle', 'en_cours']),
-      sb.from('adhesions').select('*', { count: 'exact', head: true }),
+      sb.from('candidatures').select('id', { count: 'exact', head: true }).in('statut', ['nouvelle', 'en_cours']),
+      sb.from('adhesions').select('id', { count: 'exact', head: true }),
       sb.from('contact_messages').select('*', { count: 'exact', head: true }).eq('traite', false),
     ]);
     document.getElementById('sAbo')!.textContent = String(st?.confirmes ?? 0);
@@ -433,7 +489,7 @@ import Base from '../layouts/Base.astro';
     const candMsg = document.getElementById('candMsg')!;
     const posteOf = (c: any) => c.type === 'bureau' ? `<strong>${esc(c.poste || 'Tout poste')}</strong>` : '<span class="pill">membre</span>';
     const motivOf = (c: any) => `${esc(c.motivation)}${c.experience ? `<br><em class="muted">Exp. : ${esc(c.experience)}</em>` : ''}${c.disponibilites ? `<br><span class="muted">Dispo : ${esc(c.disponibilites)}</span>` : ''}`;
-    const who = (c: any) => `<strong>${esc(c.prenom)} ${esc(c.nom)}</strong><br><span class="muted">${esc(c.classe)}<br><a href="mailto:${esc(c.email)}">${esc(c.email)}</a>${c.profiles?.telephone ? `<br><a href="tel:${esc(c.profiles.telephone)}">${esc(c.profiles.telephone)}</a>` : ''}</span>`;
+    const who = (c: any) => `<strong>${esc(c.prenom)} ${esc(c.nom)}</strong><br><span class="muted">${esc(c.classe)}${isAdmin ? `<br>${contact(cCand.get(c.id))}` : ''}</span>`;
     async function decide(id: string, statut: string, note?: string) {
       const r = await postJSON<{ emailed: boolean; warning?: string }>('/api/candidature-decision', { id, statut, note }, session.access_token);
       if (!r.ok) { candMsg.innerHTML = `<div class="alert alert-err">${esc(r.error)}</div>`; return false; }
@@ -441,7 +497,7 @@ import Base from '../layouts/Base.astro';
       return true;
     }
     async function loadCands() {
-      const { data: cands } = await sb.from('candidatures').select('*, profiles(telephone)').order('created_at', { ascending: false });
+      const { data: cands } = await sb.from('candidatures').select('id, user_id, type, poste, prenom, nom, classe, motivation, experience, disponibilites, statut, note_bureau, created_at, decided_at').order('created_at', { ascending: false });
       const open = (cands || []).filter((c: any) => c.statut === 'nouvelle' || c.statut === 'en_cours');
       const done = (cands || []).filter((c: any) => c.statut === 'acceptee' || c.statut === 'refusee').sort((a: any, b: any) => (b.decided_at || b.created_at).localeCompare(a.decided_at || a.created_at));
       document.getElementById('sCand')!.textContent = String(open.length);
@@ -453,7 +509,7 @@ import Base from '../layouts/Base.astro';
       tb.querySelectorAll<HTMLButtonElement>('.dec').forEach((b) => b.addEventListener('click', async () => {
         const c: any = open.find((x: any) => x.id === b.dataset.id); const s0 = b.dataset.s!;
         const note = (tb.querySelector(`.note[data-id="${b.dataset.id}"]`) as HTMLTextAreaElement).value;
-        if (s0 !== 'en_cours' && !confirm(`${s0 === 'acceptee' ? 'Accepter' : 'Refuser'} la candidature de ${c.prenom} ${c.nom} ?\nUn email automatique lui sera envoyé à ${c.email}${note.trim() ? ' avec ton message' : ''}.`)) return;
+        if (s0 !== 'en_cours' && !confirm(`${s0 === 'acceptee' ? 'Accepter' : 'Refuser'} la candidature de ${c.prenom} ${c.nom} ?\nUn email automatique lui sera envoyé${note.trim() ? ' avec ton message' : ''}.`)) return;
         b.disabled = true; if (await decide(b.dataset.id!, s0, note)) loadCands(); else b.disabled = false;
       }));
       tb.querySelectorAll<HTMLTextAreaElement>('.note').forEach((t) => t.addEventListener('change', async () => { await sb.from('candidatures').update({ note_bureau: t.value.trim() || null }).eq('id', t.dataset.id); }));
@@ -498,17 +554,18 @@ import Base from '../layouts/Base.astro';
     }
     await listNl();
     document.getElementById('exportSubs')!.addEventListener('click', async () => {
-      const { data } = await sb.from('newsletter_subscribers').select('email, confirmed_at').eq('confirmed', true).is('unsubscribed_at', null);
-      const csv = 'email;confirme_le\n' + (data || []).map((s) => `${s.email};${s.confirmed_at?.slice(0, 10) || ''}`).join('\n');
+      const { data, error } = await sb.rpc('newsletter_export_admin');
+      if (error) { alert('Export réservé aux administrateurs.'); return; }
+      const csv = 'email;confirme_le\n' + ((data as any[]) || []).map((s) => `${s.email};${s.confirmed_at?.slice(0, 10) || ''}`).join('\n');
       const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); a.download = 'abonnes-newsletter.csv'; a.click();
     });
 
     // Adhésions
-    const { data: adh } = await sb.from('adhesions').select('*').order('created_at', { ascending: false });
-    document.querySelector('#adhTable tbody')!.innerHTML = (adh || []).map((a) => `<tr><td>${d(a.created_at)}</td><td><strong>${esc(a.prenom)} ${esc(a.nom)}</strong><br><a href="mailto:${esc(a.email)}">${esc(a.email)}</a>${a.telephone ? `<br><a href="tel:${esc(a.telephone)}">${esc(a.telephone)}</a>` : ''}${a.user_id ? ' <span class="pill">compte</span>' : ''}</td><td>${esc(a.classe)}</td><td>${(a.interets || []).map((i: string) => `<span class="pill">${esc(i)}</span>`).join(' ')}</td><td class="motiv">${esc(a.message || '')}</td></tr>`).join('') || '<tr><td colspan="5" class="muted">Aucune adhésion pour le moment.</td></tr>';
+    const { data: adh } = await sb.from('adhesions').select('id, prenom, nom, classe, interets, message, user_id, created_at').order('created_at', { ascending: false });
+    document.querySelector('#adhTable tbody')!.innerHTML = (adh || []).map((a) => `<tr><td>${d(a.created_at)}</td><td><strong>${esc(a.prenom)} ${esc(a.nom)}</strong>${isAdmin ? `<br>${contact(cAdh.get(a.id))}` : ''}${a.user_id ? ' <span class="pill">compte</span>' : ''}</td><td>${esc(a.classe)}</td><td>${(a.interets || []).map((i: string) => `<span class="pill">${esc(i)}</span>`).join(' ')}</td><td class="motiv">${esc(a.message || '')}</td></tr>`).join('') || '<tr><td colspan="5" class="muted">Aucune adhésion pour le moment.</td></tr>';
     document.getElementById('exportAdh')!.addEventListener('click', () => {
       const q = (v: unknown) => `"${String(v ?? '').replace(/"/g, '""')}"`;
-      const csv = 'date;prenom;nom;classe;email;telephone;interets;message\n' + (adh || []).map((a) => [a.created_at.slice(0, 10), a.prenom, a.nom, a.classe, a.email, a.telephone, (a.interets || []).join(', '), a.message].map(q).join(';')).join('\n');
+      const csv = (isAdmin ? 'date;prenom;nom;classe;email;telephone;interets;message\n' : 'date;prenom;nom;classe;interets;message\n') + (adh || []).map((a: any) => [a.created_at.slice(0, 10), a.prenom, a.nom, a.classe, ...(isAdmin ? [cAdh.get(a.id)?.email, cAdh.get(a.id)?.telephone] : []), (a.interets || []).join(', '), a.message].map(q).join(';')).join('\n');
       const link = document.createElement('a'); link.href = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv' })); link.download = 'adhesions-parlement-jpv.csv'; link.click();
     });
 
@@ -556,12 +613,12 @@ import Base from '../layouts/Base.astro';
     async function loadEvents() {
       const [{ data: evs }, { data: regs }] = await Promise.all([
         sb.from('events').select('*').order('starts_at', { ascending: false }),
-        sb.from('event_signups').select('event_key, reponse, camp, prenom, nom, classe, email, telephone').order('created_at'),
+        sb.from('event_signups').select('id, event_key, reponse, camp, prenom, nom, classe').order('created_at'),
       ]);
       const by: Record<string, any[]> = {};
       (regs || []).forEach((r: any) => (by[r.event_key] ||= []).push(r));
       const now = Date.now();
-      const list = (rows: any[]) => rows.length ? rows.map((p) => `${esc(p.prenom)} ${esc(p.nom)} (${esc(p.classe)}) <a href="mailto:${esc(p.email)}">${esc(p.email)}</a>${p.telephone ? ` · <a href="tel:${esc(p.telephone)}">${esc(p.telephone)}</a>` : ''}`).join('<br>') : '<span class="muted">personne</span>';
+      const list = (rows: any[]) => rows.length ? rows.map((p) => `${esc(p.prenom)} ${esc(p.nom)} (${esc(p.classe)})${isAdmin && cSg.get(p.id) ? ` · ${contact(cSg.get(p.id)).replace('<br>', ' · ')}` : ''}`).join('<br>') : '<span class="muted">personne</span>';
       const box = document.getElementById('inscr')!;
       box.innerHTML = (evs || []).map((ev: any) => {
         const rs = by[ev.id] || [], oui = rs.filter((r) => r.reponse === 'oui'), non = rs.filter((r) => r.reponse === 'non');
@@ -609,7 +666,7 @@ import Base from '../layouts/Base.astro';
       box.querySelectorAll<HTMLButtonElement>('.ev-csv').forEach((b) => b.addEventListener('click', () => {
         const ev: any = (evs || []).find((x: any) => x.id === b.dataset.id); const rs = by[b.dataset.id!] || [];
         const q = (v: unknown) => `"${String(v ?? '').replace(/"/g, '""')}"`;
-        const csv = 'reponse;camp;prenom;nom;classe;email;telephone\n' + rs.map((r: any) => [r.reponse === 'oui' ? 'vient' : 'ne vient pas', r.camp || '', r.prenom, r.nom, r.classe, r.email, r.telephone].map(q).join(';')).join('\n');
+        const csv = (isAdmin ? 'reponse;camp;prenom;nom;classe;email;telephone\n' : 'reponse;camp;prenom;nom;classe\n') + rs.map((r: any) => [r.reponse === 'oui' ? 'vient' : 'ne vient pas', r.camp || '', r.prenom, r.nom, r.classe, ...(isAdmin ? [cSg.get(r.id)?.email, cSg.get(r.id)?.telephone] : [])].map(q).join(';')).join('\n');
         const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv' })); a.download = `reponses-${(ev?.title || 'evenement').toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 40)}.csv`; a.click();
       }));
     }
@@ -623,18 +680,18 @@ import Base from '../layouts/Base.astro';
 
     // Écrire aux membres
     {
-      const { data: people } = await sb.from('adhesions').select('id, prenom, nom, classe, email, interets').order('nom');
+      const { data: people } = await sb.from('adhesions').select('id, prenom, nom, classe, interets').order('nom');
       const all = people || [];
       const chosen = new Set<string>();
       let filter = '', tag = '';
       const tags = [...new Set(all.flatMap((a: any) => a.interets || []))].sort();
       const fBox = document.getElementById('mmFilters')!;
       fBox.innerHTML = ['Tous', ...tags].map((t, i) => `<button class="pill mm-tag${i === 0 ? ' active' : ''}" data-t="${i === 0 ? '' : esc(t)}" type="button">${esc(t)}</button>`).join('');
-      const visible = () => all.filter((a: any) => (!tag || (a.interets || []).includes(tag)) && (!filter || `${a.prenom} ${a.nom} ${a.classe} ${a.email}`.toLowerCase().includes(filter)));
+      const visible = () => all.filter((a: any) => (!tag || (a.interets || []).includes(tag)) && (!filter || `${a.prenom} ${a.nom} ${a.classe}`.toLowerCase().includes(filter)));
       const count = () => (document.getElementById('mmCount')!.textContent = `${chosen.size} sélectionné${chosen.size > 1 ? 's' : ''}`);
       const paint = () => {
         const v = visible();
-        document.getElementById('mmList')!.innerHTML = v.map((a: any) => `<label class="mm-row"><input type="checkbox" value="${a.id}" ${chosen.has(a.id) ? 'checked' : ''} /><span><strong>${esc(a.prenom)} ${esc(a.nom)}</strong> <span class="muted">${esc(a.classe)}</span><br><span class="small muted">${esc(a.email)}</span></span></label>`).join('') || '<p class="muted small">Aucun membre ne correspond.</p>';
+        document.getElementById('mmList')!.innerHTML = v.map((a: any) => `<label class="mm-row"><input type="checkbox" value="${a.id}" ${chosen.has(a.id) ? 'checked' : ''} /><span><strong>${esc(a.prenom)} ${esc(a.nom)}</strong> <span class="muted">${esc(a.classe)}</span></span></label>`).join('') || '<p class="muted small">Aucun membre ne correspond.</p>';
         document.querySelectorAll<HTMLInputElement>('#mmList input').forEach((c) => c.addEventListener('change', () => { c.checked ? chosen.add(c.value) : chosen.delete(c.value); count(); }));
         count();
       };
@@ -667,14 +724,13 @@ import Base from '../layouts/Base.astro';
     // Membres : rôles et bannissement
     async function loadMembers() {
       const [{ data: mems }, { data: adhs }] = await Promise.all([
-        sb.from('profiles').select('*').order('created_at', { ascending: false }),
-        sb.from('adhesions').select('user_id, email').not('user_id', 'is', null),
+        sb.from('profiles').select('id, prenom, nom, classe, role, created_at, banni, poste').order('created_at', { ascending: false }),
+        Promise.resolve({ data: [] as any[] }),
       ]);
-      const mail = new Map((adhs || []).map((a: any) => [a.user_id, a.email]));
       const tbody = document.querySelector('#memTable tbody')!;
       tbody.innerHTML = (mems || []).map((p: any) => `<tr class="${p.banni ? 'banned' : ''}">
         <td><strong>${esc(p.prenom)} ${esc(p.nom)}</strong>${p.banni ? ' <span class="pill pill-gold">banni</span>' : ''}</td><td>${esc(p.classe || '')}</td>
-        <td class="small">${mail.get(p.id) ? `<a href="mailto:${esc(mail.get(p.id))}">${esc(mail.get(p.id))}</a>` : ''}${p.telephone ? `<br><a href="tel:${esc(p.telephone)}">${esc(p.telephone)}</a>` : ''}</td>
+        <td class="small admin-only">${contact(cMem.get(p.id))}</td>
         <td>${d(p.created_at)}</td>
         <td>${isAdmin && p.id !== session.user.id && !p.banni ? `<select class="role" data-id="${p.id}">${['membre', 'bureau', 'admin'].map((r) => `<option ${r === p.role ? 'selected' : ''}>${r}</option>`).join('')}</select>` : `<span class="pill">${p.role}</span>`}</td>
         <td>${isAdmin && !p.banni ? `<select class="poste-sel" data-id="${p.id}"><option value="">—</option>${POSTES.map((x) => `<option ${x === p.poste ? 'selected' : ''}>${esc(x)}</option>`).join('')}</select>` : (p.poste ? `<span class="poste-badge" style="margin:0">${esc(p.poste)}</span>` : '')}</td>

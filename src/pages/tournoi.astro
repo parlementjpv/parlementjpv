@@ -1,0 +1,77 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Tournoi d'éloquence" description="Le tournoi d'éloquence du Parlement JPV : inscriptions, tableau des duels et champion.">
+  <div class="page-head"><div class="container">
+    <span class="eyebrow">Tournoi d'éloquence</span>
+    <h1>Un contre un, jusqu'à la finale</h1>
+    <p class="lead">Chaque duel oppose deux orateurs sur un sujet tiré au sort. Le vainqueur passe au tour suivant, jusqu'à la finale.</p>
+  </div></div>
+  <section class="section"><div class="container" id="tn"><p class="muted">Chargement…</p></div></section>
+</Base>
+
+<style is:global>
+  .tn-bloc { display: grid; gap: 22px; margin-bottom: 56px; }
+  .tn-tete { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+  .tn-tete h2 { margin: 0; }
+  .tn-ins { border: 3px solid var(--nuit); padding: 20px 24px; display: grid; gap: 10px; }
+  .tn-parts { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tn-anciens summary { cursor: pointer; font-weight: 700; }
+</style>
+
+<script>
+  import { getSupabase, supabaseConfigured } from '../lib/supabase';
+  import { esc } from '../lib/events';
+  import { u } from '../lib/url';
+  import { tableauHtml, monDuel, elimine, fmtQuand, nomTour, type Tournoi } from '../lib/tournoi';
+  const box = document.getElementById('tn')!;
+  const dateFr = (d: string) => new Date(d).toLocaleString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }).replace(':', 'h');
+
+  async function charger() {
+    if (!supabaseConfigured) return;
+    const sb = getSupabase();
+    const [{ data }, { data: s }] = await Promise.all([sb.rpc('tournois_liste'), sb.auth.getSession()]);
+    const session = s.session;
+    const ts = (data as Tournoi[]) || [];
+    if (!ts.length) { box.innerHTML = '<p>Aucun tournoi pour le moment. Le bureau annoncera le prochain ici et dans l\'application.</p>'; return; }
+    const actifs = ts.filter((t) => t.statut !== 'termine'), anciens = ts.filter((t) => t.statut === 'termine');
+    const bloc = (t: Tournoi) => {
+      const moi = session?.user.id;
+      const ouvert = t.statut === 'inscriptions' && (!t.fin_inscriptions || new Date(t.fin_inscriptions) > new Date());
+      const complet = t.max != null && t.inscrits >= t.max;
+      let ins = '';
+      if (t.statut === 'inscriptions') {
+        const action = !ouvert ? '<p class="muted">Les inscriptions sont closes : le tirage au sort arrive.</p>'
+          : !session ? `<p>Connecte-toi pour t'inscrire.</p><a class="btn btn-primary btn-sm" href="${u('/connexion')}?next=${encodeURIComponent(u('/tournoi'))}">Se connecter</a>`
+          : t.moi_inscrit ? `<p><strong>Tu es inscrit.</strong> Tu recevras ton premier duel par email et notification après le tirage au sort.</p><button class="btn btn-outline btn-sm tn-act" data-id="${t.id}" data-v="0" type="button">Me désinscrire</button>`
+          : complet ? '<p class="muted">Le tableau est complet.</p>'
+          : `<button class="btn btn-primary tn-act" data-id="${t.id}" data-v="1" type="button">Je m'inscris au tournoi</button>`;
+        ins = `<div class="tn-ins"><p style="margin:0;"><strong>${t.inscrits}</strong> inscrit${t.inscrits > 1 ? 's' : ''}${t.max ? ` sur ${t.max} places` : ''}${t.fin_inscriptions ? ` · inscriptions jusqu'au ${esc(dateFr(t.fin_inscriptions))}` : ''}</p>
+          ${t.participants?.length ? `<div class="tn-parts">${t.participants.map((p) => `<span class="pill">${esc(p.nom)}</span>`).join('')}</div>` : ''}
+          ${action}<div class="tn-msg" aria-live="polite"></div></div>`;
+      }
+      let perso = '';
+      if (moi && t.statut === 'en_cours') {
+        const m = monDuel(t, moi);
+        if (m) { const nb = Math.max(...t.matchs.map((x) => x.tour)); const adv = m.a === moi ? m.b_nom : m.a_nom;
+          perso = `<div class="tn-ins"><p style="margin:0;"><strong>Ton prochain duel (${esc(nomTour(m.tour, nb).toLowerCase())}) : contre ${esc(adv || '?')}</strong></p>${m.sujet ? `<p style="margin:0;">Sujet : « ${esc(m.sujet)} »</p>` : '<p class="muted" style="margin:0;">Le sujet sera annoncé par le bureau.</p>'}${m.quand ? `<p style="margin:0;">${esc(fmtQuand(m.quand))}${m.lieu ? ` · ${esc(m.lieu)}` : ''}</p>` : ''}</div>`; }
+        else if (elimine(t, moi)) perso = '<p class="muted">Ton parcours s\'arrête ici. Merci d\'avoir défendu tes idées !</p>';
+      }
+      const champion = t.statut === 'termine' && t.champion ? `<div class="tb-champion"><span class="small">Champion·ne du tournoi</span><strong>${esc(t.champion)}</strong></div>` : '';
+      return `<div class="tn-bloc"><div class="tn-tete"><h2>${esc(t.nom)}</h2><span class="pill">${t.statut === 'inscriptions' ? 'Inscriptions' : t.statut === 'en_cours' ? 'En cours' : 'Terminé'}</span></div>
+        ${t.description ? `<p style="margin:0;max-width:70ch;">${esc(t.description)}</p>` : ''}${champion}${ins}${perso}${tableauHtml(t, { moi })}</div>`;
+    };
+    box.innerHTML = actifs.map(bloc).join('') + (anciens.length ? (actifs.length ? `<details class="tn-anciens"><summary>Tournois précédents (${anciens.length})</summary><div class="mt-2">${anciens.map(bloc).join('')}</div></details>` : anciens.map(bloc).join('')) : '');
+    box.querySelectorAll<HTMLButtonElement>('.tn-act').forEach((b) => b.addEventListener('click', async () => {
+      b.disabled = true;
+      const { error } = await sb.rpc('tournoi_inscription', { p_tournoi: b.dataset.id, p_inscrire: b.dataset.v === '1' });
+      if (error) {
+        const M: Record<string, string> = { inscriptions_closes: 'Les inscriptions sont closes.', complet: 'Le tableau est complet.', reserve_aux_membres: 'Réservé aux membres du Parlement.' };
+        (b.parentElement!.querySelector('.tn-msg') as HTMLElement).innerHTML = `<div class="alert alert-err">${M[Object.keys(M).find((k) => error.message.includes(k)) || ''] || 'Action impossible.'}</div>`;
+        b.disabled = false; return;
+      }
+      charger();
+    }));
+  }
+  charger();
+</script>

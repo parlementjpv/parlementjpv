@@ -61,3 +61,6 @@ verify_jwt = false
 
 [functions.notif-bureau]
 verify_jwt = false
+
+[functions.tournoi-notif]
+verify_jwt = false

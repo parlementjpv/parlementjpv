@@ -1,0 +1,28 @@
+---
+// Classe en deux temps : niveau, puis numéro de la classe (pour les élèves)
+interface Props { prefix?: string; required?: boolean }
+const { prefix = '', required = true } = Astro.props;
+---
+<div class="form-row classe-champs" data-classe>
+  <div class="field"><label for={`${prefix}niveau`}>Classe</label>
+    <select id={`${prefix}niveau`} name="niveau" required={required}>
+      <option value="">Choisir…</option>
+      <option>Seconde</option><option>Première</option><option>Terminale</option>
+      <option value="Personnel">Personnel du lycée</option><option>Autre</option>
+    </select>
+  </div>
+  <div class="field classe-num"><label for={`${prefix}classe_num`}>Numéro de la classe</label>
+    <select id={`${prefix}classe_num`} name="classe_num">
+      <option value="">Choisir…</option>
+      {Array.from({ length: 15 }, (_, i) => <option value={i + 1}>{i + 1}</option>)}
+    </select>
+  </div>
+</div>
+<script>
+  // Le numéro n'est demandé qu'aux élèves (Seconde, Première, Terminale)
+  document.querySelectorAll<HTMLElement>('[data-classe]').forEach((g) => {
+    const niv = g.querySelector<HTMLSelectElement>('select[name="niveau"]')!, num = g.querySelector<HTMLSelectElement>('select[name="classe_num"]')!;
+    const maj = () => { const eleve = ['Seconde', 'Première', 'Terminale'].includes(niv.value); (num.closest('.classe-num') as HTMLElement).hidden = !eleve; num.required = eleve; if (!eleve) num.value = ''; };
+    niv.addEventListener('change', maj); g.addEventListener('classe:maj', maj); maj();
+  });
+</script>

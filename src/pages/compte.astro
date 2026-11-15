@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import ClasseChamps from '../components/ClasseChamps.astro';
 ---
 <Base title="Mon espace" noindex>
   <div class="page-head"><div class="container flex between">
@@ -12,6 +13,7 @@ import Base from '../layouts/Base.astro';
       <div class="card hidden" id="welcome"></div>
       <div class="card mo-card hidden" id="moVote"></div>
       <div class="card mo-card hidden" id="moLaureat"></div>
+      <div class="card mo-card hidden" id="tnCard"></div>
       <div class="card">
         <h3>Ma candidature</h3>
         <div id="cand"><p class="muted small">Chargement…</p></div>
@@ -67,7 +69,7 @@ import Base from '../layouts/Base.astro';
             <div class="field"><label for="nom">Nom</label><input id="nom" name="nom" required /></div>
           </div>
           <div class="form-row">
-            <div class="field"><label for="classe">Classe</label><input id="classe" name="classe" /></div>
+            <ClasseChamps prefix="p-" />
             <div class="field"><label for="telephone">Téléphone</label><input id="telephone" name="telephone" type="tel" autocomplete="tel" inputmode="tel" pattern="[+0-9 .()\-]{8,20}" placeholder="06 12 34 56 78" /></div>
           </div>
           <div class="field"><label>Email</label><input id="email" disabled /></div>
@@ -141,6 +143,8 @@ import Base from '../layouts/Base.astro';
   import { etatPush, activerPush, desactiverPush, estApp } from '../lib/push';
   import { telechargerCertificat } from '../lib/certificat';
   import { demanderSignature } from '../lib/signature';
+  import { lireClasse, remplirClasse } from '../lib/classe';
+  import { monDuel, elimine, nomTour, fmtQuand, type Tournoi } from '../lib/tournoi';
   (async () => {
     const session = await requireSession(); if (!session) return;
     const sb = getSupabase();
@@ -229,15 +233,16 @@ import Base from '../layouts/Base.astro';
     document.getElementById('cancelInfos')!.addEventListener('click', () => toggleInfos(false));
     (f.elements.namedItem('prenom') as HTMLInputElement).value = p?.prenom || '';
     (f.elements.namedItem('nom') as HTMLInputElement).value = p?.nom || '';
-    (f.elements.namedItem('classe') as HTMLInputElement).value = p?.classe || '';
-    (f.elements.namedItem('telephone') as HTMLInputElement).value = p?.telephone || '';
+    remplirClasse(f, (p as any)?.niveau, (p as any)?.classe_num);
+    sb.rpc('mes_coordonnees').then(({ data }) => { (f.elements.namedItem('telephone') as HTMLInputElement).value = data?.telephone || ''; });
     (document.getElementById('email') as HTMLInputElement).value = session.user.email || '';
     f.addEventListener('submit', async (e) => {
       e.preventDefault(); const fd = new FormData(f);
       if (!f.checkValidity()) { f.reportValidity(); return; }
       const tel = String(fd.get('telephone') || '').trim() || null;
-      const { error } = await sb.from('profiles').update({ prenom: fd.get('prenom'), nom: fd.get('nom'), classe: fd.get('classe'), telephone: tel }).eq('id', session.user.id);
-      if (!error) await sb.from('adhesions').update({ prenom: fd.get('prenom'), nom: fd.get('nom'), classe: fd.get('classe') || '?', telephone: tel }).eq('user_id', session.user.id);
+      const cl = lireClasse(fd);
+      const { error } = await sb.from('profiles').update({ prenom: fd.get('prenom'), nom: fd.get('nom'), classe: cl.classe || null, niveau: cl.niveau || null, classe_num: cl.classe_num, telephone: tel }).eq('id', session.user.id);
+      if (!error) await sb.from('adhesions').update({ prenom: fd.get('prenom'), nom: fd.get('nom'), classe: cl.classe || '?', telephone: tel }).eq('user_id', session.user.id);
       if (error) { document.getElementById('pmsg')!.innerHTML = `<div class="alert alert-err">${error.message}</div>`; return; }
       toggleInfos(false); editBtn.insertAdjacentHTML('afterend', '<span class="small muted" id="savedNote" style="margin-left:10px;">Informations enregistrées.</span>'); setTimeout(() => document.getElementById('savedNote')?.remove(), 4000);
     });
@@ -269,6 +274,23 @@ import Base from '../layouts/Base.astro';
       const v = ((data as any[]) || []).find((x) => x.candidats.length);
       if (!v) return;
       rendreVote(v); moVote.classList.remove('hidden');
+    });
+    // Tournoi d'éloquence : inscriptions ouvertes ou prochain duel
+    sb.rpc('tournois_liste').then(({ data }) => {
+      const ts = (data as Tournoi[]) || [], moi = session.user.id, el = document.getElementById('tnCard')!;
+      const enCours = ts.find((t) => t.statut === 'en_cours' && t.matchs.some((m) => m.a === moi || m.b === moi));
+      const ouvert = ts.find((t) => t.statut === 'inscriptions' && (!t.fin_inscriptions || new Date(t.fin_inscriptions) > new Date()));
+      if (enCours) {
+        const m = monDuel(enCours, moi); const nb = Math.max(...enCours.matchs.map((x) => x.tour));
+        if (!m && !elimine(enCours, moi)) return;
+        el.innerHTML = `<p class="mo-k">Tournoi d'éloquence</p><h3>${m ? `${esc(nomTour(m.tour, nb))} : contre ${esc((m.a === moi ? m.b_nom : m.a_nom) || '?')}` : 'Ton parcours s\'arrête ici'}</h3>
+          ${m ? `<p class="small muted">${m.sujet ? `Sujet : « ${esc(m.sujet)} »` : 'Le sujet sera annoncé par le bureau.'}${m.quand ? `<br>${esc(fmtQuand(m.quand))}${m.lieu ? ` · ${esc(m.lieu)}` : ''}` : ''}</p>` : '<p class="small muted">Merci d\'avoir défendu tes idées. Suis la suite du tournoi.</p>'}
+          <a class="btn btn-outline btn-sm" href="${u('/tournoi')}">Voir le tableau</a>`;
+      } else if (ouvert) {
+        el.innerHTML = `<p class="mo-k">Tournoi d'éloquence</p><h3>${esc(ouvert.nom)}</h3><p class="small muted">${ouvert.moi_inscrit ? 'Tu es inscrit. Tu recevras ton premier duel après le tirage au sort.' : `Inscriptions ouvertes${ouvert.fin_inscriptions ? ` jusqu'au ${new Date(ouvert.fin_inscriptions).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}` : ''} · ${ouvert.inscrits} inscrit${ouvert.inscrits > 1 ? 's' : ''}.`}</p>
+          <a class="btn ${ouvert.moi_inscrit ? 'btn-outline' : 'btn-primary'} btn-sm" href="${u('/tournoi')}">${ouvert.moi_inscrit ? 'Voir le tournoi' : 'Je m\'inscris'}</a>`;
+      } else return;
+      el.classList.remove('hidden');
     });
     sb.rpc('derniers_meilleurs_orateurs', { p_limite: 1 }).then(({ data }) => {
       const d = ((data as any[]) || [])[0];
@@ -334,7 +356,7 @@ import Base from '../layouts/Base.astro';
           b.disabled = true;
           const { error } = rep.has(id)
             ? await sb.from('event_signups').update({ reponse: r }).eq('event_key', id).eq('user_id', session.user.id)
-            : await sb.from('event_signups').insert({ event_key: id, reponse: r, user_id: session.user.id, prenom: p?.prenom || '?', nom: p?.nom || '?', classe: p?.classe || '?', telephone: p?.telephone || null, email: session.user.email });
+            : await sb.from('event_signups').insert({ event_key: id, reponse: r, user_id: session.user.id, prenom: p?.prenom || '?', nom: p?.nom || '?', classe: p?.classe || '?', email: session.user.email });
           if (error) { b.disabled = false; alert(/camps_complets/.test(error.message) ? 'Tous les camps sont complets pour cet événement.' : /evenement_annule/.test(error.message) ? 'Cet événement a été annulé.' : error.code === '23505' ? 'Ton adresse a déjà répondu à cet événement sans être connectée.' : "Réponse impossible : complète d'abord ton prénom, ton nom et ta classe."); return; }
           const { data: row } = await sb.from('event_signups').select('camp, jeton').eq('event_key', id).eq('user_id', session.user.id).maybeSingle();
           rep.set(id, r); camp.set(id, row?.camp ?? null); jet.set(id, row?.jeton ?? null); paint();

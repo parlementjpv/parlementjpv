@@ -49,9 +49,12 @@ Deno.serve(async (req) => {
   const meta = b.data && typeof b.data === 'object' ? b.data : {};
   const data = {
     prenom: String(meta.prenom || '').trim().slice(0, 80), nom: String(meta.nom || '').trim().slice(0, 80), classe: String(meta.classe || '').trim().slice(0, 40),
+    niveau: ['Seconde', 'Première', 'Terminale', 'Personnel', 'Autre'].includes(meta.niveau) ? meta.niveau : '',
+    classe_num: Number.isInteger(Number(meta.classe_num)) && Number(meta.classe_num) >= 1 && Number(meta.classe_num) <= 20 ? Number(meta.classe_num) : null,
     telephone: String(meta.telephone || '').trim().slice(0, 30), interets: Array.isArray(meta.interets) ? meta.interets.map(String).slice(0, 12) : [], newsletter: !!meta.newsletter,
   };
   if (!data.prenom || !data.nom || !data.classe) return json(req, 400, { error: 'Prénom, nom et classe sont obligatoires.' });
+  if (['Seconde', 'Première', 'Terminale'].includes(data.niveau) && !data.classe_num) return json(req, 400, { error: 'Indique le numéro de ta classe.' });
   const { data: link, error } = await db.auth.admin.generateLink({ type: 'signup', email, password, options: { data, redirectTo: retour(b.redirectTo) } });
   if (error) {
     const m = error.message.toLowerCase();

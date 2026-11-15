@@ -72,9 +72,9 @@ async function initAppel(sb: SupabaseClient, session: Session) {
   if (!evs?.length) { sel.innerHTML = '<option value="">Aucune séance passée ou du jour</option>'; list.innerHTML = '<p class="muted">L\'appel sera possible le jour de la première séance.</p>'; return; }
   sel.innerHTML = evs.map((e) => `<option value="${e.id}">${esc(fmtDate(e.starts_at))} — ${esc(e.title)}</option>`).join('');
 
-  type Row = { email: string; prenom: string; nom: string; classe: string; camp: string | null; user_id: string | null; statut: string | null; inscrit: boolean };
+  type Row = { cle: string; prenom: string; nom: string; classe: string; camp: string | null; user_id: string | null; statut: string | null; inscrit: boolean };
   let rows: Row[] = [];
-  const { data: membres } = await sb.from('adhesions').select('prenom, nom, classe, email, user_id').order('nom');
+  const { data: membres } = await sb.from('adhesions').select('prenom, nom, classe, email_cle, user_id').order('nom');
 
   const paint = () => {
     const n = (s: string) => rows.filter((r) => r.statut === s).length;
@@ -88,12 +88,12 @@ async function initAppel(sb: SupabaseClient, session: Session) {
     msg.innerHTML = '';
     const ev = sel.value;
     const [{ data: sg }, { data: pr }] = await Promise.all([
-      sb.from('event_signups').select('prenom, nom, classe, email, camp, user_id').eq('event_key', ev).eq('reponse', 'oui').order('camp').order('nom'),
-      sb.from('presences').select('email, prenom, nom, classe, camp, user_id, statut').eq('event_key', ev),
+      sb.from('event_signups').select('prenom, nom, classe, email_cle, camp, user_id').eq('event_key', ev).eq('reponse', 'oui').order('camp').order('nom'),
+      sb.from('presences').select('email_cle, prenom, nom, classe, camp, user_id, statut').eq('event_key', ev),
     ]);
     const map = new Map<string, Row>();
-    (sg || []).forEach((s) => map.set(s.email.toLowerCase(), { ...s, email: s.email.toLowerCase(), statut: null, inscrit: true }));
-    (pr || []).forEach((p) => { const k = p.email.toLowerCase(); const r = map.get(k); if (r) r.statut = p.statut; else map.set(k, { ...p, email: k, inscrit: false }); });
+    (sg || []).forEach((s: any) => map.set(s.email_cle, { prenom: s.prenom, nom: s.nom, classe: s.classe, camp: s.camp, user_id: s.user_id, cle: s.email_cle, statut: null, inscrit: true }));
+    (pr || []).forEach((p: any) => { const k = p.email_cle; const r = map.get(k); if (r) r.statut = p.statut; else map.set(k, { prenom: p.prenom, nom: p.nom, classe: p.classe, camp: p.camp, user_id: p.user_id, statut: p.statut, cle: k, inscrit: false }); });
     rows = [...map.values()];
     $('apDone').textContent = pr?.length ? `Appel déjà enregistré (${pr.length} personnes) — tu peux le corriger.` : '';
     paint();
@@ -107,18 +107,18 @@ async function initAppel(sb: SupabaseClient, session: Session) {
   const q = $('apAdd') as HTMLInputElement, res = $('apAddRes');
   q.addEventListener('input', () => {
     const t = q.value.trim().toLowerCase(); if (t.length < 2) { res.innerHTML = ''; return; }
-    const found = (membres || []).filter((m) => `${m.prenom} ${m.nom} ${m.classe} ${m.email}`.toLowerCase().includes(t) && !rows.some((r) => r.email === m.email.toLowerCase())).slice(0, 6);
-    res.innerHTML = found.map((m) => `<button type="button" class="pill ap-pick" data-e="${esc(m.email)}">+ ${esc(m.prenom)} ${esc(m.nom)} (${esc(m.classe)})</button>`).join(' ') || '<span class="small muted">Aucun membre trouvé.</span>';
+    const found = (membres || []).filter((m) => `${m.prenom} ${m.nom} ${m.classe}`.toLowerCase().includes(t) && !rows.some((r) => r.cle === m.email_cle)).slice(0, 6);
+    res.innerHTML = found.map((m) => `<button type="button" class="pill ap-pick" data-e="${esc(m.email_cle)}">+ ${esc(m.prenom)} ${esc(m.nom)} (${esc(m.classe)})</button>`).join(' ') || '<span class="small muted">Aucun membre trouvé.</span>';
   });
   res.addEventListener('click', (e) => {
     const b = (e.target as HTMLElement).closest('.ap-pick') as HTMLElement | null; if (!b) return;
-    const m = (membres || []).find((x) => x.email === b.dataset.e); if (!m) return;
-    rows.push({ prenom: m.prenom, nom: m.nom, classe: m.classe, email: m.email.toLowerCase(), user_id: m.user_id, camp: null, statut: 'present', inscrit: false });
+    const m: any = (membres || []).find((x: any) => x.email_cle === b.dataset.e); if (!m) return;
+    rows.push({ prenom: m.prenom, nom: m.nom, classe: m.classe, cle: m.email_cle, user_id: m.user_id, camp: null, statut: 'present', inscrit: false });
     q.value = ''; res.innerHTML = ''; paint();
   });
 
   $('apSave').addEventListener('click', async () => {
-    const lignes = rows.filter((r) => r.statut).map((r) => ({ email: r.email, statut: r.statut, user_id: r.user_id, prenom: r.prenom, nom: r.nom, classe: r.classe }));
+    const lignes = rows.filter((r) => r.statut).map((r) => ({ cle: r.cle, statut: r.statut, user_id: r.user_id, prenom: r.prenom, nom: r.nom, classe: r.classe }));
     if (!lignes.length) { msg.innerHTML = '<div class="alert alert-err">Pointe au moins une personne.</div>'; return; }
     const reste = rows.filter((r) => !r.statut).length;
     if (reste && !confirm(`${reste} personne(s) ne sont pas pointées et ne seront pas enregistrées. Continuer ?`)) return;

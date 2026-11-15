@@ -24,7 +24,9 @@ export interface Profile {
   classe: string | null;
   role: Role;
   newsletter: boolean;
-  telephone: string | null;
+  telephone?: string | null;
+  niveau?: string | null;
+  classe_num?: number | null;
   banni: boolean;
   poste?: string | null;
   created_at: string;
