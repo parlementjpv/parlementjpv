@@ -92,3 +92,8 @@ export function page(_req: Request, dest: 'merci' | 'desinscrit' | 'erreur') {
 }
 
 export async function readJson(req: Request) { try { return await req.json(); } catch { return null; } }
+
+/** Journal des actions du bureau (lisible par l'admin). Ne bloque jamais l'action en cas d'échec. */
+export async function journal(acteur: string, categorie: string, resume: string) {
+  try { await admin().rpc('journaliser', { p_categorie: categorie, p_resume: resume, p_acteur: acteur }); } catch (e) { console.error('journal', e); }
+}

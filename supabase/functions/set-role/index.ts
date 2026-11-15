@@ -1,4 +1,4 @@
-import { admin, json, userFromRequest, cors, readJson, sendMail, layout, esc, FROM } from '../_shared/lib.ts';
+import { admin, json, userFromRequest, cors, readJson, sendMail, layout, esc, FROM, journal } from '../_shared/lib.ts';
 
 const POSTES = ['Président·e', 'Vice-président·e', 'Secrétaire général·e', 'Trésorier·e', 'Responsable Débat', 'Responsable Éloquence', 'Responsable Conférences', 'Responsable Visites', 'Responsable Communication'];
 
@@ -32,6 +32,7 @@ Deno.serve(async (req) => {
              <p style="color:#555;font-size:14px;">Le bureau du Parlement JPV</p>` }) });
       } catch (err) { console.error(err); }
     }
+    await journal(me.user.id, 'Membres', `a démis ${p.prenom} de ses fonctions${p.poste ? ` (${p.poste})` : ''}`);
     return json(req, 200, { ok: true, demis: true });
   }
 
@@ -50,6 +51,8 @@ Deno.serve(async (req) => {
     if (poste && cible.role === 'membre') maj.role = 'bureau';
     const { error } = await db.from('profiles').update(maj).eq('id', b.userId);
     if (error) return json(req, 500, { error: error.message });
+    const { data: qn } = await db.from('profiles').select('prenom, nom').eq('id', b.userId).maybeSingle();
+    await journal(me.user.id, 'Membres', poste ? `a nommé ${qn?.prenom} ${qn?.nom} ${poste}${ancien ? ` (à la place de ${ancien})` : ''}` : `a retiré le poste de ${qn?.prenom} ${qn?.nom}`);
     return json(req, 200, { ok: true, ancien, role: maj.role ?? cible.role });
   }
 
@@ -57,5 +60,7 @@ Deno.serve(async (req) => {
   if (b.userId === me.user.id && b.role !== 'admin') return json(req, 400, { error: 'Tu ne peux pas retirer ton propre rôle admin.' });
   const { error } = await db.from('profiles').update({ role: b.role, ...(b.role === 'membre' ? { poste: null } : {}) }).eq('id', b.userId);
   if (error) return json(req, 500, { error: error.message });
+  const { data: qr } = await db.from('profiles').select('prenom, nom').eq('id', b.userId).maybeSingle();
+  await journal(me.user.id, 'Membres', `a donné le rôle « ${b.role} » à ${qr?.prenom} ${qr?.nom}`);
   return json(req, 200, { ok: true });
 });

@@ -1,4 +1,4 @@
-import { admin, json, userFromRequest, cors, readJson } from '../_shared/lib.ts';
+import { admin, json, userFromRequest, cors, readJson, journal } from '../_shared/lib.ts';
 
 /** Bannir / débannir / supprimer un compte. Réservé aux admins, jamais sur soi-même. */
 Deno.serve(async (req) => {
@@ -12,6 +12,8 @@ Deno.serve(async (req) => {
   if (b.userId === me.user.id) return json(req, 400, { error: 'Tu ne peux pas faire ça sur ton propre compte.' });
 
   const db = admin();
+  const { data: cible } = await db.from('profiles').select('prenom, nom').eq('id', b.userId).maybeSingle();
+  const qui = cible ? `${cible.prenom} ${cible.nom}` : 'un compte';
   if (b.action === 'delete') {
     // Suppression définitive : données liées au compte, puis le compte (le profil suit en cascade)
     await db.from('candidatures').delete().eq('user_id', b.userId);
@@ -19,11 +21,13 @@ Deno.serve(async (req) => {
     await db.from('adhesions').delete().eq('user_id', b.userId);
     const { error } = await db.auth.admin.deleteUser(b.userId);
     if (error) return json(req, 500, { error: error.message });
+    await journal(me.user.id, 'Membres', `a supprimé le compte de ${qui}`);
     return json(req, 200, { ok: true, deleted: true });
   }
   const ban = b.action === 'ban';
   const { error } = await db.auth.admin.updateUserById(b.userId, { ban_duration: ban ? '876000h' : 'none' });
   if (error) return json(req, 500, { error: error.message });
   await db.from('profiles').update({ banni: ban, ...(ban ? { role: 'membre', poste: null } : { absences_depuis: new Date().toISOString() }) }).eq('id', b.userId);
+  await journal(me.user.id, 'Membres', ban ? `a banni ${qui}` : `a débanni ${qui}`);
   return json(req, 200, { ok: true, banni: ban });
 });

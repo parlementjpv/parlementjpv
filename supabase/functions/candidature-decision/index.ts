@@ -1,4 +1,4 @@
-import { admin, sendMail, json, userFromRequest, esc, layout, button, SITE, cors, readJson } from '../_shared/lib.ts';
+import { admin, sendMail, json, userFromRequest, esc, layout, button, SITE, cors, readJson, journal } from '../_shared/lib.ts';
 
 const STATUTS = ['nouvelle', 'en_cours', 'acceptee', 'refusee'];
 
@@ -19,6 +19,8 @@ Deno.serve(async (req) => {
   if (note !== undefined) patch.note_bureau = note || null;
   const { data: c, error } = await db.from('candidatures').update(patch).eq('id', b.id).select('*').maybeSingle();
   if (error || !c) return json(req, 404, { error: 'Candidature introuvable.' });
+  const LIB: Record<string, string> = { acceptee: 'accepté', refusee: 'refusé', en_cours: 'mis en cours', nouvelle: 'rouvert' };
+  await journal(me.user.id, 'Membres', `a ${LIB[b.statut] || b.statut} la candidature de ${c.prenom} ${c.nom}${c.poste ? ` (${c.poste})` : ''}`);
   if (!decided) return json(req, 200, { ok: true, emailed: false });
 
   const poste = c.type === 'bureau' ? (c.poste && c.poste !== 'Peu importe' ? `au poste de ${c.poste}` : 'au bureau') : "comme membre de l'instance";

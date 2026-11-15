@@ -1,4 +1,4 @@
-import { admin, sendMail, json, userFromRequest, layout, FROM, cors, readJson } from '../_shared/lib.ts';
+import { admin, sendMail, json, userFromRequest, layout, FROM, cors, readJson, journal } from '../_shared/lib.ts';
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors(req) });
@@ -36,6 +36,6 @@ Deno.serve(async (req) => {
     } catch (e) { console.error('envoi', s.email, e); failed.push(s.email); }
   }
   if (sent === 0) return json(req, 500, { error: `Aucun email n'a pu partir (${failed.length} échec${failed.length > 1 ? 's' : ''}).` });
-  if (!test) await db.from('newsletters').update({ sent_at: new Date().toISOString(), recipients: sent }).eq('id', nl.id);
+  if (!test) { await db.from('newsletters').update({ sent_at: new Date().toISOString(), recipients: sent }).eq('id', nl.id); await journal(me.user.id, 'Communication', `a envoyé la newsletter « ${nl.subject} » à ${sent} abonné${sent > 1 ? 's' : ''}`); }
   return json(req, 200, { sent, failed: failed.length, test: Boolean(test) });
 });

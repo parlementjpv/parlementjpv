@@ -1,4 +1,4 @@
-import { admin, sendMail, json, esc, layout, button, SITE, FROM, cors, readJson, userFromRequest } from '../_shared/lib.ts';
+import { admin, sendMail, json, esc, layout, button, SITE, FROM, cors, readJson, userFromRequest, journal } from '../_shared/lib.ts';
 
 // Appel d'une séance par le bureau. Au-delà du seuil d'absences non excusées, le compte est exclu
 // automatiquement ; à la dernière absence tolérée, un avertissement est envoyé.
@@ -36,5 +36,7 @@ Deno.serve(async (req) => {
       }
     } catch (e) { console.error(e); }
   }
+  const n = (s: string) => b.lignes.filter((l: any) => l.statut === s).length;
+  await journal(me.user.id, 'Séances', `a fait l'appel de « ${ev.title} » : ${n('present')} présents, ${n('absent')} absents, ${n('excuse')} excusés${notifs.some((x) => x.action === 'exclu') ? ` — suspendu${notifs.filter((x) => x.action === 'exclu').length > 1 ? 's' : ''} : ${notifs.filter((x) => x.action === 'exclu').map((x) => x.prenom).join(', ')}` : ''}`);
   return json(req, 200, { ok: true, seuil: data?.seuil, exclus: notifs.filter((n) => n.action === 'exclu').map((n) => n.prenom), avertis: notifs.filter((n) => n.action !== 'exclu').map((n) => n.prenom) });
 });

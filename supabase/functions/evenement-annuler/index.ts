@@ -1,4 +1,4 @@
-import { admin, sendMail, json, esc, layout, button, SITE, FROM, cors, readJson, userFromRequest } from '../_shared/lib.ts';
+import { admin, sendMail, json, esc, layout, button, SITE, FROM, cors, readJson, userFromRequest, journal } from '../_shared/lib.ts';
 import { quand, type Ev } from '../_shared/evenement.ts';
 
 // Annulation d'un événement : prévient automatiquement tous les inscrits
@@ -30,5 +30,6 @@ Deno.serve(async (req) => {
       envoyes++;
     } catch (e) { console.error(e); }
   }
+  await journal(me.user.id, 'Séances', `a annulé la séance « ${ev.title} »${motif ? ` (motif : ${motif.slice(0, 120)})` : ''} — ${envoyes} inscrit${envoyes > 1 ? 's' : ''} prévenu${envoyes > 1 ? 's' : ''}`);
   return json(req, 200, { ok: true, envoyes });
 });

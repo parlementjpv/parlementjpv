@@ -1,4 +1,4 @@
-import { admin, sendMail, json, esc, layout, button, FROM, cors, readJson, userFromRequest } from '../_shared/lib.ts';
+import { admin, sendMail, json, esc, layout, button, FROM, cors, readJson, userFromRequest, journal } from '../_shared/lib.ts';
 const SUPA = Deno.env.get('SUPABASE_URL')!;
 import { fiche, lienEvenement, type Ev } from '../_shared/evenement.ts';
 
@@ -41,5 +41,6 @@ Deno.serve(async (req) => {
       envoyes++;
     } catch (e) { console.error(e); echecs.push(m.email); }
   }
+  await journal(me.user.id, 'Séances', `a annoncé la séance « ${ev.title} » à ${envoyes} membre${envoyes > 1 ? 's' : ''}`);
   return json(req, 200, { ok: true, envoyes, echecs: echecs.length });
 });

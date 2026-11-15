@@ -1,4 +1,4 @@
-import { admin, sendMail, json, userFromRequest, esc, layout, BUREAU_EMAIL, cors, readJson } from '../_shared/lib.ts';
+import { admin, sendMail, json, userFromRequest, esc, layout, BUREAU_EMAIL, cors, readJson, journal } from '../_shared/lib.ts';
 
 const MAX = 100; // destinataires par envoi (Gmail : ~500 emails par jour au total)
 
@@ -33,6 +33,7 @@ Deno.serve(async (req) => {
     catch (e) { console.error('envoi', p.email, e); failed.push(p.email); }
   }
   await db.from('member_messages').insert({ subject, body, recipients: people.map((p) => p.email), sent_count: sent, sender_id: me.user.id, sender_name: from });
+  if (sent) await journal(me.user.id, 'Communication', `a écrit à ${sent} membre${sent > 1 ? 's' : ''} : « ${subject} »`);
   if (!sent) return json(req, 500, { error: "Aucun email n'a pu partir." });
   return json(req, 200, { sent, failed });
 });

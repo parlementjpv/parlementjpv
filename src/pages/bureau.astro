@@ -30,6 +30,9 @@ import Base from '../layouts/Base.astro';
       <section class="bu-group"><h2 class="bu-group-t">Entre nous</h2><div class="bu-tiles">
         <button class="bu-tile tab" data-tab="entre" type="button"><span class="bu-tile-t">Entre nous</span><span class="bu-tile-d">Tâches, discussion et notes du bureau</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
       </div></section>
+      <section class="bu-group hidden" id="buAdminGroup"><h2 class="bu-group-t">Administration</h2><div class="bu-tiles">
+        <button class="bu-tile tab" data-tab="journal" type="button"><span class="bu-tile-t">Journal du bureau</span><span class="bu-tile-d">Qui a fait quoi, et quand</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
+      </div></section>
     </nav>
     <div class="bu-bar hidden" id="buBar"><button class="btn btn-outline btn-sm" id="buBack" type="button">← Menu du bureau</button><h2 id="buTitle"></h2></div>
     <div class="panel hidden" id="tab-cand"><div class="card" style="overflow:auto;"><p class="small muted">Écris d'abord un message (facultatif), puis accepte ou refuse : le candidat reçoit automatiquement un email avec ta réponse et ton message, et la candidature passe dans les archives.</p><div id="candMsg"></div><table class="table" id="candTable"><thead><tr><th>Date</th><th>Candidat·e</th><th>Poste</th><th>Motivation</th><th>Message au candidat</th><th>Décision</th></tr></thead><tbody></tbody></table></div></div>
@@ -182,6 +185,17 @@ import Base from '../layouts/Base.astro';
         </div>
       </div>
     </div>
+    <div class="panel hidden" id="tab-journal">
+      <div class="card">
+        <p class="small muted" style="margin-top:0;">Toutes les actions du bureau, de la plus récente à la plus ancienne. Visible uniquement par l'administrateur ; conservé un an. Les votes et les actions des simples membres ne sont jamais enregistrés ici.</p>
+        <div class="form-row">
+          <div class="field"><label for="jnCat">Catégorie</label><select id="jnCat"><option value="">Toutes</option><option>Séances</option><option>Membres</option><option>Élections</option><option>Motions</option><option>Communication</option><option>Réglages</option></select></div>
+          <div class="field"><label for="jnQui">Membre du bureau</label><select id="jnQui"><option value="">Tous</option></select></div>
+          <div class="field"><label for="jnQ">Rechercher</label><input id="jnQ" placeholder="un nom, une séance…" /></div>
+        </div>
+        <div id="jnList" class="jn-list"><p class="muted">Chargement…</p></div>
+      </div>
+    </div>
     <div class="panel hidden" id="tab-msg"><div class="card" style="overflow:auto;"><table class="table" id="msgTable"><thead><tr><th>Date</th><th>De</th><th>Sujet</th><th>Message</th><th></th></tr></thead><tbody></tbody></table></div></div>
     <div class="panel hidden" id="tab-membres"><div class="card" style="overflow:auto;"><p class="small muted">Seul un <strong>admin</strong> peut changer les rôles, bannir ou supprimer un compte. Le rôle « bureau » donne accès à cette page. Un compte banni ne peut plus se connecter. Le <strong>poste</strong> (Président·e…) s'affiche à côté du nom partout sur le site et met à jour automatiquement la page « Qui sommes-nous » ; donner un poste donne aussi accès à l'espace bureau. Un poste n'a qu'un titulaire : l'attribuer à quelqu'un le retire au précédent.</p><table class="table" id="memTable"><thead><tr><th>Nom</th><th>Classe</th><th>Contact</th><th>Inscrit le</th><th>Rôle</th><th>Poste au bureau</th><th></th></tr></thead><tbody></tbody></table></div></div>
   </div></section>
@@ -198,6 +212,12 @@ import Base from '../layouts/Base.astro';
   .bu-tile-d { font-size: 0.95rem; color: var(--gris); }
   .bu-go { margin-top: auto; padding-top: 10px; font-weight: 700; font-size: 0.9rem; text-decoration: underline; text-decoration-color: var(--rouge); text-underline-offset: 4px; }
   .bu-count { position: absolute; top: 16px; right: 18px; font-size: 2.2rem; line-height: 1; font-weight: 800; color: var(--rouge); }
+  .jn-list { display: grid; }
+  .jn-row { display: grid; grid-template-columns: 150px 170px 1fr; gap: 14px; padding: 10px 0; border-bottom: 2px solid var(--pierre-fonce); align-items: baseline; }
+  .jn-quand { font-size: 0.85rem; color: var(--gris); }
+  .jn-qui { font-weight: 700; }
+  .jn-cat { display: inline-block; font-size: 0.72rem; font-weight: 800; background: var(--pierre); padding: 1px 7px; margin-right: 8px; }
+  @media (max-width: 760px) { .jn-row { grid-template-columns: 1fr; gap: 2px; } }
   .bu-count.zero { color: var(--pierre-fonce); }
   .bu-bar { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin-bottom: 22px; padding-bottom: 14px; border-bottom: var(--rule); }
   .bu-bar h2 { margin: 0; font-size: clamp(1.6rem, 3vw, 2.2rem); }
@@ -287,6 +307,20 @@ import Base from '../layouts/Base.astro';
     document.getElementById('app')!.style.display = '';
     const isAdmin = me.role === 'admin';
     initBureauPlus(sb, session, me as any).catch((e) => console.error(e));
+    if (isAdmin) {
+      document.getElementById('buAdminGroup')!.classList.remove('hidden');
+      const { data: jn } = await sb.from('journal').select('*').order('at', { ascending: false }).limit(1000);
+      const lignes = (jn || []) as any[];
+      const qui = document.getElementById('jnQui') as HTMLSelectElement;
+      [...new Set(lignes.map((l) => l.acteur_nom))].sort().forEach((n) => qui.insertAdjacentHTML('beforeend', `<option>${esc(n)}</option>`));
+      const paintJn = () => {
+        const c = (document.getElementById('jnCat') as HTMLSelectElement).value, p = qui.value, q = (document.getElementById('jnQ') as HTMLInputElement).value.trim().toLowerCase();
+        const f = lignes.filter((l) => (!c || l.categorie === c) && (!p || l.acteur_nom === p) && (!q || `${l.acteur_nom} ${l.resume}`.toLowerCase().includes(q)));
+        document.getElementById('jnList')!.innerHTML = f.map((l) => `<div class="jn-row"><span class="jn-quand">${new Date(l.at).toLocaleString('fr-FR', { day: 'numeric', month: 'short', year: '2-digit', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' })}</span><span class="jn-qui">${esc(l.acteur_nom)}</span><span><span class="jn-cat">${esc(l.categorie)}</span>${esc(l.resume)}</span></div>`).join('') || '<p class="muted">Aucune action enregistrée pour l\'instant.</p>';
+      };
+      ['jnCat', 'jnQui', 'jnQ'].forEach((id) => document.getElementById(id)!.addEventListener('input', paintJn));
+      paintJn();
+    }
 
     // Tabs
     // Menu du bureau : grandes cases ; chaque case ouvre sa section, « ← Menu du bureau » revient

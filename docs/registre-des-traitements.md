@@ -99,6 +99,12 @@
 - **Données :** contenu rédigé par les membres du bureau, auteur.
 - **Durée :** messages 1 an ; tâches et notes jusqu'à suppression.
 
+### 13. Journal des actions du bureau
+- **Finalité :** savoir qui, au bureau, a fait quelle action (séances, appel, candidatures, élections, rôles, envois d'emails) pour éviter les abus et corriger les erreurs.
+- **Données :** nom du membre du bureau, date, catégorie, résumé de l'action (peut citer le nom de l'élève concerné). Jamais les votes ni les actions des simples membres.
+- **Destinataires :** administrateur uniquement.
+- **Durée :** 1 an (purge automatique).
+
 ## Mesures de sécurité
 - HTTPS sur tout le site ; mots de passe hachés (bcrypt) par Supabase Auth.
 - Règles d'accès en base (Row Level Security) : chaque membre ne voit que ses propres données ; listes et réponses réservées au bureau ; actions sensibles (bannir, supprimer un compte) réservées à l'administrateur.
