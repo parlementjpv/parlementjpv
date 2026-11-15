@@ -33,7 +33,7 @@ export async function userFromRequest(req: Request) {
   return { user: data.user, profile };
 }
 
-type Mail = { from?: string; to: string; subject: string; html: string; text?: string; replyTo?: string; headers?: Record<string, string> };
+type Mail = { from?: string; to: string; subject: string; html: string; text?: string; replyTo?: string; headers?: Record<string, string>; attachments?: { filename: string; content: Uint8Array | string; contentType?: string }[] };
 let transport: ReturnType<typeof nodemailer.createTransport> | null = null;
 
 /** Envoi d'emails via Gmail (SMTP, port 465 SSL). Identifiants dans les secrets SMTP_USER / SMTP_PASS. */
@@ -43,7 +43,7 @@ export async function sendMail(m: Mail) {
     if (!user || !pass) throw new Error('SMTP_USER / SMTP_PASS manquants');
     transport = nodemailer.createTransport({ host: Deno.env.get('SMTP_HOST') || 'smtp.gmail.com', port: 465, secure: true, auth: { user, pass } });
   }
-  return await transport.sendMail({ from: m.from || FROM, to: m.to, subject: m.subject, html: m.html, text: m.text, replyTo: m.replyTo, headers: m.headers });
+  return await transport.sendMail({ from: m.from || FROM, to: m.to, subject: m.subject, html: m.html, text: m.text, replyTo: m.replyTo, headers: m.headers, attachments: m.attachments });
 }
 
 export const json = (req: Request, status: number, body: unknown) =>

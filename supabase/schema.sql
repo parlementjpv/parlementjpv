@@ -1303,3 +1303,8 @@ returns json language sql stable security definer set search_path = public as $$
     where (public.est_membre() and e.statut <> 'brouillon' and not e.archivee) or public.is_bureau()
   ) x;
 $$;
+
+-- 015 — Sauvegarde hebdomadaire (dimanche 4 h 07 UTC) : pg_net appelle la fonction « sauvegarde »
+-- avec le secret BACKUP_SECRET (défini dans les secrets Supabase ; non versionné ici).
+-- create extension if not exists pg_net;
+-- select cron.schedule('sauvegarde-hebdo', '7 4 * * 0', $$select net.http_post(url := '<SUPABASE_URL>/functions/v1/sauvegarde', headers := '{"x-sauvegarde": "<BACKUP_SECRET>", "Content-Type": "application/json"}'::jsonb, body := '{}'::jsonb, timeout_milliseconds := 60000)$$);

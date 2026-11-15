@@ -1,0 +1,21 @@
+name: Garder la base éveillée
+
+# Supabase (offre gratuite) met en pause un projet après 7 jours sans activité.
+# Cette tâche interroge la base une fois par jour pour qu'elle reste active, même pendant les vacances.
+on:
+  schedule:
+    - cron: '23 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Interroger la base
+        env:
+          URL: 'https://waqaeyclhwhnnmvlfoau.supabase.co'
+          KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhcWFleWNsaHdobm5tdmxmb2F1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ2MDEyMTYsImV4cCI6MjExMDE3NzIxNn0.Dd8OXAxYr98zB95YHAPIgKXfQ5wriej7mLnZVLP8mv8'
+        run: |
+          code=$(curl -s -o /dev/null -w '%{http_code}' -X POST "$URL/rest/v1/rpc/bureau_public" -H "apikey: $KEY" -H "Authorization: Bearer $KEY" -H 'Content-Type: application/json' -d '{}')
+          echo "Réponse de la base : $code"
+          test "$code" = "200"

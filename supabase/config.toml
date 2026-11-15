@@ -40,3 +40,6 @@ verify_jwt = false
 
 [functions.election-resultats]
 verify_jwt = false
+
+[functions.sauvegarde]
+verify_jwt = false
