@@ -127,6 +127,16 @@
 - **Données :** prénom, nom, classe, date d'adhésion, numéro unique, signature manuscrite (image dessinée par le membre, visible uniquement par lui et sur son certificat). Vérification publique par numéro ou QR code (page /verifier). Certificat envoyé par email à l'inscription.
 - **Durée :** tant que le compte existe.
 
+### 18. Tournoi d'éloquence
+- **Finalité :** organiser des tournois à élimination directe entre membres.
+- **Données :** inscription, duels (sujet, date, lieu), vainqueurs. Affichage public limité au prénom et à l'initiale du nom.
+- **Destinataires :** bureau (organisation), membres et public (tableau).
+- **Durée :** jusqu'à suppression du tournoi par le bureau.
+
+### 19. Accès aux coordonnées
+- Les emails et numéros de téléphone des membres ne sont lisibles que par les **administrateurs** (onglet État, fiches membres) ; le reste du bureau voit noms, classes et réponses, mais plus les coordonnées. Verrou appliqué au niveau des colonnes de la base de données (migration 022).
+- La classe est saisie en deux champs (niveau, numéro) pour les statistiques d'effectifs de l'onglet État.
+
 ## Mesures de sécurité
 - HTTPS sur tout le site ; mots de passe hachés (bcrypt) par Supabase Auth.
 - Règles d'accès en base (Row Level Security) : chaque membre ne voit que ses propres données ; listes et réponses réservées au bureau ; actions sensibles (bannir, supprimer un compte) réservées à l'administrateur.
