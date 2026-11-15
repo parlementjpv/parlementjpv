@@ -48,8 +48,8 @@ import Base from '../layouts/Base.astro';
         </div>
         <div id="notifMsg" aria-live="polite"></div>
       </div>
-      <div class="card">
-        <h3>Certificat de membre</h3>
+      <details class="card cert-card" id="certCard" open>
+        <summary><span class="cert-sum"><span class="cert-t">Certificat de membre</span><span class="small muted" id="certEtat">À signer</span></span><span class="cert-chev" aria-hidden="true"></span></summary>
         <p class="small muted">Un PDF officiel signé par toi et par la présidence, qui atteste que tu es membre du Parlement JPV. Son QR code permet à n'importe qui de vérifier qu'il est authentique. Utile pour Parcoursup, un CV ou une candidature.</p>
         <div class="sig-apercu hidden" id="sigApercu"><span class="small muted">Ma signature</span><img id="sigImg" alt="Ta signature" /></div>
         <div class="flex" style="gap:8px;flex-wrap:wrap;">
@@ -57,7 +57,7 @@ import Base from '../layouts/Base.astro';
           <button class="btn btn-outline btn-sm" id="sigEdit" type="button">Signer mon certificat</button>
         </div>
         <div id="certifMsg" aria-live="polite"></div>
-      </div>
+      </details>
       <div class="card">
         <h3>Mes informations</h3>
         <button class="btn btn-outline btn-sm" id="editInfos" type="button" aria-expanded="false" aria-controls="profileForm">Modifier mes informations</button>
@@ -101,6 +101,16 @@ import Base from '../layouts/Base.astro';
   a.card.tuile strong { display: block; font-size: 1.3rem; line-height: 1.2; letter-spacing: -0.01em; }
   a.card.tuile .tuile-go { font-weight: 700; font-size: 0.92rem; text-decoration: underline; text-decoration-color: var(--rouge); text-underline-offset: 4px; }
   a.card.tuile.tuile-chaud { border-color: var(--rouge); background: var(--pierre); }
+  .cert-card { padding-top: 0; padding-bottom: 0; }
+  .cert-card > summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0; }
+  .cert-card > summary::-webkit-details-marker { display: none; }
+  .cert-card > summary:focus-visible { outline: 3px solid var(--rouge); outline-offset: 4px; }
+  .cert-sum { display: grid; gap: 2px; }
+  .cert-t { font-size: 1.25rem; font-weight: 800; line-height: 1.15; }
+  .cert-chev { flex: none; width: 12px; height: 12px; border-right: 3px solid var(--nuit); border-bottom: 3px solid var(--nuit); transform: rotate(45deg); margin-top: -6px; transition: transform 0.15s ease; }
+  .cert-card[open] > summary .cert-chev { transform: rotate(-135deg); margin-top: 4px; }
+  .cert-card[open] { padding-bottom: 20px; }
+  @media (prefers-reduced-motion: reduce) { .cert-chev { transition: none; } }
   .sig-apercu { display: grid; gap: 4px; margin: 4px 0 12px; }
   .sig-apercu img { max-width: 220px; max-height: 70px; object-fit: contain; object-position: left; background: #fff; padding: 4px 8px; border-bottom: 2px solid var(--nuit); }
   .mo-card { border: 3px solid var(--nuit); }
@@ -146,9 +156,13 @@ import Base from '../layouts/Base.astro';
     // Signature du membre (affichée sur le certificat)
     const sigImg = document.getElementById('sigImg') as HTMLImageElement, sigAp = document.getElementById('sigApercu')!, sigBtn = document.getElementById('sigEdit')!;
     let aSigne = false;
-    const majSig = (img: string | null) => { aSigne = !!img; if (img) { sigImg.src = img; sigAp.classList.remove('hidden'); sigBtn.textContent = 'Modifier ma signature'; } };
+    const certCard = document.getElementById('certCard') as HTMLDetailsElement;
+    const majSig = (img: string | null, replier = false) => {
+      aSigne = !!img;
+      if (img) { sigImg.src = img; sigAp.classList.remove('hidden'); sigBtn.textContent = 'Refaire ma signature'; document.getElementById('certEtat')!.textContent = 'Signé · télécharger ou refaire la signature'; if (replier) certCard.open = false; }
+    };
     const { data: sigRow } = await sb.from('signatures').select('image').eq('user_id', session.user.id).maybeSingle();
-    majSig(sigRow?.image || null);
+    majSig(sigRow?.image || null, true);
     const signer = async (titre: string, texte: string, annuler: string | null = 'Annuler') => {
       const img = await demanderSignature({ titre, texte, annuler });
       if (!img) return false;
