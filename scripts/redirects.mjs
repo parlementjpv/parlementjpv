@@ -10,6 +10,7 @@ const map = {
   'photos.html': 'actualites/', 'media.html': 'medias/', 'rapports.html': 'rapports/', 'mentions-legales.html': 'mentions-legales/',
   'politique-confidentialite.html': 'confidentialite/', 'jpv-mun.html': '', 'Espace-bureau.html': 'bureau/', 'Espace-bourse.html': '',
   'galerie/index.html': 'actualites/',
+  'agenda/index.html': 'evenement/',
 };
 for (const [from, to] of Object.entries(map)) {
   const url = `${origin}${base}/${to}`;

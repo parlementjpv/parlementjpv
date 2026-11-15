@@ -1,19 +1,22 @@
 ---
 import Base from '../layouts/Base.astro';
 import NewsletterForm from '../components/NewsletterForm.astro';
+import EventList from '../components/EventList.astro';
+import LiveEvents from '../components/LiveEvents.astro';
+import data from '../data/events.json';
 ---
-<Base title="Événements" description="Les prochains débats, ateliers et conférences du Parlement JPV : dis-nous si tu viens.">
-  <div id="evLoading" class="section"><div class="container"><p class="muted">Chargement des événements…</p></div></div>
+<Base title="Séances" description="Les séances du Parlement JPV : prochains débats, conférences et visites, inscription en ligne et séances passées.">
+  <div id="evLoading" class="section"><div class="container"><p class="muted">Chargement des séances…</p></div></div>
 
   <!-- Aucun événement : message de reprise -->
   <section class="section" id="evEmpty" hidden>
     <div class="container narrow">
-      <span class="eyebrow">Événements</span>
-      <h1>Nos événements reprennent très bientôt.</h1>
-      <p class="lead">Débats, conférences, concours d'éloquence, visites : le nouveau bureau prépare le programme. Les réponses s'ouvriront ici dès la première date annoncée.</p>
+      <span class="eyebrow">Séances</span>
+      <h1>Nos séances reprennent très bientôt.</h1>
+      <p class="lead">Débats de 30 minutes sur l'heure de midi, conférences, concours d'éloquence, visites : le nouveau bureau prépare le programme. Les inscriptions s'ouvriront ici dès la première date annoncée.</p>
       <div class="flex mt-3">
         <a class="btn btn-primary hide-member" href="/rejoindre">Rejoindre l'instance</a>
-        <a class="btn btn-outline" href="/agenda">Voir les séances passées</a>
+        <a class="btn btn-outline" href="#passees">Voir les séances passées</a>
       </div>
       <div class="mt-4" style="max-width:520px;"><h2 style="font-size:1.6rem;">Être prévenu par email</h2><NewsletterForm /></div>
     </div>
@@ -42,7 +45,7 @@ import NewsletterForm from '../components/NewsletterForm.astro';
           <p class="muted">Ta réponse aide le bureau à prévoir la salle et le temps de parole. Pas besoin de compte ; tes coordonnées ne sont visibles que par le bureau.</p>
           <p class="muted hidden" id="evCampsInfo">Si tu viens, ton camp est <strong>tiré au sort</strong> au moment de ta réponse, en équilibrant les effectifs. Tu le découvres tout de suite après.</p>
           <div class="mon-camp hidden" id="monCamp"></div>
-          <div id="evOthers" class="mt-3" hidden><h3 style="font-size:1.2rem;">Les autres événements</h3><div id="evOthersList"></div></div>
+          <div id="evOthers" class="mt-3" hidden><h3 style="font-size:1.2rem;">Les autres séances à venir</h3><div id="evOthersList"></div></div>
         </div>
         <form class="form card" id="evForm" novalidate>
           <fieldset class="answer">
@@ -67,6 +70,18 @@ import NewsletterForm from '../components/NewsletterForm.astro';
       </div>
     </section>
   </div>
+  <section class="section seances-passees" id="passees">
+    <div class="container">
+      <div class="flex between" style="align-items:end;gap:16px;flex-wrap:wrap;">
+        <div><span class="eyebrow">Archives</span><h2 style="margin:0;">Séances passées</h2></div>
+        <div class="flex" style="gap:8px;"><a class="btn btn-outline btn-sm" href="/agenda.ics" download>Ajouter les séances à mon calendrier</a><a class="btn btn-outline btn-sm" href="/#newsletter">Recevoir les rappels par email</a></div>
+      </div>
+      <div class="mt-3">
+        <LiveEvents mode="past" />
+        <EventList events={data.events} past />
+      </div>
+    </div>
+  </section>
 </Base>
 
 <style is:global>

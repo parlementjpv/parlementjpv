@@ -1,7 +1,7 @@
 ---
 const links = [
   { href: '/institution', label: 'Le Parlement' },
-  { href: '/agenda', label: 'Séances' },
+  { href: '/evenement', label: 'Séances' },
   { href: '/actualites', label: 'Actualités' },
   { href: '/qui-sommes-nous', label: 'Le bureau' },
   { href: '/candidature', label: 'Candidature' },
@@ -19,9 +19,10 @@ const current = Astro.url.pathname.replace(BASE, '').replace(/\/$/, '') || '/';
       {links.map((l) => <a href={l.href} aria-current={current === l.href ? 'page' : undefined}>{l.label}</a>)}
     </nav>
     <div class="nav-actions">
+      <a class="btn btn-outline btn-sm nav-cta hide-member" href="/rejoindre">Rejoindre l'instance</a>
+      <span class="nav-sep" aria-hidden="true"></span>
       <a class="nav-auth" href="/connexion" data-auth="out">Connexion</a>
       <a class="nav-auth hidden" href="/compte" data-auth="in">Mon espace</a>
-      <a class="btn btn-primary btn-sm nav-cta hide-member" href="/rejoindre">Rejoindre l'instance</a>
       <button class="icon-btn" id="themeToggle" type="button" aria-label="Basculer clair / sombre"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
       <button class="icon-btn burger" id="burger" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobileNav">Menu</button>
     </div>
@@ -31,10 +32,7 @@ const current = Astro.url.pathname.replace(BASE, '').replace(/\/$/, '') || '/';
     <a href="/charte">Charte</a>
     <a href="/newsletter">Newsletter</a>
     <a href="/contact">Contact</a>
-    <a href="/connexion" data-auth="out">Connexion</a>
-    <a href="/compte" data-auth="in" class="hidden">Mon espace</a>
-    <a href="/evenement">Événements</a>
-    <a href="/rejoindre" class="btn btn-primary hide-member">Rejoindre l'instance</a>
+    <a href="/rejoindre" class="btn btn-outline hide-member">Rejoindre l'instance</a>
   </nav>
 </header>
 
@@ -47,7 +45,11 @@ const current = Astro.url.pathname.replace(BASE, '').replace(/\/$/, '') || '/';
   .nav-links a::after { content: ''; position: absolute; left: 12px; right: 12px; bottom: 2px; height: 3px; background: var(--rouge); transform: scaleX(0); transform-origin: left; transition: transform 0.15s ease; }
   .nav-links a:hover::after, .nav-links a[aria-current='page']::after { transform: scaleX(1); }
   .nav-actions { display: flex; align-items: center; gap: 12px; }
-  .nav-auth { text-decoration: none; font-weight: 600; white-space: nowrap; }
+  .nav-sep { width: 3px; align-self: stretch; margin: 2px 4px; background: var(--pierre-fonce); }
+  .nav-auth { display: inline-flex; align-items: center; gap: 6px; text-decoration: none; font-weight: 800; white-space: nowrap; background: var(--rouge); color: #fff; border: 3px solid var(--rouge); padding: 7px 16px; transition: background 0.15s ease, color 0.15s ease; }
+  .nav-auth:hover { background: transparent; color: var(--rouge); }
+  .nav-auth:focus-visible { outline: 3px solid var(--nuit); outline-offset: 3px; }
+  .nav-auth.hidden { display: none; }
   .nav-cta { white-space: nowrap; }
   .icon-btn { display: inline-flex; align-items: center; background: transparent; border: 2px solid var(--nuit); color: var(--nuit); font: inherit; font-weight: 700; padding: 6px 10px; cursor: pointer; }
   .burger { display: none; }
@@ -55,7 +57,8 @@ const current = Astro.url.pathname.replace(BASE, '').replace(/\/$/, '') || '/';
   .mobile-nav a { padding: 12px 0; text-decoration: none; font-weight: 700; font-size: 1.2rem; border-bottom: 2px solid var(--pierre); }
   .mobile-nav .btn { margin-top: 14px; border-bottom: 0; }
   .mobile-nav.open { display: flex; }
-  @media (max-width: 1200px) { .nav-links, .nav-auth, .nav-cta { display: none; } .burger { display: inline-block; } }
+  @media (max-width: 1200px) { .nav-links, .nav-cta, .nav-sep { display: none; } .burger { display: inline-block; } .nav-actions { gap: 8px; } }
+  @media (max-width: 420px) { .nav-auth { padding: 6px 10px; font-size: 0.9rem; } }
 </style>
 
 <script>
