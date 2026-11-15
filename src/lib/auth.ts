@@ -30,12 +30,19 @@ export async function requireSession(next = location.pathname) {
     return null;
   }
   // Vérifie auprès du serveur que la connexion est toujours valable (session révoquée, compte banni ou supprimé…)
+  // Une coupure réseau (réveil de l'app, métro, wifi du lycée…) ne doit jamais déconnecter : seul un refus explicite du serveur le fait.
   const { error } = await getSupabase().auth.getUser();
-  if (error) {
+  if (error && sessionRefusee(error)) {
     await expireSession(next);
     return null;
   }
   return session;
+}
+
+/** Vrai seulement si le serveur a explicitement refusé la session (révoquée, compte banni ou supprimé). */
+function sessionRefusee(error: { status?: number; code?: string; name?: string }) {
+  if (error.name === 'AuthRetryableFetchError' || !error.status || error.status >= 500) return false;
+  return error.status === 401 || error.status === 403 || ['session_not_found', 'user_not_found', 'user_banned', 'bad_jwt', 'refresh_token_not_found', 'refresh_token_already_used'].includes(error.code || '');
 }
 
 /** Connexion plus reconnue par le serveur : on nettoie et on renvoie vers la page de connexion. */
