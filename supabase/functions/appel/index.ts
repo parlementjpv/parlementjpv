@@ -1,3 +1,4 @@
+import { pushUtilisateurs } from '../_shared/push.ts';
 import { admin, sendMail, json, esc, layout, button, SITE, FROM, cors, readJson, userFromRequest, journal } from '../_shared/lib.ts';
 
 // Appel d'une séance par le bureau. Au-delà du seuil d'absences non excusées, le compte est exclu
@@ -54,6 +55,7 @@ Deno.serve(async (req) => {
           invites++;
         } catch (e) { console.error(e); }
       }
+      await pushUtilisateurs(presents!.map((pr) => pr.user_id), { titre: 'Qui a été le meilleur orateur ?', texte: `${ev.title} : vote pour la personne qui t'a le plus convaincu (3 jours).`, url: `${SITE}/compte`, tag: `orateur-${b.event}` });
     }
   }
   const n = (s: string) => b.lignes.filter((l: any) => l.statut === s).length;

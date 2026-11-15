@@ -1,5 +1,6 @@
 import { admin, sendMail, json, esc, layout, button, FROM, cors, readJson, userFromRequest, journal } from '../_shared/lib.ts';
 const SUPA = Deno.env.get('SUPABASE_URL')!;
+import { pushUtilisateurs } from '../_shared/push.ts';
 import { fiche, lienEvenement, type Ev } from '../_shared/evenement.ts';
 
 // Annonce d'une nouvelle séance à tous les membres de l'instance (une seule fois par événement)
@@ -41,6 +42,7 @@ Deno.serve(async (req) => {
       envoyes++;
     } catch (e) { console.error(e); echecs.push(m.email); }
   }
+  await pushUtilisateurs(dest.map((m) => m.user_id), { titre: 'Nouvelle séance', texte: `${ev.title} — ${new Date(ev.starts_at).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'Europe/Paris' })}. Dis-nous si tu viens !`, url: lienEvenement(ev), tag: `seance-${ev.id}` });
   await journal(me.user.id, 'Séances', `a annoncé la séance « ${ev.title} » à ${envoyes} membre${envoyes > 1 ? 's' : ''}`);
   return json(req, 200, { ok: true, envoyes, echecs: echecs.length });
 });

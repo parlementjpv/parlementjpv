@@ -24,6 +24,9 @@ import Base from '../layouts/Base.astro';
         <tr><td>Espace interne du bureau</td><td>Tâches, messages et notes des membres du bureau</td><td>Organiser le travail du bureau</td><td>Intérêt légitime</td><td>Messages : 1 an ; tâches et notes jusqu'à suppression</td></tr>
         <tr><td>Candidature au bureau</td><td>Identité, classe, poste visé, motivation, expérience, disponibilités</td><td>Étude de la candidature par le bureau</td><td>Consentement</td><td>1 an après la décision</td></tr>
         <tr><td>Newsletter</td><td>Email, date et adresse IP de confirmation</td><td>Envoi de la lettre mensuelle</td><td>Consentement (confirmé par email)</td><td>Jusqu'à la désinscription ; 30 jours si l'inscription n'est jamais confirmée</td></tr>
+        <tr><td>Vote du meilleur orateur</td><td>Le vote de chaque présent (jamais affiché, même au bureau), résultat de la séance</td><td>Élire le meilleur orateur de chaque séance ; seul le résultat est visible</td><td>Consentement</td><td>Tant que le compte existe</td></tr>
+        <tr><td>Notifications sur le téléphone</td><td>Adresse technique d'abonnement de l'appareil (fournie par Apple, Google ou Mozilla), modèle du navigateur</td><td>Envoyer les alertes (nouvelle séance, rappel la veille, votes)</td><td>Consentement (activable et désactivable dans Mon espace)</td><td>Jusqu'à la désactivation ou la suppression du compte</td></tr>
+        <tr><td>Certificat de membre</td><td>Prénom, nom, classe, date d'adhésion, numéro du certificat</td><td>Attester l'adhésion ; toute personne qui possède le numéro peut vérifier le certificat en ligne</td><td>Intérêt légitime</td><td>Tant que le compte existe</td></tr>
         <tr><td>Formulaire de contact</td><td>Nom, email, message</td><td>Répondre à ta demande</td><td>Intérêt légitime</td><td>1 an</td></tr>
       </tbody>
     </table></div>
@@ -41,7 +44,8 @@ import Base from '../layouts/Base.astro';
     <ul>
       <li><strong>Supabase</strong> : base de données et comptes, serveurs dans l'Union européenne (Suède) ;</li>
       <li><strong>Google (Gmail)</strong> : envoi des emails ;</li>
-      <li><strong>GitHub</strong> : hébergement des pages du site (aucune donnée de formulaire n'y est stockée).</li>
+      <li><strong>GitHub</strong> : hébergement des pages du site (aucune donnée de formulaire n'y est stockée) ;</li>
+      <li><strong>Apple, Google ou Mozilla</strong> (selon ton téléphone) : acheminement des notifications si tu les actives. Leur contenu est chiffré : ces services ne peuvent pas le lire.</li>
     </ul>
     <p>Google et GitHub sont des entreprises américaines. Les transferts éventuels de données vers les États-Unis sont encadrés par le cadre de protection des données UE–États-Unis (Data Privacy Framework), auquel ces entreprises ont adhéré, et par les clauses contractuelles types de la Commission européenne.</p>
 

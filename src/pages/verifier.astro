@@ -1,0 +1,35 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Vérifier un certificat" description="Vérifier l'authenticité d'un certificat de membre du Parlement JPV." noindex>
+  <div class="page-head"><div class="container">
+    <span class="eyebrow">Certificat de membre</span>
+    <h1>Vérifier un certificat</h1>
+    <p class="lead">Saisis le numéro imprimé en bas du certificat (10 caractères).</p>
+  </div></div>
+  <section class="section"><div class="container" style="max-width:640px;">
+    <form class="form" id="vf">
+      <div class="field"><label for="code">Numéro du certificat</label><input id="code" name="code" required minlength="10" maxlength="10" autocomplete="off" autocapitalize="characters" spellcheck="false" style="text-transform:uppercase;letter-spacing:0.08em;" /></div>
+      <button class="btn btn-primary" type="submit">Vérifier</button>
+    </form>
+    <div id="vr" class="mt-2" aria-live="polite"></div>
+  </div></section>
+</Base>
+
+<script>
+  import { getSupabase } from '../lib/supabase';
+  import { esc } from '../lib/events';
+  const f = document.getElementById('vf') as HTMLFormElement, out = document.getElementById('vr')!, inp = document.getElementById('code') as HTMLInputElement;
+  const verifier = async (code: string) => {
+    out.innerHTML = '<p class="muted">Vérification…</p>';
+    const { data, error } = await getSupabase().rpc('verifier_certificat', { p_code: code.trim().toUpperCase() });
+    if (error || !data) { out.innerHTML = '<div class="alert alert-err"><strong>Certificat introuvable.</strong> Vérifie le numéro : il ne correspond à aucun membre du Parlement JPV.</div>'; return; }
+    const d = new Date(data.membre_depuis).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+    out.innerHTML = data.actif
+      ? `<div class="alert alert-ok"><strong>Certificat authentique.</strong><br>${esc(data.prenom)} ${esc(data.nom)}${data.classe ? ` (${esc(data.classe)})` : ''} est membre du Parlement JPV depuis le ${esc(d)}.</div>`
+      : `<div class="alert alert-err"><strong>Certificat authentique, mais ce compte n'est plus actif.</strong><br>${esc(data.prenom)} ${esc(data.nom)} a été membre du Parlement JPV à partir du ${esc(d)}.</div>`;
+  };
+  f.addEventListener('submit', (e) => { e.preventDefault(); verifier(inp.value); });
+  const c = new URLSearchParams(location.search).get('c');
+  if (c) { inp.value = c; verifier(c); }
+</script>

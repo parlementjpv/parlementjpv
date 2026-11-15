@@ -1,3 +1,4 @@
+import { pushUtilisateurs } from '../_shared/push.ts';
 import { admin, sendMail, json, esc, layout, button, SITE, FROM, cors, readJson, userFromRequest, journal } from '../_shared/lib.ts';
 
 // Envoie les résultats d'une élection publiée à chaque membre qui a voté (une seule fois par élection).
@@ -40,6 +41,7 @@ Deno.serve(async (req) => {
       envoyes++;
     } catch (err) { console.error(err); }
   }
+  await pushUtilisateurs(ids, { titre: `Résultats : ${e.titre}`, texte: 'Les résultats du vote sont publiés.', url: `${SITE}/elections` });
   await journal(me.user.id, 'Élections', `a envoyé les résultats de « ${e.titre} » à ${envoyes} votant${envoyes > 1 ? 's' : ''}`);
   return json(req, 200, { ok: true, envoyes });
 });

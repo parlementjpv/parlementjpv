@@ -105,6 +105,22 @@
 - **Destinataires :** administrateur uniquement.
 - **Durée :** 1 an (purge automatique).
 
+### 14. Vote du meilleur orateur
+- **Finalité :** élire le meilleur orateur de chaque séance, parmi et par les présents.
+- **Données :** votant, personne choisie, séance. Aucun accès direct (ni membres ni bureau) : seuls le résultat et le nombre de voix des lauréats sont affichés.
+- **Durée :** tant que le compte existe.
+
+### 15. Notifications push et application
+- **Finalité :** alerter les membres (nouvelle séance, rappel la veille, votes, annulation).
+- **Données :** adresse d'abonnement push de l'appareil, clés de chiffrement, navigateur. Contenu chiffré de bout en bout (Web Push / VAPID).
+- **Destinataires :** services push d'Apple, Google ou Mozilla (transport uniquement).
+- **Durée :** jusqu'à la désactivation, la suppression du compte ou l'expiration de l'abonnement (supprimé automatiquement).
+
+### 16. Certificat de membre
+- **Finalité :** attester l'adhésion (Parcoursup, CV).
+- **Données :** prénom, nom, classe, date d'adhésion, numéro unique. Vérification publique par numéro (page /verifier).
+- **Durée :** tant que le compte existe.
+
 ## Mesures de sécurité
 - HTTPS sur tout le site ; mots de passe hachés (bcrypt) par Supabase Auth.
 - Règles d'accès en base (Row Level Security) : chaque membre ne voit que ses propres données ; listes et réponses réservées au bureau ; actions sensibles (bannir, supprimer un compte) réservées à l'administrateur.

@@ -231,3 +231,10 @@ hr.sep { border: 0; border-top: 2px solid var(--pierre-fonce); margin: 36px 0; }
 /* Badge de poste au bureau, affiché à côté des noms */
 .poste-badge { display: inline-block; vertical-align: middle; margin-left: 6px; background: var(--rouge); color: #fff; font-weight: 800; font-size: 0.72rem; line-height: 1.4; padding: 1px 7px; letter-spacing: 0.01em; white-space: nowrap; text-decoration: none; }
 .poste-badge::before { content: '★ '; }
+
+/* Application installée : seulement l'espace membre */
+html.app .notice, html.app .site-footer, html.app .nav-links, html.app .nav-cta, html.app .nav-sep,
+html.app #burger, html.app .mobile-nav, html.app .app-hide { display: none !important; }
+html.app .site-header { padding-top: env(safe-area-inset-top); }
+html.app body { padding-bottom: env(safe-area-inset-bottom); }
+html:not(.app) .app-only { display: none !important; }

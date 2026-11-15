@@ -38,6 +38,11 @@ const turnstile = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
   <link rel="icon" href="/assets/img/icon-192.png" sizes="192x192" type="image/png" />
   <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png" />
   <meta name="theme-color" content="#0f1f4b" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Parlement JPV" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   {noindex && <meta name="robots" content="noindex" />}
   <script type="application/ld+json" set:html={JSON.stringify({
     '@context': 'https://schema.org',
@@ -64,6 +69,14 @@ const turnstile = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
   <style is:inline set:html={`@font-face{font-family:'Bricolage Grotesque';font-style:normal;font-display:swap;font-weight:200 800;font-stretch:75% 100%;src:url(${base}/fonts/bricolage-grotesque-latin.woff2) format('woff2');}`}></style>
   <script is:inline>
     (function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);var m=localStorage.getItem('jpv_compte');for(var i=0;i<localStorage.length&&!m;i++){if(/^sb-.*-auth-token$/.test(localStorage.key(i)||''))m='1';}if(m)document.documentElement.classList.add('membre');}catch(e){}})();
+  </script>
+  <script is:inline define:vars={{ base }}>
+    // Application installée : uniquement l'espace membre (pas le site vitrine)
+    (function(){var app=false;try{app=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true||new URLSearchParams(location.search).get('app')==='1';if(app)sessionStorage.setItem('jpv_app','1');else app=sessionStorage.getItem('jpv_app')==='1';}catch(e){}
+      if(!app)return;document.documentElement.classList.add('app');
+      var p=location.pathname.slice(base.length).replace(/\/+$/,'')||'/';
+      var ok=/^\/(compte|profil|motions|elections|salle|bureau|candidature|connexion|inscription|mot-de-passe-oublie|nouveau-mot-de-passe|evenement|application|verifier|charte|confidentialite|mentions-legales)(\/|$)/.test(p);
+      if(!ok)location.replace(base+'/compte/');})();
   </script>
   <script is:inline define:vars={{ base }}>
     // Lien d'activation expiré ou déjà utilisé : Supabase renvoie #error=… ; on l'affiche sur la page de connexion

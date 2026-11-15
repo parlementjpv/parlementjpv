@@ -1,3 +1,4 @@
+import { pushUtilisateurs } from '../_shared/push.ts';
 import { admin, sendMail, json, esc, layout, button, SITE, FROM, cors, readJson, userFromRequest, journal } from '../_shared/lib.ts';
 
 // Prévient par email chaque membre pouvant voter qu'un vote est ouvert (une seule fois par élection).
@@ -25,14 +26,14 @@ Deno.serve(async (req) => {
   const ids = (profs || []).map((p) => p.id);
   const { data: adh } = ids.length ? await db.from('adhesions').select('user_id, email').in('user_id', ids) : { data: [] as { user_id: string; email: string }[] };
   const mail = new Map((adh || []).map((a) => [a.user_id, a.email]));
-  const vus = new Set<string>(); const dest: { email: string; prenom: string }[] = [];
+  const vus = new Set<string>(); const dest: { email: string; prenom: string; id: string }[] = [];
   for (const p of profs || []) {
     let email = mail.get(p.id);
     if (!email) { const { data } = await db.auth.admin.getUserById(p.id); email = data?.user?.email || undefined; }
     if (!email) continue;
     const k = email.toLowerCase();
     if (vus.has(k) || (seulement && !seulement.includes(k))) continue;
-    vus.add(k); dest.push({ email, prenom: p.prenom || '' });
+    vus.add(k); dest.push({ email, prenom: p.prenom || '', id: p.id });
   }
 
   const fmt = (d: string) => new Date(d).toLocaleString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' });
@@ -55,6 +56,7 @@ Deno.serve(async (req) => {
       envoyes++;
     } catch (err) { console.error(err); echecs.push(d.email); }
   }
+  await pushUtilisateurs(dest.map((d) => d.id), { titre: programme ? 'Vote programmé' : 'Vote ouvert', texte: `${e.titre} — ${programme ? `ouverture le ${fmt(e.ouverture)}` : 'à toi de voter !'}`, url: `${SITE}/elections`, tag: `election-${e.id}` });
   if (me) await journal(me.user.id, 'Élections', `a annoncé le vote « ${e.titre} » à ${envoyes} membre${envoyes > 1 ? 's' : ''}`);
   return json(req, 200, { ok: true, envoyes, echecs: echecs.length });
 });

@@ -1,0 +1,80 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Installer l'application" description="Installe l'application Parlement JPV sur ton téléphone : ton espace membre et les notifications des séances et des votes.">
+  <div class="page-head"><div class="container">
+    <span class="eyebrow">Application</span>
+    <h1>Le Parlement dans ta poche</h1>
+    <p class="lead">L'application s'ouvre directement sur ton espace membre et t'envoie une notification à chaque nouvelle séance, la veille d'un débat et à chaque vote. Gratuit, sans passer par un store.</p>
+  </div></div>
+
+  <section class="section"><div class="container ap-grid">
+    <div id="apEtat" class="card ap-etat" aria-live="polite"></div>
+
+    <div class="ap-col" id="apIos">
+      <h2>Sur iPhone</h2>
+      <ol class="ap-steps">
+        <li>Ouvre cette page <strong>dans Safari</strong> (pas dans Instagram ni Chrome).</li>
+        <li>Touche le bouton <strong>Partager</strong> <span class="ap-ic" aria-hidden="true">⬆︎</span> en bas de l'écran.</li>
+        <li>Fais défiler et choisis <strong>« Sur l'écran d'accueil »</strong>, puis <strong>Ajouter</strong>.</li>
+        <li>Ouvre l'app <strong>Parlement JPV</strong> depuis ton écran d'accueil et connecte-toi.</li>
+        <li>Dans Mon espace, touche <strong>« Activer les notifications »</strong> puis <strong>Autoriser</strong>.</li>
+      </ol>
+      <p class="small muted">Il faut iOS 16.4 ou plus récent. Sur iPhone, les notifications ne marchent que depuis l'app ajoutée à l'écran d'accueil.</p>
+    </div>
+
+    <div class="ap-col" id="apAndroid">
+      <h2>Sur Android</h2>
+      <ol class="ap-steps">
+        <li>Ouvre cette page dans <strong>Chrome</strong>.</li>
+        <li>Touche <strong>« Installer l'application »</strong> ci-dessous, ou le menu <strong>⋮</strong> puis <strong>« Installer l'application »</strong>.</li>
+        <li>Ouvre l'app <strong>Parlement JPV</strong> et connecte-toi.</li>
+        <li>Dans Mon espace, touche <strong>« Activer les notifications »</strong> puis <strong>Autoriser</strong>.</li>
+      </ol>
+      <button class="btn btn-primary hidden" id="apInstall" type="button">Installer l'application</button>
+    </div>
+
+    <div class="ap-col ap-full">
+      <h2>Ce que contient l'application</h2>
+      <p>Uniquement ton espace membre : tes prochaines séances et ta réponse, la salle de préparation de ton camp, les votes, les motions, ton profil d'orateur et ton certificat de membre. Le reste du site reste accessible dans ton navigateur.</p>
+    </div>
+  </div></section>
+</Base>
+
+<style>
+  .ap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 36px 48px; align-items: start; }
+  .ap-etat { grid-column: 1 / -1; border: 3px solid var(--nuit); }
+  .ap-etat:empty { display: none; }
+  .ap-full { grid-column: 1 / -1; }
+  .ap-steps { counter-reset: s; list-style: none; padding: 0; margin: 16px 0; display: grid; gap: 12px; }
+  .ap-steps li { counter-increment: s; position: relative; padding: 3px 0 0 46px; min-height: 30px; }
+  .ap-steps li::before { content: counter(s); position: absolute; left: 0; top: 0; background: var(--nuit); color: #fff; font-weight: 800; width: 30px; height: 30px; display: grid; place-items: center; }
+  .ap-ic { display: inline-block; border: 2px solid currentColor; padding: 0 5px; font-size: 0.85em; }
+  .ap-col.moins { opacity: 0.55; }
+  @media (max-width: 760px) { .ap-grid { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  import { u } from '../lib/url';
+  import { estApp, estIOS } from '../lib/push';
+  const etat = document.getElementById('apEtat')!;
+  const ios = estIOS(), android = /android/i.test(navigator.userAgent);
+  // Mettre en avant les instructions de l'appareil utilisé
+  if (ios) { document.getElementById('apAndroid')!.classList.add('moins'); }
+  if (android) { document.getElementById('apIos')!.classList.add('moins'); document.querySelector('.ap-grid')!.insertBefore(document.getElementById('apAndroid')!, document.getElementById('apIos')); }
+  if (estApp()) {
+    etat.innerHTML = `<h3>L'application est installée</h3><p>Active les notifications depuis ton espace pour ne rater aucune séance.</p><a class="btn btn-primary btn-sm" href="${u('/compte')}">Aller à mon espace</a>`;
+  } else if ((ios && /crios|fxios|edgios/i.test(navigator.userAgent)) || /instagram|fban|fbav|snapchat|tiktok/i.test(navigator.userAgent)) {
+    etat.innerHTML = '<h3>Ouvre cette page dans Safari</h3><p class="small">Tu es dans le navigateur d\'une autre app. Touche « … » ou l\'icône de boussole pour ouvrir la page dans Safari, puis suis les étapes ci-dessous.</p>';
+  }
+  // Android / ordinateur : invite d'installation native
+  let invite: any = null;
+  const btn = document.getElementById('apInstall')!;
+  window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); invite = e; btn.classList.remove('hidden'); });
+  btn.addEventListener('click', async () => {
+    if (!invite) return; invite.prompt();
+    const r = await invite.userChoice; invite = null; btn.classList.add('hidden');
+    if (r.outcome === 'accepted') etat.innerHTML = '<h3>Application installée</h3><p>Ouvre-la depuis ton écran d\'accueil, connecte-toi et active les notifications.</p>';
+  });
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register(u('/sw.js'), { scope: u('/') }).catch(() => {});
+</script>

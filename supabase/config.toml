@@ -49,3 +49,12 @@ verify_jwt = false
 
 [functions.election-annonce]
 verify_jwt = false
+
+[functions.rappel-veille]
+verify_jwt = false
+
+[functions.bienvenue]
+verify_jwt = false
+
+[functions.push-test]
+verify_jwt = false
