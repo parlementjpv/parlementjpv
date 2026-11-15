@@ -3,6 +3,8 @@ import type { SupabaseClient, Session } from '@supabase/supabase-js';
 import { postJSON } from './newsletter';
 import postes from '../data/postes.json';
 import { posteBadge } from './poste';
+import { mdToHtmlWeb } from './markdown';
+import { CATEGORIES, slugify, preparerImage, fmtDate, type Article } from './articles';
 
 const esc = (s: unknown) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
 const $ = (id: string) => document.getElementById(id)!;
@@ -20,6 +22,7 @@ export async function initBureauPlus(sb: SupabaseClient, session: Session, me: {
   initElections(sb, session, me.role === 'admin');
   initMotions(sb);
   initEntreNous(sb, me);
+  initActualites(sb, me);
 }
 
 /* ────────────────────────── Appel ────────────────────────── */
@@ -285,4 +288,102 @@ async function initEntreNous(sb: SupabaseClient, me: { id: string; prenom: strin
     await sb.from('bureau_notes').delete().eq('id', courant); courant = null; $('ntZone').classList.add('hidden'); loadNotes();
   });
   loadNotes();
+}
+
+/* ────────────────────────── Actualités ────────────────────────── */
+async function initActualites(sb: SupabaseClient, me: { id: string; prenom: string; nom: string }) {
+  const form = $('arForm') as HTMLFormElement, msg = $('arMsg'), list = $('arList'), prev = $('arPreview');
+  const F = (n: string) => form.elements.namedItem(n) as HTMLInputElement;
+  const texte = $('arTexte') as HTMLTextAreaElement;
+  ($('arCat') as HTMLSelectElement).innerHTML = CATEGORIES.map((c) => `<option>${c}</option>`).join('');
+  const show = (t: string, k = 'err') => (msg.innerHTML = `<div class="alert alert-${k}">${t}</div>`);
+  let articles: Article[] = [];
+
+  const envoyerImage = async (file: File) => {
+    if (file.size > 15 * 1024 * 1024) throw new Error('Image trop lourde (15 Mo maximum avant réduction).');
+    const blob = await preparerImage(file);
+    const path = `${new Date().toISOString().slice(0, 10)}/${crypto.randomUUID()}.jpg`;
+    const { error } = await sb.storage.from('articles').upload(path, blob, { contentType: 'image/jpeg', upsert: false });
+    if (error) throw new Error("L'image n'a pas pu être envoyée : " + error.message);
+    return sb.storage.from('articles').getPublicUrl(path).data.publicUrl;
+  };
+  const apercu = () => {
+    const img = F('image_url').value, t = F('titre').value.trim();
+    prev.innerHTML = `${t ? `<span class="pill pill-gold">${esc(F('categorie').value)}</span><h1 style="font-size:1.8rem;margin:8px 0 4px;">${esc(t)}</h1>` : ''}${F('chapo').value ? `<p class="lead" style="font-size:1.05rem;">${esc(F('chapo').value)}</p>` : ''}${img ? `<img class="ar-hero" src="${esc(img)}" alt="${esc(F('image_alt').value)}" />` : ''}${mdToHtmlWeb(texte.value) || '<p class="muted">L\'aperçu s\'affiche pendant que tu écris.</p>'}`;
+  };
+  form.addEventListener('input', apercu);
+  const setImage = (url: string) => { F('image_url').value = url; const box = $('arImgPrev'); box.classList.toggle('hidden', !url); (box.querySelector('img') as HTMLImageElement).src = url || ''; apercu(); };
+  $('arImg').addEventListener('change', async (e) => {
+    const f = (e.target as HTMLInputElement).files?.[0]; if (!f) return;
+    show('Envoi de l\'image…', 'info');
+    try { setImage(await envoyerImage(f)); msg.innerHTML = ''; } catch (err: any) { show(esc(err.message)); }
+    (e.target as HTMLInputElement).value = '';
+  });
+  $('arImgDel').addEventListener('click', () => setImage(''));
+
+  // Barre de mise en forme
+  const insere = (avant: string, apres = '', ligne = false) => {
+    const a = texte.selectionStart, b = texte.selectionEnd, v = texte.value, sel = v.slice(a, b);
+    const debut = ligne ? v.lastIndexOf('\n', a - 1) + 1 : a;
+    texte.value = ligne ? v.slice(0, debut) + avant + v.slice(debut) : v.slice(0, a) + avant + sel + apres + v.slice(b);
+    texte.focus(); const pos = ligne ? b + avant.length : b + avant.length + apres.length; texte.setSelectionRange(pos, pos); apercu();
+  };
+  document.querySelectorAll<HTMLButtonElement>('.ar-tools button').forEach((bt) => bt.addEventListener('click', () => {
+    const m = bt.dataset.md!;
+    if (m === '**' || m === '*') insere(m, m);
+    else if (m === 'link') { const url = prompt('Adresse du lien (https://…)'); if (url && /^https?:\/\//.test(url)) insere('[', `](${url})`); }
+    else if (m === 'img') ($('arImgInline') as HTMLInputElement).click();
+    else insere(m, '', true);
+  }));
+  $('arImgInline').addEventListener('change', async (e) => {
+    const f = (e.target as HTMLInputElement).files?.[0]; if (!f) return;
+    const legende = prompt('Légende de l\'image (facultatif)') || '';
+    show('Envoi de l\'image…', 'info');
+    try { const url = await envoyerImage(f); insere(`\n![${legende.replace(/[\[\]]/g, '')}](${url})\n`); msg.innerHTML = ''; } catch (err: any) { show(esc(err.message)); }
+    (e.target as HTMLInputElement).value = '';
+  });
+
+  const reset = () => { form.reset(); F('id').value = ''; setImage(''); $('arFormTitle').textContent = 'Nouvel article'; $('arCancel').classList.add('hidden'); apercu(); };
+  $('arCancel').addEventListener('click', reset);
+
+  let publier = true;
+  form.querySelectorAll<HTMLButtonElement>('button[type=submit]').forEach((bt) => bt.addEventListener('click', () => { publier = bt.dataset.publier === '1'; }));
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault(); if (!form.checkValidity()) { form.reportValidity(); return; }
+    if (publier && texte.value.trim().length < 20) { show('Écris au moins quelques lignes avant de publier.'); return; }
+    const id = F('id').value, titre = F('titre').value.trim();
+    const row: Record<string, unknown> = { titre, categorie: F('categorie').value, chapo: F('chapo').value.trim() || null, contenu: texte.value, image_url: F('image_url').value || null, image_alt: F('image_alt').value.trim() || null, publie: publier };
+    if (F('date').value) row.publie_at = new Date(F('date').value + 'T12:00:00').toISOString();
+    let error;
+    if (id) ({ error } = await sb.from('articles').update(row).eq('id', id));
+    else {
+      let slug = slugify(titre); if (articles.some((a) => a.slug === slug)) slug = `${slug}-${Date.now().toString(36).slice(-4)}`;
+      ({ error } = await sb.from('articles').insert({ ...row, slug, auteur: me.id, auteur_nom: `${me.prenom} ${(me.nom || '').slice(0, 1)}.` }));
+    }
+    if (error) { show(esc(error.message)); return; }
+    show(publier ? 'Article publié : il est visible dans Actualités.' : 'Brouillon enregistré : il n\'est pas visible du public.', 'ok');
+    reset(); load();
+  });
+
+  async function load() {
+    const { data } = await sb.from('articles').select('*').order('created_at', { ascending: false });
+    articles = (data || []) as Article[];
+    list.innerHTML = articles.map((a) => `<div class="ar-row"><div><span class="ar-st${a.publie ? ' pub' : ''}">${a.publie ? 'Publié' : 'Brouillon'}</span><strong>${esc(a.titre)}</strong><br><span class="small muted">${esc(a.categorie)} · ${a.publie_at ? fmtDate(a.publie_at) : 'non publié'} · ${esc(a.auteur_nom)}</span></div>
+      <div class="flex" style="gap:6px;flex-wrap:wrap;justify-content:flex-end;">${a.publie ? `<a class="btn btn-outline btn-sm" href="${location.pathname.replace(/bureau\/?$/, '')}actualites/lire/?a=${a.slug}" target="_blank" rel="noopener">Voir</a>` : ''}
+      <button class="btn btn-outline btn-sm ar-edit" data-id="${a.id}" type="button">Modifier</button>
+      <button class="btn btn-outline btn-sm ar-pub" data-id="${a.id}" type="button">${a.publie ? 'Dépublier' : 'Publier'}</button>
+      <button class="lnk ar-del" data-id="${a.id}" type="button">Supprimer</button></div></div>`).join('') || '<p class="muted">Aucun article pour l\'instant. Le premier s\'écrit à gauche.</p>';
+  }
+  list.addEventListener('click', async (e) => {
+    const b = (e.target as HTMLElement).closest('button') as HTMLButtonElement | null; if (!b) return;
+    const a = articles.find((x) => x.id === b.dataset.id); if (!a) return;
+    if (b.classList.contains('ar-edit')) {
+      F('id').value = a.id; F('titre').value = a.titre; F('categorie').value = a.categorie; F('chapo').value = a.chapo || ''; texte.value = a.contenu; F('image_alt').value = a.image_alt || '';
+      F('date').value = a.publie_at ? a.publie_at.slice(0, 10) : ''; setImage(a.image_url || '');
+      $('arFormTitle').textContent = `Modifier « ${a.titre} »`; $('arCancel').classList.remove('hidden'); form.scrollIntoView({ behavior: 'smooth' });
+    }
+    if (b.classList.contains('ar-pub')) { await sb.from('articles').update({ publie: !a.publie }).eq('id', a.id); load(); }
+    if (b.classList.contains('ar-del') && confirm(`Supprimer définitivement « ${a.titre} » ?`)) { await sb.from('articles').delete().eq('id', a.id); load(); }
+  });
+  apercu(); load();
 }

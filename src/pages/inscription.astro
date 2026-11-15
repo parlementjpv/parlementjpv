@@ -29,6 +29,10 @@ import Base from '../layouts/Base.astro';
       </fieldset>
       <div class="field"><label for="password">Mot de passe</label><input id="password" name="password" type="password" required minlength="8" autocomplete="new-password" /><small>8 caractères minimum.</small></div>
       <label class="checkbox"><input type="checkbox" name="newsletter" checked /><span>Je souhaite recevoir la newsletter (désinscription à tout moment).</span></label>
+      <div class="robot-box">
+        <altcha-widget id="altcha" challengeurl={`${import.meta.env.PUBLIC_SUPABASE_URL}/functions/v1/inscription`} hidelogo hidefooter auto="onfocus"
+          strings={JSON.stringify({ label: 'Je ne suis pas un robot', verifying: 'Vérification…', verified: 'Vérifié', error: 'La vérification a échoué. Réessaie.', expired: 'La vérification a expiré. Recoche la case.', waitAlert: 'Vérification en cours, patiente un instant.', ariaLinkLabel: 'ALTCHA' })}></altcha-widget>
+      </div>
       <label class="checkbox"><input type="checkbox" name="rgpd" required /><span>J'ai lu la <a href="/confidentialite" target="_blank">politique de confidentialité</a> et, si j'ai moins de 15 ans, j'ai l'accord d'un parent.</span></label>
       <div id="msg"></div>
       <button class="btn btn-primary" type="submit">Créer mon compte et rejoindre l'instance</button>
@@ -36,6 +40,10 @@ import Base from '../layouts/Base.astro';
     <p class="auth-foot">Déjà un compte ? <a href="/connexion">Se connecter</a></p>
   </div></div>
 </Base>
+<style is:global>
+  .robot-box { margin: 4px 0 8px; }
+  altcha-widget { --altcha-max-width: 100%; --altcha-border-width: 3px; --altcha-border-radius: 0; --altcha-color-border: var(--nuit); --altcha-color-text: var(--nuit); --altcha-color-base: var(--blanc); --altcha-color-border-focus: var(--rouge); --altcha-color-error-text: var(--rouge); font-family: inherit; }
+</style>
 <style>
   .tags-field { border: 0; padding: 0; margin: 0; }
   .tags-field legend { font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; }
@@ -53,6 +61,8 @@ import Base from '../layouts/Base.astro';
   import { api } from '../lib/newsletter';
   import { getSupabase, supabaseConfigured } from '../lib/supabase';
   import { frError, resendBox } from '../lib/auth';
+  import { postJSON } from '../lib/newsletter';
+  import 'altcha';
   const form = document.getElementById('signupForm') as HTMLFormElement;
   const msg = document.getElementById('msg')!;
   const show = (t: string, k = 'err') => (msg.innerHTML = `<div class="alert alert-${k}">${t}</div>`);
@@ -62,27 +72,24 @@ import Base from '../layouts/Base.astro';
     if (!form.checkValidity()) { form.reportValidity(); return; }
     const fd = new FormData(form);
     const btn = form.querySelector('button')!; btn.disabled = true; msg.innerHTML = '';
+    const altcha = String(fd.get('altcha') || '');
+    if (!altcha) { show('Coche « Je ne suis pas un robot » avant de continuer.'); btn.disabled = false; return; }
     try {
-      const { data, error } = await getSupabase().auth.signUp({
+      const r = await postJSON('/api/inscription', {
+        action: 'creer', altcha,
         email: String(fd.get('email')).trim(),
         password: String(fd.get('password')),
-        options: {
-          emailRedirectTo: `${location.origin}${u('/compte')}?bienvenue=1`,
-          data: { prenom: fd.get('prenom'), nom: fd.get('nom'), classe: fd.get('classe'), telephone: String(fd.get('telephone')).trim(), interets: fd.getAll('interets').map(String), newsletter: fd.get('newsletter') === 'on' },
-        },
+        redirectTo: `${location.origin}${u('/compte')}?bienvenue=1`,
+        data: { prenom: fd.get('prenom'), nom: fd.get('nom'), classe: fd.get('classe'), telephone: String(fd.get('telephone')).trim(), interets: fd.getAll('interets').map(String), newsletter: fd.get('newsletter') === 'on' },
       });
-      if (error) throw error;
-      if (data.user && data.user.identities && data.user.identities.length === 0) throw new Error('already registered');
+      if (!r.ok) { (document.getElementById('altcha') as any)?.reset?.(); throw new Error(r.error); }
       if (fd.get('newsletter') === 'on') {
         fetch(api('/api/newsletter-subscribe'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: String(fd.get('email')).trim(), fromSignup: true }) }).catch(() => {});
       }
       try { localStorage.setItem('jpv_compte', '1'); } catch {}
       form.classList.add('hidden');
-      if (data.session) { show('Compte créé ! Redirection vers ton espace…', 'ok'); setTimeout(() => (location.href = u('/compte?bienvenue=1')), 900); }
-      else {
-        show('Compte créé ! Vérifie ta boîte mail (et les spams) et clique sur le lien de confirmation pour activer ton compte.', 'ok');
-        msg.appendChild(resendBox(String(fd.get('email'))));
-      }
+      show(r.data?.warning || 'Compte créé ! Vérifie ta boîte mail (et les spams) et clique sur le lien de confirmation pour activer ton compte.', r.data?.warning ? 'info' : 'ok');
+      msg.appendChild(resendBox(String(fd.get('email'))));
     } catch (err: any) {
       show(frError(err.message || String(err)));
       if (/already registered/i.test(err.message || '')) msg.appendChild(resendBox(String(fd.get('email')), "Compte pas encore confirmé ? Renvoyer l'email de confirmation"));

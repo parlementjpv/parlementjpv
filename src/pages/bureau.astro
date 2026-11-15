@@ -23,6 +23,7 @@ import Base from '../layouts/Base.astro';
         <button class="bu-tile tab" data-tab="motions" type="button"><span class="bu-tile-t">Motions</span><span class="bu-tile-d">Les sujets proposés par les membres</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
       </div></section>
       <section class="bu-group"><h2 class="bu-group-t">Communication</h2><div class="bu-tiles">
+        <button class="bu-tile tab" data-tab="actu" type="button"><span class="bu-tile-t">Actualités</span><span class="bu-tile-d">Écrire, illustrer et publier un article</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
         <button class="bu-tile tab" data-tab="nl" type="button"><strong class="bu-count" id="sAbo">–</strong><span class="bu-tile-t">Newsletter</span><span class="bu-tile-d">Rédiger et envoyer la lettre</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
         <button class="bu-tile tab" data-tab="ecrire" type="button"><span class="bu-tile-t">Écrire aux membres</span><span class="bu-tile-d">Un email à des membres choisis</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
         <button class="bu-tile tab" data-tab="msg" type="button"><strong class="bu-count" id="sMsg">–</strong><span class="bu-tile-t">Messages reçus</span><span class="bu-tile-d">Le formulaire de contact</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
@@ -185,6 +186,45 @@ import Base from '../layouts/Base.astro';
         </div>
       </div>
     </div>
+    <div class="panel hidden" id="tab-actu">
+      <div class="grid ev-admin">
+        <form class="form card" id="arForm">
+          <h3 id="arFormTitle">Nouvel article</h3>
+          <input type="hidden" name="id" />
+          <div class="field"><label for="arTitre">Titre</label><input id="arTitre" name="titre" required maxlength="160" placeholder="Débat : faut-il interdire les téléphones au lycée ?" /></div>
+          <div class="form-row">
+            <div class="field"><label for="arCat">Catégorie</label><select id="arCat" name="categorie"></select></div>
+            <div class="field"><label for="arDate">Date affichée <small>(vide = date de publication)</small></label><input id="arDate" name="date" type="date" /></div>
+          </div>
+          <div class="field"><label for="arChapo">Résumé <small>(2 phrases, affiché dans la liste)</small></label><textarea id="arChapo" name="chapo" maxlength="400" style="min-height:70px;"></textarea></div>
+          <div class="field">
+            <label for="arImg">Image principale <small>(JPEG, PNG ou WebP, réduite automatiquement)</small></label>
+            <input id="arImg" type="file" accept="image/jpeg,image/png,image/webp" />
+            <div id="arImgPrev" class="ar-img-prev hidden"><img alt="" /><button class="lnk" id="arImgDel" type="button">Retirer l'image</button></div>
+            <input type="hidden" name="image_url" />
+          </div>
+          <div class="field"><label for="arAlt">Description de l'image <small>(pour les lecteurs d'écran)</small></label><input id="arAlt" name="image_alt" maxlength="200" placeholder="Les deux camps face à face en salle B12" /></div>
+          <div class="field">
+            <label for="arTexte">Texte de l'article</label>
+            <div class="ar-tools" role="toolbar" aria-label="Mise en forme">
+              <button type="button" data-md="## " title="Intertitre">Intertitre</button><button type="button" data-md="**" title="Gras"><b>Gras</b></button><button type="button" data-md="*" title="Italique"><i>Italique</i></button><button type="button" data-md="- " title="Liste">Liste</button><button type="button" data-md="> " title="Citation">Citation</button><button type="button" data-md="link" title="Lien">Lien</button><button type="button" data-md="img" title="Image dans le texte">Image</button>
+            </div>
+            <textarea id="arTexte" name="contenu" maxlength="60000" style="min-height:280px;" placeholder="Écris ton article ici. Laisse une ligne vide entre deux paragraphes."></textarea>
+            <input id="arImgInline" type="file" accept="image/jpeg,image/png,image/webp" class="hidden" />
+          </div>
+          <div id="arMsg"></div>
+          <div class="flex" style="gap:8px;flex-wrap:wrap;">
+            <button class="btn btn-primary" type="submit" data-publier="1">Publier</button>
+            <button class="btn btn-outline" type="submit" data-publier="0">Enregistrer en brouillon</button>
+            <button class="btn btn-outline hidden" id="arCancel" type="button">Annuler la modification</button>
+          </div>
+        </form>
+        <div style="display:grid;gap:24px;align-content:start;">
+          <div class="card"><h3>Aperçu</h3><article class="ar-preview prose" id="arPreview"><p class="muted">L'aperçu s'affiche pendant que tu écris.</p></article></div>
+          <div class="card"><h3>Articles</h3><div id="arList"><p class="muted">Chargement…</p></div></div>
+        </div>
+      </div>
+    </div>
     <div class="panel hidden" id="tab-journal">
       <div class="card">
         <p class="small muted" style="margin-top:0;">Toutes les actions du bureau, de la plus récente à la plus ancienne. Visible uniquement par l'administrateur ; conservé un an. Les votes et les actions des simples membres ne sont jamais enregistrés ici.</p>
@@ -212,6 +252,16 @@ import Base from '../layouts/Base.astro';
   .bu-tile-d { font-size: 0.95rem; color: var(--gris); }
   .bu-go { margin-top: auto; padding-top: 10px; font-weight: 700; font-size: 0.9rem; text-decoration: underline; text-decoration-color: var(--rouge); text-underline-offset: 4px; }
   .bu-count { position: absolute; top: 16px; right: 18px; font-size: 2.2rem; line-height: 1; font-weight: 800; color: var(--rouge); }
+  .ar-tools { display: flex; flex-wrap: wrap; gap: 0; margin-bottom: -3px; }
+  .ar-tools button { border: 3px solid var(--nuit); background: var(--pierre); color: var(--nuit); font: inherit; font-size: 0.82rem; font-weight: 700; padding: 5px 10px; cursor: pointer; margin-right: -3px; }
+  .ar-tools button:hover { background: var(--blanc); }
+  .ar-img-prev { display: flex; gap: 12px; align-items: center; margin-top: 8px; }
+  .ar-img-prev img { width: 140px; height: 90px; object-fit: cover; border: 2px solid var(--nuit); }
+  .ar-preview img { max-width: 100%; height: auto; display: block; }
+  .ar-preview .ar-hero { margin: 8px 0 14px; aspect-ratio: 16 / 9; object-fit: cover; width: 100%; }
+  .ar-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; padding: 12px 0; border-bottom: 2px solid var(--pierre-fonce); align-items: center; }
+  .ar-st { font-size: 0.72rem; font-weight: 800; padding: 1px 7px; background: var(--pierre); margin-right: 6px; }
+  .ar-st.pub { background: var(--rouge); color: #fff; }
   .jn-list { display: grid; }
   .jn-row { display: grid; grid-template-columns: 150px 170px 1fr; gap: 14px; padding: 10px 0; border-bottom: 2px solid var(--pierre-fonce); align-items: baseline; }
   .jn-quand { font-size: 0.85rem; color: var(--gris); }

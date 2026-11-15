@@ -19,26 +19,51 @@ const cats = ['Tous', ...new Set(posts.map((p) => p.data.category))];
   <section class="section">
     <div class="container grid grid-3" id="postGrid">
       {posts.map((p) => (
-        <a class="card post" href={`/actualites/${p.id}`} data-cat={p.data.category}>
+        <a class="card post" href={`/actualites/${p.id}`} data-cat={p.data.category} data-date={p.data.date.toISOString()}>
           <span class="pill pill-gold">{p.data.category}</span>
           <h3>{p.data.title}</h3>
           <p class="muted small">{p.data.excerpt}</p>
           <span class="small muted">{fmt(p.data.date)} · {p.data.author}</span>
         </a>
       ))}
-      {posts.length === 0 && <p class="muted">Aucune publication pour le moment.</p>}
+      {posts.length === 0 && <p class="muted" id="noPost">Aucune publication pour le moment.</p>}
     </div>
   </section>
 </Base>
-<style>
+<style is:global>
+  .post-img { width: calc(100% + 2 * var(--card-pad, 24px)); margin: calc(-1 * var(--card-pad, 24px)) calc(-1 * var(--card-pad, 24px)) 6px; aspect-ratio: 16 / 9; object-fit: cover; display: block; max-width: none; }
   .post { text-decoration: none; display: grid; gap: 8px; align-content: start; } .post h3 { font-size: 1.15rem; margin: 4px 0 0; } .post p { margin: 0; } .post:hover { border-color: var(--rouge); }
   .filter { cursor: pointer; border: 0; font: inherit; font-size: 0.8rem; } .filter.active { background: var(--nuit); color: #fff; }
 </style>
 <script>
-  document.querySelectorAll<HTMLButtonElement>('.filter').forEach((b) => b.addEventListener('click', () => {
+  import { getSupabase, supabaseConfigured } from '../../lib/supabase';
+  import { articlesPublies, fmtDate } from '../../lib/articles';
+  import { u } from '../../lib/url';
+  const esc = (s: unknown) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
+  // Articles publiés depuis l'espace bureau : ajoutés à la grille, triés avec les anciens par date
+  (async () => {
+    if (!supabaseConfigured) return;
+    const arts = await articlesPublies(getSupabase());
+    if (!arts.length) return;
+    document.getElementById('noPost')?.remove();
+    const grid = document.getElementById('postGrid')!;
+    grid.insertAdjacentHTML('beforeend', arts.map((a) => `<a class="card post" href="${u('/actualites/lire/')}?a=${a.slug}" data-cat="${esc(a.categorie)}" data-date="${a.publie_at}">
+      ${a.image_url ? `<img class="post-img" src="${esc(a.image_url)}" alt="" loading="lazy" />` : ''}<span class="pill pill-gold">${esc(a.categorie)}</span><h3>${esc(a.titre)}</h3>
+      ${a.chapo ? `<p class="muted small">${esc(a.chapo)}</p>` : ''}<span class="small muted">${fmtDate(a.publie_at!)} · ${esc(a.auteur_nom)}</span></a>`).join(''));
+    [...grid.querySelectorAll<HTMLElement>('.post')].sort((x, y) => (y.dataset.date || '').localeCompare(x.dataset.date || '')).forEach((el) => grid.appendChild(el));
+    const filtres = document.getElementById('filters')!;
+    [...new Set(arts.map((a) => a.categorie))].filter((c) => !filtres.querySelector(`[data-cat="${CSS.escape(c)}"]`)).forEach((c) => {
+      filtres.insertAdjacentHTML('beforeend', `<button class="pill filter" data-cat="${esc(c)}" type="button">${esc(c)}</button>`);
+    });
+    brancherFiltres();
+  })();
+  function brancherFiltres() {
+  document.querySelectorAll<HTMLButtonElement>('.filter').forEach((b) => b.onclick = () => {
     document.querySelectorAll('.filter').forEach((x) => x.classList.remove('active'));
     b.classList.add('active');
     const cat = b.dataset.cat;
     document.querySelectorAll<HTMLElement>('#postGrid .post').forEach((p) => { p.style.display = cat === 'Tous' || p.dataset.cat === cat ? '' : 'none'; });
-  }));
+  });
+  }
+  brancherFiltres();
 </script>

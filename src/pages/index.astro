@@ -72,14 +72,16 @@ const motions = data.events.filter((e) => e.type === 'Débat' || e.type === 'Con
       </div>
       <div>
         <h2>Dernières publications</h2>
+        <div id="lastPosts">
         {posts.map((p) => (
-          <a class="post-row" href={`/actualites/${p.id}`}>
+          <a class="post-row" href={`/actualites/${p.id}`} data-date={p.data.date.toISOString()}>
             <span class="pill">{p.data.category}</span>
             <h3>{p.data.title}</h3>
             <p>{p.data.excerpt}</p>
             <span class="small muted">{fmt(p.data.date)}</span>
           </a>
         ))}
+        </div>
         <a class="link" href="/actualites">Toutes les actualités</a>
       </div>
     </div>
@@ -111,6 +113,20 @@ const motions = data.events.filter((e) => e.type === 'Débat' || e.type === 'Con
     </div>
   </section>
 </Base>
+<script>
+  import { getSupabase, supabaseConfigured } from '../lib/supabase';
+  import { articlesPublies, fmtDate } from '../lib/articles';
+  import { u } from '../lib/url';
+  (async () => {
+    if (!supabaseConfigured) return;
+    const arts = await articlesPublies(getSupabase(), 2);
+    if (!arts.length) return;
+    const esc = (v: unknown) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
+    const box = document.getElementById('lastPosts')!;
+    box.insertAdjacentHTML('afterbegin', arts.map((a) => `<a class="post-row" href="${u('/actualites/lire/')}?a=${a.slug}" data-date="${a.publie_at}"><span class="pill">${esc(a.categorie)}</span><h3>${esc(a.titre)}</h3>${a.chapo ? `<p>${esc(a.chapo)}</p>` : ''}<span class="small muted">${fmtDate(a.publie_at!)}</span></a>`).join(''));
+    [...box.querySelectorAll<HTMLElement>('.post-row')].sort((x, y) => (y.dataset.date || '').localeCompare(x.dataset.date || '')).forEach((el, i) => { if (i < 2) box.appendChild(el); else el.remove(); });
+  })();
+</script>
 
 <style>
   .hero-home { padding: clamp(40px, 6vw, 90px) 0 clamp(32px, 4vw, 60px); position: relative; }
@@ -130,10 +146,10 @@ const motions = data.events.filter((e) => e.type === 'Débat' || e.type === 'Con
 
   .split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 72px); align-items: start; }
   @media (max-width: 860px) { .split { grid-template-columns: 1fr; } }
-  .post-row { display: block; text-decoration: none; padding: 20px 0; border-bottom: 2px solid var(--pierre-fonce); }
-  .post-row h3 { margin: 8px 0 6px; }
-  .post-row p { margin: 0 0 6px; color: var(--gris); }
-  .post-row:hover h3 { text-decoration: underline; text-decoration-color: var(--rouge); text-decoration-thickness: 4px; text-underline-offset: 5px; }
+  :global(.post-row) { display: block; text-decoration: none; padding: 20px 0; border-bottom: 2px solid var(--pierre-fonce); }
+  :global(.post-row h3) { margin: 8px 0 6px; }
+  :global(.post-row p) { margin: 0 0 6px; color: var(--gris); }
+  :global(.post-row:hover h3) { text-decoration: underline; text-decoration-color: var(--rouge); text-decoration-thickness: 4px; text-underline-offset: 5px; }
   .link { display: inline-block; margin-top: 18px; font-weight: 700; }
 
   .quote-band { background: var(--bleu); color: #fff; }

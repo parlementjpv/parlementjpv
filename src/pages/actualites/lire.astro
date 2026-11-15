@@ -1,0 +1,40 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+<Base title="Actualité" description="Publication du bureau du Parlement JPV.">
+  <article class="section">
+    <div class="container prose ar-lire" style="margin-inline:auto;" id="arBox">
+      <a href="/actualites" class="small muted">← Toutes les actualités</a>
+      <p class="muted mt-2" id="arWait">Chargement de l'article…</p>
+    </div>
+  </article>
+</Base>
+<style is:global>
+  .ar-lire .ar-hero { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; margin: 10px 0 22px; display: block; }
+  .ar-lire figure { margin: 24px 0; } .ar-lire figure img { width: 100%; height: auto; display: block; }
+  .ar-lire figcaption { font-size: 0.88rem; color: var(--gris); margin-top: 6px; }
+  .ar-lire blockquote { border-left: 6px solid var(--rouge); margin: 20px 0; padding: 4px 0 4px 18px; font-size: 1.15rem; font-weight: 600; }
+</style>
+<script>
+  import { getSupabase, supabaseConfigured } from '../../lib/supabase';
+  import { mdToHtmlWeb } from '../../lib/markdown';
+  import { fmtDate, type Article } from '../../lib/articles';
+  const esc = (s: unknown) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
+  (async () => {
+    const slug = new URLSearchParams(location.search).get('a');
+    const box = document.getElementById('arBox')!, wait = document.getElementById('arWait')!;
+    if (!slug || !supabaseConfigured) { wait.textContent = 'Article introuvable.'; return; }
+    const { data } = await getSupabase().from('articles').select('*').eq('slug', slug).eq('publie', true).maybeSingle();
+    const a = data as Article | null;
+    if (!a) { wait.textContent = "Cet article n'existe pas ou n'est plus publié."; return; }
+    document.title = `${a.titre} — Parlement JPV`;
+    document.querySelector('meta[name="description"]')?.setAttribute('content', a.chapo || a.titre);
+    wait.remove();
+    box.insertAdjacentHTML('beforeend', `<div class="mt-2"><span class="pill pill-gold">${esc(a.categorie)}</span></div>
+      <h1 style="margin-top:10px;">${esc(a.titre)}</h1>
+      <p class="muted">${fmtDate(a.publie_at || a.created_at)} · ${esc(a.auteur_nom)}</p>
+      ${a.chapo ? `<p class="lead">${esc(a.chapo)}</p>` : ''}
+      ${a.image_url ? `<img class="ar-hero" src="${esc(a.image_url)}" alt="${esc(a.image_alt || '')}" />` : ''}
+      ${mdToHtmlWeb(a.contenu)}`);
+  })();
+</script>
