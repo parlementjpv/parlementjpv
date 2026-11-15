@@ -116,9 +116,15 @@
 - **Destinataires :** services push d'Apple, Google ou Mozilla (transport uniquement).
 - **Durée :** jusqu'à la désactivation, la suppression du compte ou l'expiration de l'abonnement (supprimé automatiquement).
 
+### 17. Notifications envoyées par le bureau
+- **Finalité :** prévenir rapidement les membres (changement de salle, rappel).
+- **Données :** titre, message, destinataires (groupe), nombre de membres joints, auteur.
+- **Destinataires :** bureau.
+- **Durée :** 1 an (purge automatique).
+
 ### 16. Certificat de membre
 - **Finalité :** attester l'adhésion (Parcoursup, CV).
-- **Données :** prénom, nom, classe, date d'adhésion, numéro unique. Vérification publique par numéro (page /verifier).
+- **Données :** prénom, nom, classe, date d'adhésion, numéro unique, signature manuscrite (image dessinée par le membre, visible uniquement par lui et sur son certificat). Vérification publique par numéro ou QR code (page /verifier). Certificat envoyé par email à l'inscription.
 - **Durée :** tant que le compte existe.
 
 ## Mesures de sécurité

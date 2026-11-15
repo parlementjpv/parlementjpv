@@ -43,7 +43,6 @@ import Base from '../layouts/Base.astro';
         <p class="small muted" id="notifTxt">Nouvelles séances, rappel la veille, votes : reçois une alerte comme un SMS.</p>
         <div class="flex" style="gap:8px;flex-wrap:wrap;">
           <button class="btn btn-primary btn-sm hidden" id="notifOn" type="button">Activer les notifications</button>
-          <button class="btn btn-outline btn-sm hidden" id="notifTest" type="button">M'envoyer un test</button>
           <button class="btn btn-outline btn-sm hidden" id="notifOff" type="button">Désactiver sur cet appareil</button>
           <a class="btn btn-outline btn-sm hidden app-hide" id="notifInstall" href="/application">Installer l'application</a>
         </div>
@@ -51,8 +50,12 @@ import Base from '../layouts/Base.astro';
       </div>
       <div class="card">
         <h3>Certificat de membre</h3>
-        <p class="small muted">Un PDF officiel qui atteste que tu es membre du Parlement JPV, avec un numéro vérifiable en ligne. Utile pour Parcoursup, un CV ou une candidature.</p>
-        <button class="btn btn-outline btn-sm" id="certif" type="button">Télécharger mon certificat (PDF)</button>
+        <p class="small muted">Un PDF officiel signé par toi et par la présidence, qui atteste que tu es membre du Parlement JPV. Son QR code permet à n'importe qui de vérifier qu'il est authentique. Utile pour Parcoursup, un CV ou une candidature.</p>
+        <div class="sig-apercu hidden" id="sigApercu"><span class="small muted">Ma signature</span><img id="sigImg" alt="Ta signature" /></div>
+        <div class="flex" style="gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" id="certif" type="button">Télécharger mon certificat (PDF)</button>
+          <button class="btn btn-outline btn-sm" id="sigEdit" type="button">Signer mon certificat</button>
+        </div>
         <div id="certifMsg" aria-live="polite"></div>
       </div>
       <div class="card">
@@ -98,6 +101,8 @@ import Base from '../layouts/Base.astro';
   a.card.tuile strong { display: block; font-size: 1.3rem; line-height: 1.2; letter-spacing: -0.01em; }
   a.card.tuile .tuile-go { font-weight: 700; font-size: 0.92rem; text-decoration: underline; text-decoration-color: var(--rouge); text-underline-offset: 4px; }
   a.card.tuile.tuile-chaud { border-color: var(--rouge); background: var(--pierre); }
+  .sig-apercu { display: grid; gap: 4px; margin: 4px 0 12px; }
+  .sig-apercu img { max-width: 220px; max-height: 70px; object-fit: contain; object-position: left; background: #fff; padding: 4px 8px; border-bottom: 2px solid var(--nuit); }
   .mo-card { border: 3px solid var(--nuit); }
   .mo-card .mo-k { font-weight: 800; color: var(--rouge); font-size: 0.9rem; margin: 0 0 4px; }
   .mo-card h3 { margin: 0 0 6px; }
@@ -125,6 +130,7 @@ import Base from '../layouts/Base.astro';
   import { fetchUpcoming, fmt, when, esc } from '../lib/events';
   import { etatPush, activerPush, desactiverPush, estApp } from '../lib/push';
   import { telechargerCertificat } from '../lib/certificat';
+  import { demanderSignature } from '../lib/signature';
   (async () => {
     const session = await requireSession(); if (!session) return;
     const sb = getSupabase();
@@ -137,37 +143,67 @@ import Base from '../layouts/Base.astro';
 
     // Profil
     // Guide d'installation : envoyé une fois, à la première connexion d'un nouveau membre
-    if (p && !(p as any).guide_envoye_at) postJSON('/api/bienvenue', {}, session.access_token).catch(() => {});
+    // Signature du membre (affichée sur le certificat)
+    const sigImg = document.getElementById('sigImg') as HTMLImageElement, sigAp = document.getElementById('sigApercu')!, sigBtn = document.getElementById('sigEdit')!;
+    let aSigne = false;
+    const majSig = (img: string | null) => { aSigne = !!img; if (img) { sigImg.src = img; sigAp.classList.remove('hidden'); sigBtn.textContent = 'Modifier ma signature'; } };
+    const { data: sigRow } = await sb.from('signatures').select('image').eq('user_id', session.user.id).maybeSingle();
+    majSig(sigRow?.image || null);
+    const signer = async (titre: string, texte: string, annuler: string | null = 'Annuler') => {
+      const img = await demanderSignature({ titre, texte, annuler });
+      if (!img) return false;
+      const { error } = await sb.from('signatures').upsert({ user_id: session.user.id, image: img, signed_at: new Date().toISOString() });
+      if (error) { alert("La signature n'a pas pu être enregistrée. Réessaie."); return false; }
+      majSig(img); return true;
+    };
+    sigBtn.addEventListener('click', () => signer('Ta signature', 'Elle apparaîtra sur ton certificat de membre, à côté de celle de la présidence.'));
+
+    // Nouveau membre : signature du certificat, puis email de bienvenue (guide d'installation + certificat en pièce jointe)
+    if (p && !(p as any).guide_envoye_at) {
+      if (!aSigne) await signer(`Bienvenue ${p.prenom || ''} !`.replace(' !', ' !'), "Signe ta carte de membre : ta signature figurera sur ton certificat de membre, que nous t'envoyons par email avec le guide pour installer l'application.", null);
+      postJSON('/api/bienvenue', {}, session.access_token).catch(() => {});
+    }
 
     // Notifications push
-    const nOn = document.getElementById('notifOn')!, nTest = document.getElementById('notifTest')!, nOff = document.getElementById('notifOff')!, nInst = document.getElementById('notifInstall')!;
+    const nOn = document.getElementById('notifOn')!, nOff = document.getElementById('notifOff')!, nInst = document.getElementById('notifInstall')!;
     const nTxt = document.getElementById('notifTxt')!, nMsg = document.getElementById('notifMsg')!;
     const majNotif = async () => {
       const e = await etatPush();
-      [nOn, nTest, nOff, nInst].forEach((b) => b.classList.add('hidden'));
-      if (e === 'actif') { nTxt.textContent = 'Activées sur cet appareil. Tu recevras les nouvelles séances, le rappel la veille et les votes.'; nTest.classList.remove('hidden'); nOff.classList.remove('hidden'); }
+      [nOn, nOff, nInst].forEach((b) => b.classList.add('hidden'));
+      if (e === 'actif') { nTxt.textContent = 'Activées sur cet appareil. Tu recevras les nouvelles séances, le rappel la veille et les votes.'; nOff.classList.remove('hidden'); }
       else if (e === 'inactif') { nTxt.textContent = 'Nouvelles séances, rappel la veille, votes : reçois une alerte comme un SMS.'; nOn.classList.remove('hidden'); if (!estApp()) nInst.classList.remove('hidden'); }
       else if (e === 'ios-installer') { nTxt.textContent = "Sur iPhone, les notifications ne marchent que dans l'application : ajoute d'abord le site à ton écran d'accueil."; nInst.classList.remove('hidden'); }
       else if (e === 'bloque') nTxt.textContent = "Les notifications sont bloquées pour ce site. Autorise-les dans les réglages de ton téléphone ou de ton navigateur, puis recharge la page.";
       else { nTxt.textContent = "Ce navigateur ne gère pas les notifications. Installe l'application depuis Safari (iPhone) ou Chrome (Android)."; nInst.classList.remove('hidden'); }
     };
-    majNotif();
+    majNotif().then(async () => {
+      // Application installée : on propose tout de suite d'activer les notifications (un toucher est exigé par le téléphone)
+      if (!estApp() || (await etatPush()) !== 'inactif' || sessionStorage.getItem('jpv_notif_vu')) return;
+      sessionStorage.setItem('jpv_notif_vu', '1');
+      const d = document.createElement('dialog'); d.className = 'sig-dialog';
+      d.innerHTML = `<div class="sig-box"><h2 class="sig-t">Ne rate aucune séance</h2><p class="sig-p">Active les notifications : nouvelle séance, rappel la veille, votes et messages du bureau arrivent directement sur ton téléphone.</p>
+        <button class="btn btn-primary sig-big" type="button" id="dnOui">Activer les notifications</button><button class="btn btn-outline btn-sm" type="button" id="dnNon">Plus tard</button><div id="dnMsg" class="small" aria-live="polite"></div></div>`;
+      document.body.appendChild(d); d.showModal();
+      d.querySelector('#dnNon')!.addEventListener('click', () => { d.close(); d.remove(); });
+      d.querySelector('#dnOui')!.addEventListener('click', async () => {
+        try { await activerPush(sb); d.close(); d.remove(); nMsg.innerHTML = '<div class="alert alert-ok">Notifications activées.</div>'; }
+        catch (e: any) { d.querySelector('#dnMsg')!.textContent = e?.message === 'bloque' ? 'Les notifications sont bloquées : autorise-les dans les réglages du téléphone.' : 'Activation impossible pour le moment. Tu pourras réessayer depuis ton espace.'; }
+        majNotif();
+      });
+    });
     nOn.addEventListener('click', async () => {
       nMsg.innerHTML = '';
       try { await activerPush(sb); nMsg.innerHTML = '<div class="alert alert-ok">Notifications activées.</div>'; }
       catch (e: any) { nMsg.innerHTML = `<div class="alert alert-err">${e?.message === 'bloque' ? 'Tu as bloqué les notifications : autorise-les dans les réglages, puis réessaie.' : e?.message === 'refuse' ? 'Notifications non autorisées.' : "L'activation a échoué. Réessaie dans un instant."}</div>`; }
       majNotif();
     });
-    nTest.addEventListener('click', async () => {
-      const r = await postJSON<{ envoyes: number }>('/api/push-test', {}, session.access_token);
-      nMsg.innerHTML = r.ok && r.data.envoyes ? '<div class="alert alert-ok">Notification envoyée : elle arrive dans quelques secondes.</div>' : '<div class="alert alert-err">Aucun appareil n\'a pu être joint. Désactive puis réactive les notifications.</div>';
-    });
     nOff.addEventListener('click', async () => { await desactiverPush(sb); nMsg.innerHTML = '<div class="alert alert-ok">Notifications désactivées sur cet appareil.</div>'; majNotif(); });
 
     // Certificat de membre
     document.getElementById('certif')!.addEventListener('click', async (ev) => {
       const b = ev.currentTarget as HTMLButtonElement; b.disabled = true; b.textContent = 'Préparation du PDF…';
-      try { await telechargerCertificat(sb); document.getElementById('certifMsg')!.innerHTML = ''; }
+      if (!aSigne && !(await signer('Signe ton certificat', 'Ta signature figurera sur ton certificat de membre, à côté de celle de la présidence.'))) { b.disabled = false; b.textContent = 'Télécharger mon certificat (PDF)'; return; }
+      try { await telechargerCertificat(session.access_token); document.getElementById('certifMsg')!.innerHTML = ''; }
       catch { document.getElementById('certifMsg')!.innerHTML = '<div class="alert alert-err">Le certificat n\'a pas pu être généré. Réessaie.</div>'; }
       b.disabled = false; b.textContent = 'Télécharger mon certificat (PDF)';
     });

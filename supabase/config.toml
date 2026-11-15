@@ -56,5 +56,8 @@ verify_jwt = false
 [functions.bienvenue]
 verify_jwt = false
 
-[functions.push-test]
+[functions.certificat]
+verify_jwt = false
+
+[functions.notif-bureau]
 verify_jwt = false

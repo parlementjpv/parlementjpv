@@ -238,3 +238,18 @@ html.app #burger, html.app .mobile-nav, html.app .app-hide { display: none !impo
 html.app .site-header { padding-top: env(safe-area-inset-top); }
 html.app body { padding-bottom: env(safe-area-inset-bottom); }
 html:not(.app) .app-only { display: none !important; }
+
+/* Fenêtres (signature, notifications) */
+.sig-dialog { border: 4px solid var(--nuit); padding: 0; width: min(560px, calc(100vw - 24px)); background: var(--blanc, #fff); color: var(--nuit); }
+.sig-dialog::backdrop { background: rgba(15, 31, 75, 0.6); }
+.sig-box { padding: 24px; display: grid; gap: 12px; }
+.sig-t { margin: 0; font-size: 1.6rem; line-height: 1.1; }
+.sig-p { margin: 0; color: var(--gris); }
+.sig-zone { position: relative; border: 2px dashed var(--nuit); background: #fff; touch-action: none; }
+.sig-zone canvas { display: block; width: 100%; height: auto; aspect-ratio: 3 / 1; cursor: crosshair; touch-action: none; }
+.sig-ligne { position: absolute; left: 6%; right: 6%; bottom: 22%; border-bottom: 1.5px solid #c9ccd6; pointer-events: none; }
+.sig-vide { position: absolute; left: 6%; bottom: 26%; pointer-events: none; }
+.sig-err { color: var(--rouge); min-height: 1em; }
+.sig-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.sig-sp { flex: 1; }
+.sig-big { font-size: 1.05rem; padding: 14px 22px; width: 100%; }

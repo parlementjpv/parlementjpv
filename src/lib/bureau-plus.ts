@@ -23,6 +23,43 @@ export async function initBureauPlus(sb: SupabaseClient, session: Session, me: {
   initMotions(sb);
   initEntreNous(sb, me);
   initActualites(sb, me);
+  initNotifs(sb, session);
+}
+
+/* ────────────────────────── Notifications push ────────────────────────── */
+async function initNotifs(sb: SupabaseClient, session: Session) {
+  const f = $('nbForm') as HTMLFormElement, cible = $('nbCible') as HTMLSelectElement, ev = $('nbEvent') as HTMLSelectElement;
+  const titre = $('nbTitre') as HTMLInputElement, texte = $('nbTexte') as HTMLTextAreaElement, msg = $('nbMsg'), btn = $('nbSend') as HTMLButtonElement;
+  const stats = async () => {
+    const { data } = await sb.rpc('push_stats');
+    if (data) { $('sPush').textContent = String(data.membres); $('nbStats').textContent = `${data.membres} membre${data.membres > 1 ? 's ont' : ' a'} activé les notifications (${data.appareils} appareil${data.appareils > 1 ? 's' : ''}). Les autres ne recevront rien : pense à leur dire d'installer l'application.`; }
+  };
+  const hist = async () => {
+    const { data } = await sb.from('notifs_bureau').select('*').order('at', { ascending: false }).limit(20);
+    $('nbHist').innerHTML = data?.length ? data.map((n: any) => `<div class="nb-h"><strong>${esc(n.titre)}</strong> — ${esc(n.texte)}<br><span class="muted">${esc(fmtDate(n.at))} · ${esc(n.cible)} · ${n.personnes} membre${n.personnes > 1 ? 's' : ''} joint${n.personnes > 1 ? 's' : ''} · par ${esc(n.auteur_nom)}</span></div>`).join('<hr>') : '<p class="muted">Aucune notification envoyée pour l\'instant.</p>';
+  };
+  const apercu = () => { $('nbApT').textContent = titre.value || 'Titre'; $('nbApX').textContent = texte.value || 'Message'; $('nbCount').textContent = `${texte.value.length} / 300`; };
+  titre.addEventListener('input', apercu); texte.addEventListener('input', apercu);
+  cible.addEventListener('change', async () => {
+    $('nbEventWrap').classList.toggle('hidden', cible.value !== 'seance');
+    if (cible.value === 'seance' && !ev.options.length) {
+      const { data } = await sb.from('events').select('id, title, starts_at').is('annule_at', null).gte('starts_at', new Date(Date.now() - 86400000).toISOString()).order('starts_at').limit(30);
+      ev.innerHTML = data?.length ? data.map((e) => `<option value="${e.id}">${esc(fmtDate(e.starts_at))} — ${esc(e.title)}</option>`).join('') : '<option value="">Aucune séance à venir</option>';
+    }
+  });
+  f.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (cible.value === 'seance' && !ev.value) { msg.innerHTML = '<div class="alert alert-err">Choisis une séance.</div>'; return; }
+    const qui = cible.value === 'tous' ? 'tous les membres' : cible.value === 'bureau' ? 'le bureau' : `les inscrits à « ${ev.selectedOptions[0]?.textContent} »`;
+    if (!confirm(`Envoyer cette notification à ${qui} ?`)) return;
+    btn.disabled = true; msg.innerHTML = '';
+    const r = await postJSON<{ personnes: number; cibles: number }>('/api/notif-bureau', { titre: titre.value, texte: texte.value, cible: cible.value, event: ev.value || undefined }, session.access_token);
+    btn.disabled = false;
+    if (!r.ok) { msg.innerHTML = `<div class="alert alert-err">${esc(r.error || 'Envoi impossible.')}</div>`; return; }
+    msg.innerHTML = `<div class="alert alert-ok">Notification envoyée : ${r.data.personnes} membre${r.data.personnes > 1 ? 's' : ''} sur ${r.data.cibles} l'${r.data.personnes > 1 ? 'ont' : 'a'} reçue.${r.data.personnes < r.data.cibles ? ' Les autres n\'ont pas activé les notifications.' : ''}</div>`;
+    f.reset(); apercu(); $('nbEventWrap').classList.add('hidden'); hist(); stats();
+  });
+  stats(); hist();
 }
 
 /* ────────────────────────── Appel ────────────────────────── */

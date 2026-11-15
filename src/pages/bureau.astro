@@ -25,6 +25,7 @@ import Base from '../layouts/Base.astro';
       <section class="bu-group"><h2 class="bu-group-t">Communication</h2><div class="bu-tiles">
         <button class="bu-tile tab" data-tab="actu" type="button"><span class="bu-tile-t">Actualités</span><span class="bu-tile-d">Écrire, illustrer et publier un article</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
         <button class="bu-tile tab" data-tab="nl" type="button"><strong class="bu-count" id="sAbo">–</strong><span class="bu-tile-t">Newsletter</span><span class="bu-tile-d">Rédiger et envoyer la lettre</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
+        <button class="bu-tile tab" data-tab="notifs" type="button"><strong class="bu-count" id="sPush">–</strong><span class="bu-tile-t">Notifications</span><span class="bu-tile-d">Une alerte sur le téléphone des membres</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
         <button class="bu-tile tab" data-tab="ecrire" type="button"><span class="bu-tile-t">Écrire aux membres</span><span class="bu-tile-d">Un email à des membres choisis</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
         <button class="bu-tile tab" data-tab="msg" type="button"><strong class="bu-count" id="sMsg">–</strong><span class="bu-tile-t">Messages reçus</span><span class="bu-tile-d">Le formulaire de contact</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
       </div></section>
@@ -95,6 +96,24 @@ import Base from '../layouts/Base.astro';
           <div class="flex"><button class="btn btn-primary" type="submit" id="evSave">Publier l'événement</button><button class="btn btn-outline hidden" type="button" id="evCancel">Annuler la modification</button></div>
         </form>
         <div class="card"><h3>Événements et réponses</h3><div id="inscr">—</div></div>
+      </div>
+    </div>
+    <div class="panel hidden" id="tab-notifs">
+      <div class="grid ecrire">
+        <form class="card form" id="nbForm">
+          <h3 style="margin:0;">Envoyer une notification</h3>
+          <p class="small muted" style="margin:0;" id="nbStats">Elle arrive sur le téléphone des membres qui ont activé les notifications dans l'application.</p>
+          <div class="field"><label for="nbCible">Destinataires</label>
+            <select id="nbCible"><option value="tous">Tous les membres</option><option value="seance">Les inscrits à une séance</option><option value="bureau">Le bureau</option></select></div>
+          <div class="field hidden" id="nbEventWrap"><label for="nbEvent">Séance</label><select id="nbEvent"></select></div>
+          <div class="field"><label for="nbTitre">Titre <span class="small muted">(80 caractères max.)</span></label><input id="nbTitre" required maxlength="80" placeholder="ex. Changement de salle" /></div>
+          <div class="field"><label for="nbTexte">Message <span class="small muted" id="nbCount">0 / 300</span></label><textarea id="nbTexte" required maxlength="300" style="min-height:110px;" placeholder="ex. Le débat de jeudi a lieu en salle 204, même heure."></textarea></div>
+          <div class="nb-apercu" aria-hidden="true"><span class="nb-app">Parlement JPV</span><strong id="nbApT">Titre</strong><span id="nbApX">Message</span></div>
+          <div id="nbMsg" aria-live="polite"></div>
+          <button class="btn btn-primary" type="submit" id="nbSend">Envoyer la notification</button>
+          <p class="small muted" style="margin:0;">Pour un message long ou important, utilise plutôt « Écrire aux membres » (email) : tout le monde n'a pas activé les notifications. Les nouvelles séances, rappels, annulations et votes sont déjà notifiés automatiquement.</p>
+        </form>
+        <div class="card"><h3 style="margin-top:0;">Notifications envoyées</h3><div id="nbHist" class="small">—</div></div>
       </div>
     </div>
     <div class="panel hidden" id="tab-ecrire">
@@ -244,6 +263,8 @@ import Base from '../layouts/Base.astro';
 <style is:global>
   .bu-menu { display: grid; gap: 34px; }
   .bu-group-t { font-size: 1rem; font-weight: 800; color: var(--rouge); margin: 0 0 10px; letter-spacing: 0; }
+  .nb-apercu { display: grid; gap: 2px; padding: 12px 14px; border: 2px solid var(--nuit); background: var(--pierre); font-size: 0.95rem; }
+  .nb-app { font-size: 0.75rem; font-weight: 800; color: var(--rouge); }
   .bu-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
   .bu-tile { position: relative; display: grid; align-content: start; gap: 6px; text-align: left; min-height: 150px; padding: 22px 22px 18px; border: 3px solid var(--nuit); border-left-width: 10px; background: var(--blanc); color: var(--nuit); font: inherit; cursor: pointer; transition: transform 0.15s ease, background 0.15s ease; }
   .bu-tile:hover { transform: translateY(-3px); background: var(--pierre); }
