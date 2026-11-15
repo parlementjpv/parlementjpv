@@ -33,6 +33,7 @@ export async function certificatPdf(userId: string): Promise<{ pdf: Uint8Array; 
   const centre = (t: string, y: number, f = reg, s = 14, c = nuit) => pg.drawText(t, { x: (W - f.widthOfTextAtSize(t, s)) / 2, y, size: s, font: f, color: c });
   pg.drawText('PARLEMENT JPV', { x: 156, y: H - 102, size: 18, font: bold, color: nuit });
   pg.drawText('Lycée Jean-Pierre Vernant, Sèvres', { x: 156, y: H - 124, size: 11, font: reg, color: gris });
+  pg.drawText('Instance fondée en 2025 par Gustave Jeannin', { x: 156, y: H - 140, size: 9, font: it, color: gris });
 
   centre('Certificat de membre', H - 205, bold, 40);
   centre('Le bureau du Parlement JPV certifie que', H - 245, reg, 14, gris);
