@@ -24,7 +24,7 @@ import ClasseChamps from '../components/ClasseChamps.astro';
         </div>
       </fieldset>
       <div class="field"><label for="password">Mot de passe</label><input id="password" name="password" type="password" required minlength="8" autocomplete="new-password" /><small>8 caractères minimum.</small></div>
-      <label class="checkbox"><input type="checkbox" name="newsletter" checked /><span>Je souhaite recevoir la newsletter (désinscription à tout moment).</span></label>
+      <label class="checkbox"><input type="checkbox" name="newsletter" checked /><span>Je souhaite recevoir la newsletter (activée dès la confirmation de mon adresse, désinscription à tout moment).</span></label>
       <div class="robot-box">
         <altcha-widget id="altcha" challengeurl={`${import.meta.env.PUBLIC_SUPABASE_URL}/functions/v1/inscription`} hidelogo hidefooter auto="onfocus"
           strings={JSON.stringify({ label: 'Je ne suis pas un robot', verifying: 'Vérification…', verified: 'Vérifié', error: 'La vérification a échoué. Réessaie.', expired: 'La vérification a expiré. Recoche la case.', waitAlert: 'Vérification en cours, patiente un instant.', ariaLinkLabel: 'ALTCHA' })}></altcha-widget>
@@ -55,7 +55,6 @@ import ClasseChamps from '../components/ClasseChamps.astro';
 <script>
   import { lireClasse } from '../lib/classe';
   import { u } from '../lib/url';
-  import { api } from '../lib/newsletter';
   import { getSupabase, supabaseConfigured } from '../lib/supabase';
   import { frError, resendBox } from '../lib/auth';
   import { postJSON } from '../lib/newsletter';
@@ -80,9 +79,7 @@ import ClasseChamps from '../components/ClasseChamps.astro';
         data: { prenom: fd.get('prenom'), nom: fd.get('nom'), ...lireClasse(fd), telephone: String(fd.get('telephone')).trim(), interets: fd.getAll('interets').map(String), newsletter: fd.get('newsletter') === 'on' },
       });
       if (!r.ok) { (document.getElementById('altcha') as any)?.reset?.(); throw new Error(r.error); }
-      if (fd.get('newsletter') === 'on') {
-        fetch(api('/api/newsletter-subscribe'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: String(fd.get('email')).trim(), fromSignup: true }) }).catch(() => {});
-      }
+      // Newsletter : abonnement activé automatiquement quand l'adresse est confirmée (aucun email séparé)
       try { localStorage.setItem('jpv_compte', '1'); } catch {}
       form.classList.add('hidden');
       show(r.data?.warning || 'Compte créé ! Vérifie ta boîte mail (et les spams) et clique sur le lien de confirmation pour activer ton compte.', r.data?.warning ? 'info' : 'ok');
