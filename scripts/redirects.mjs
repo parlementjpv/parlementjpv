@@ -5,12 +5,13 @@ import { writeFile, mkdir } from 'node:fs/promises';
 const origin = (process.env.SITE_ORIGIN || 'https://parlementjpv.github.io').replace(/\/$/, '');
 const base = (process.env.BASE_PATH || '').replace(/\/$/, '');
 const map = {
-  'qui-sommes-nous.html': 'qui-sommes-nous/', 'institution.html': 'institution/', 'rejoindre.html': 'rejoindre/',
+  'qui-sommes-nous.html': 'qui-sommes-nous/', 'institution.html': 'institution/', 'rejoindre.html': 'inscription/',
   'contact.html': 'contact/', 'actualites.html': 'actualites/', 'charte.html': 'charte/', 'galerie.html': 'actualites/',
   'photos.html': 'actualites/', 'media.html': 'medias/', 'rapports.html': 'rapports/', 'mentions-legales.html': 'mentions-legales/',
   'politique-confidentialite.html': 'confidentialite/', 'jpv-mun.html': '', 'Espace-bureau.html': 'bureau/', 'Espace-bourse.html': '',
   'galerie/index.html': 'actualites/',
   'agenda/index.html': 'evenement/',
+  'rejoindre/index.html': 'inscription/',
 };
 for (const [from, to] of Object.entries(map)) {
   const url = `${origin}${base}/${to}`;
