@@ -37,6 +37,12 @@ import ClasseChamps from '../components/ClasseChamps.astro';
   </div></div>
 </Base>
 <style is:global>
+  .ok-conf { border: 4px solid var(--nuit); padding: 28px; display: grid; gap: 14px; }
+  .ok-conf h2 { margin: 0; font-size: clamp(1.8rem, 5vw, 2.6rem); line-height: 1.05; }
+  .ok-conf p { margin: 0; font-size: 1.1rem; }
+  .ok-spam { color: var(--rouge); font-weight: 800; font-size: 1.2rem !important; }
+</style>
+<style is:global>
   .robot-box { margin: 4px 0 8px; }
   altcha-widget { --altcha-max-width: 100%; --altcha-border-width: 3px; --altcha-border-radius: 0; --altcha-color-border: var(--nuit); --altcha-color-text: var(--nuit); --altcha-color-base: var(--blanc); --altcha-color-border-focus: var(--rouge); --altcha-color-error-text: var(--rouge); font-family: inherit; }
 </style>
@@ -82,7 +88,14 @@ import ClasseChamps from '../components/ClasseChamps.astro';
       // Newsletter : abonnement activé automatiquement quand l'adresse est confirmée (aucun email séparé)
       try { localStorage.setItem('jpv_compte', '1'); } catch {}
       form.classList.add('hidden');
-      show(r.data?.warning || 'Compte créé ! Vérifie ta boîte mail (et les spams) et clique sur le lien de confirmation pour activer ton compte.', r.data?.warning ? 'info' : 'ok');
+      const adr = String(fd.get('email')).trim().replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+      msg.innerHTML = `<div class="ok-conf">
+        <h2>Merci de confirmer ton adresse email</h2>
+        <p>Nous venons d'envoyer un lien de confirmation à <strong>${adr}</strong>. Clique dessus pour activer ton compte.</p>
+        <p class="ok-spam">Nos emails arrivent souvent dans les spams : pense à vérifier ce dossier, puis signale l'email comme « Ce n'est pas du spam ».</p>
+        ${r.data?.warning ? `<p class="small">${r.data.warning}</p>` : ''}
+      </div>`;
+      msg.scrollIntoView({ behavior: 'smooth', block: 'start' });
       msg.appendChild(resendBox(String(fd.get('email'))));
     } catch (err: any) {
       show(frError(err.message || String(err)));
