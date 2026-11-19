@@ -15,6 +15,9 @@ import Base from '../layouts/Base.astro';
     <p class="auth-foot">Pas encore membre ? <a href="/inscription">Créer mon compte et rejoindre l'instance</a></p>
   </div></div>
 </Base>
+<style is:global>
+  .spam-rouge { color: var(--rouge); font-weight: 800; font-size: 1.05rem; margin: 10px 0; }
+</style>
 <script>
   import { u } from '../lib/url';
   import { getSupabase, supabaseConfigured } from '../lib/supabase';
@@ -41,6 +44,7 @@ import Base from '../layouts/Base.astro';
     const { error } = await getSupabase().auth.signInWithPassword({ email: String(fd.get('email')).trim(), password: String(fd.get('password')) });
     if (error) {
       show(frError(error.message)); btn.disabled = false;
+      if (/not confirmed/i.test(error.message)) msg.insertAdjacentHTML('beforeend', '<p class="spam-rouge">Nos emails arrivent souvent dans les spams : vérifie ce dossier, puis signale l\'email comme « Ce n\'est pas du spam ».</p>');
       if (/not confirmed/i.test(error.message)) msg.appendChild(resendBox(() => (form.elements.namedItem('email') as HTMLInputElement).value, "Renvoyer l'email de confirmation"));
       return;
     }
