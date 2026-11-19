@@ -30,9 +30,10 @@ import ClasseChamps from '../components/ClasseChamps.astro';
           strings={JSON.stringify({ label: 'Je ne suis pas un robot', verifying: 'Vérification…', verified: 'Vérifié', error: 'La vérification a échoué. Réessaie.', expired: 'La vérification a expiré. Recoche la case.', waitAlert: 'Vérification en cours, patiente un instant.', ariaLinkLabel: 'ALTCHA' })}></altcha-widget>
       </div>
       <label class="checkbox"><input type="checkbox" name="rgpd" required /><span>J'ai lu la <a href="/confidentialite" target="_blank">politique de confidentialité</a> et, si j'ai moins de 15 ans, j'ai l'accord d'un parent.</span></label>
-      <div id="msg"></div>
+      <div id="msgForm" aria-live="polite"></div>
       <button class="btn btn-primary" type="submit">Créer mon compte et rejoindre l'instance</button>
     </form>
+    <div id="msg" aria-live="polite"></div>
     <p class="auth-foot">Déjà un compte ? <a href="/connexion">Se connecter</a></p>
   </div></div>
 </Base>
@@ -66,14 +67,14 @@ import ClasseChamps from '../components/ClasseChamps.astro';
   import { postJSON } from '../lib/newsletter';
   import 'altcha';
   const form = document.getElementById('signupForm') as HTMLFormElement;
-  const msg = document.getElementById('msg')!;
-  const show = (t: string, k = 'err') => (msg.innerHTML = `<div class="alert alert-${k}">${t}</div>`);
+  const msg = document.getElementById('msg')!, msgForm = document.getElementById('msgForm')!;
+  const show = (t: string, k = 'err') => (msgForm.innerHTML = `<div class="alert alert-${k}">${t}</div>`);
   if (!supabaseConfigured) show('Le serveur d’inscription n’est pas encore configuré (variables Supabase manquantes).', 'info');
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!form.checkValidity()) { form.reportValidity(); return; }
     const fd = new FormData(form);
-    const btn = form.querySelector('button')!; btn.disabled = true; msg.innerHTML = '';
+    const btn = form.querySelector('button')!; btn.disabled = true; msgForm.innerHTML = '';
     const altcha = String(fd.get('altcha') || '');
     if (!altcha) { show('Coche « Je ne suis pas un robot » avant de continuer.'); btn.disabled = false; return; }
     try {
@@ -95,11 +96,12 @@ import ClasseChamps from '../components/ClasseChamps.astro';
         <p class="ok-spam">Nos emails arrivent souvent dans les spams : pense à vérifier ce dossier, puis signale l'email comme « Ce n'est pas du spam ».</p>
         ${r.data?.warning ? `<p class="small">${r.data.warning}</p>` : ''}
       </div>`;
+      document.querySelectorAll('.auth-card > h1, .auth-card > p.muted').forEach((e) => ((e as HTMLElement).hidden = true));
       msg.scrollIntoView({ behavior: 'smooth', block: 'start' });
       msg.appendChild(resendBox(String(fd.get('email'))));
     } catch (err: any) {
       show(frError(err.message || String(err)));
-      if (/already registered/i.test(err.message || '')) msg.appendChild(resendBox(String(fd.get('email')), "Compte pas encore confirmé ? Renvoyer l'email de confirmation"));
+      if (/already registered/i.test(err.message || '')) msgForm.appendChild(resendBox(String(fd.get('email')), "Compte pas encore confirmé ? Renvoyer l'email de confirmation"));
       btn.disabled = false;
     }
   });
