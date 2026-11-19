@@ -81,25 +81,30 @@ export async function checkTurnstile(token: string, req: Request) {
   return Boolean(d.success);
 }
 
+// Modèle d'email du Parlement (variante A3 choisie) : carte arrondie, en-tête bleu nuit avec logo, bande tricolore
 export function layout({ title, body, unsubscribeUrl }: { title: string; body: string; unsubscribeUrl?: string }) {
-  return `<!DOCTYPE html><html lang="fr"><body style="margin:0;background:#e9ebf0;font-family:Helvetica,Arial,sans-serif;color:#0f1f4b;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:32px 12px;">
-  <table role="presentation" width="600" style="max-width:600px;background:#fff;border:3px solid #0f1f4b;">
-    <tr><td style="background:#0f1f4b;padding:20px 28px;color:#fff;">
-      <div style="font-size:22px;font-weight:800;">Parlement JPV</div>
-      <div style="font-size:12px;color:#ff6b78;font-weight:700;">Lycée Jean-Pierre Vernant — Sèvres</div>
+  const tri = '<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="height:6px;background:#0f1f4b;width:33%;font-size:0;line-height:0;">&nbsp;</td><td style="height:6px;background:#ffffff;width:34%;font-size:0;line-height:0;">&nbsp;</td><td style="height:6px;background:#d62839;width:33%;font-size:0;line-height:0;">&nbsp;</td></tr></table>';
+  return `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"></head>
+  <body style="margin:0;padding:0;background:#e9ebf0;font-family:Helvetica,Arial,sans-serif;color:#0f1f4b;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#e9ebf0;"><tr><td align="center" style="padding:28px 12px;">
+  <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:14px;overflow:hidden;box-shadow:0 4px 18px rgba(15,31,75,.12);">
+    <tr><td style="background:#0f1f4b;padding:20px 28px;">
+      <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+        <td><img src="${SITE}/assets/img/icon-192.png" width="42" height="42" alt="Parlement JPV" style="display:block;border:0;border-radius:8px;"></td>
+        <td style="padding-left:12px;color:#ffffff;"><div style="font-size:19px;font-weight:800;line-height:1.2;">Parlement JPV</div><div style="font-size:12px;color:#ff8a95;font-weight:700;">Lycée Jean-Pierre Vernant · Sèvres</div></td>
+      </tr></table>
     </td></tr>
-    <tr><td style="padding:28px;font-size:16px;line-height:1.55;">
-      <h1 style="font-size:26px;line-height:1.05;margin:0 0 16px;color:#0f1f4b;">${esc(title)}</h1>
+    <tr><td>${tri}</td></tr>
+    <tr><td style="padding:32px 30px;font-size:16px;line-height:1.6;color:#0f1f4b;">
+      <h1 style="font-size:26px;line-height:1.12;margin:0 0 18px;color:#0f1f4b;">${esc(title)}</h1>
       ${body}
     </td></tr>
-    <tr><td style="padding:16px 28px;background:#e9ebf0;font-size:12px;color:#5d6477;">
-      Parlement JPV · Lycée Jean-Pierre Vernant, 92310 Sèvres · <a href="${SITE}" style="color:#5d6477;">${SITE.replace('https://', '')}</a>
-      ${unsubscribeUrl ? ` · <a href="${unsubscribeUrl}" style="color:#5d6477;">Se désinscrire</a>` : ''}
+    <tr><td style="padding:18px 30px;border-top:1px solid #e9ebf0;font-size:12px;line-height:1.5;color:#5d6477;">
+      Parlement JPV · Lycée Jean-Pierre Vernant, 92310 Sèvres<br><a href="${SITE}" style="color:#5d6477;">${SITE.replace('https://', '').replace(/\/parlementjpv$/, '')}</a> · Tu peux répondre à cet email.${unsubscribeUrl ? ` · <a href="${unsubscribeUrl}" style="color:#5d6477;">Se désinscrire</a>` : ''}
     </td></tr>
   </table></td></tr></table></body></html>`;
 }
-export const button = (href: string, label: string) => `<p style="margin:24px 0;"><a href="${href}" style="display:inline-block;background:#d62839;color:#fff;font-weight:700;padding:13px 22px;text-decoration:none;">${esc(label)}</a></p>`;
+export const button = (href: string, label: string) => `<p style="margin:24px 0;"><a href="${href}" style="display:inline-block;background:#d62839;color:#ffffff;font-weight:700;padding:14px 26px;text-decoration:none;border-radius:8px;">${esc(label)}</a></p>`;
 
 /** Lien cliqué depuis un email : redirection immédiate vers la bonne page du site
  *  (Supabase n'affiche pas le HTML servi par les fonctions : il apparaissait en code brut). */
