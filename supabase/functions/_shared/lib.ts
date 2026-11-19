@@ -43,7 +43,24 @@ export async function sendMail(m: Mail) {
     if (!user || !pass) throw new Error('SMTP_USER / SMTP_PASS manquants');
     transport = nodemailer.createTransport({ host: Deno.env.get('SMTP_HOST') || 'smtp.gmail.com', port: 465, secure: true, auth: { user, pass } });
   }
-  return await transport.sendMail({ from: m.from || FROM, to: m.to, subject: m.subject, html: m.html, text: m.text, replyTo: m.replyTo, headers: m.headers, attachments: m.attachments });
+  // Anti-spam : version texte, réponses autorisées vers la boîte du Parlement, lien de désinscription dans l'en-tête
+  const repondre = Deno.env.get('SMTP_USER') || 'parlementjpv@gmail.com';
+  const headers: Record<string, string> = { ...(m.headers || {}) };
+  if (!headers['List-Unsubscribe']) headers['List-Unsubscribe'] = `<mailto:${repondre}?subject=D%C3%A9sinscription>`;
+  else if (!headers['List-Unsubscribe'].includes('mailto:')) headers['List-Unsubscribe'] += `, <mailto:${repondre}?subject=D%C3%A9sinscription>`;
+  if (/^<https:/.test(headers['List-Unsubscribe']) && !headers['List-Unsubscribe-Post']) headers['List-Unsubscribe-Post'] = 'List-Unsubscribe=One-Click';
+  return await transport.sendMail({ from: m.from || FROM, to: m.to, subject: m.subject, html: m.html, text: m.text || versionTexte(m.html), replyTo: m.replyTo || repondre, headers, attachments: m.attachments });
+}
+
+/** Version texte lisible d'un email HTML (liens conservés entre parenthèses) */
+export function versionTexte(html: string) {
+  return html
+    .replace(/<(style|script)[\s\S]*?<\/\1>/gi, '')
+    .replace(/<a [^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gi, (_m, href, t) => { const txt = t.replace(/<[^>]+>/g, '').trim(); return txt && !href.includes(txt) ? `${txt} (${href})` : href; })
+    .replace(/<br\s*\/?>/gi, '\n').replace(/<\/(p|div|h[1-6]|tr|li|table)>/gi, '\n\n').replace(/<li[^>]*>/gi, '- ').replace(/<\/td>/gi, '  ')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'")
+    .replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').replace(/[ \t]{2,}/g, ' ').trim();
 }
 
 export const json = (req: Request, status: number, body: unknown) =>
