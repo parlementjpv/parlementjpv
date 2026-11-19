@@ -12,7 +12,7 @@ const current = Astro.url.pathname.replace(BASE, '').replace(/\/$/, '') || '/';
 <header class="site-header">
   <div class="container nav">
     <a class="brand" href="/" aria-label="Parlement JPV — accueil">
-      <img class="brand-logo" src="/assets/img/icon-192.png" width="40" height="40" alt="" />
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M3 10 17 3l14 7z" fill="currentColor"/><rect x="5" y="12" width="4" height="13" fill="#1d3a8a"/><rect x="11" y="12" width="4" height="13" fill="#1d3a8a"/><rect x="19" y="12" width="4" height="13" fill="#d62839"/><rect x="25" y="12" width="4" height="13" fill="#d62839"/><rect x="3" y="27" width="28" height="4" fill="currentColor"/></svg>
       <span>Parlement<br />JPV</span>
     </a>
     <nav class="nav-links" aria-label="Navigation principale">
@@ -39,7 +39,6 @@ const current = Astro.url.pathname.replace(BASE, '').replace(/\/$/, '') || '/';
 <style>
   .site-header { position: sticky; top: 0; z-index: 50; background: var(--blanc); border-bottom: var(--rule); }
   .nav { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 10px var(--gutter); }
-  .brand-logo { display: block; width: 40px; height: 40px; }
   .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; line-height: 0.95; font-size: 1.05rem; letter-spacing: -0.02em; }
   .nav-links { display: flex; gap: 2px; }
   .nav-links a { white-space: nowrap; text-decoration: none; font-weight: 600; padding: 8px 12px; position: relative; }
@@ -62,7 +61,7 @@ const current = Astro.url.pathname.replace(BASE, '').replace(/\/$/, '') || '/';
   @media (max-width: 600px) {
     .nav { gap: 10px; padding-top: 8px; padding-bottom: 8px; }
     .brand { gap: 8px; font-size: 0.92rem; }
-    .brand-logo { width: 32px; height: 32px; }
+    .brand svg { width: 28px; height: 28px; }
     .nav-actions { gap: 6px; }
     .nav-auth { border-width: 2px; padding: 5px 10px; font-size: 0.85rem; }
     .icon-btn { padding: 5px 8px; font-size: 0.85rem; }

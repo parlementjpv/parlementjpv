@@ -94,6 +94,18 @@ const motions = data.events.filter((e) => e.type === 'Débat' || e.type === 'Con
     </div>
   </section>
 
+  <section class="section presse" aria-labelledby="presse-t">
+    <div class="container">
+      <h2 id="presse-t" class="presse-t">Ils parlent de nous</h2>
+      <a class="presse-card" href="https://www.letudiant.fr/lycee/au-cese-l-engagement-lyceen-mis-a-l-honneur.html" target="_blank" rel="noopener">
+        <span class="presse-src">L'Étudiant <span class="presse-date">10 avril 2026</span></span>
+        <strong class="presse-titre">« On ne s'est pas engagé que pour Parcoursup » : au Cese, des projets lycéens mis à l'honneur</strong>
+        <span class="presse-resume">Aux premiers Trophées Act de l'engagement lycéen, au Conseil économique, social et environnemental, le Parlement JPV figurait parmi les projets lycéens mis en avant : une instance née pour donner aux élèves du lycée l'occasion de prendre la parole, à travers débats, concours d'éloquence et rencontres.</span>
+        <span class="presse-lire">Lire l'article sur letudiant.fr ↗</span>
+      </a>
+    </div>
+  </section>
+
   <section class="section" id="newsletter">
     <div class="container nl">
       <div>
@@ -113,6 +125,17 @@ const motions = data.events.filter((e) => e.type === 'Débat' || e.type === 'Con
     </div>
   </section>
 </Base>
+<style>
+  .presse-t { margin: 0 0 18px; }
+  .presse-card { display: grid; gap: 10px; padding: 26px 28px; border: 3px solid var(--nuit); border-left: 12px solid var(--rouge); text-decoration: none; color: inherit; max-width: 900px; }
+  .presse-card:hover, .presse-card:focus-visible { background: var(--pierre); }
+  .presse-card:focus-visible { outline: 3px solid var(--rouge); outline-offset: 3px; }
+  .presse-src { font-weight: 800; font-size: 1.05rem; color: var(--rouge); }
+  .presse-date { color: var(--gris); font-weight: 600; font-size: 0.9rem; margin-left: 8px; }
+  .presse-titre { font-size: clamp(1.25rem, 3vw, 1.7rem); line-height: 1.15; letter-spacing: -0.01em; }
+  .presse-resume { color: var(--gris); max-width: 70ch; }
+  .presse-lire { font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
+</style>
 <script>
   import { getSupabase, supabaseConfigured } from '../lib/supabase';
   import { articlesPublies, fmtDate } from '../lib/articles';
