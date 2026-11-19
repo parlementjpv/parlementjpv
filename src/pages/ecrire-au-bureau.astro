@@ -1,0 +1,72 @@
+---
+import Base from '../layouts/Base.astro';
+import MembreNav from '../components/MembreNav.astro';
+---
+<Base title="Écrire au bureau" noindex>
+  <MembreNav actif="bureau-contact" />
+  <div class="page-head"><div class="container">
+    <span class="eyebrow">Réservé aux membres</span>
+    <h1>Écrire au bureau</h1>
+    <p class="lead">Une question pour quelqu'un en particulier ? Écris-lui directement. Une idée ou un problème à signaler sans donner ton nom ? Utilise la boîte à idées anonyme.</p>
+  </div></div>
+  <section class="section-tight"><div class="container eb-grid">
+    <form class="card form" id="cbForm">
+      <h2 class="eb-t">Contacter un membre du bureau</h2>
+      <p class="small muted" style="margin:0;">Ton message part de l'adresse du Parlement. Le membre du bureau te répondra par email, sur ton adresse.</p>
+      <div class="field"><label for="cbDest">À qui ?</label><select id="cbDest" required><option value="">Choisir…</option></select></div>
+      <div class="field"><label for="cbSujet">Objet</label><input id="cbSujet" required maxlength="120" /></div>
+      <div class="field"><label for="cbMsg">Message</label><textarea id="cbMsg" required minlength="5" maxlength="3000" style="min-height:150px;"></textarea></div>
+      <div id="cbOut" aria-live="polite"></div>
+      <button class="btn btn-primary" type="submit">Envoyer</button>
+    </form>
+    <div>
+      <form class="card form eb-idee" id="idForm">
+        <h2 class="eb-t">Boîte à idées anonyme</h2>
+        <p class="small muted" style="margin:0;">Ton nom n'est enregistré nulle part avec ton message : même le bureau ne peut pas savoir qui l'a écrit. Reste respectueux·se.</p>
+        <div class="field"><label for="idCat">C'est…</label><select id="idCat"><option>Idée</option><option>Sujet de débat</option><option>Problème</option><option>Autre</option></select></div>
+        <div class="field"><label for="idTxt">Ton message</label><textarea id="idTxt" required minlength="5" maxlength="2000" style="min-height:130px;"></textarea></div>
+        <div id="idOut" aria-live="polite"></div>
+        <button class="btn btn-primary" type="submit">Déposer anonymement</button>
+      </form>
+      <div class="mt-3"><h3>Le bureau a répondu</h3><div id="idRep" class="small"><p class="muted">Chargement…</p></div></div>
+    </div>
+  </div></section>
+</Base>
+<style is:global>
+  .eb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+  .eb-t { margin: 0; font-size: 1.4rem; }
+  .eb-idee { border-color: var(--rouge); }
+  .eb-rep { border-left: 4px solid var(--nuit); padding: 8px 14px; margin-bottom: 14px; display: grid; gap: 4px; }
+  .eb-rep q { font-style: italic; }
+  @media (max-width: 820px) { .eb-grid { grid-template-columns: 1fr; } }
+</style>
+<script>
+  import { getSupabase } from '../lib/supabase';
+  import { requireMembre } from '../lib/auth';
+  import { esc } from '../lib/events';
+  import { postJSON } from '../lib/newsletter';
+  (async () => {
+    const m = await requireMembre(); if (!m) return;
+    const sb = getSupabase(); const $ = (id: string) => document.getElementById(id)!;
+    const { data: bc } = await sb.rpc('bureau_contacts');
+    const dest = $('cbDest') as HTMLSelectElement;
+    ((bc as any[]) || []).filter((b) => b.id !== m.session.user.id).forEach((b) => dest.insertAdjacentHTML('beforeend', `<option value="${b.id}">${esc(b.nom)}${b.poste ? ` — ${esc(b.poste)}` : ''}</option>`));
+    const pre = new URLSearchParams(location.search).get('a'); if (pre) dest.value = pre;
+    ($('cbForm') as HTMLFormElement).addEventListener('submit', async (e) => {
+      e.preventDefault(); const btn = (e.target as HTMLFormElement).querySelector('button')!; btn.disabled = true;
+      const r = await postJSON('/api/contact-bureau', { destinataire: dest.value, sujet: ($('cbSujet') as HTMLInputElement).value, message: ($('cbMsg') as HTMLTextAreaElement).value }, m.session.access_token);
+      btn.disabled = false;
+      $('cbOut').innerHTML = r.ok ? '<div class="alert alert-ok">Message envoyé. La réponse arrivera dans ta boîte mail (pense à regarder les spams).</div>' : `<div class="alert alert-err">${esc(r.error || 'Envoi impossible.')}</div>`;
+      if (r.ok) (e.target as HTMLFormElement).reset();
+    });
+    ($('idForm') as HTMLFormElement).addEventListener('submit', async (e) => {
+      e.preventDefault(); const btn = (e.target as HTMLFormElement).querySelector('button')!; btn.disabled = true;
+      const { error } = await sb.rpc('deposer_idee', { p_texte: ($('idTxt') as HTMLTextAreaElement).value, p_categorie: ($('idCat') as HTMLSelectElement).value });
+      btn.disabled = false;
+      $('idOut').innerHTML = error ? `<div class="alert alert-err">${error.message.includes('trop_d_idees') ? 'Tu as déjà déposé 5 messages aujourd\'hui.' : 'Le message n\'a pas pu être déposé.'}</div>` : '<div class="alert alert-ok">Merci ! Ton message a été déposé anonymement.</div>';
+      if (!error) (e.target as HTMLFormElement).reset();
+    });
+    const { data: rep } = await sb.rpc('idees_publiques');
+    $('idRep').innerHTML = (rep as any[])?.length ? (rep as any[]).map((i) => `<div class="eb-rep"><span class="muted">${esc(i.categorie)}</span><q>${esc(i.texte)}</q><span><strong>Le bureau :</strong> ${esc(i.reponse)}</span></div>`).join('') : '<p class="muted">Pas encore de réponse publiée.</p>';
+  })();
+</script>

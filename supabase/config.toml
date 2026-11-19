@@ -64,3 +64,12 @@ verify_jwt = false
 
 [functions.tournoi-notif]
 verify_jwt = false
+
+[functions.vie-notif]
+verify_jwt = false
+
+[functions.autorisation]
+verify_jwt = false
+
+[functions.contact-bureau]
+verify_jwt = false

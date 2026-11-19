@@ -20,6 +20,9 @@ import Base from '../layouts/Base.astro';
       </div></section>
       <section class="bu-group"><h2 class="bu-group-t">Vie de l'instance</h2><div class="bu-tiles">
         <button class="bu-tile tab" data-tab="elections" type="button"><span class="bu-tile-t">Élections</span><span class="bu-tile-d">Votes du bureau à bulletin secret</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
+        <button class="bu-tile tab" data-tab="sondages" type="button"><strong class="bu-count" id="sSondages">–</strong><span class="bu-tile-t">Sondages</span><span class="bu-tile-d">Demander l'avis des membres en un clic</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
+        <button class="bu-tile tab" data-tab="sorties" type="button"><strong class="bu-count" id="sSorties">–</strong><span class="bu-tile-t">Sorties et visites</span><span class="bu-tile-d">Places, liste d'attente, autorisations parentales</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
+        <button class="bu-tile tab" data-tab="idees" type="button"><strong class="bu-count" id="sIdees">–</strong><span class="bu-tile-t">Boîte à idées</span><span class="bu-tile-d">Messages anonymes des membres</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
         <button class="bu-tile tab" data-tab="tournoi" type="button"><strong class="bu-count" id="sTournoi">–</strong><span class="bu-tile-t">Tournoi d'éloquence</span><span class="bu-tile-d">Inscriptions, tirage au sort, duels et résultats</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
         <button class="bu-tile tab" data-tab="motions" type="button"><span class="bu-tile-t">Motions</span><span class="bu-tile-d">Les sujets proposés par les membres</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
       </div></section>
@@ -246,6 +249,39 @@ import Base from '../layouts/Base.astro';
         </div>
       </div>
     </div>
+    <div class="panel hidden" id="tab-sondages">
+      <div class="grid ecrire">
+        <form class="card form" id="sdForm">
+          <h3 style="margin:0;">Nouveau sondage</h3>
+          <div class="field"><label for="sdQ">Question</label><input id="sdQ" name="question" required minlength="3" maxlength="200" placeholder="ex. Quel créneau pour le prochain débat ?" /></div>
+          <div class="field"><label>Choix proposés</label><div id="sdOpts" class="vie-opts"><input name="opt" maxlength="100" placeholder="Choix 1" required /><input name="opt" maxlength="100" placeholder="Choix 2" required /></div>
+            <button class="btn btn-outline btn-sm mt-1" id="sdAddOpt" type="button">Ajouter un choix</button></div>
+          <label class="checkbox"><input type="checkbox" name="multiple" /><span>Plusieurs réponses possibles</span></label>
+          <div class="field"><label for="sdFin">Fin du sondage <span class="small muted">(facultatif)</span></label><input id="sdFin" name="fin" type="datetime-local" /></div>
+          <div id="sdMsg" aria-live="polite"></div>
+          <button class="btn btn-primary" type="submit">Publier et notifier les membres</button>
+        </form>
+        <div id="sdList" class="vie-list"></div>
+      </div>
+    </div>
+    <div class="panel hidden" id="tab-sorties">
+      <form class="card form" id="soForm">
+        <h3 style="margin:0;">Nouvelle sortie</h3>
+        <div class="field"><label for="soT">Titre</label><input id="soT" name="titre" required minlength="3" maxlength="150" placeholder="ex. Visite de l'Assemblée nationale" /></div>
+        <div class="form-row"><div class="field"><label for="soQ">Date et heure</label><input id="soQ" name="quand" type="datetime-local" required /></div><div class="field"><label for="soR">Retour prévu <span class="small muted">(facultatif)</span></label><input id="soR" name="retour" maxlength="120" placeholder="ex. 17h, au lycée" /></div></div>
+        <div class="form-row"><div class="field"><label for="soL">Lieu</label><input id="soL" name="lieu" maxlength="200" placeholder="ex. 126 rue de l'Université, Paris" /></div><div class="field"><label for="soRdv">Rendez-vous</label><input id="soRdv" name="rdv" maxlength="200" placeholder="ex. 13h devant le lycée" /></div></div>
+        <div class="form-row"><div class="field"><label for="soP">Nombre de places <span class="small muted">(vide = illimité)</span></label><input id="soP" name="places" type="number" min="1" max="500" /></div><div class="field"><label for="soLim">Fin des inscriptions <span class="small muted">(facultatif)</span></label><input id="soLim" name="limite" type="datetime-local" /></div></div>
+        <div class="field"><label for="soD">Description <span class="small muted">(facultatif)</span></label><textarea id="soD" name="description" maxlength="3000" style="min-height:90px;" placeholder="Programme, tenue, ce qu'il faut apporter…"></textarea></div>
+        <label class="checkbox"><input type="checkbox" name="autorisation" checked /><span>Autorisation parentale obligatoire (les inscrits la téléchargent pré-remplie depuis leur espace)</span></label>
+        <div id="soMsg" aria-live="polite"></div>
+        <button class="btn btn-primary" type="submit">Publier et notifier les membres</button>
+      </form>
+      <div id="soList" class="vie-list mt-3"></div>
+    </div>
+    <div class="panel hidden" id="tab-idees">
+      <p class="small muted" style="margin-top:0;">Ces messages sont totalement anonymes : le site n'enregistre pas qui les a écrits. Une réponse publique s'affiche pour tous les membres sur la page « Écrire au bureau ».</p>
+      <div id="idList" class="vie-list"></div>
+    </div>
     <div class="panel hidden" id="tab-tournoi">
       <form class="card form" id="tnForm">
         <h3 style="margin:0;">Nouveau tournoi</h3>
@@ -304,6 +340,14 @@ import Base from '../layouts/Base.astro';
   .et-row:focus { outline: 3px solid var(--rouge); outline-offset: -3px; }
   .et-bar { display: inline-block; height: 10px; width: calc(var(--w) * 0.9); min-width: 4px; max-width: 160px; background: var(--rouge); vertical-align: middle; margin-right: 6px; }
   #etDetailT tr.banned td { opacity: 0.55; }
+  .vie-list { display: grid; gap: 14px; align-content: start; }
+  .vie-item { display: grid; gap: 8px; }
+  .vie-item.annulee { opacity: 0.6; }
+  .vie-opts { display: grid; gap: 6px; }
+  .vie-res { display: grid; gap: 4px; }
+  .vie-bar { position: relative; display: flex; justify-content: space-between; gap: 8px; padding: 6px 10px; border: 2px solid var(--nuit); font-size: 0.9rem; overflow: hidden; }
+  .vie-bar span { position: absolute; inset: 0 auto 0 0; width: var(--p); background: rgba(15, 31, 75, 0.12); }
+  .vie-bar em, .vie-bar b { position: relative; font-style: normal; }
   .tn-list { display: grid; gap: 18px; }
   .tb-outils { border-top: 2px solid var(--pierre); padding: 8px 12px; display: grid; gap: 8px; font-size: 0.9rem; }
   .tb-outils summary { cursor: pointer; font-weight: 700; }
@@ -418,6 +462,7 @@ import Base from '../layouts/Base.astro';
   import { initBureauPlus } from '../lib/bureau-plus';
   import { telechargerCertificat } from '../lib/certificat';
   import { initTournoi } from '../lib/bureau-tournoi';
+  import { initVie } from '../lib/bureau-vie';
   import { initEtat } from '../lib/etat';
   import postesData from '../data/postes.json';
   const POSTES = (postesData as { titre: string }[]).map((p) => p.titre);
@@ -436,6 +481,7 @@ import Base from '../layouts/Base.astro';
     const contact = (c?: { email: string | null; telephone: string | null }) => !c ? '' : `${c.email ? `<a href="mailto:${esc(c.email)}">${esc(c.email)}</a>` : ''}${c.telephone ? `${c.email ? '<br>' : ''}<a href="tel:${esc(c.telephone)}">${esc(c.telephone)}</a>` : ''}`;
     initBureauPlus(sb, session, me as any).catch((e) => console.error(e));
     initTournoi(sb, session).catch((e) => console.error(e));
+    try { initVie(sb, session); } catch (e) { console.error(e); }
     if (isAdmin) {
       document.getElementById('buAdminGroup')!.classList.remove('hidden');
       initEtat(sb).catch((e) => console.error(e));

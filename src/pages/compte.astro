@@ -33,6 +33,21 @@ import ClasseChamps from '../components/ClasseChamps.astro';
         <strong id="tVote">Élections du bureau à bulletin secret</strong>
         <span class="tuile-go">Aller voter</span>
       </a>
+      <a class="card tuile" href="/sondages">
+        <span class="tuile-k">Sondages</span>
+        <strong id="tSondages">Donne ton avis au bureau en un clic</strong>
+        <span class="tuile-go">Répondre</span>
+      </a>
+      <a class="card tuile" href="/sorties">
+        <span class="tuile-k">Sorties et visites</span>
+        <strong id="tSorties">Assemblée, Sénat, tribunal : inscris-toi aux prochaines sorties</strong>
+        <span class="tuile-go">Voir les sorties</span>
+      </a>
+      <a class="card tuile" href="/ecrire-au-bureau">
+        <span class="tuile-k">Écrire au bureau</span>
+        <strong>Contacter un membre du bureau ou déposer une idée anonyme</strong>
+        <span class="tuile-go">Écrire</span>
+      </a>
       <a class="card tuile" href="/profil">
         <span class="tuile-k">Profil d'orateur</span>
         <strong id="tProfil">Tes séances, tes rôles et tes badges</strong>
@@ -291,6 +306,17 @@ import ClasseChamps from '../components/ClasseChamps.astro';
           <a class="btn ${ouvert.moi_inscrit ? 'btn-outline' : 'btn-primary'} btn-sm" href="${u('/tournoi')}">${ouvert.moi_inscrit ? 'Voir le tournoi' : 'Je m\'inscris'}</a>`;
       } else return;
       el.classList.remove('hidden');
+    });
+    sb.rpc('sondages_liste').then(({ data }) => {
+      const n = ((data as any[]) || []).filter((s) => s.ouvert && !s.mon_choix).length;
+      if (n) document.getElementById('tSondages')!.textContent = `${n} sondage${n > 1 ? 's attendent' : ' attend'} ta réponse`;
+    });
+    sb.rpc('sorties_liste').then(({ data }) => {
+      const ss = ((data as any[]) || []).filter((s) => !s.annule && new Date(s.quand) > new Date());
+      const moi = ss.find((s) => s.mon_statut === 'inscrit');
+      const t = document.getElementById('tSorties')!;
+      if (moi) t.textContent = `Inscrit·e : ${moi.titre}, le ${new Date(moi.quand).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}${moi.autorisation && !moi.mon_autorisation ? ' (autorisation à rapporter)' : ''}`;
+      else if (ss.length) t.textContent = `${ss.length} sortie${ss.length > 1 ? 's' : ''} à venir : ${ss[0].titre}`;
     });
     sb.rpc('derniers_meilleurs_orateurs', { p_limite: 1 }).then(({ data }) => {
       const d = ((data as any[]) || [])[0];

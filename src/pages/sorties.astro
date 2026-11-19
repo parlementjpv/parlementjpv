@@ -1,0 +1,86 @@
+---
+import Base from '../layouts/Base.astro';
+import MembreNav from '../components/MembreNav.astro';
+---
+<Base title="Sorties et visites" noindex>
+  <MembreNav actif="sorties" />
+  <div class="page-head"><div class="container">
+    <span class="eyebrow">Réservé aux membres</span>
+    <h1>Sorties et visites</h1>
+    <p class="lead">Assemblée nationale, Sénat, tribunal… Inscris-toi aux sorties organisées par le bureau. Quand c'est complet, tu passes sur liste d'attente et tu es prévenu·e dès qu'une place se libère.</p>
+  </div></div>
+  <section class="section-tight"><div class="container" style="max-width:900px;"><div id="soList" class="so-list"><p class="muted">Chargement…</p></div></div></section>
+</Base>
+<style is:global>
+  .so-list { display: grid; gap: 20px; }
+  .so { border: 3px solid var(--nuit); display: grid; grid-template-columns: 120px 1fr; }
+  .so.passee, .so.annulee { opacity: 0.6; }
+  .so-date { background: var(--nuit); color: #fff; display: grid; place-content: center; text-align: center; padding: 16px 8px; gap: 2px; }
+  .so-date strong { font-size: 2.2rem; line-height: 1; }
+  .so-date span { font-size: 0.85rem; font-weight: 700; }
+  .so-corps { padding: 20px 24px; display: grid; gap: 10px; }
+  .so-corps h2 { margin: 0; font-size: 1.4rem; line-height: 1.15; }
+  .so-infos { display: grid; gap: 2px; font-size: 0.95rem; }
+  .so-infos span { color: var(--gris); }
+  .so-etat { font-weight: 800; }
+  .so-etat.ok { color: #1c7a3e; }
+  .so-etat.att { color: #a15c00; }
+  .so-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  @media (max-width: 560px) { .so { grid-template-columns: 1fr; } .so-date { grid-auto-flow: column; justify-content: start; gap: 8px; padding: 10px 16px; } .so-date strong { font-size: 1.4rem; } }
+</style>
+<script>
+  import { getSupabase } from '../lib/supabase';
+  import { requireMembre } from '../lib/auth';
+  import { esc } from '../lib/events';
+  import { postJSON, api } from '../lib/newsletter';
+  (async () => {
+    const m = await requireMembre(); if (!m) return;
+    const sb = getSupabase(); const box = document.getElementById('soList')!;
+    const ERR: Record<string, string> = { inscriptions_closes: 'Les inscriptions sont closes.', annulee: 'Cette sortie est annulée.', passee: 'Cette sortie est passée.' };
+    async function charger() {
+      const { data } = await sb.rpc('sorties_liste');
+      const ss = (data as any[]) || [];
+      if (!ss.length) { box.innerHTML = '<p class="muted">Aucune sortie prévue pour le moment. Le bureau te préviendra par notification.</p>'; return; }
+      box.innerHTML = ss.map((s) => {
+        const d = new Date(s.quand), passee = d < new Date(), close = s.limite && new Date(s.limite) < new Date();
+        const restantes = s.places != null ? Math.max(0, s.places - s.inscrits) : null;
+        const etat = s.annule ? '<p class="so-etat">Sortie annulée</p>'
+          : s.mon_statut === 'inscrit' ? `<p class="so-etat ok">Tu es inscrit·e${s.autorisation ? (s.mon_autorisation ? ' · autorisation reçue par le bureau ✓' : ' · pense à rapporter ton autorisation signée') : ''}</p>`
+          : s.mon_statut === 'attente' ? `<p class="so-etat att">Liste d'attente : tu es ${s.ma_position === 1 ? '1er·e' : `${s.ma_position}e`}. Tu seras prévenu·e si une place se libère.</p>` : '';
+        const actions = s.annule || passee ? '' : s.mon_statut
+          ? `${s.mon_statut === 'inscrit' && s.autorisation ? `<button class="btn btn-primary btn-sm so-auth" data-id="${s.id}" type="button">Télécharger l'autorisation parentale</button>` : ''}<button class="btn btn-outline btn-sm so-act" data-id="${s.id}" data-v="0" type="button">Me désinscrire</button>`
+          : close ? '<p class="muted small">Inscriptions closes.</p>'
+          : `<button class="btn btn-primary btn-sm so-act" data-id="${s.id}" data-v="1" type="button">${restantes === 0 ? 'Rejoindre la liste d\'attente' : 'Je m\'inscris'}</button>`;
+        return `<article class="so${passee ? ' passee' : ''}${s.annule ? ' annulee' : ''}">
+          <div class="so-date"><strong>${d.getDate()}</strong><span>${esc(d.toLocaleDateString('fr-FR', { month: 'short' }))} ${d.getFullYear()}</span></div>
+          <div class="so-corps"><h2>${esc(s.titre)}</h2>
+            <div class="so-infos"><div><span>Quand</span> ${esc(d.toLocaleString('fr-FR', { weekday: 'long', hour: '2-digit', minute: '2-digit' }).replace(':', 'h'))}${s.retour ? ` · retour ${esc(s.retour)}` : ''}</div>
+            ${s.lieu ? `<div><span>Où</span> ${esc(s.lieu)}</div>` : ''}${s.rdv ? `<div><span>Rendez-vous</span> ${esc(s.rdv)}</div>` : ''}
+            <div><span>Places</span> ${s.places == null ? 'illimitées' : `${restantes} restante${restantes! > 1 ? 's' : ''} sur ${s.places}`}${s.attente ? ` · ${s.attente} en attente` : ''}${s.limite ? ` · inscriptions jusqu'au ${esc(new Date(s.limite).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' }))}` : ''}</div>
+            ${s.autorisation ? '<div><span>Autorisation parentale</span> obligatoire</div>' : ''}</div>
+            ${s.description ? `<p style="margin:0;white-space:pre-wrap;">${esc(s.description)}</p>` : ''}
+            ${etat}<div class="so-actions">${actions}</div><div class="so-msg" aria-live="polite"></div></div></article>`;
+      }).join('');
+      box.querySelectorAll<HTMLButtonElement>('.so-act').forEach((b) => b.addEventListener('click', async () => {
+        if (b.dataset.v === '0' && !confirm('Te désinscrire de cette sortie ? Ta place ira à la première personne en liste d\'attente.')) return;
+        b.disabled = true;
+        const { data: promu, error } = await sb.rpc('sortie_inscription', { p_sortie: b.dataset.id, p_inscrire: b.dataset.v === '1' });
+        if (error) { (b.closest('.so-corps')!.querySelector('.so-msg') as HTMLElement).innerHTML = `<div class="alert alert-err">${ERR[Object.keys(ERR).find((k) => error.message.includes(k)) || ''] || 'Action impossible.'}</div>`; b.disabled = false; return; }
+        if (promu) postJSON('/api/vie-notif', { action: 'promotion', sortie: b.dataset.id, user: promu }, m.session.access_token).catch(() => {});
+        charger();
+      }));
+      box.querySelectorAll<HTMLButtonElement>('.so-auth').forEach((b) => b.addEventListener('click', async () => {
+        b.disabled = true; const t = b.textContent; b.textContent = 'Préparation…';
+        try {
+          const { data: s } = await sb.auth.getSession();
+          const r = await fetch(api('/api/autorisation'), { method: 'POST', headers: { Authorization: `Bearer ${s.session?.access_token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ sortie: b.dataset.id }) });
+          if (!r.ok) throw new Error();
+          const a = document.createElement('a'); a.href = URL.createObjectURL(await r.blob());
+          a.download = /filename="([^"]+)"/.exec(r.headers.get('content-disposition') || '')?.[1] || 'autorisation.pdf'; document.body.appendChild(a); a.click(); a.remove();
+        } catch { alert('L\'autorisation n\'a pas pu être générée.'); }
+        b.disabled = false; b.textContent = t;
+      }));
+    }
+    charger();
+  })();
+</script>

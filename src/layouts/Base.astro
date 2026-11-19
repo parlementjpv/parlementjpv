@@ -75,7 +75,7 @@ const turnstile = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
     (function(){var app=false;try{app=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true||new URLSearchParams(location.search).get('app')==='1';if(app)sessionStorage.setItem('jpv_app','1');else app=sessionStorage.getItem('jpv_app')==='1';}catch(e){}
       if(!app)return;document.documentElement.classList.add('app');
       var p=location.pathname.slice(base.length).replace(/\/+$/,'')||'/';
-      var ok=/^\/(compte|profil|motions|elections|tournoi|salle|bureau|candidature|connexion|inscription|mot-de-passe-oublie|nouveau-mot-de-passe|evenement|application|verifier|charte|confidentialite|mentions-legales)(\/|$)/.test(p);
+      var ok=/^\/(compte|profil|motions|elections|tournoi|sondages|sorties|ecrire-au-bureau|salle|bureau|candidature|connexion|inscription|mot-de-passe-oublie|nouveau-mot-de-passe|evenement|application|verifier|charte|confidentialite|mentions-legales)(\/|$)/.test(p);
       if(!ok)location.replace(base+'/compte/');})();
   </script>
   <script is:inline define:vars={{ base }}>
