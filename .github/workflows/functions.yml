@@ -33,4 +33,4 @@ jobs:
         with:
           version: latest
       - if: steps.jeton.outputs.ok == 'true'
-        run: supabase functions deploy --project-ref waqaeyclhwhnnmvlfoau --use-api
+        run: supabase functions deploy --project-ref waqaeyclhwhnnmvlfoau --use-api --yes
