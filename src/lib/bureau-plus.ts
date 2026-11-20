@@ -458,7 +458,7 @@ async function initDiffuser(sb: SupabaseClient, session: Session) {
     if (c.email) parts.push(`${d.email} email${d.email > 1 ? 's' : ''} aux membres`);
     if (c.newsletter) parts.push(`${d.newsletter} email${d.newsletter > 1 ? 's' : ''} newsletter`);
     if (c.push) parts.push(`${d.push} notification${d.push > 1 ? 's' : ''}`);
-    if (c.whatsapp) parts.push(test ? 'texte WhatsApp envoyé à ton adresse' : 'texte WhatsApp envoyé à l'adresse du Parlement');
+    if (c.whatsapp) parts.push(test ? 'texte WhatsApp envoyé à ton adresse' : 'texte WhatsApp envoyé à l’adresse du Parlement');
     msg.innerHTML = `<div class="alert alert-ok">${test ? 'Test envoyé à toi seul : ' : 'Annonce diffusée : '}${esc(parts.join(' · '))}.${d.echecs ? ` ${d.echecs} échec${d.echecs > 1 ? 's' : ''}.` : ''}</div>`;
     if (!test) { f.reset(); apercu(); }
   };
