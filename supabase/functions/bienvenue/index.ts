@@ -8,7 +8,12 @@ function guide(prenom: string) {
   const etape = (n: number, t: string) => `<tr><td style="vertical-align:top;padding:6px 12px 6px 0;"><span style="display:inline-block;width:26px;height:26px;line-height:26px;text-align:center;background:#0f1f4b;color:#fff;font-weight:700;">${n}</span></td><td style="padding:6px 0;">${t}</td></tr>`;
   const bloc = (titre: string, etapes: string[]) => `<h3 style="margin:24px 0 6px;">${titre}</h3><table style="border-collapse:collapse;font-size:15px;">${etapes.map((t, i) => etape(i + 1, t)).join('')}</table>`;
   return layout({ title: `Bienvenue ${prenom} ! Installe l'app du Parlement`, body:
-    `<p>Ton compte est actif. Pour ne rien rater (nouvelles séances, rappel la veille, votes), installe l'application Parlement JPV sur ton téléphone : elle s'ouvre directement sur ton espace et t'envoie des notifications. C'est gratuit et ça prend 30 secondes.</p>
+    `<div style="background:#e8f8ee;border:2px solid #25d366;border-radius:10px;padding:18px 20px;margin:0 0 24px;">
+       <p style="margin:0 0 8px;font-size:17px;font-weight:800;color:#0f1f4b;">Première chose à faire : rejoins le groupe WhatsApp du Parlement</p>
+       <p style="margin:0 0 14px;">C'est là que passent toutes les infos au quotidien : séances, sujets de débat, changements de dernière minute. Clique sur le bouton, puis sur <strong>« Rejoindre le groupe »</strong>.</p>
+       <a href="https://chat.whatsapp.com/DgbCKPKUfR17UUqv4DIPoI" style="display:inline-block;background:#25d366;color:#ffffff;font-weight:800;font-size:16px;padding:14px 26px;text-decoration:none;border-radius:8px;">Rejoindre le groupe WhatsApp</a>
+     </div>
+     <p>Ton compte est actif. Pour ne rien rater (nouvelles séances, rappel la veille, votes), installe l'application Parlement JPV sur ton téléphone : elle s'ouvre directement sur ton espace et t'envoie des notifications. C'est gratuit et ça prend 30 secondes.</p>
      ${bloc('Sur iPhone (Safari)', [
        `Ouvre <a href="${SITE}/application">parlementjpv.fr/application</a> <strong>dans Safari</strong>.`,
        'Touche le bouton <strong>Partager</strong> (le carré avec une flèche vers le haut).',
