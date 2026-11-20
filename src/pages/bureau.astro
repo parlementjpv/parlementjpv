@@ -117,7 +117,7 @@ import Base from '../layouts/Base.astro';
             <label class="df-c"><input type="checkbox" value="email" checked /><span><strong>Email aux membres</strong><small id="dfNbMembres">Chaque membre reçoit un email personnel</small></span></label>
             <label class="df-c"><input type="checkbox" value="newsletter" /><span><strong>Newsletter</strong><small id="dfNbAbo">Les abonnés à la lettre (sans doublon avec les membres)</small></span></label>
             <label class="df-c"><input type="checkbox" value="push" checked /><span><strong>Notification push</strong><small id="dfNbPush">Sur le téléphone de ceux qui ont l'application</small></span></label>
-            <label class="df-c df-wa"><input type="checkbox" value="whatsapp" checked /><span><strong>WhatsApp</strong><small>Le message prêt à poster est envoyé à parlementjpv@gmail.com, et WhatsApp s'ouvre ici avec le texte</small></span></label>
+            <label class="df-c df-wa"><input type="checkbox" value="whatsapp" checked /><span><strong>WhatsApp</strong><small>Le message prêt à poster est envoyé à l'adresse du Parlement, et WhatsApp s'ouvre ici avec le texte</small></span></label>
             <button class="btn btn-outline btn-sm" type="button" id="dfTout">Tout cocher</button>
           </fieldset>
           <div id="dfMsg" aria-live="polite"></div>
@@ -125,7 +125,7 @@ import Base from '../layouts/Base.astro';
             <button class="btn btn-primary" type="submit" id="dfSend">Envoyer</button>
             <button class="btn btn-outline" type="button" id="dfTest">M'envoyer un test d'abord</button>
           </div>
-          <p class="small muted" style="margin:0;">Le test n'arrive qu'à toi, sur tous les canaux cochés. Les nouvelles séances, modifications et annulations envoient déjà automatiquement le message WhatsApp à parlementjpv@gmail.com.</p>
+          <p class="small muted" style="margin:0;">Le test n'arrive qu'à toi, sur tous les canaux cochés. Les nouvelles séances, modifications et annulations envoient déjà automatiquement le message WhatsApp à l'adresse du Parlement.</p>
         </form>
         <div class="card"><h3 style="margin-top:0;">Aperçu WhatsApp</h3><pre class="df-wa-apercu" id="dfApercu">📢 *Titre*
 
