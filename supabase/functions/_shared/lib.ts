@@ -5,7 +5,7 @@ export const SITE = (Deno.env.get('SITE_URL') || 'https://parlementjpv.fr').repl
 export const FROM = Deno.env.get('MAIL_FROM') || `Parlement JPV <${Deno.env.get('SMTP_USER') || 'contact@parlementjpv.fr'}>`;
 export const BUREAU_EMAIL = Deno.env.get('BUREAU_EMAIL') || 'parlementjpv@gmail.com';
 
-const ALLOWED_ORIGINS = [SITE, 'https://parlementjpv.fr', 'https://www.parlementjpv.fr', 'https://parlementjpv.github.io', 'http://localhost:4321'];
+const ALLOWED_ORIGINS = [SITE, 'https://parlementjpv.fr', 'https://www.parlementjpv.fr', 'http://localhost:4321'];
 export function cors(req: Request) {
   const origin = req.headers.get('origin') || '';
   const allow = ALLOWED_ORIGINS.includes(origin) || /^http:\/\/localhost:\d+$/.test(origin) ? origin : ALLOWED_ORIGINS[0];
