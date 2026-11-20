@@ -48,7 +48,7 @@ const turnstile = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
     '@context': 'https://schema.org',
     '@graph': [
       { '@type': 'Organization', '@id': `${home}#org`, name: 'Parlement JPV', alternateName: 'Parlement du lycée Jean-Pierre Vernant', url: home,
-        logo: new URL(base + '/assets/img/logo.png', Astro.site).href, email: 'parlementjpv@gmail.com',
+        logo: new URL(base + '/assets/img/logo.png', Astro.site).href, email: 'contact@parlementjpv.fr',
         description: "Instance lycéenne de débat, d'éloquence et d'engagement citoyen du lycée Jean-Pierre Vernant à Sèvres.",
         address: { '@type': 'PostalAddress', streetAddress: '21 rue du Docteur Ledermann', postalCode: '92310', addressLocality: 'Sèvres', addressCountry: 'FR' },
         parentOrganization: { '@type': 'HighSchool', name: 'Lycée Jean-Pierre Vernant', address: { '@type': 'PostalAddress', addressLocality: 'Sèvres', addressCountry: 'FR' } },

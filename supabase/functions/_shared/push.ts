@@ -8,7 +8,7 @@ function init() {
   if (pret) return true;
   const pub = Deno.env.get('VAPID_PUBLIC_KEY'), priv = Deno.env.get('VAPID_PRIVATE_KEY');
   if (!pub || !priv) return false;
-  webpush.setVapidDetails(Deno.env.get('VAPID_SUBJECT') || 'mailto:parlementjpv@gmail.com', pub, priv);
+  webpush.setVapidDetails(Deno.env.get('VAPID_SUBJECT') || 'mailto:contact@parlementjpv.fr', pub, priv);
   return (pret = true);
 }
 

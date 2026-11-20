@@ -9,7 +9,7 @@
 | | |
 |---|---|
 | **Organisme** | Parlement JPV, instance de débat créée par des élèves du lycée Jean-Pierre Vernant (Sèvres) |
-| **Responsable de traitement** | Bureau du Parlement JPV — parlementjpv@gmail.com |
+| **Responsable de traitement** | Bureau du Parlement JPV — contact@parlementjpv.fr |
 | **Site concerné** | https://parlementjpv.fr/ |
 
 ## Sous-traitants
@@ -17,7 +17,7 @@
 | Prestataire | Rôle | Localisation des données | Garanties |
 |---|---|---|---|
 | Supabase, Inc. | Base de données, comptes, fonctions serveur | Union européenne (Stockholm, Suède) | Contrat de traitement (DPA) Supabase, clauses contractuelles types |
-| Google LLC (Gmail) | Envoi des emails depuis parlementjpv@gmail.com | États-Unis / UE | Data Privacy Framework UE–États-Unis, clauses contractuelles types |
+| OVHcloud (Zimbra) | Envoi et réception des emails de contact@parlementjpv.fr | France (UE) | — |
 | GitHub, Inc. | Hébergement des pages statiques (aucune donnée de formulaire) | États-Unis | Data Privacy Framework UE–États-Unis |
 
 ## Traitements

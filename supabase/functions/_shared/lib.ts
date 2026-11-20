@@ -2,7 +2,7 @@ import { createClient } from 'npm:@supabase/supabase-js@2';
 import nodemailer from 'npm:nodemailer@6';
 
 export const SITE = (Deno.env.get('SITE_URL') || 'https://parlementjpv.fr').replace(/\/$/, '');
-export const FROM = Deno.env.get('MAIL_FROM') || `Parlement JPV <${Deno.env.get('SMTP_USER') || 'parlementjpv@gmail.com'}>`;
+export const FROM = Deno.env.get('MAIL_FROM') || `Parlement JPV <${Deno.env.get('SMTP_USER') || 'contact@parlementjpv.fr'}>`;
 export const BUREAU_EMAIL = Deno.env.get('BUREAU_EMAIL') || 'parlementjpv@gmail.com';
 
 const ALLOWED_ORIGINS = [SITE, 'https://parlementjpv.fr', 'https://www.parlementjpv.fr', 'https://parlementjpv.github.io', 'http://localhost:4321'];
@@ -36,15 +36,15 @@ export async function userFromRequest(req: Request) {
 type Mail = { from?: string; to: string; subject: string; html: string; text?: string; replyTo?: string; headers?: Record<string, string>; attachments?: { filename: string; content: Uint8Array | string; contentType?: string }[] };
 let transport: ReturnType<typeof nodemailer.createTransport> | null = null;
 
-/** Envoi d'emails via Gmail (SMTP, port 465 SSL). Identifiants dans les secrets SMTP_USER / SMTP_PASS. */
+/** Envoi d'emails via la boîte contact@parlementjpv.fr (Zimbra OVHcloud, SMTP port 465 SSL). Identifiants dans les secrets SMTP_USER / SMTP_PASS. */
 export async function sendMail(m: Mail) {
   if (!transport) {
     const user = Deno.env.get('SMTP_USER'), pass = Deno.env.get('SMTP_PASS');
     if (!user || !pass) throw new Error('SMTP_USER / SMTP_PASS manquants');
-    transport = nodemailer.createTransport({ host: Deno.env.get('SMTP_HOST') || 'smtp.gmail.com', port: 465, secure: true, auth: { user, pass } });
+    transport = nodemailer.createTransport({ host: Deno.env.get('SMTP_HOST') || 'smtp.mail.ovh.net', port: 465, secure: true, auth: { user, pass } });
   }
   // Anti-spam : version texte, réponses autorisées vers la boîte du Parlement, lien de désinscription dans l'en-tête
-  const repondre = Deno.env.get('SMTP_USER') || 'parlementjpv@gmail.com';
+  const repondre = Deno.env.get('SMTP_USER') || 'contact@parlementjpv.fr';
   const headers: Record<string, string> = { ...(m.headers || {}) };
   if (!headers['List-Unsubscribe']) headers['List-Unsubscribe'] = `<mailto:${repondre}?subject=D%C3%A9sinscription>`;
   else if (!headers['List-Unsubscribe'].includes('mailto:')) headers['List-Unsubscribe'] += `, <mailto:${repondre}?subject=D%C3%A9sinscription>`;
