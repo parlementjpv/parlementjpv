@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: process.env.SITE_ORIGIN || 'https://parlementjpv.github.io',
+  site: process.env.SITE_ORIGIN || 'https://parlementjpv.fr',
   base: process.env.BASE_PATH || '/',
   output: 'static',
   trailingSlash: 'ignore',

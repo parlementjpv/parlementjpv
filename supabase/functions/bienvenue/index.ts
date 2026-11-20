@@ -10,7 +10,7 @@ function guide(prenom: string) {
   return layout({ title: `Bienvenue ${prenom} ! Installe l'app du Parlement`, body:
     `<p>Ton compte est actif. Pour ne rien rater (nouvelles séances, rappel la veille, votes), installe l'application Parlement JPV sur ton téléphone : elle s'ouvre directement sur ton espace et t'envoie des notifications. C'est gratuit et ça prend 30 secondes.</p>
      ${bloc('Sur iPhone (Safari)', [
-       `Ouvre <a href="${SITE}/application">parlementjpv.github.io/parlementjpv/application</a> <strong>dans Safari</strong>.`,
+       `Ouvre <a href="${SITE}/application">parlementjpv.fr/application</a> <strong>dans Safari</strong>.`,
        'Touche le bouton <strong>Partager</strong> (le carré avec une flèche vers le haut).',
        'Choisis <strong>« Sur l\'écran d\'accueil »</strong>, puis <strong>Ajouter</strong>.',
        'Ouvre l\'app Parlement JPV depuis ton écran d\'accueil et connecte-toi : elle te propose aussitôt d\'activer les notifications. Touche <strong>« Activer »</strong> puis <strong>Autoriser</strong>.',

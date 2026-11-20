@@ -16,7 +16,7 @@ export async function certificatPdf(userId: string): Promise<{ pdf: Uint8Array; 
   const president = pres?.[0];
 
   const doc = await PDFDocument.create();
-  doc.setTitle(`Certificat de membre — ${p.prenom} ${p.nom}`); doc.setAuthor('Parlement JPV'); doc.setCreator('parlementjpv.github.io');
+  doc.setTitle(`Certificat de membre — ${p.prenom} ${p.nom}`); doc.setAuthor('Parlement JPV'); doc.setCreator('parlementjpv.fr');
   const W = 841.89, H = 595.28;
   const pg = doc.addPage([W, H]);
   const reg = await doc.embedFont(StandardFonts.Helvetica), bold = await doc.embedFont(StandardFonts.HelveticaBold), it = await doc.embedFont(StandardFonts.HelveticaOblique);

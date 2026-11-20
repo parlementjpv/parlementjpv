@@ -2,7 +2,7 @@
 // déjà connues de Google. Redirection immédiate + lien canonique vers la nouvelle page.
 import { writeFile, mkdir } from 'node:fs/promises';
 
-const origin = (process.env.SITE_ORIGIN || 'https://parlementjpv.github.io').replace(/\/$/, '');
+const origin = (process.env.SITE_ORIGIN || 'https://parlementjpv.fr').replace(/\/$/, '');
 const base = (process.env.BASE_PATH || '').replace(/\/$/, '');
 const map = {
   'qui-sommes-nous.html': 'qui-sommes-nous/', 'institution.html': 'institution/', 'rejoindre.html': 'inscription/',

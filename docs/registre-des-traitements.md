@@ -10,7 +10,7 @@
 |---|---|
 | **Organisme** | Parlement JPV, instance de débat créée par des élèves du lycée Jean-Pierre Vernant (Sèvres) |
 | **Responsable de traitement** | Bureau du Parlement JPV — parlementjpv@gmail.com |
-| **Site concerné** | https://parlementjpv.github.io/parlementjpv/ |
+| **Site concerné** | https://parlementjpv.fr/ |
 
 ## Sous-traitants
 

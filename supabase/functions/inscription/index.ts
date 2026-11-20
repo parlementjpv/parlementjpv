@@ -5,7 +5,7 @@ import { admin, sendMail, json, esc, layout, button, SITE, FROM, cors, readJson,
 // GET  → un défi à résoudre ; POST {action:'creer'} → vérifie le défi puis crée le compte et envoie l'email d'activation ;
 // POST {action:'renvoyer'} → renvoie un lien d'activation (même vérification). Les inscriptions directes sont désactivées.
 const KEY = () => Deno.env.get('ALTCHA_HMAC_KEY')!;
-const retour = (r: unknown) => (typeof r === 'string' && /^https:\/\/parlementjpv\.github\.io\/|^http:\/\/localhost(:\d+)?\//.test(r) ? r : `${SITE}/compte?bienvenue=1`);
+const retour = (r: unknown) => (typeof r === 'string' && /^https:\/\/(www\.)?parlementjpv\.fr\/|^https:\/\/parlementjpv\.github\.io\/|^http:\/\/localhost(:\d+)?\//.test(r) ? r : `${SITE}/compte?bienvenue=1`);
 const vus = new Map<string, number>();
 
 async function envoyerActivation(email: string, prenom: string, lien: string) {
