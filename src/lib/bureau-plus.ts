@@ -24,6 +24,7 @@ export async function initBureauPlus(sb: SupabaseClient, session: Session, me: {
   initEntreNous(sb, me);
   initActualites(sb, me);
   initNotifs(sb, session);
+  initDiffuser(sb, session);
 }
 
 /* ────────────────────────── Notifications push ────────────────────────── */
@@ -427,4 +428,40 @@ async function initActualites(sb: SupabaseClient, me: { id: string; prenom: stri
     if (b.classList.contains('ar-del') && confirm(`Supprimer définitivement « ${a.titre} » ?`)) { await sb.from('articles').delete().eq('id', a.id); load(); }
   });
   apercu(); load();
+}
+
+/* ────────────────────────── Diffuser une annonce (tous canaux) ────────────────────────── */
+async function initDiffuser(sb: SupabaseClient, session: Session) {
+  const f = $('dfForm') as HTMLFormElement, msg = $('dfMsg');
+  const titre = $('dfTitre') as HTMLInputElement, message = $('dfMessage') as HTMLTextAreaElement, lien = $('dfLien') as HTMLInputElement;
+  const cases = [...f.querySelectorAll<HTMLInputElement>('.df-canaux input[type=checkbox]')];
+  const canaux = () => Object.fromEntries(cases.map((c) => [c.value, c.checked])) as Record<string, boolean>;
+  const texteWa = () => `📢 *${titre.value.trim() || 'Titre'}*\n\n${message.value.trim() || 'Message'}${lien.value.trim() ? `\n\n👉 ${lien.value.trim()}` : ''}`;
+  const apercu = () => { $('dfApercu').textContent = texteWa(); };
+  [titre, message, lien].forEach((el) => el.addEventListener('input', apercu));
+  $('dfTout').addEventListener('click', () => cases.forEach((c) => (c.checked = true)));
+  sb.rpc('push_stats').then(({ data }) => { if (data) $('dfNbPush').textContent = `Sur le téléphone des ${data.membres} membre${data.membres > 1 ? 's' : ''} qui ont activé les notifications`; });
+  const envoyer = async (test: boolean) => {
+    const c = canaux();
+    if (!f.reportValidity()) return;
+    if (!Object.values(c).some(Boolean)) { msg.innerHTML = '<div class="alert alert-err">Coche au moins un moyen de communication.</div>'; return; }
+    const noms = [c.email && 'email aux membres', c.newsletter && 'newsletter', c.push && 'notification push', c.whatsapp && 'WhatsApp'].filter(Boolean).join(', ');
+    if (!test && !confirm(`Diffuser « ${titre.value.trim()} » par : ${noms} ?`)) return;
+    // WhatsApp s'ouvre tout de suite (sinon le navigateur bloque la fenêtre)
+    const wa = !test && c.whatsapp ? window.open(`https://wa.me/?text=${encodeURIComponent(texteWa())}`, '_blank') : null;
+    ($('dfSend') as HTMLButtonElement).disabled = ($('dfTest') as HTMLButtonElement).disabled = true;
+    msg.innerHTML = '<p class="small muted">Envoi en cours…</p>';
+    const r = await postJSON<{ email: number; newsletter: number; push: number; whatsapp: boolean; echecs: number }>('/api/diffuser', { titre: titre.value, message: message.value, lien: lien.value, canaux: c, test }, session.access_token);
+    ($('dfSend') as HTMLButtonElement).disabled = ($('dfTest') as HTMLButtonElement).disabled = false;
+    if (!r.ok) { wa?.close(); msg.innerHTML = `<div class="alert alert-err">${esc(r.error || 'Envoi impossible.')}</div>`; return; }
+    const d = r.data, parts: string[] = [];
+    if (c.email) parts.push(`${d.email} email${d.email > 1 ? 's' : ''} aux membres`);
+    if (c.newsletter) parts.push(`${d.newsletter} email${d.newsletter > 1 ? 's' : ''} newsletter`);
+    if (c.push) parts.push(`${d.push} notification${d.push > 1 ? 's' : ''}`);
+    if (c.whatsapp) parts.push(test ? 'texte WhatsApp envoyé à ton adresse' : 'texte WhatsApp envoyé à parlementjpv@gmail.com');
+    msg.innerHTML = `<div class="alert alert-ok">${test ? 'Test envoyé à toi seul : ' : 'Annonce diffusée : '}${esc(parts.join(' · '))}.${d.echecs ? ` ${d.echecs} échec${d.echecs > 1 ? 's' : ''}.` : ''}</div>`;
+    if (!test) { f.reset(); apercu(); }
+  };
+  f.addEventListener('submit', (e) => { e.preventDefault(); envoyer(false); });
+  $('dfTest').addEventListener('click', () => envoyer(true));
 }

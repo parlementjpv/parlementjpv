@@ -27,6 +27,7 @@ import Base from '../layouts/Base.astro';
         <button class="bu-tile tab" data-tab="motions" type="button"><span class="bu-tile-t">Motions</span><span class="bu-tile-d">Les sujets proposés par les membres</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
       </div></section>
       <section class="bu-group"><h2 class="bu-group-t">Communication</h2><div class="bu-tiles">
+        <button class="bu-tile tab bu-tile-cle" data-tab="diffuser" type="button"><span class="bu-tile-t">Diffuser une annonce</span><span class="bu-tile-d">Email, newsletter, notification, WhatsApp : tout en même temps</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
         <button class="bu-tile tab" data-tab="actu" type="button"><span class="bu-tile-t">Actualités</span><span class="bu-tile-d">Écrire, illustrer et publier un article</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
         <button class="bu-tile tab" data-tab="nl" type="button"><strong class="bu-count" id="sAbo">–</strong><span class="bu-tile-t">Newsletter</span><span class="bu-tile-d">Rédiger et envoyer la lettre</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
         <button class="bu-tile tab" data-tab="notifs" type="button"><strong class="bu-count" id="sPush">–</strong><span class="bu-tile-t">Notifications</span><span class="bu-tile-d">Une alerte sur le téléphone des membres</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
@@ -101,6 +102,34 @@ import Base from '../layouts/Base.astro';
           <div class="flex"><button class="btn btn-primary" type="submit" id="evSave">Publier l'événement</button><button class="btn btn-outline hidden" type="button" id="evCancel">Annuler la modification</button></div>
         </form>
         <div class="card"><h3>Événements et réponses</h3><div id="inscr">—</div></div>
+      </div>
+    </div>
+    <div class="panel hidden" id="tab-diffuser">
+      <div class="grid ecrire">
+        <form class="card form" id="dfForm">
+          <h3 style="margin:0;">Diffuser une annonce</h3>
+          <p class="small muted" style="margin:0;">Écris le message une seule fois, coche les moyens de communication, et tout part en même temps.</p>
+          <div class="field"><label for="dfTitre">Titre</label><input id="dfTitre" required maxlength="120" placeholder="ex. Changement de salle jeudi" /></div>
+          <div class="field"><label for="dfMessage">Message</label><textarea id="dfMessage" required maxlength="5000" style="min-height:160px;" placeholder="ex. Le débat de jeudi a lieu en salle 204, même heure."></textarea></div>
+          <div class="field"><label for="dfLien">Lien <span class="small muted">(facultatif)</span></label><input id="dfLien" type="url" maxlength="500" placeholder="https://…" /></div>
+          <fieldset class="df-canaux">
+            <legend>Envoyer par</legend>
+            <label class="df-c"><input type="checkbox" value="email" checked /><span><strong>Email aux membres</strong><small id="dfNbMembres">Chaque membre reçoit un email personnel</small></span></label>
+            <label class="df-c"><input type="checkbox" value="newsletter" /><span><strong>Newsletter</strong><small id="dfNbAbo">Les abonnés à la lettre (sans doublon avec les membres)</small></span></label>
+            <label class="df-c"><input type="checkbox" value="push" checked /><span><strong>Notification push</strong><small id="dfNbPush">Sur le téléphone de ceux qui ont l'application</small></span></label>
+            <label class="df-c df-wa"><input type="checkbox" value="whatsapp" checked /><span><strong>WhatsApp</strong><small>Le message prêt à poster est envoyé à parlementjpv@gmail.com, et WhatsApp s'ouvre ici avec le texte</small></span></label>
+            <button class="btn btn-outline btn-sm" type="button" id="dfTout">Tout cocher</button>
+          </fieldset>
+          <div id="dfMsg" aria-live="polite"></div>
+          <div class="flex" style="gap:8px;flex-wrap:wrap;">
+            <button class="btn btn-primary" type="submit" id="dfSend">Envoyer</button>
+            <button class="btn btn-outline" type="button" id="dfTest">M'envoyer un test d'abord</button>
+          </div>
+          <p class="small muted" style="margin:0;">Le test n'arrive qu'à toi, sur tous les canaux cochés. Les nouvelles séances, modifications et annulations envoient déjà automatiquement le message WhatsApp à parlementjpv@gmail.com.</p>
+        </form>
+        <div class="card"><h3 style="margin-top:0;">Aperçu WhatsApp</h3><pre class="df-wa-apercu" id="dfApercu">📢 *Titre*
+
+Message</pre></div>
       </div>
     </div>
     <div class="panel hidden" id="tab-notifs">
@@ -450,6 +479,14 @@ import Base from '../layouts/Base.astro';
   .ev-campstats { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
   .ev-campstats span { background: var(--pierre); padding: 3px 10px; font-weight: 700; font-size: 0.9rem; }
   .ev-campstats b { color: var(--rouge); }
+  .bu-tile-cle { border-color: #25d366 !important; }
+  .df-canaux { border: 1px solid var(--ligne, #d9dce3); border-radius: 10px; padding: 12px 14px; display: grid; gap: 10px; margin: 0; }
+  .df-canaux legend { font-weight: 800; padding: 0 6px; }
+  .df-c { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+  .df-c input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--rouge); flex: none; }
+  .df-c span { display: grid; } .df-c small { color: #5d6477; font-size: 0.85rem; }
+  .df-wa input { accent-color: #25d366; }
+  .df-wa-apercu { background: #e8f8ee; border: 2px solid #25d366; border-radius: 10px; padding: 14px; white-space: pre-wrap; font: inherit; font-size: 0.95rem; margin: 0; }
 </style>
 <script>
   import { getSupabase } from '../lib/supabase';
