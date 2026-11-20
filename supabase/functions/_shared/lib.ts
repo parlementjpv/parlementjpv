@@ -82,7 +82,7 @@ export async function checkTurnstile(token: string, req: Request) {
 }
 
 // Modèle d'email du Parlement (variante A3 choisie) : carte arrondie, en-tête bleu nuit avec logo, bande tricolore
-export function layout({ title, body, unsubscribeUrl }: { title: string; body: string; unsubscribeUrl?: string }) {
+export function layout({ title, body, unsubscribeUrl, unsubscribeLabel }: { title: string; body: string; unsubscribeUrl?: string; unsubscribeLabel?: string }) {
   const tri = '<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="height:6px;background:#0f1f4b;width:33%;font-size:0;line-height:0;">&nbsp;</td><td style="height:6px;background:#ffffff;width:34%;font-size:0;line-height:0;">&nbsp;</td><td style="height:6px;background:#d62839;width:33%;font-size:0;line-height:0;">&nbsp;</td></tr></table>';
   return `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"></head>
   <body style="margin:0;padding:0;background:#e9ebf0;font-family:Helvetica,Arial,sans-serif;color:#0f1f4b;">
@@ -100,7 +100,7 @@ export function layout({ title, body, unsubscribeUrl }: { title: string; body: s
       ${body}
     </td></tr>
     <tr><td style="padding:18px 30px;border-top:1px solid #e9ebf0;font-size:12px;line-height:1.5;color:#5d6477;">
-      Parlement JPV · Lycée Jean-Pierre Vernant, 92310 Sèvres<br><a href="${SITE}" style="color:#5d6477;">${SITE.replace('https://', '').replace(/\/parlementjpv$/, '')}</a> · Tu peux répondre à cet email.${unsubscribeUrl ? ` · <a href="${unsubscribeUrl}" style="color:#5d6477;">Se désinscrire</a>` : ''}
+      Parlement JPV · Lycée Jean-Pierre Vernant, 92310 Sèvres<br><a href="${SITE}" style="color:#5d6477;">${SITE.replace('https://', '').replace(/\/parlementjpv$/, '')}</a> · Tu peux répondre à cet email.${unsubscribeUrl ? `<br><br><a href="${unsubscribeUrl}" style="display:inline-block;border:1px solid #c5cad6;color:#5d6477;font-weight:700;font-size:12px;padding:8px 16px;text-decoration:none;border-radius:6px;">${esc(unsubscribeLabel || 'Me désabonner')}</a>` : ''}
     </td></tr>
   </table></td></tr></table></body></html>`;
 }

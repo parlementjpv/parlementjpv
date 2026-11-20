@@ -36,7 +36,8 @@ Deno.serve(async (req) => {
           `<p>Le bureau vient de publier une nouvelle séance du Parlement JPV.</p>${fiche(ev)}
            <p>Dis-nous si tu viens : ça prend dix secondes${ev.camps?.length ? ', et ton camp sera tiré au sort' : ''}.</p>
            ${button(lienEvenement(ev), 'Je réponds')}
-           <p style="color:#555;font-size:13px;">Tu reçois cet email parce que tu es membre du Parlement JPV. <a href="${SUPA}/functions/v1/annonces-stop?t=${m.desabo_token}" style="color:#555;">Ne plus recevoir les annonces de séances</a>.</p>` }),
+           <p style="color:#555;font-size:13px;">Tu reçois cet email parce que tu es membre du Parlement JPV.</p>`,
+          unsubscribeUrl: `${SUPA}/functions/v1/annonces-stop?t=${m.desabo_token}`, unsubscribeLabel: 'Me désabonner des annonces' }),
         headers: { 'List-Unsubscribe': `<${SUPA}/functions/v1/annonces-stop?t=${m.desabo_token}>` },
       });
       envoyes++;
