@@ -99,7 +99,7 @@ import MembreNav from '../components/MembreNav.astro';
     const m = await requireMembre(); if (!m) return;
     const sb = getSupabase();
     const cible = new URLSearchParams(location.search).get('u');
-    const [{ data: p, error }, { data: cl }, { data: palm }] = await Promise.all([sb.rpc('profil_orateur', { p_user: cible || null }), sb.rpc('orateurs_classement'), sb.rpc('tournoi_palmares', { p_user: cible || session.user.id })]);
+    const [{ data: p, error }, { data: cl }, { data: palm }] = await Promise.all([sb.rpc('profil_orateur', { p_user: cible || null }), sb.rpc('orateurs_classement'), sb.rpc('tournoi_palmares', { p_user: cible || m.session.user.id })]);
     if (p && palm) Object.assign(p, { tournois_gagnes: palm.gagnes, finales: palm.finales, duels_gagnes: palm.duels_gagnes });
     if (error || !p) { $('pfNom').textContent = 'Profil introuvable'; return; }
     const ROLE: Record<string, string> = { admin: 'Bureau', bureau: 'Bureau', membre: 'Membre' };
