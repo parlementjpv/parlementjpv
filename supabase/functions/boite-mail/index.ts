@@ -26,8 +26,9 @@ async function chemin(c: ImapFlow, cle: string) {
 }
 
 async function un(c: ImapFlow, uid: number, q: Record<string, unknown>) {
-  for await (const m of c.fetch({ uid: String(uid) } as any, q as any)) return m;
-  return null;
+  let r: any = null;
+  for await (const m of c.fetch(String(uid), q as any, { uid: true })) r = m; // on lit le flux jusqu'au bout
+  return r;
 }
 
 Deno.serve(async (req) => {
@@ -116,5 +117,5 @@ Deno.serve(async (req) => {
   } catch (e) {
     console.error(e);
     return json(req, 502, { error: 'Connexion à la boîte mail impossible pour le moment.' });
-  } finally { try { await c?.logout(); } catch { /* */ } }
+  } finally { try { c?.close(); } catch { /* */ } }
 });
