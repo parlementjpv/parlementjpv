@@ -51,7 +51,7 @@ export function initBoite(sb: SupabaseClient) {
       </div>
       <form class="form hidden bm-repform" id="bmRepForm">
         <div class="field"><label for="bmRepTxt">Réponse à ${esc(m.de?.address || '')}</label><textarea id="bmRepTxt" required style="min-height:160px;" placeholder="Bonjour,&#10;&#10;…"></textarea></div>
-        <p class="small muted" style="margin:0;">Envoyée depuis contact@parlementjpv.fr, avec le message d'origine cité en dessous. Une copie est rangée dans « Envoyés ».</p>
+        <p class="small muted" style="margin:0;">Envoyée depuis contact@parlementjpv.fr avec ta signature, et le message d'origine cité en dessous. Une copie est rangée dans « Envoyés ».</p>
         <div class="flex" style="gap:8px;"><button class="btn btn-primary btn-sm" type="submit">Envoyer la réponse</button><button class="btn btn-outline btn-sm" type="button" id="bmRepAnn">Annuler</button></div>
       </form><div id="bmActMsg" aria-live="polite"></div>`;
     // Contenu affiché dans un cadre isolé : aucun script, images distantes bloquées tant qu'on ne les autorise pas
@@ -106,7 +106,7 @@ export function initBoite(sb: SupabaseClient) {
         <div class="field"><label for="bmCc">Cc <span class="small muted">(facultatif)</span></label><input id="bmCc" type="text" autocomplete="off" /></div>
         <div class="field"><label for="bmSujet">Objet</label><input id="bmSujet" required maxlength="200" /></div>
         <div class="field"><label for="bmTxt">Message</label><textarea id="bmTxt" required style="min-height:220px;" placeholder="Bonjour,&#10;&#10;…"></textarea></div>
-        <p class="small muted" style="margin:0;">Envoyé depuis contact@parlementjpv.fr, avec la signature du Parlement. Une copie est rangée dans « Envoyés ».</p>
+        <p class="small muted" style="margin:0;">Envoyé depuis contact@parlementjpv.fr. Ta signature (nom, fonction, logo du Parlement) est ajoutée automatiquement à la fin. Une copie est rangée dans « Envoyés ».</p>
         <div id="bmNvMsg" aria-live="polite"></div>
         <div class="flex" style="gap:8px;"><button class="btn btn-primary btn-sm" type="submit">Envoyer</button><button class="btn btn-outline btn-sm" type="button" id="bmNvAnn">Annuler</button></div>
       </form>`;

@@ -47,6 +47,27 @@ async function sourceBrute(dossier: string, uid: number): Promise<Uint8Array> {
   } finally { try { await conn.write(enc.encode('a9 LOGOUT\r\n')); } catch { /* */ } try { conn.close(); } catch { /* */ } }
 }
 
+
+/** Signature professionnelle de l'administrateur qui écrit (HTML + texte). */
+function signature(prof: any) {
+  const e = (x: string) => String(x || '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
+  const nom = [prof?.prenom, prof?.nom].filter(Boolean).join(' ') || 'Le bureau';
+  const fonction = prof?.poste ? `${prof.poste} du Parlement JPV` : 'Administrateur du Parlement JPV';
+  const html = `<table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:28px;font-family:Arial,Helvetica,sans-serif;border-collapse:collapse;">
+  <tr><td colspan="2" style="padding-bottom:14px;"><div style="width:48px;height:3px;background:#d62839;font-size:0;line-height:0;">&nbsp;</div></td></tr>
+  <tr>
+    <td style="vertical-align:top;padding-right:16px;border-right:2px solid #0f1f4b;"><img src="https://parlementjpv.fr/assets/img/icon-192.png" width="64" height="64" alt="Parlement JPV" style="display:block;border:0;border-radius:10px;"></td>
+    <td style="vertical-align:top;padding-left:16px;">
+      <div style="font-size:16px;font-weight:700;color:#0f1f4b;line-height:1.3;">${e(nom)}</div>
+      <div style="font-size:13px;font-weight:700;color:#d62839;line-height:1.4;margin-bottom:8px;">${e(fonction)}</div>
+      <div style="font-size:12.5px;color:#4a5370;line-height:1.55;">Lycée Jean-Pierre Vernant<br>21 rue du Docteur Ledermann, 92310 Sèvres<br>
+        <a href="mailto:contact@parlementjpv.fr" style="color:#0f1f4b;text-decoration:none;">contact@parlementjpv.fr</a> · <a href="https://parlementjpv.fr" style="color:#0f1f4b;font-weight:700;text-decoration:none;">parlementjpv.fr</a></div>
+    </td>
+  </tr></table>`;
+  const texte = `\n\n--\n${nom}\n${fonction}\nLycée Jean-Pierre Vernant, 92310 Sèvres\ncontact@parlementjpv.fr · https://parlementjpv.fr`;
+  return { html, texte };
+}
+
 async function un(c: ImapFlow, uid: number, q: Record<string, unknown>) {
   let r: any = null;
   for await (const m of c.fetch(String(uid), q as any, { uid: true })) r = m; // on lit le flux jusqu'au bout
@@ -68,8 +89,9 @@ Deno.serve(async (req) => {
     if (!tous.length || [...tous, ...cc].some((e) => !valide(e))) return json(req, 400, { error: 'Adresse de destinataire invalide.' });
     if (tous.length + cc.length > 20) return json(req, 400, { error: '20 destinataires maximum. Pour écrire à tous les membres, utilise « Diffuser une annonce ».' });
     if (!sujet || texte.length < 2) return json(req, 400, { error: 'Objet et message obligatoires.' });
-    const corps = `${texte}\n\n— \nParlement JPV · Lycée Jean-Pierre Vernant, Sèvres\nhttps://parlementjpv.fr`;
-    const html = `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.5;color:#0f1f4b;white-space:pre-wrap;">${texte.replace(/[&<>]/g, (x) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[x]!))}</div><p style="font-family:Arial,sans-serif;font-size:13px;color:#5d6477;margin-top:20px;">Parlement JPV · Lycée Jean-Pierre Vernant, Sèvres<br><a href="https://parlementjpv.fr" style="color:#5d6477;">parlementjpv.fr</a></p>`;
+    const sig = signature(me.profile);
+    const corps = `${texte}${sig.texte}`;
+    const html = `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.5;color:#0f1f4b;white-space:pre-wrap;">${texte.replace(/[&<>]/g, (x) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[x]!))}</div>${sig.html}`;
     try {
       await sendMail({ from: FROM, to: tous.join(', '), cc: cc.length ? cc.join(', ') : undefined, subject: sujet, text: corps, html, brut: true } as any);
     } catch (e) { console.error(e); return json(req, 502, { error: "L'envoi a échoué. Réessaie dans un instant." }); }
@@ -122,8 +144,9 @@ Deno.serve(async (req) => {
         const dest = (p.replyTo || p.from)?.address; if (!dest) return json(req, 400, { error: 'Adresse de réponse introuvable.' });
         const sujet = /^re\s*:/i.test(p.subject || '') ? p.subject! : `Re: ${p.subject || ''}`;
         const cite = (p.text || '').split('\n').map((l) => '> ' + l).join('\n');
-        const corps = `${texte}\n\n— \nParlement JPV · Lycée Jean-Pierre Vernant, Sèvres\nhttps://parlementjpv.fr\n\nLe ${p.date?.toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })}, ${p.from?.name ? `${p.from.name} <${p.from.address}>` : p.from?.address} a écrit :\n${cite}`;
-        const html = `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.5;color:#0f1f4b;white-space:pre-wrap;">${texte.replace(/[&<>]/g, (x) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[x]!))}</div><p style="font-family:Arial,sans-serif;font-size:13px;color:#5d6477;margin-top:20px;">Parlement JPV · Lycée Jean-Pierre Vernant, Sèvres<br><a href="https://parlementjpv.fr" style="color:#5d6477;">parlementjpv.fr</a></p>`;
+        const sig = signature(me.profile);
+        const corps = `${texte}${sig.texte}\n\nLe ${p.date?.toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })}, ${p.from?.name ? `${p.from.name} <${p.from.address}>` : p.from?.address} a écrit :\n${cite}`;
+        const html = `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.5;color:#0f1f4b;white-space:pre-wrap;">${texte.replace(/[&<>]/g, (x) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[x]!))}</div>${sig.html}`;
         const refs = [...p.references, p.messageId].filter(Boolean) as string[];
         await sendMail({ from: FROM, to: dest, subject: sujet, text: corps, html, inReplyTo: p.messageId, references: refs, brut: true } as any);
         await c.messageFlagsAdd(String(uid), ['\\Answered', '\\Seen'], { uid: true });
