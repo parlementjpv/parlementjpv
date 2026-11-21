@@ -82,3 +82,6 @@ verify_jwt = false
 
 [functions.boite-mail]
 verify_jwt = false
+
+[functions.apercu-bienvenue]
+verify_jwt = false
