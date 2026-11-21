@@ -38,6 +38,7 @@ import Base from '../layouts/Base.astro';
         <button class="bu-tile tab" data-tab="entre" type="button"><span class="bu-tile-t">Entre nous</span><span class="bu-tile-d">Tâches, discussion et notes du bureau</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
       </div></section>
       <section class="bu-group hidden" id="buAdminGroup"><h2 class="bu-group-t">Administration</h2><div class="bu-tiles">
+        <button class="bu-tile tab" data-tab="boite" type="button"><span class="bu-tile-t">Boîte mail <span class="bm-badge" id="bmNonLus"></span></span><span class="bu-tile-d">Lire et répondre aux emails de contact@parlementjpv.fr</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
         <button class="bu-tile tab" data-tab="etat" type="button"><span class="bu-tile-t">État</span><span class="bu-tile-d">Effectifs par classe, coordonnées, export</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
         <button class="bu-tile tab" data-tab="journal" type="button"><span class="bu-tile-t">Journal du bureau</span><span class="bu-tile-d">Qui a fait quoi, et quand</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
       </div></section>
@@ -326,6 +327,24 @@ Message</pre></div>
       </form>
       <div id="tnList" class="tn-list mt-3"></div>
     </div>
+    <div class="panel hidden" id="tab-boite">
+      <div class="bm-tete">
+        <div><h2 style="margin:0;">contact@parlementjpv.fr</h2><p class="small muted" style="margin:4px 0 0;">Réservé aux administrateurs. Les réponses partent depuis cette adresse.</p></div>
+        <div class="bm-dossiers" role="group" aria-label="Dossiers">
+          <button type="button" class="bm-dossier" data-d="inbox" aria-pressed="true">Réception</button>
+          <button type="button" class="bm-dossier" data-d="envoyes" aria-pressed="false">Envoyés</button>
+          <button type="button" class="bm-dossier" data-d="spam" aria-pressed="false">Spam</button>
+          <button type="button" class="bm-dossier" data-d="corbeille" aria-pressed="false">Corbeille</button>
+          <button type="button" class="btn btn-outline btn-sm" id="bmRefresh">Actualiser</button>
+        </div>
+      </div>
+      <div id="bmMsg" aria-live="polite"></div>
+      <div class="bm-boite">
+        <div class="bm-col-liste"><div id="bmListe"><p class="muted small bm-vide">Chargement…</p></div>
+          <div class="bm-pager"><button type="button" class="btn btn-outline btn-sm" id="bmPrec">Plus récents</button><span class="small muted" id="bmPage"></span><button type="button" class="btn btn-outline btn-sm" id="bmSuiv">Plus anciens</button></div></div>
+        <div class="bm-col-lecteur" id="bmLecteur"><p class="muted small">Choisis un message à gauche.</p></div>
+      </div>
+    </div>
     <div class="panel hidden" id="tab-etat">
       <div id="etBox" class="et">
         <p class="small muted" style="margin-top:0;">Visible uniquement par les administrateurs : les autres membres du bureau n'ont accès ni aux emails ni aux numéros de téléphone. Clique sur une classe pour voir ses membres.</p>
@@ -487,6 +506,43 @@ Message</pre></div>
   .df-c span { display: grid; } .df-c small { color: #5d6477; font-size: 0.85rem; }
   .df-wa input { accent-color: #25d366; }
   .df-wa-apercu { background: #e8f8ee; border: 2px solid #25d366; border-radius: 10px; padding: 14px; white-space: pre-wrap; font: inherit; font-size: 0.95rem; margin: 0; }
+  .bm-tete { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; }
+  .bm-dossiers { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .bm-dossier { font: inherit; font-weight: 700; font-size: 0.9rem; padding: 7px 14px; border: 2px solid var(--nuit); background: transparent; color: var(--nuit); border-radius: 999px; cursor: pointer; }
+  .bm-dossier[aria-pressed="true"] { background: var(--nuit); color: var(--blanc); }
+  .bm-badge:empty { display: none; }
+  .bm-badge { display: inline-block; min-width: 22px; padding: 1px 7px; margin-left: 6px; border-radius: 999px; background: var(--rouge); color: #fff; font-size: 0.8rem; text-align: center; vertical-align: middle; }
+  .bm-boite { display: grid; grid-template-columns: minmax(260px, 360px) minmax(0, 1fr); border: 2px solid var(--nuit); border-radius: 12px; overflow: hidden; min-height: 520px; background: var(--blanc); }
+  .bm-col-liste { border-right: 2px solid var(--pierre); display: flex; flex-direction: column; max-height: 78vh; }
+  #bmListe { overflow-y: auto; flex: 1; }
+  .bm-vide { padding: 16px; }
+  .bm-ligne { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; width: 100%; text-align: left; padding: 12px 14px; border: 0; border-bottom: 1px solid var(--pierre); background: transparent; color: var(--nuit); font: inherit; cursor: pointer; }
+  .bm-ligne:hover { background: var(--pierre); }
+  .bm-ligne.actif { background: var(--nuit); color: var(--blanc); }
+  .bm-ligne.nonlu .bm-de, .bm-ligne.nonlu .bm-sujet { font-weight: 800; }
+  .bm-ligne.nonlu { box-shadow: inset 4px 0 0 var(--rouge); }
+  .bm-de { font-size: 0.92rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bm-date { font-size: 0.8rem; opacity: 0.75; }
+  .bm-sujet { grid-column: 1 / -1; font-size: 0.88rem; opacity: 0.85; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bm-pager { display: flex; justify-content: space-between; align-items: center; gap: 6px; padding: 10px; border-top: 1px solid var(--pierre); }
+  .bm-col-lecteur { padding: 20px 22px; overflow-y: auto; max-height: 78vh; }
+  .bm-titre { margin: 0 0 8px; font-size: 1.35rem; }
+  .bm-meta { color: var(--gris); margin: 0 0 14px; }
+  .bm-corps { width: 100%; border: 1px solid var(--pierre); border-radius: 8px; background: #fff; min-height: 160px; }
+  .bm-pjs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .bm-pj { font: inherit; font-size: 0.85rem; padding: 6px 10px; border: 1px solid var(--nuit); border-radius: 8px; background: transparent; color: var(--nuit); cursor: pointer; }
+  .bm-actions { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0; }
+  .bm-suppr { border-color: var(--err) !important; color: var(--err) !important; }
+  .bm-repform { margin-top: 6px; }
+  .bm-retour { display: none; margin-bottom: 12px; }
+  @media (max-width: 800px) {
+    .bm-boite { grid-template-columns: 1fr; }
+    .bm-col-liste { border-right: 0; max-height: none; }
+    .bm-col-lecteur { display: none; max-height: none; }
+    .bm-boite.lecture .bm-col-liste { display: none; }
+    .bm-boite.lecture .bm-col-lecteur { display: block; }
+    .bm-retour { display: inline-block; }
+  }
 </style>
 <script>
   import { getSupabase } from '../lib/supabase';
@@ -501,6 +557,7 @@ Message</pre></div>
   import { initTournoi } from '../lib/bureau-tournoi';
   import { initVie } from '../lib/bureau-vie';
   import { initEtat } from '../lib/etat';
+  import { initBoite } from '../lib/boite';
   import postesData from '../data/postes.json';
   const POSTES = (postesData as { titre: string }[]).map((p) => p.titre);
   (async () => {
@@ -522,6 +579,7 @@ Message</pre></div>
     if (isAdmin) {
       document.getElementById('buAdminGroup')!.classList.remove('hidden');
       initEtat(sb).catch((e) => console.error(e));
+      try { initBoite(sb); } catch (e) { console.error(e); }
       const { data: jn } = await sb.from('journal').select('*').order('at', { ascending: false }).limit(1000);
       const lignes = (jn || []) as any[];
       const qui = document.getElementById('jnQui') as HTMLSelectElement;

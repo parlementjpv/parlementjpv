@@ -79,3 +79,6 @@ verify_jwt = false
 
 [functions.whatsapp-annonce]
 verify_jwt = false
+
+[functions.boite-mail]
+verify_jwt = false
