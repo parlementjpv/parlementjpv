@@ -1,5 +1,11 @@
 import { ImapFlow } from 'npm:imapflow@1.0.164';
-import { simpleParser } from 'npm:mailparser@3.7.1';
+import PostalMime from 'npm:postal-mime@2.3.2';
+const simpleParser = async (src: Uint8Array) => {
+  const e: any = await PostalMime.parse(src);
+  const adr = (a: any) => a ? { name: a.name || '', address: a.address || '' } : null;
+  const liste = (l: any[] | undefined) => (l || []).map((a) => a.name ? `${a.name} <${a.address}>` : a.address).join(', ');
+  return { subject: e.subject, from: adr(e.from), replyTo: adr(e.replyTo?.[0]), to: liste(e.to), cc: liste(e.cc), date: e.date ? new Date(e.date) : null, messageId: e.messageId, references: e.references ? String(e.references).split(/\s+/).filter(Boolean) : [], html: e.html || null, text: e.text || '', attachments: (e.attachments || []).map((a: any) => ({ filename: a.filename, contentType: a.mimeType, content: new Uint8Array(a.content), size: (a.content?.byteLength) || 0 })) };
+};
 import MailComposer from 'npm:nodemailer@6.9.16/lib/mail-composer/index.js';
 import { sendMail, json, cors, readJson, userFromRequest, journal, FROM } from '../_shared/lib.ts';
 
@@ -49,7 +55,7 @@ Deno.serve(async (req) => {
         if (!m) return json(req, 404, { error: 'Message introuvable.' });
         const p = await simpleParser(m.source);
         await c.messageFlagsAdd(String(uid), ['\\Seen'], { uid: true });
-        return json(req, 200, { uid, sujet: p.subject || '(sans objet)', de: p.from?.value?.[0] || null, a: p.to ? (Array.isArray(p.to) ? p.to : [p.to]).map((x) => x.text).join(', ') : '', cc: p.cc ? (Array.isArray(p.cc) ? p.cc : [p.cc]).map((x) => x.text).join(', ') : '', date: p.date, messageId: p.messageId, references: p.references, html: p.html || null, texte: p.text || '', pj: (p.attachments || []).map((a, i) => ({ i, nom: a.filename || `piece-jointe-${i + 1}`, type: a.contentType, taille: a.size })) });
+        return json(req, 200, { uid, sujet: p.subject || '(sans objet)', de: p.from, a: p.to, cc: p.cc, date: p.date, messageId: p.messageId, references: p.references, html: p.html || null, texte: p.text || '', pj: (p.attachments || []).map((a, i) => ({ i, nom: a.filename || `piece-jointe-${i + 1}`, type: a.contentType, taille: a.size })) });
       }
       if (b.action === 'pj') {
         const m = await c.fetchOne(String(uid), { source: true }, { uid: true });
@@ -69,12 +75,12 @@ Deno.serve(async (req) => {
         const texte = String(b.texte || '').trim(); if (texte.length < 2) return json(req, 400, { error: 'Écris ta réponse.' });
         const m = await c.fetchOne(String(uid), { source: true }, { uid: true });
         const p = m && await simpleParser(m.source); if (!p) return json(req, 404, { error: 'Message introuvable.' });
-        const dest = (p.replyTo?.value?.[0] || p.from?.value?.[0])?.address; if (!dest) return json(req, 400, { error: 'Adresse de réponse introuvable.' });
+        const dest = (p.replyTo || p.from)?.address; if (!dest) return json(req, 400, { error: 'Adresse de réponse introuvable.' });
         const sujet = /^re\s*:/i.test(p.subject || '') ? p.subject! : `Re: ${p.subject || ''}`;
         const cite = (p.text || '').split('\n').map((l) => '> ' + l).join('\n');
-        const corps = `${texte}\n\n— \nParlement JPV · Lycée Jean-Pierre Vernant, Sèvres\nhttps://parlementjpv.fr\n\nLe ${p.date?.toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })}, ${p.from?.text} a écrit :\n${cite}`;
+        const corps = `${texte}\n\n— \nParlement JPV · Lycée Jean-Pierre Vernant, Sèvres\nhttps://parlementjpv.fr\n\nLe ${p.date?.toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })}, ${p.from?.name ? `${p.from.name} <${p.from.address}>` : p.from?.address} a écrit :\n${cite}`;
         const html = `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.5;color:#0f1f4b;white-space:pre-wrap;">${texte.replace(/[&<>]/g, (x) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[x]!))}</div><p style="font-family:Arial,sans-serif;font-size:13px;color:#5d6477;margin-top:20px;">Parlement JPV · Lycée Jean-Pierre Vernant, Sèvres<br><a href="https://parlementjpv.fr" style="color:#5d6477;">parlementjpv.fr</a></p>`;
-        const refs = [...(Array.isArray(p.references) ? p.references : p.references ? [p.references] : []), p.messageId].filter(Boolean) as string[];
+        const refs = [...p.references, p.messageId].filter(Boolean) as string[];
         await sendMail({ from: FROM, to: dest, subject: sujet, text: corps, html, inReplyTo: p.messageId, references: refs, brut: true } as any);
         await c.messageFlagsAdd(String(uid), ['\\Answered', '\\Seen'], { uid: true });
         // Copie dans « Envoyés » pour garder le fil complet dans la boîte
