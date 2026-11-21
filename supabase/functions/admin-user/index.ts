@@ -19,6 +19,8 @@ Deno.serve(async (req) => {
     await db.from('candidatures').delete().eq('user_id', b.userId);
     await db.from('event_signups').delete().eq('user_id', b.userId);
     await db.from('adhesions').delete().eq('user_id', b.userId);
+    const { data: u } = await db.auth.admin.getUserById(b.userId);
+    if (u?.user?.email) await db.from('adhesions').delete().ilike('email', u.user.email);
     const { error } = await db.auth.admin.deleteUser(b.userId);
     if (error) return json(req, 500, { error: error.message });
     await journal(me.user.id, 'Membres', `a supprimé le compte de ${qui}`);
