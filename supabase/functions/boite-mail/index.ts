@@ -63,11 +63,7 @@ Deno.serve(async (req) => {
           const env: any = await lim(un(c, uid, { envelope: true, size: true }), 'envelope');
           etapes.push('taille ' + env?.size);
           const st: any = await lim(un(c, uid, { bodyStructure: true }), 'structure');
-          const dl: any = await lim(c.download(String(uid), undefined, { uid: true }), 'download');
-          const chunks: Uint8Array[] = []; await lim((async () => { for await (const ch of dl.content) chunks.push(ch); })(), 'lecture flux');
-          etapes.push('octets ' + chunks.reduce((a, x) => a + x.length, 0));
-          const src: any = await lim(un(c, uid, { source: true }), 'source');
-          etapes.push('source ' + src?.source?.length);
+          for (const n of [1000, 4000, 12000, 30000]) { const r: any = await lim(un(c, uid, { source: { start: 0, maxLength: n } }), 'source ' + n); etapes.push(`${n} -> ${r?.source?.length}`); }
         } catch (e) { etapes.push('ERREUR ' + (e as Error).message); }
         return json(req, 200, { etapes });
       }
