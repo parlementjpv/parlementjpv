@@ -50,6 +50,21 @@ Deno.serve(async (req) => {
         return json(req, 200, { items: items.reverse(), total, page, pages: Math.ceil(total / par), nonLus });
       }
       const uid = Number(b.uid); if (!uid) return json(req, 400, { error: 'Message manquant.' });
+      if (b.action === 'diag') {
+        const t0 = Date.now(), etapes: string[] = [];
+        const lim = <T,>(p: Promise<T>, n: string) => Promise.race([p.then((v) => { etapes.push(`${n} ok ${Date.now() - t0}ms`); return v; }), new Promise<T>((_, r) => setTimeout(() => r(new Error(n + ' timeout')), 15000))]);
+        try {
+          const env: any = await lim(c.fetchOne(String(uid), { envelope: true, size: true }, { uid: true }), 'envelope');
+          etapes.push('taille ' + env?.size);
+          const st: any = await lim(c.fetchOne(String(uid), { bodyStructure: true }, { uid: true }), 'structure');
+          const dl: any = await lim(c.download(String(uid), undefined, { uid: true }), 'download');
+          const chunks: Uint8Array[] = []; await lim((async () => { for await (const ch of dl.content) chunks.push(ch); })(), 'lecture flux');
+          etapes.push('octets ' + chunks.reduce((a, x) => a + x.length, 0));
+          const src: any = await lim(c.fetchOne(String(uid), { source: true }, { uid: true }), 'source');
+          etapes.push('source ' + src?.source?.length);
+        } catch (e) { etapes.push('ERREUR ' + (e as Error).message); }
+        return json(req, 200, { etapes });
+      }
       if (b.action === 'lire') {
         const m = await c.fetchOne(String(uid), { source: true, flags: true }, { uid: true });
         if (!m) return json(req, 404, { error: 'Message introuvable.' });
