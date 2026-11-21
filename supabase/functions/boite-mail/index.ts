@@ -59,6 +59,26 @@ Deno.serve(async (req) => {
   if (!me) return json(req, 401, { error: 'Ta session a expiré : recharge la page.' });
   if (me.profile?.role !== 'admin') return json(req, 403, { error: 'Réservé aux administrateurs.' });
   const b = (await readJson(req)) || {};
+  // Nouveau message (hors fil) : pas besoin d'ouvrir de dossier
+  if (b.action === 'envoyer') {
+    const tous = String(b.a || '').split(/[,;\s]+/).map((x) => x.trim()).filter(Boolean);
+    const cc = String(b.cc || '').split(/[,;\s]+/).map((x) => x.trim()).filter(Boolean);
+    const sujet = String(b.sujet || '').trim().slice(0, 200), texte = String(b.texte || '').trim().slice(0, 20000);
+    const valide = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e);
+    if (!tous.length || [...tous, ...cc].some((e) => !valide(e))) return json(req, 400, { error: 'Adresse de destinataire invalide.' });
+    if (tous.length + cc.length > 20) return json(req, 400, { error: '20 destinataires maximum. Pour écrire à tous les membres, utilise « Diffuser une annonce ».' });
+    if (!sujet || texte.length < 2) return json(req, 400, { error: 'Objet et message obligatoires.' });
+    const corps = `${texte}\n\n— \nParlement JPV · Lycée Jean-Pierre Vernant, Sèvres\nhttps://parlementjpv.fr`;
+    const html = `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.5;color:#0f1f4b;white-space:pre-wrap;">${texte.replace(/[&<>]/g, (x) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[x]!))}</div><p style="font-family:Arial,sans-serif;font-size:13px;color:#5d6477;margin-top:20px;">Parlement JPV · Lycée Jean-Pierre Vernant, Sèvres<br><a href="https://parlementjpv.fr" style="color:#5d6477;">parlementjpv.fr</a></p>`;
+    try {
+      await sendMail({ from: FROM, to: tous.join(', '), cc: cc.length ? cc.join(', ') : undefined, subject: sujet, text: corps, html, brut: true } as any);
+    } catch (e) { console.error(e); return json(req, 502, { error: "L'envoi a échoué. Réessaie dans un instant." }); }
+    let c2: ImapFlow | null = null;
+    try { c2 = await connecter(); const env = await chemin(c2, 'envoyes'); if (env) { const raw: Uint8Array = await new MailComposer({ from: FROM, to: tous.join(', '), cc: cc.join(', ') || undefined, subject: sujet, text: corps, html, date: new Date() }).compile().build(); await c2.append(env, raw, ['\\Seen']); } }
+    catch (e) { console.error('copie envoyés', e); } finally { try { c2?.close(); } catch { /* */ } }
+    await journal(me.user.id, 'Boîte mail', `a envoyé un email depuis contact@ (« ${sujet.slice(0, 60)} »)`);
+    return json(req, 200, { ok: true, a: tous.join(', ') });
+  }
   let c: ImapFlow | null = null;
   try {
     c = await connecter();

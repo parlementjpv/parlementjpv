@@ -96,6 +96,35 @@ export function initBoite(sb: SupabaseClient) {
     dossier = b.dataset.d!; page = 0; courant = null; lecteur.innerHTML = '<p class="muted small">Choisis un message à gauche.</p>'; document.querySelector('.bm-boite')!.classList.remove('lecture'); chargerListe();
   }));
   $('bmRefresh').addEventListener('click', chargerListe);
+  $('bmNouveau').addEventListener('click', () => {
+    courant = null; liste.querySelectorAll('.bm-ligne').forEach((x) => x.classList.remove('actif'));
+    document.querySelector('.bm-boite')!.classList.add('lecture');
+    lecteur.innerHTML = `<button type="button" class="btn btn-outline btn-sm bm-retour" id="bmRetour">← Retour à la liste</button>
+      <h3 class="bm-titre">Nouveau message</h3>
+      <form class="form" id="bmNvForm">
+        <div class="field"><label for="bmA">À</label><input id="bmA" type="text" required placeholder="prenom.nom@exemple.fr" autocomplete="off" /><span class="small muted">Plusieurs adresses : sépare-les par une virgule.</span></div>
+        <div class="field"><label for="bmCc">Cc <span class="small muted">(facultatif)</span></label><input id="bmCc" type="text" autocomplete="off" /></div>
+        <div class="field"><label for="bmSujet">Objet</label><input id="bmSujet" required maxlength="200" /></div>
+        <div class="field"><label for="bmTxt">Message</label><textarea id="bmTxt" required style="min-height:220px;" placeholder="Bonjour,&#10;&#10;…"></textarea></div>
+        <p class="small muted" style="margin:0;">Envoyé depuis contact@parlementjpv.fr, avec la signature du Parlement. Une copie est rangée dans « Envoyés ».</p>
+        <div id="bmNvMsg" aria-live="polite"></div>
+        <div class="flex" style="gap:8px;"><button class="btn btn-primary btn-sm" type="submit">Envoyer</button><button class="btn btn-outline btn-sm" type="button" id="bmNvAnn">Annuler</button></div>
+      </form>`;
+    const fermer = () => { document.querySelector('.bm-boite')!.classList.remove('lecture'); lecteur.innerHTML = '<p class="muted small">Choisis un message à gauche.</p>'; };
+    $('bmRetour').addEventListener('click', fermer); $('bmNvAnn').addEventListener('click', fermer);
+    ($('bmA') as HTMLInputElement).focus();
+    $('bmNvForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const a = ($('bmA') as HTMLInputElement).value, sujet = ($('bmSujet') as HTMLInputElement).value;
+      if (!confirm(`Envoyer « ${sujet} » à ${a} ?`)) return;
+      const btn = (e.target as HTMLFormElement).querySelector('button[type=submit]') as HTMLButtonElement; btn.disabled = true; btn.textContent = 'Envoi…';
+      const r = await postJSON<any>('/api/boite-mail', { action: 'envoyer', a, cc: ($('bmCc') as HTMLInputElement).value, sujet, texte: ($('bmTxt') as HTMLTextAreaElement).value }, await tok());
+      btn.disabled = false; btn.textContent = 'Envoyer';
+      if (!r.ok) { $('bmNvMsg').innerHTML = `<div class="alert alert-err">${esc(r.error || 'Envoi impossible.')}</div>`; return; }
+      lecteur.innerHTML = `<div class="alert alert-ok">Message envoyé à ${esc(r.data.a)}. Une copie est dans « Envoyés ».</div>`;
+      if (dossier === 'envoyes') chargerListe();
+    });
+  });
   $('bmPrec').addEventListener('click', () => { page--; chargerListe(); });
   $('bmSuiv').addEventListener('click', () => { page++; chargerListe(); });
   // Chargement au premier affichage de l'onglet

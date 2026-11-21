@@ -47,7 +47,7 @@ export async function sendMail(m: Mail) {
   const repondre = Deno.env.get('SMTP_USER') || 'contact@parlementjpv.fr';
   const headers: Record<string, string> = { ...(m.headers || {}) };
   // Réponse personnelle (boîte mail du bureau) : pas d'en-tête de désinscription, fil de discussion conservé
-  if ((m as any).brut) return await transport.sendMail({ from: m.from || FROM, to: m.to, subject: m.subject, html: m.html, text: m.text || versionTexte(m.html), replyTo: repondre, inReplyTo: (m as any).inReplyTo, references: (m as any).references, attachments: m.attachments });
+  if ((m as any).brut) return await transport.sendMail({ from: m.from || FROM, to: m.to, cc: (m as any).cc, subject: m.subject, html: m.html, text: m.text || versionTexte(m.html), replyTo: repondre, inReplyTo: (m as any).inReplyTo, references: (m as any).references, attachments: m.attachments });
   if (!headers['List-Unsubscribe']) headers['List-Unsubscribe'] = `<mailto:${repondre}?subject=D%C3%A9sinscription>`;
   else if (!headers['List-Unsubscribe'].includes('mailto:')) headers['List-Unsubscribe'] += `, <mailto:${repondre}?subject=D%C3%A9sinscription>`;
   if (/^<https:/.test(headers['List-Unsubscribe']) && !headers['List-Unsubscribe-Post']) headers['List-Unsubscribe-Post'] = 'List-Unsubscribe=One-Click';
