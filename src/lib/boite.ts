@@ -58,7 +58,12 @@ export function initBoite(sb: SupabaseClient) {
     const f = lecteur.querySelector<HTMLIFrameElement>('.bm-corps')!;
     const csp = `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data: cid:; font-src data:">`;
     const base = '<base target="_blank"><style>body{font-family:Arial,sans-serif;font-size:15px;line-height:1.5;color:#0f1f4b;margin:0;padding:4px;word-wrap:break-word}img{max-width:100%;height:auto}pre{white-space:pre-wrap}</style>';
-    f.srcdoc = m.html ? csp + base + m.html : `${csp}${base}<pre>${esc(m.texte)}</pre>`;
+    const peindre = (images: boolean) => { const c = images ? csp.replace("img-src data: cid:", 'img-src data: cid: https:') : csp; f.srcdoc = m.html ? c + base + m.html : `${c}${base}<pre>${esc(m.texte)}</pre>`; };
+    peindre(false);
+    if (m.html && /<img[^>]+src=["']?https?:/i.test(m.html)) {
+      f.insertAdjacentHTML('beforebegin', '<p class="small muted bm-img">Images masquées pour ta sécurité. <button type="button" class="bm-pj" id="bmImg">Afficher les images</button></p>');
+      $('bmImg').addEventListener('click', () => { peindre(true); document.querySelector('.bm-img')?.remove(); });
+    }
     f.addEventListener('load', () => { try { f.style.height = Math.min(1400, Math.max(160, f.contentDocument!.body.scrollHeight + 20)) + 'px'; } catch { f.style.height = '420px'; } });
     $('bmRetour').addEventListener('click', () => document.querySelector('.bm-boite')!.classList.remove('lecture'));
     lecteur.querySelectorAll<HTMLButtonElement>('.bm-pj').forEach((b) => b.addEventListener('click', async () => {
