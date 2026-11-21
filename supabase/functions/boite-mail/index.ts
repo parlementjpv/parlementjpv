@@ -93,13 +93,13 @@ Deno.serve(async (req) => {
     const corps = `${texte}${sig.texte}`;
     const html = `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.5;color:#0f1f4b;white-space:pre-wrap;">${texte.replace(/[&<>]/g, (x) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[x]!))}</div>${sig.html}`;
     try {
-      await sendMail({ from: FROM, to: tous.join(', '), cc: cc.length ? cc.join(', ') : undefined, subject: sujet, text: corps, html, brut: true } as any);
+      var info: any = await sendMail({ from: FROM, to: tous.join(', '), cc: cc.length ? cc.join(', ') : undefined, subject: sujet, text: corps, html, brut: true } as any);
     } catch (e) { console.error(e); return json(req, 502, { error: "L'envoi a échoué. Réessaie dans un instant." }); }
     let c2: ImapFlow | null = null;
     try { c2 = await connecter(); const env = await chemin(c2, 'envoyes'); if (env) { const raw: Uint8Array = await new MailComposer({ from: FROM, to: tous.join(', '), cc: cc.join(', ') || undefined, subject: sujet, text: corps, html, date: new Date() }).compile().build(); await c2.append(env, raw, ['\\Seen']); } }
     catch (e) { console.error('copie envoyés', e); } finally { try { c2?.close(); } catch { /* */ } }
     await journal(me.user.id, 'Boîte mail', `a envoyé un email depuis contact@ (« ${sujet.slice(0, 60)} »)`);
-    return json(req, 200, { ok: true, a: tous.join(', ') });
+    return json(req, 200, { ok: true, a: tous.join(', '), smtp: info?.response, accepte: info?.accepted, rejete: info?.rejected, id: info?.messageId });
   }
   let c: ImapFlow | null = null;
   try {
