@@ -12,7 +12,8 @@ const liens = [
 ];
 ---
 <nav class="membre-nav" aria-label="Espace membres">
-  <div class="container">
+  <div class="container mn-mobile"><a href="/compte" class="mn-retour">← Mon espace</a></div>
+  <div class="container mn-desk">
     {liens.map((l) => <a href={l.href} aria-current={l.k === actif ? 'page' : undefined}>{l.label}</a>)}
   </div>
 </nav>
@@ -22,4 +23,12 @@ const liens = [
   .membre-nav a { color: #fff; text-decoration: none; font-weight: 700; font-size: 0.95rem; padding: 12px 14px; white-space: nowrap; border-bottom: 4px solid transparent; margin-bottom: -4px; }
   .membre-nav a:hover { background: rgba(255,255,255,0.08); }
   .membre-nav a[aria-current='page'] { border-bottom-color: #fff; }
+  .mn-mobile { display: none !important; }
+  @media (max-width: 759px) {
+    .membre-nav { background: transparent; border-bottom: 0; }
+    .mn-desk { display: none !important; }
+    .mn-mobile { display: block !important; padding-top: 14px; }
+    .membre-nav a.mn-retour { display: inline-block; color: var(--nuit); background: var(--pierre); border: 0; border-radius: 999px; padding: 8px 14px; margin: 0; font-size: 0.9rem; }
+    .membre-nav a.mn-retour:hover { background: var(--nuit); color: var(--blanc); }
+  }
 </style>
