@@ -58,6 +58,8 @@ const turnstile = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
     ],
   })} />
   <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Parlement JPV" />
+  <meta name="application-name" content="Parlement JPV" />
   <meta property="og:title" content={`${title} — Parlement JPV`} />
   <meta property="og:description" content={description} />
   <meta property="og:image" content={new URL(import.meta.env.BASE_URL.replace(/\/$/, '') + image, Astro.site)} />
