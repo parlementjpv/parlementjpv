@@ -9,7 +9,7 @@ const fdate = (d: string) => new Date(d).toLocaleString('fr-FR', { weekday: 'sho
 const alerte = (el: HTMLElement, t: string, k = 'ok') => (el.innerHTML = `<div class="alert alert-${k}">${t}</div>`);
 
 export function initVie(sb: SupabaseClient, session: Session) {
-  const notif = (body: object) => postJSON<{ push?: number; envoyes?: number }>('/api/vie-notif', body, session.access_token);
+  const notif = (body: object) => postJSON<{ push?: number; envoyes?: number; emails?: number }>('/api/vie-notif', body, session.access_token);
 
   /* ── Sondages ── */
   const sdForm = $('sdForm') as HTMLFormElement;
@@ -24,7 +24,8 @@ export function initVie(sb: SupabaseClient, session: Session) {
     const { data, error } = await sb.from('sondages').insert({ question: String(fd.get('question')).trim(), options, multiple: fd.get('multiple') === 'on', fin: iso(fd.get('fin')), created_by: session.user.id }).select('id').single();
     if (error) { alerte($('sdMsg'), 'Le sondage n\'a pas pu être créé.', 'err'); return; }
     const r = await notif({ action: 'sondage', id: data.id });
-    alerte($('sdMsg'), `Sondage publié${r.ok && r.data.push ? ` : ${r.data.push} membre${r.data.push > 1 ? 's ont' : ' a'} reçu une notification` : ''}.`);
+    const d: any = r.ok ? r.data : {};
+    alerte($('sdMsg'), `Sondage publié : ${d.emails || 0} email${(d.emails || 0) > 1 ? 's' : ''} envoyé${(d.emails || 0) > 1 ? 's' : ''} aux membres${d.push ? ` et ${d.push} notification${d.push > 1 ? 's' : ''}` : ''}.`);
     sdForm.reset(); $('sdOpts').innerHTML = '<input name="opt" maxlength="100" placeholder="Choix 1" required /><input name="opt" maxlength="100" placeholder="Choix 2" required />';
     chargerSondages();
   });
