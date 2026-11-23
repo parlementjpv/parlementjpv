@@ -25,11 +25,14 @@ import MembreNav from '../components/MembreNav.astro';
   .sd-opt.moi { border-color: var(--rouge); }
   .sd-opt.moi .sd-bar { background: rgba(214, 40, 57, 0.18); }
   .sd-opt > span { position: relative; z-index: 1; }
+  .sd-limite { margin: 4px 0 6px; padding: 8px 12px; border-left: 4px solid var(--rouge); background: #fdecee; color: var(--nuit); font-size: 0.95rem; border-radius: 4px; }
+  .sd-actions { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
 </style>
 <script>
   import { getSupabase } from '../lib/supabase';
   import { requireMembre } from '../lib/auth';
   import { esc } from '../lib/events';
+  import { postJSON } from '../lib/newsletter';
   (async () => {
     const m = await requireMembre(); if (!m) return;
     const sb = getSupabase(); const box = document.getElementById('sdList')!;
@@ -41,23 +44,31 @@ import MembreNav from '../components/MembreNav.astro';
       box.innerHTML = ss.map((s) => {
         const voir = !s.ouvert || s.mon_choix; const tot = Math.max(1, s.votants);
         return `<article class="sd${s.ouvert ? '' : ' clos'}" data-id="${s.id}"><h2>${esc(s.question)}</h2>
-          <p class="sd-meta">${s.ouvert ? (s.multiple ? 'Plusieurs réponses possibles' : 'Une seule réponse') + (s.fin ? ` · jusqu'au ${esc(fin(s.fin))}` : '') : 'Sondage terminé'} · ${s.votants} réponse${s.votants > 1 ? 's' : ''}</p>
+          ${s.ouvert ? `<p class="sd-limite">${s.fin ? `Date limite de réponse : <strong>${esc(fin(s.fin))}</strong>` : 'Pas de date limite fixée'}</p>` : ''}
+          <p class="sd-meta">${s.ouvert ? (s.multiple ? 'Plusieurs réponses possibles : touche un choix pour le cocher ou le décocher' : 'Une seule réponse : touche ton choix une seconde fois pour l\'enlever') : `Sondage terminé${s.fin ? ` le ${esc(fin(s.fin))}` : ''}`} · ${s.votants} réponse${s.votants > 1 ? 's' : ''}</p>
           <div style="display:grid;gap:8px;">${s.options.map((o: string, i: number) => {
             const n = s.compte[i] || 0, moi = (s.mon_choix || []).includes(i), pct = Math.round((100 * n) / tot);
             return `<button class="sd-opt${moi ? ' moi' : ''}" data-i="${i}" type="button" ${s.ouvert ? '' : 'disabled'} aria-pressed="${moi}">${voir ? `<span class="sd-bar" style="--p:${pct}%"></span>` : ''}<span>${esc(o)}${moi ? ' ✓' : ''}</span>${voir ? `<span>${pct} %</span>` : ''}</button>`;
-          }).join('')}</div>${s.ouvert && s.mon_choix ? '<p class="sd-meta">Tu peux changer ta réponse jusqu\'à la fin du sondage.</p>' : ''}</article>`;
+          }).join('')}</div>${s.ouvert && s.mon_choix ? `<div class="sd-actions"><p class="sd-meta" style="margin:0;">Tu peux modifier ou retirer ta réponse jusqu'à la date limite.</p><button class="btn btn-outline btn-sm sd-retirer" type="button">Retirer ma réponse</button></div>` : ''}</article>`;
       }).join('');
       box.querySelectorAll<HTMLElement>('.sd').forEach((el) => {
         const s = ss.find((x) => x.id === el.dataset.id);
         el.querySelectorAll<HTMLButtonElement>('.sd-opt').forEach((b) => b.addEventListener('click', async () => {
           const i = Number(b.dataset.i); let choix: number[] = s.mon_choix || [];
-          choix = s.multiple ? (choix.includes(i) ? choix.filter((x: number) => x !== i) : [...choix, i]) : [i];
-          if (!choix.length) return;
+          choix = s.multiple ? (choix.includes(i) ? choix.filter((x: number) => x !== i) : [...choix, i]) : (choix.includes(i) ? [] : [i]);
+          if (!choix.length) { await retirer(s.id); return; }
           const { error } = await sb.rpc('repondre_sondage', { p_sondage: s.id, p_choix: choix });
           if (error) { alert(error.message.includes('sondage_clos') ? 'Ce sondage est terminé.' : 'Ta réponse n\'a pas pu être enregistrée.'); return; }
           charger();
         }));
+        el.querySelector<HTMLButtonElement>('.sd-retirer')?.addEventListener('click', () => retirer(s.id));
       });
+    }
+    async function retirer(id: string) {
+      const { data: { session } } = await sb.auth.getSession();
+      const r = await postJSON<{ ok: boolean }>('/api/vie-notif', { action: 'sondage-retirer', id }, session?.access_token || '');
+      if (!r.ok) { alert(r.error || 'Ta réponse n\'a pas pu être retirée.'); return; }
+      charger();
     }
     charger();
   })();

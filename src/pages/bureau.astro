@@ -287,7 +287,7 @@ Message</pre></div>
           <div class="field"><label>Choix proposés</label><div id="sdOpts" class="vie-opts"><input name="opt" maxlength="100" placeholder="Choix 1" required /><input name="opt" maxlength="100" placeholder="Choix 2" required /></div>
             <button class="btn btn-outline btn-sm mt-1" id="sdAddOpt" type="button">Ajouter un choix</button></div>
           <label class="checkbox"><input type="checkbox" name="multiple" /><span>Plusieurs réponses possibles</span></label>
-          <div class="field"><label for="sdFin">Fin du sondage <span class="small muted">(facultatif)</span></label><input id="sdFin" name="fin" type="datetime-local" /></div>
+          <div class="field"><label for="sdFin">Date limite de réponse</label><input id="sdFin" name="fin" type="datetime-local" required /><span class="small muted">Affichée aux membres sur le site et dans l'email. Le sondage se ferme automatiquement à cette date.</span></div>
           <div id="sdMsg" aria-live="polite"></div>
           <button class="btn btn-primary" type="submit">Publier et notifier les membres</button>
         </form>

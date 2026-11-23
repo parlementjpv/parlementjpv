@@ -12,7 +12,9 @@ export function initVie(sb: SupabaseClient, session: Session) {
   const notif = (body: object) => postJSON<{ push?: number; envoyes?: number; emails?: number }>('/api/vie-notif', body, session.access_token);
 
   /* ── Sondages ── */
+  const sdFinDefaut = () => { const d = new Date(Date.now() + 7 * 86400000); d.setHours(20, 0, 0, 0); const z = (n: number) => String(n).padStart(2, '0'); return `${d.getFullYear()}-${z(d.getMonth() + 1)}-${z(d.getDate())}T20:00`; };
   const sdForm = $('sdForm') as HTMLFormElement;
+  ($('sdFin') as HTMLInputElement).value = sdFinDefaut();
   $('sdAddOpt').addEventListener('click', () => {
     const n = $('sdOpts').querySelectorAll('input').length; if (n >= 8) return;
     $('sdOpts').insertAdjacentHTML('beforeend', `<input name="opt" maxlength="100" placeholder="Choix ${n + 1}" />`);
@@ -26,7 +28,7 @@ export function initVie(sb: SupabaseClient, session: Session) {
     const r = await notif({ action: 'sondage', id: data.id });
     const d: any = r.ok ? r.data : {};
     alerte($('sdMsg'), `Sondage publié : ${d.emails || 0} email${(d.emails || 0) > 1 ? 's' : ''} envoyé${(d.emails || 0) > 1 ? 's' : ''} aux membres${d.push ? ` et ${d.push} notification${d.push > 1 ? 's' : ''}` : ''}.`);
-    sdForm.reset(); $('sdOpts').innerHTML = '<input name="opt" maxlength="100" placeholder="Choix 1" required /><input name="opt" maxlength="100" placeholder="Choix 2" required />';
+    sdForm.reset(); ($('sdFin') as HTMLInputElement).value = sdFinDefaut(); $('sdOpts').innerHTML = '<input name="opt" maxlength="100" placeholder="Choix 1" required /><input name="opt" maxlength="100" placeholder="Choix 2" required />';
     chargerSondages();
   });
   async function chargerSondages() {

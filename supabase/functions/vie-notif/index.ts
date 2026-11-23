@@ -79,6 +79,13 @@ Deno.serve(async (req) => {
     if (to) await sendMail({ from: FROM, to, subject: `Une place s'est libérée : ${s.titre}`, html: layout({ title: 'Une place s\'est libérée pour toi', body: `<p>Tu étais sur liste d'attente pour <strong>${esc(s.titre)}</strong> : tu es maintenant inscrit·e.</p><p>${esc(quand(s.quand))}${s.lieu ? ` · ${esc(s.lieu)}` : ''}</p>${s.autorisation ? '<p><strong>N\'oublie pas l\'autorisation parentale</strong> : télécharge-la depuis ton espace, fais-la signer et rapporte-la au bureau.</p>' : ''}${button(`${SITE}/sorties`, 'Voir la sortie')}<p style="color:#555;font-size:14px;">Tu ne peux plus venir ? Désinscris-toi pour laisser ta place au suivant.</p>` }) });
     return json(req, 200, { ok: true });
   }
+  if (b?.action === 'sondage-retirer') {
+    const { data: s } = await db.from('sondages').select('clos, fin').eq('id', b.id).maybeSingle();
+    if (!s) return json(req, 404, { error: 'Sondage introuvable.' });
+    if (s.clos || (s.fin && new Date(s.fin) <= new Date())) return json(req, 400, { error: 'Ce sondage est terminé.' });
+    await db.from('sondage_reponses').delete().eq('sondage', b.id).eq('user_id', me.user.id);
+    return json(req, 200, { ok: true });
+  }
   if (!bureau) return json(req, 403, { error: 'Réservé au bureau.' });
 
   if (b?.action === 'sondage') {
