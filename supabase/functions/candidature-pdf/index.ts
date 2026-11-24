@@ -10,7 +10,7 @@ const date = (d: string | null, h = false) => d ? new Date(d).toLocaleString('fr
 
 /** Remplace les caractères que la police PDF standard ne sait pas afficher. */
 function propre(f: PDFFont, t: string) {
-  const map: Record<string, string> = { '’': "'", '‘': "'", '“': '"', '”': '"', '–': '-', '—': '-', '…': '...', '·': '-', ' ': ' ', ' ': ' ', 'œ': 'oe', 'Œ': 'OE' };
+  const map: Record<string, string> = { '’': "'", '‘': "'", '“': '"', '”': '"', '–': '-', '—': '-', '…': '...', ' ': ' ', ' ': ' ', 'œ': 'oe', 'Œ': 'OE' };
   let out = '';
   for (const ch of String(t ?? '').replace(/\r/g, '')) {
     const c = map[ch] ?? ch;
@@ -60,7 +60,7 @@ Deno.serve(async (req) => {
   const nouvellePage = () => {
     pg = doc.addPage([W, H]); pages.push(pg);
     // filigrane
-    pg.drawText('CONFIDENTIEL', { x: 120, y: 300, size: 74, font: bold, color: rouge, opacity: 0.06, rotate: degrees(35) });
+    pg.drawText('CONFIDENTIEL', { x: 95, y: 250, size: 66, font: bold, color: rouge, opacity: 0.06, rotate: degrees(35) });
     // bandeau tricolore + en-tête
     const t = W / 3; pg.drawRectangle({ x: 0, y: H - 8, width: t, height: 8, color: nuit }); pg.drawRectangle({ x: 2 * t, y: H - 8, width: t, height: 8, color: rouge });
     if (logo) pg.drawImage(logo, { x: M, y: H - 78, width: 46, height: 46 });
