@@ -88,3 +88,6 @@ verify_jwt = false
 
 [functions.candidature-pdf]
 verify_jwt = false
+
+[functions.telecharger]
+verify_jwt = false
