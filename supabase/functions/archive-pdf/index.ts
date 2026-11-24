@@ -1,4 +1,7 @@
-import { ZipWriter, Uint8ArrayReader, Uint8ArrayWriter } from 'npm:@zip.js/zip.js@2.7.52';
+import { ZipWriter, Uint8ArrayReader, Uint8ArrayWriter, configure } from 'npm:@zip.js/zip.js@2.7.52';
+
+// Pas de Web Workers sur le serveur ; les PDF sont déjà compressés : on chiffre sans recompresser (moins de calcul)
+configure({ useWebWorkers: false, useCompressionStream: false });
 import { admin, json, cors, readJson, sendMail, layout, FROM } from '../_shared/lib.ts';
 
 // Archive automatique (toutes les deux semaines) : tous les documents PDF du bureau,
@@ -40,7 +43,7 @@ Deno.serve(async (req) => {
     ...(so || []).map((s) => ['07-Sorties', { type: 'sortie', id: s.id }] as [string, any]),
   ];
   const mdp = motDePasse();
-  const zip = new ZipWriter(new Uint8ArrayWriter(), { password: mdp, encryptionStrength: 3, zipCrypto: false });
+  const zip = new ZipWriter(new Uint8ArrayWriter(), { password: mdp, encryptionStrength: 3, zipCrypto: false, level: 0 });
   const liste: string[] = []; let echecs = 0;
   for (const [dossier, d] of demandes) {
     // Chaque PDF est fabriqué par un appel séparé (budget de calcul propre à chaque appel)
