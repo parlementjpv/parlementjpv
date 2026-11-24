@@ -57,9 +57,18 @@ async function envoyer(db: ReturnType<typeof admin>, demandes: [string, any][], 
   return { ok: true as const, documents: liste.length, echecs, taille: contenu.length, a: dest, heure: `${jour} à ${heure}` };
 }
 
-async function tousLesDocuments(db: ReturnType<typeof admin>): Promise<[string, any][]> {
-    const demandes = await listeComplete(db);
-    const r = await envoyer(db, demandes, { libelle: 'Archive automatique (tous les documents)', demandePar: "l'archive automatique", test: !!b.test, auto: true });
+Deno.serve(async (req) => {
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: cors(req) });
+  if (req.method !== 'POST') return json(req, 405, { error: 'Méthode non autorisée' });
+  const secret = Deno.env.get('BACKUP_SECRET');
+  const b = (await readJson(req)) || {};
+  const db = admin();
+
+  // 1) Archive automatique (pg_cron, clé serveur)
+  if (secret && req.headers.get('x-sauvegarde') === secret) {
+    const semaine = Math.floor(Date.now() / (7 * 86400000));
+    if (!b.forcer && semaine % 2 !== 0) return json(req, 200, { ok: true, saute: 'semaine impaire' });
+    const r = await envoyer(db, await listeComplete(db), { libelle: 'Archive automatique (tous les documents)', demandePar: "l'archive automatique", test: !!b.test, auto: true });
     return json(req, r.ok ? 200 : 500, r);
   }
 
@@ -68,15 +77,7 @@ async function tousLesDocuments(db: ReturnType<typeof admin>): Promise<[string, 
   if (!me) return json(req, 401, { error: 'Ta session a expiré : recharge la page.' });
   const role = me.profile?.role;
   if (!['bureau', 'admin'].includes(role)) return json(req, 403, { error: 'Réservé au bureau.' });
-  if (b.complet) {
-    if (role !== 'admin') return json(req, 403, { error: 'Réservé aux administrateurs.' });
-    const demandePar = [me.profile?.prenom, me.profile?.nom].filter(Boolean).join(' ') || 'un administrateur';
-    const r = await envoyer(db, await tousLesDocuments(db), { libelle: 'Archive complète (tous les documents)', demandePar, test: false, auto: false });
-    if (!r.ok) return json(req, 500, { error: r.error });
-    await journal(me.user.id, 'Téléchargements', "a envoyé par email l'archive complète (ZIP chiffré)");
-    return json(req, 200, r);
-  }
-  if (b.complete) {
+  if (b.complet || b.complete) {
     if (role !== 'admin') return json(req, 403, { error: 'Réservé aux administrateurs.' });
     const demandePar = [me.profile?.prenom, me.profile?.nom].filter(Boolean).join(' ') || 'un administrateur';
     const r = await envoyer(db, await listeComplete(db), { libelle: 'Archive complète (tous les documents)', demandePar, test: false, auto: false });

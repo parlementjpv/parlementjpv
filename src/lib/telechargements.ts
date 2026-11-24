@@ -60,17 +60,5 @@ export function initTelechargements(sb: SupabaseClient) {
     }; });
   };
   document.querySelector('[data-tab="telechargements"]')?.addEventListener('click', () => { if (!charge) { charge = true; charger(); } });
-  document.getElementById('tlComplete')?.addEventListener('click', async (ev) => {
-    const b = ev.currentTarget as HTMLButtonElement; const { data } = await sb.auth.getSession();
-    if (!confirm("L'archive complète contient tous les documents (une trentaine de PDF) : l'envoi peut prendre 1 à 2 minutes. Continuer ?")) return;
-    const t0 = b.textContent; b.disabled = true; b.textContent = 'Préparation… (1-2 min)';
-    try {
-      const r = await fetch(api('/api/archive-pdf'), { method: 'POST', headers: { Authorization: `Bearer ${data.session?.access_token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ complete: true }) });
-      const d = await r.json().catch(() => ({}));
-      if (!r.ok || !d.ok) throw new Error(d.error || `Envoi impossible (erreur ${r.status}).`);
-      alert(`Archive complète envoyée à ${d.a} (${d.documents} documents${d.echecs ? `, ${d.echecs} en échec` : ''}).\n\nMot de passe : Archives, ligne du ${d.heure}.`);
-      document.dispatchEvent(new CustomEvent('archives:maj'));
-    } catch (e) { alert((e as Error).message); } finally { b.disabled = false; b.textContent = t0; }
-  });
   document.addEventListener('archives:maj', () => { if (charge) chargerArchives(); });
 }
