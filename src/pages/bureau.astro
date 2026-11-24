@@ -340,6 +340,7 @@ Message</pre></div>
         <section class="card"><h3>Résultats des votes</h3><p class="small muted">Résultats publiés et liste d'émargement des votants (prénom et initiale du nom ; jamais le choix).</p><div id="tlElections"><p class="small muted">Chargement…</p></div></section>
         <section class="card"><h3>Fiches de séance</h3><p class="small muted">Participants attendus, puis présences réelles une fois l'appel fait, et arguments de chaque camp.</p><div id="tlSeances" class="tl-scroll"><p class="small muted">Chargement…</p></div></section>
         <section class="card"><h3>Sondages</h3><div id="tlSondages" class="tl-scroll"><p class="small muted">Chargement…</p></div></section>
+        <section class="card"><h3>Archives envoyées par email</h3><p class="small muted">Tous les 15 jours, une archive ZIP chiffrée de tous les PDF part à l'adresse du Parlement. Son mot de passe n'est disponible qu'ici, et il est effacé au bout d'un an.</p><div id="tlArchives" class="tl-scroll"><p class="small muted">Chargement…</p></div></section>
         <section class="card"><h3>Sorties</h3><p class="small muted">Liste des participants avec autorisations parentales et case de présence.</p><div id="tlSorties" class="tl-scroll"><p class="small muted">Chargement…</p></div></section>
       </div>
     </div>
@@ -565,6 +566,8 @@ Message</pre></div>
   .tl-l { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 0; border-top: 1px solid var(--pierre); }
   .tl-l .btn { flex: none; }
   .tl-scroll { max-height: 360px; overflow-y: auto; }
+  .tl-mdp { margin-top: 8px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .tl-code { font-size: 1rem; font-weight: 700; letter-spacing: 0.04em; background: var(--pierre); padding: 6px 10px; border-radius: 6px; user-select: all; }
 </style>
 <script>
   import { getSupabase } from '../lib/supabase';

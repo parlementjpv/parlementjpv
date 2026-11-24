@@ -40,6 +40,18 @@ export function initTelechargements(sb: SupabaseClient) {
       || `<p class="small muted">Aucun résultat publié pour l'instant.${(el || []).length ? ' Les élections apparaissent ici une fois leurs résultats publiés.' : ''}</p>`;
     $('tlSondages').innerHTML = (sd || []).map((s) => ligne(s.question, `créé le ${jour(s.created_at)}${s.fin ? ` · fin ${jour(s.fin)}` : ''}`, { type: 'sondage', id: s.id }, 'Résultats PDF')).join('') || '<p class="small muted">Aucun sondage.</p>';
     $('tlSorties').innerHTML = (so || []).map((s) => ligne(s.titre, `${jour(s.quand)}${s.annule_at ? ' · annulée' : ''}`, { type: 'sortie', id: s.id }, 'Liste PDF')).join('') || '<p class="small muted">Aucune sortie.</p>';
+    const { data: ar } = await sb.from('archives_pdf').select('id, created_at, fichier, documents, test').order('created_at', { ascending: false });
+    $('tlArchives').innerHTML = (ar || []).map((a) => `<div class="tl-l"><div><strong>${esc(new Date(a.created_at).toLocaleString('fr-FR', { dateStyle: 'long', timeStyle: 'short' }))}${a.test ? ' (test)' : ''}</strong><br><span class="small muted">${esc(a.fichier)} · ${a.documents} documents</span><div class="tl-mdp hidden" data-id="${a.id}"></div></div><button type="button" class="btn btn-outline btn-sm tl-voir" data-id="${a.id}">Mot de passe</button></div>`).join('') || '<p class="small muted">Aucune archive envoyée pour l\'instant.</p>';
+    document.querySelectorAll<HTMLButtonElement>('#tlArchives .tl-voir').forEach((b) => { b.onclick = async () => {
+      const box = document.querySelector<HTMLElement>(`.tl-mdp[data-id="${b.dataset.id}"]`)!;
+      if (!box.classList.contains('hidden')) { box.classList.add('hidden'); box.textContent = ''; b.textContent = 'Mot de passe'; return; }
+      const { data, error } = await sb.rpc('archive_mot_de_passe', { p_id: b.dataset.id });
+      if (error || !data) { alert('Mot de passe indisponible (expiré ou accès refusé).'); return; }
+      box.innerHTML = `<code class="tl-code">${esc(data)}</code> <button type="button" class="btn btn-outline btn-sm tl-copie">Copier</button>`;
+      box.classList.remove('hidden'); b.textContent = 'Masquer';
+      box.querySelector<HTMLButtonElement>('.tl-copie')!.onclick = async (e) => { await navigator.clipboard.writeText(String(data)).catch(() => {}); (e.target as HTMLButtonElement).textContent = 'Copié'; };
+      setTimeout(() => { box.classList.add('hidden'); box.textContent = ''; b.textContent = 'Mot de passe'; }, 60000);
+    }; });
     document.querySelectorAll<HTMLButtonElement>('#tab-telechargements .tl-b').forEach((b) => { b.onclick = () => telecharger(sb, JSON.parse(b.dataset.c!), b); });
   };
   document.querySelector('[data-tab="telechargements"]')?.addEventListener('click', () => { if (!charge) { charge = true; charger(); } });
