@@ -428,7 +428,7 @@ import ClasseChamps from '../components/ClasseChamps.astro';
     const visibles = (cands || []).filter((c: any) => !['acceptee', 'refusee'].includes(c.statut) || Date.now() - new Date(c.decided_at || c.created_at).getTime() < SEMAINE);
     const labels: Record<string, string> = { nouvelle: 'Reçue, en attente', en_cours: 'En cours d’examen', acceptee: 'Acceptée 🎉', refusee: 'Non retenue' };
     cEl.innerHTML = visibles.length
-      ? visibles.map((c) => `<p><span class="pill">${c.type === 'bureau' ? `bureau${c.poste ? ' — ' + c.poste : ''}` : c.type}</span> déposée le ${new Date(c.created_at).toLocaleDateString('fr-FR')} — <strong>${labels[c.statut] || c.statut}</strong>${c.note_bureau ? `<br><span class="small muted">Message du bureau : ${c.note_bureau}</span>` : ''}</p>`).join('')
+      ? visibles.map((c) => `<p><span class="pill">${c.type === 'bureau' ? `bureau${c.poste ? ' — ' + c.poste : ''}` : c.type}</span> déposée le ${new Date(c.created_at).toLocaleDateString('fr-FR')} — <strong>${labels[c.statut] || c.statut}</strong>${c.note_bureau ? `<br><span class="small muted">Message du bureau : ${esc(c.note_bureau)}</span>` : ''}</p>`).join('')
       : '<p class="muted">Aucune candidature en cours.</p><a class="btn btn-primary btn-sm" href="/candidature">Candidater</a>';
 
     // Prochains événements : je viens / je ne viens pas

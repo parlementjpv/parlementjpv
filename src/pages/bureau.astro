@@ -635,7 +635,7 @@ Message</pre></div>
     async function decide(id: string, statut: string, note?: string) {
       const r = await postJSON<{ emailed: boolean; warning?: string }>('/api/candidature-decision', { id, statut, note }, session.access_token);
       if (!r.ok) { candMsg.innerHTML = `<div class="alert alert-err">${esc(r.error)}</div>`; return false; }
-      candMsg.innerHTML = r.data.warning ? `<div class="alert alert-err">${esc(r.data.warning)}</div>` : r.data.emailed ? '<div class="alert alert-ok">Décision enregistrée et email envoyé au candidat. La candidature est dans les archives.</div>' : '';
+      candMsg.innerHTML = r.data.warning ? `<div class="alert alert-err">${esc(r.data.warning)}</div>` : r.data.emailed ? '<div class="alert alert-ok">Réponse enregistrée : un email a prévenu le candidat de consulter son espace.</div>' : '<div class="alert alert-ok">Enregistré.</div>';
       return true;
     }
     async function loadCands() {
