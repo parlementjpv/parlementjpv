@@ -42,9 +42,16 @@ export async function genererDocument(db: ReturnType<typeof admin>, b: any, aute
       return { pdf: await recueil.save(), fichier: `certificats-membres-parlement-jpv-${new Date().toISOString().slice(0, 10)}.pdf`, quoi: `l'intégralité des certificats de membre (${n})` };
     }
 
-    if (b.type === 'candidatures') {
+    if (b.type === 'certificat') {
+      const c = await certificatPdf(b.id);
+      if (!c) return err(404, 'Certificat indisponible.');
+      return { pdf: c.pdf, fichier: c.nomFichier, quoi: `le certificat de ${c.prenom}` };
+    }
+
+    if (b.type === 'candidatures' || b.type === 'candidature') {
       let q = db.from('candidatures').select('*').order('created_at', { ascending: false });
       if (b.filtre === 'ouvertes') q = q.in('statut', ['nouvelle', 'en_cours']);
+      if (b.type === 'candidature') q = q.eq('id', b.id);
       const { data: cs } = await q;
       const liste = cs || [];
       d = await DocPdf.creer('Candidatures au bureau', `${b.filtre === 'ouvertes' ? 'Candidatures à traiter' : 'Toutes les candidatures'} — ${liste.length} dossier${liste.length > 1 ? 's' : ''}`, true, auteur);
@@ -62,7 +69,8 @@ export async function genererDocument(db: ReturnType<typeof admin>, b: any, aute
         d.titreSection('Disponibilités'); d.texte(c.disponibilites); d.espace();
         d.titreSection('Message du bureau'); d.texte(c.note_bureau, 'Aucun message.');
       }
-      fichier = `candidatures-parlement-jpv-${new Date().toISOString().slice(0, 10)}.pdf`; quoi = `les candidatures (${liste.length})`;
+      if (b.type === 'candidature') { if (!liste.length) return err(404, 'Candidature introuvable.'); fichier = `candidature-${slug(liste[0].prenom + ' ' + liste[0].nom)}${liste[0].poste ? '-' + slug(liste[0].poste) : ''}.pdf`; quoi = `la candidature de ${liste[0].prenom} ${liste[0].nom}`; }
+      else { fichier = `candidatures-parlement-jpv-${new Date().toISOString().slice(0, 10)}.pdf`; quoi = `les candidatures (${liste.length})`; }
     }
 
     else if (b.type === 'election') {

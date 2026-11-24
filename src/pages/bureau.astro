@@ -329,18 +329,18 @@ Message</pre></div>
       <div id="tnList" class="tn-list mt-3"></div>
     </div>
     <div class="panel hidden" id="tab-telechargements">
-      <div class="bm-tete"><div><h2 style="margin:0;">Téléchargements</h2><p class="small muted" style="margin:4px 0 0;">Réservé aux administrateurs. Les documents contenant des données d'élèves sont marqués confidentiels : ne pas les diffuser, les supprimer après usage. Chaque téléchargement est noté dans le journal.</p></div></div>
+      <div class="bm-tete"><div><h2 style="margin:0;">Téléchargements</h2><p class="small muted" style="margin:4px 0 0;">Réservé aux administrateurs. Pour protéger les données des élèves, les documents ne se téléchargent pas directement : ils sont <strong>envoyés par email à l'adresse du Parlement</strong>, dans un fichier ZIP chiffré. Le mot de passe de chaque envoi s'affiche dans « Archives » ci-dessous. Chaque envoi est noté dans le journal.</p></div></div>
       <div class="tl-grille">
         <section class="card"><h3>Candidatures</h3><p class="small muted">Un seul PDF avec le récapitulatif puis le dossier complet de chaque candidature.</p>
-          <div class="tl-l"><div><strong>Toutes les candidatures</strong><br><span class="small muted">En cours et archivées</span></div><button type="button" class="btn btn-outline btn-sm tl-b" data-c='{"type":"candidatures"}'>PDF</button></div>
-          <div class="tl-l"><div><strong>Candidatures à traiter</strong><br><span class="small muted">Nouvelles et en cours</span></div><button type="button" class="btn btn-outline btn-sm tl-b" data-c='{"type":"candidatures","filtre":"ouvertes"}'>PDF</button></div></section>
+          <div class="tl-l"><div><strong>Toutes les candidatures</strong><br><span class="small muted">En cours et archivées</span></div><button type="button" class="btn btn-outline btn-sm tl-b" data-c='{"type":"candidatures"}' data-l="Toutes les candidatures">Envoyer par email</button></div>
+          <div class="tl-l"><div><strong>Candidatures à traiter</strong><br><span class="small muted">Nouvelles et en cours</span></div><button type="button" class="btn btn-outline btn-sm tl-b" data-c='{"type":"candidatures","filtre":"ouvertes"}' data-l="Candidatures à traiter">Envoyer par email</button></div></section>
         <section class="card"><h3>Membres</h3><p class="small muted">Bureau et liste complète : classe, date d'adhésion, séances, coordonnées. Et l'ensemble des certificats de membre.</p>
-          <div class="tl-l"><div><strong>Liste des membres</strong><br><span class="small muted">À jour à la date du téléchargement</span></div><button type="button" class="btn btn-outline btn-sm tl-b" data-c='{"type":"membres"}'>PDF</button></div>
-          <div class="tl-l"><div><strong>Tous les certificats de membre</strong><br><span class="small muted">Un certificat par page, prêts à imprimer (peut prendre une minute)</span></div><button type="button" class="btn btn-outline btn-sm tl-b" data-c='{"type":"certificats"}'>PDF</button></div></section>
+          <div class="tl-l"><div><strong>Liste des membres</strong><br><span class="small muted">À jour à la date du téléchargement</span></div><button type="button" class="btn btn-outline btn-sm tl-b" data-c='{"type":"membres"}' data-l="Liste des membres">Envoyer par email</button></div>
+          <div class="tl-l"><div><strong>Tous les certificats de membre</strong><br><span class="small muted">Un certificat par page, prêts à imprimer</span></div><button type="button" class="btn btn-outline btn-sm tl-b" data-c='{"type":"certificats"}' data-l="Tous les certificats de membre">Envoyer par email</button></div></section>
         <section class="card"><h3>Résultats des votes</h3><p class="small muted">Résultats publiés et liste d'émargement des votants (prénom et initiale du nom ; jamais le choix).</p><div id="tlElections"><p class="small muted">Chargement…</p></div></section>
         <section class="card"><h3>Fiches de séance</h3><p class="small muted">Participants attendus, puis présences réelles une fois l'appel fait, et arguments de chaque camp.</p><div id="tlSeances" class="tl-scroll"><p class="small muted">Chargement…</p></div></section>
         <section class="card"><h3>Sondages</h3><div id="tlSondages" class="tl-scroll"><p class="small muted">Chargement…</p></div></section>
-        <section class="card"><h3>Archives envoyées par email</h3><p class="small muted">Tous les 15 jours, une archive ZIP chiffrée de tous les PDF part à l'adresse du Parlement. Son mot de passe n'est disponible qu'ici, et il est effacé au bout d'un an.</p><div id="tlArchives" class="tl-scroll"><p class="small muted">Chargement…</p></div></section>
+        <section class="card"><h3>Archives — mots de passe</h3><p class="small muted">Chaque envoi (à la demande, ou automatique tous les 15 jours avec tous les documents) a son propre mot de passe, disponible uniquement ici et effacé au bout d'un an.</p><div id="tlArchives" class="tl-scroll"><p class="small muted">Chargement…</p></div></section>
         <section class="card"><h3>Sorties</h3><p class="small muted">Liste des participants avec autorisations parentales et case de présence.</p><div id="tlSorties" class="tl-scroll"><p class="small muted">Chargement…</p></div></section>
       </div>
     </div>
@@ -389,7 +389,7 @@ Message</pre></div>
       </div>
     </div>
     <div class="panel hidden" id="tab-msg"><div class="card" style="overflow:auto;"><table class="table" id="msgTable"><thead><tr><th>Date</th><th>De</th><th>Sujet</th><th>Message</th><th></th></tr></thead><tbody></tbody></table></div></div>
-    <div class="panel hidden" id="tab-membres"><div class="card" style="overflow:auto;"><p class="small muted">Seul un <strong>admin</strong> peut changer les rôles, bannir ou supprimer un compte. Le rôle « bureau » donne accès à cette page. Un compte banni ne peut plus se connecter. Le <strong>poste</strong> (Président·e…) s'affiche à côté du nom partout sur le site et met à jour automatiquement la page « Qui sommes-nous » ; donner un poste donne aussi accès à l'espace bureau. Un poste n'a qu'un titulaire : l'attribuer à quelqu'un le retire au précédent. Les admins peuvent télécharger le certificat de membre de chacun (colonne « Certificat »).</p><table class="table" id="memTable"><thead><tr><th>Nom</th><th>Classe</th><th class="admin-only">Contact</th><th>Inscrit le</th><th>Rôle</th><th>Poste au bureau</th><th class="cert-col">Certificat</th><th></th></tr></thead><tbody></tbody></table></div></div>
+    <div class="panel hidden" id="tab-membres"><div class="card" style="overflow:auto;"><p class="small muted">Seul un <strong>admin</strong> peut changer les rôles, bannir ou supprimer un compte. Le rôle « bureau » donne accès à cette page. Un compte banni ne peut plus se connecter. Le <strong>poste</strong> (Président·e…) s'affiche à côté du nom partout sur le site et met à jour automatiquement la page « Qui sommes-nous » ; donner un poste donne aussi accès à l'espace bureau. Un poste n'a qu'un titulaire : l'attribuer à quelqu'un le retire au précédent. Les admins peuvent recevoir par email (fichier chiffré) le certificat de membre de chacun (colonne « Certificat »).</p><table class="table" id="memTable"><thead><tr><th>Nom</th><th>Classe</th><th class="admin-only">Contact</th><th>Inscrit le</th><th>Rôle</th><th>Poste au bureau</th><th class="cert-col">Certificat</th><th></th></tr></thead><tbody></tbody></table></div></div>
   </div></section>
   <section class="section" id="denied" style="display:none;"><div class="container narrow center"><h2>Accès réservé</h2><p class="muted">Cette page est réservée aux membres du bureau.</p><a class="btn btn-outline" href="/compte">Retour à mon espace</a></div></section>
 </Base>
@@ -578,7 +578,6 @@ Message</pre></div>
   const esc = (s: any) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
   const d = (s: string) => new Date(s).toLocaleDateString('fr-FR');
   import { initBureauPlus } from '../lib/bureau-plus';
-  import { telechargerCertificat } from '../lib/certificat';
   import { initTournoi } from '../lib/bureau-tournoi';
   import { initVie } from '../lib/bureau-vie';
   import { initEtat } from '../lib/etat';
@@ -673,7 +672,7 @@ Message</pre></div>
       tb.innerHTML = open.map((c: any) => `<tr>
         <td>${d(c.created_at)}<br><span class="pill">${STAT[c.statut]}</span></td><td>${who(c)}</td><td>${posteOf(c)}</td><td class="motiv">${motivOf(c)}</td>
         <td><textarea class="note" data-id="${c.id}" rows="3" placeholder="ex. Rendez-vous mardi midi au CDI">${esc(c.note_bureau || '')}</textarea></td>
-        <td><div class="decide"><button class="btn btn-primary btn-sm dec" data-id="${c.id}" data-s="acceptee" type="button">Accepter</button><button class="btn btn-outline btn-sm dec" data-id="${c.id}" data-s="refusee" type="button">Refuser</button>${c.statut === 'nouvelle' ? `<button class="btn btn-outline btn-sm dec" data-id="${c.id}" data-s="en_cours" type="button">En cours</button>` : ''}<button class="btn btn-outline btn-sm pdfc" data-id="${c.id}" type="button">PDF</button><button class="btn btn-outline btn-sm ia" data-id="${c.id}" type="button" title="Envoie un email demandant de réécrire la candidature avec ses propres mots">Rédigée par IA ?</button></div></td></tr>`).join('') || '<tr><td colspan="6" class="muted">Aucune candidature à traiter.</td></tr>';
+        <td><div class="decide"><button class="btn btn-primary btn-sm dec" data-id="${c.id}" data-s="acceptee" type="button">Accepter</button><button class="btn btn-outline btn-sm dec" data-id="${c.id}" data-s="refusee" type="button">Refuser</button>${c.statut === 'nouvelle' ? `<button class="btn btn-outline btn-sm dec" data-id="${c.id}" data-s="en_cours" type="button">En cours</button>` : ''}<button class="btn btn-outline btn-sm pdfc" data-id="${c.id}" data-l="Candidature de ${esc(c.prenom)} ${esc(c.nom)}" type="button" title="Envoyer le dossier PDF par email (fichier chiffré)">PDF par email</button><button class="btn btn-outline btn-sm ia" data-id="${c.id}" type="button" title="Envoie un email demandant de réécrire la candidature avec ses propres mots">Rédigée par IA ?</button></div></td></tr>`).join('') || '<tr><td colspan="6" class="muted">Aucune candidature à traiter.</td></tr>';
       tb.querySelectorAll<HTMLButtonElement>('.dec').forEach((b) => b.addEventListener('click', async () => {
         const c: any = open.find((x: any) => x.id === b.dataset.id); const s0 = b.dataset.s!;
         const note = (tb.querySelector(`.note[data-id="${b.dataset.id}"]`) as HTMLTextAreaElement).value;
@@ -693,11 +692,10 @@ Message</pre></div>
       ab.innerHTML = done.map((c: any) => `<tr>
         <td><span class="pill ${c.statut === 'acceptee' ? 'pill-gold' : ''}">${STAT[c.statut]}</span><br><span class="small muted">${c.decided_at ? d(c.decided_at) : ''}</span></td>
         <td>${who(c)}</td><td>${posteOf(c)}</td><td class="motiv">${motivOf(c)}</td><td class="motiv">${esc(c.note_bureau || '—')}</td>
-        <td><div class="decide"><button class="btn btn-outline btn-sm pdfc" data-id="${c.id}" type="button">PDF</button><button class="btn btn-outline btn-sm reopen" data-id="${c.id}" type="button">Rouvrir</button></div></td></tr>`).join('') || '<tr><td colspan="6" class="muted">Aucune candidature archivée.</td></tr>';
+        <td><div class="decide"><button class="btn btn-outline btn-sm pdfc" data-id="${c.id}" data-l="Candidature de ${esc(c.prenom)} ${esc(c.nom)}" type="button" title="Envoyer le dossier PDF par email (fichier chiffré)">PDF par email</button><button class="btn btn-outline btn-sm reopen" data-id="${c.id}" type="button">Rouvrir</button></div></td></tr>`).join('') || '<tr><td colspan="6" class="muted">Aucune candidature archivée.</td></tr>';
       document.querySelectorAll<HTMLButtonElement>('#candTable .pdfc, #archTable .pdfc').forEach((b) => b.addEventListener('click', async () => {
-        b.disabled = true; const t0 = b.textContent; b.textContent = '…';
-        try { const { telechargerCandidature } = await import('../lib/certificat'); await telechargerCandidature(b.dataset.id!); } catch { alert('Le PDF n\'a pas pu être généré.'); }
-        b.disabled = false; b.textContent = t0;
+        const { envoyerParEmail } = await import('../lib/telechargements');
+        await envoyerParEmail(session.access_token, [{ type: 'candidature', id: b.dataset.id }], b.dataset.l || 'Candidature', b);
       }));
       ab.querySelectorAll<HTMLButtonElement>('.reopen').forEach((b) => b.addEventListener('click', async () => { b.disabled = true; if (await decide(b.dataset.id!, 'en_cours')) loadCands(); }));
     }
@@ -915,12 +913,11 @@ Message</pre></div>
         <td>${d(p.created_at)}</td>
         <td>${isAdmin && p.id !== session.user.id && !p.banni ? `<select class="role" data-id="${p.id}">${['membre', 'bureau', 'admin'].map((r) => `<option ${r === p.role ? 'selected' : ''}>${r}</option>`).join('')}</select>` : `<span class="pill">${p.role}</span>`}</td>
         <td>${isAdmin && !p.banni ? `<select class="poste-sel" data-id="${p.id}"><option value="">—</option>${POSTES.map((x) => `<option ${x === p.poste ? 'selected' : ''}>${esc(x)}</option>`).join('')}</select>` : (p.poste ? `<span class="poste-badge" style="margin:0">${esc(p.poste)}</span>` : '')}</td>
-        <td class="cert-col">${!p.banni ? `<button class="btn btn-outline btn-sm dl-cert" data-id="${p.id}" type="button" aria-label="Télécharger le certificat de ${esc(p.prenom)} ${esc(p.nom)}">PDF</button>` : ''}</td>
+        <td class="cert-col">${!p.banni ? `<button class="btn btn-outline btn-sm dl-cert" data-id="${p.id}" data-l="Certificat de ${esc(p.prenom)} ${esc(p.nom)}" type="button" aria-label="Envoyer par email le certificat de ${esc(p.prenom)} ${esc(p.nom)}">Par email</button>` : ''}</td>
         <td>${isAdmin && p.id !== session.user.id ? `<div class="flex" style="gap:6px;flex-wrap:nowrap;">${!p.banni && (p.poste || p.role !== 'membre') ? `<button class="btn btn-outline btn-sm demettre" data-id="${p.id}" type="button">Démettre</button>` : ''}<button class="btn btn-outline btn-sm ban" data-id="${p.id}" data-a="${p.banni ? 'unban' : 'ban'}" type="button">${p.banni ? 'Débannir' : 'Bannir'}</button><button class="btn btn-sm del-user" data-id="${p.id}" type="button">Supprimer</button></div>` : ''}</td></tr>`).join('');
       tbody.querySelectorAll<HTMLButtonElement>('.dl-cert').forEach((b) => b.addEventListener('click', async () => {
-        b.disabled = true; b.textContent = '…';
-        try { await telechargerCertificat(session.access_token, b.dataset.id); } catch { alert("Le certificat n'a pas pu être généré."); }
-        b.disabled = false; b.textContent = 'PDF';
+        const { envoyerParEmail } = await import('../lib/telechargements');
+        await envoyerParEmail(session.access_token, [{ type: 'certificat', id: b.dataset.id }], b.dataset.l || 'Certificat de membre', b);
       }));
       tbody.querySelectorAll<HTMLButtonElement>('.demettre').forEach((b) => b.addEventListener('click', async () => {
         const p: any = (mems || []).find((x: any) => x.id === b.dataset.id);
