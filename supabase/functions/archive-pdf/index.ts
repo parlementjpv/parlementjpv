@@ -34,8 +34,9 @@ async function envoyer(db: ReturnType<typeof admin>, demandes: [string, any][], 
       return { nom: decodeURIComponent(r.headers.get('x-fichier') || `${d.type}.pdf`), dossier, octets: new Uint8Array(await r.arrayBuffer()) };
     } catch (e) { console.error(e); return null; }
   };
-  for (let i = 0; i < demandes.length; i += 4) {
-    for (const f of await Promise.all(demandes.slice(i, i + 4).map(fab))) {
+  const fab2 = async (x: [string, any]) => (await fab(x)) || (await new Promise((r) => setTimeout(r, 1500)), await fab(x));
+  for (let i = 0; i < demandes.length; i += 3) {
+    for (const f of await Promise.all(demandes.slice(i, i + 3).map(fab2))) {
       if (!f) { echecs++; continue; }
       await zip.add(f.dossier ? `${f.dossier}/${f.nom}` : f.nom, new Uint8ArrayReader(f.octets));
       liste.push(f.dossier ? `${f.dossier} · ${f.nom}` : f.nom);
