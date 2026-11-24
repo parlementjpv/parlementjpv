@@ -85,3 +85,6 @@ verify_jwt = false
 
 [functions.candidature-modifier]
 verify_jwt = false
+
+[functions.candidature-pdf]
+verify_jwt = false

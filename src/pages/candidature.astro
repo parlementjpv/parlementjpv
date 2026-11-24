@@ -38,7 +38,8 @@ import postes from '../data/postes.json';
       </div>
 
       <div class="card">
-        <h2 style="font-size:1.8rem;">Ma candidature au bureau</h2>
+        <h2 style="font-size:1.8rem;">Mes candidatures au bureau</h2>
+        <div id="mesCands" class="hidden"></div>
         <div id="gate" class="alert alert-info">Pour candidater, <a class="link" href="/connexion?next=/candidature">connecte-toi</a> ou <a class="link" href="/inscription">crée un compte</a>. Ça te permet de suivre la réponse du bureau depuis ton espace.</div>
         <form class="form hidden" id="candForm" novalidate>
           <input type="hidden" name="type" value="bureau" />
@@ -85,6 +86,8 @@ import postes from '../data/postes.json';
   .choice label:has(input:checked) { border-color: var(--rouge); box-shadow: inset 0 0 0 1px var(--rouge); }
   .choice input { accent-color: var(--rouge); margin-top: 4px; }
   .choice small { color: var(--gris); }
+  .mc { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--pierre); }
+  #mesCands { margin-bottom: 18px; }
 </style>
 
 <script>
@@ -100,54 +103,80 @@ import postes from '../data/postes.json';
   };
   
   const statuts: Record<string, string> = { nouvelle: 'reçue', en_cours: "en cours d'examen", acceptee: 'acceptée', refusee: 'non retenue' };
+  const esc = (t: unknown) => String(t ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
   (async () => {
     if (!supabaseConfigured) return;
     const session = await getSession(); if (!session) return;
     const sb = getSupabase();
-    const { data: existing } = await sb.from('candidatures').select('id, type, poste, statut, created_at, motivation, experience, disponibilites').eq('user_id', session.user.id).order('created_at', { ascending: false }).limit(1);
-    gate.classList.add('hidden');
-    if (existing && existing.length && existing[0].statut !== 'refusee') {
-      const c = existing[0];
-      done.classList.remove('hidden');
-      const modifiable = c.statut === 'nouvelle' || c.statut === 'en_cours';
-      done.innerHTML = `<div class="alert alert-ok">Tu as déjà candidaté (${c.type === 'bureau' ? `bureau — ${c.poste || 'tout poste'}` : 'membre'}) le ${new Date(c.created_at).toLocaleDateString('fr-FR')}. Statut : <strong>${statuts[c.statut] || c.statut}</strong>. Suis-la depuis <a class="link" href="/compte">ton espace</a>.</div>${modifiable ? '<button class="btn btn-primary" id="modifCand" type="button" style="margin-top:12px;">Modifier ma candidature</button>' : ''}`;
-      if (!modifiable) return;
-      document.getElementById('modifCand')!.addEventListener('click', () => {
-        done.classList.add('hidden'); form.classList.remove('hidden');
-        ['prenom', 'nom', 'classe', 'email'].forEach((n) => { const el = form.elements.namedItem(n) as HTMLInputElement; el.closest('.form-row')?.classList.add('hidden'); el.required = false; });
-        (form.elements.namedItem('motivation') as HTMLTextAreaElement).value = (c as any).motivation || '';
-        (form.elements.namedItem('experience') as HTMLTextAreaElement).value = (c as any).experience || '';
-        (form.elements.namedItem('disponibilites') as HTMLInputElement).value = (c as any).disponibilites || '';
-        const ps = form.elements.namedItem('poste') as HTMLSelectElement | null; if (ps && c.poste) ps.value = c.poste;
-        const btn0 = form.querySelector('button[type=submit], button:not([type])') as HTMLButtonElement | null; if (btn0) btn0.textContent = 'Enregistrer ma candidature modifiée';
-        form.addEventListener('submit', async (e) => {
-          e.preventDefault(); e.stopImmediatePropagation(); if (!form.checkValidity()) { form.reportValidity(); return; }
-          const fd = new FormData(form); if (btn0) btn0.disabled = true; msg.innerHTML = '';
-          const r = await postJSON('/api/candidature-modifier', { id: (c as any).id, motivation: fd.get('motivation'), experience: fd.get('experience'), disponibilites: fd.get('disponibilites'), poste: fd.get('poste') }, session.access_token);
-          if (btn0) btn0.disabled = false;
-          if (!r.ok) { msg.innerHTML = `<div class="alert alert-err">${r.error || 'La modification a échoué.'}</div>`; return; }
-          form.classList.add('hidden'); done.classList.remove('hidden');
-          done.innerHTML = '<div class="alert alert-ok">Ta candidature a bien été modifiée. Le bureau en est informé et te répondra par email.</div>';
-        }, { capture: true });
-      });
-      return;
-    }
-    form.classList.remove('hidden');
+    const mes = document.getElementById('mesCands')!;
+    const posteSel = form.elements.namedItem('poste') as HTMLSelectElement;
+    const btnEnvoi = form.querySelector('button[type=submit], button:not([type])') as HTMLButtonElement;
+    const libEnvoi = btnEnvoi.textContent;
     const p = await getProfile(session.user.id);
     (form.elements.namedItem('prenom') as HTMLInputElement).value = p?.prenom || '';
     (form.elements.namedItem('nom') as HTMLInputElement).value = p?.nom || '';
     (form.elements.namedItem('classe') as HTMLInputElement).value = p?.classe || '';
     (form.elements.namedItem('email') as HTMLInputElement).value = session.user.email || '';
+    gate.classList.add('hidden');
+    let enEdition: any = null, cands: any[] = [];
+
+    const identite = (visible: boolean) => ['prenom', 'nom', 'classe', 'email'].forEach((n) => { const el = form.elements.namedItem(n) as HTMLInputElement; el.closest('.form-row')?.classList.toggle('hidden', !visible); el.required = visible; });
+    const ouvrirNouvelle = () => {
+      enEdition = null; form.reset(); identite(true);
+      (form.elements.namedItem('prenom') as HTMLInputElement).value = p?.prenom || ''; (form.elements.namedItem('nom') as HTMLInputElement).value = p?.nom || '';
+      (form.elements.namedItem('classe') as HTMLInputElement).value = p?.classe || ''; (form.elements.namedItem('email') as HTMLInputElement).value = session.user.email || '';
+      // un même poste ne peut être visé qu'une fois (hors candidatures refusées)
+      const pris = new Set(cands.filter((c) => c.statut !== 'refusee').map((c) => c.poste));
+      [...posteSel.options].forEach((o) => { o.disabled = pris.has(o.value); });
+      const libre = [...posteSel.options].find((o) => !o.disabled);
+      if (!libre) { msg.innerHTML = '<div class="alert alert-info">Tu as déjà candidaté à tous les postes.</div>'; form.classList.add('hidden'); return; }
+      posteSel.value = libre.value; posteSel.disabled = false;
+      btnEnvoi.textContent = libEnvoi; form.classList.remove('hidden'); done.classList.add('hidden'); msg.innerHTML = '';
+      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    const ouvrirEdition = (c: any) => {
+      enEdition = c; form.reset(); identite(false);
+      [...posteSel.options].forEach((o) => { o.disabled = false; }); posteSel.value = c.poste || 'Peu importe'; posteSel.disabled = true;
+      (form.elements.namedItem('motivation') as HTMLTextAreaElement).value = c.motivation || '';
+      (form.elements.namedItem('experience') as HTMLTextAreaElement).value = c.experience || '';
+      (form.elements.namedItem('disponibilites') as HTMLInputElement).value = c.disponibilites || '';
+      btnEnvoi.textContent = 'Enregistrer les modifications'; form.classList.remove('hidden'); done.classList.add('hidden'); msg.innerHTML = '';
+      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    async function charger() {
+      const { data } = await sb.from('candidatures').select('id, type, poste, statut, created_at, motivation, experience, disponibilites, note_bureau').eq('user_id', session.user.id).order('created_at', { ascending: false });
+      cands = data || [];
+      if (!cands.length) { mes.classList.add('hidden'); ouvrirNouvelle(); return; }
+      mes.classList.remove('hidden'); form.classList.add('hidden');
+      mes.innerHTML = cands.map((c) => {
+        const modif = c.statut === 'nouvelle' || c.statut === 'en_cours';
+        return `<div class="mc"><div><strong>${esc(c.type === 'bureau' ? (c.poste && c.poste !== 'Peu importe' ? c.poste : 'Tout poste') : 'Membre')}</strong><br><span class="small muted">Déposée le ${new Date(c.created_at).toLocaleDateString('fr-FR')} · <strong>${statuts[c.statut] || c.statut}</strong></span>${c.note_bureau ? `<br><span class="small">Message du bureau : ${esc(c.note_bureau)}</span>` : ''}</div>${modif ? `<button class="btn btn-outline btn-sm mc-mod" data-id="${c.id}" type="button">Modifier</button>` : ''}</div>`;
+      }).join('') + '<button class="btn btn-primary" id="nouvCand" type="button" style="margin-top:14px;">Candidater à un autre poste</button><p class="small muted" style="margin-top:8px;">Tu peux modifier une candidature tant que le bureau n\'a pas rendu sa décision.</p>';
+      mes.querySelectorAll<HTMLButtonElement>('.mc-mod').forEach((b) => b.addEventListener('click', () => ouvrirEdition(cands.find((c) => c.id === b.dataset.id))));
+      document.getElementById('nouvCand')!.addEventListener('click', ouvrirNouvelle);
+    }
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault(); if (!form.checkValidity()) { form.reportValidity(); return; }
-      const fd = new FormData(form); const btn = form.querySelector('button')!; btn.disabled = true; msg.innerHTML = '';
+      const fd = new FormData(form); btnEnvoi.disabled = true; msg.innerHTML = '';
+      if (enEdition) {
+        const r = await postJSON('/api/candidature-modifier', { id: enEdition.id, motivation: fd.get('motivation'), experience: fd.get('experience'), disponibilites: fd.get('disponibilites') }, session.access_token);
+        btnEnvoi.disabled = false;
+        if (!r.ok) { msg.innerHTML = `<div class="alert alert-err">${esc(r.error || 'La modification a échoué.')}</div>`; return; }
+        form.classList.add('hidden'); done.classList.remove('hidden');
+        done.innerHTML = '<div class="alert alert-ok">Ta candidature a bien été modifiée. Le bureau en est informé.</div>';
+        return charger();
+      }
       const type = String(fd.get('type'));
       const row = { user_id: session.user.id, type, poste: type === 'bureau' ? fd.get('poste') : null, prenom: fd.get('prenom'), nom: fd.get('nom'), classe: fd.get('classe'), email: fd.get('email'), motivation: fd.get('motivation'), experience: fd.get('experience') || null, disponibilites: fd.get('disponibilites') || null };
       const { data, error } = await sb.from('candidatures').insert(row).select('id').single();
-      if (error) { msg.innerHTML = `<div class="alert alert-err">L'envoi a échoué : ${error.message}</div>`; btn.disabled = false; return; }
+      if (error) { msg.innerHTML = `<div class="alert alert-err">L'envoi a échoué : ${esc(error.message)}</div>`; btnEnvoi.disabled = false; return; }
       await postJSON('/api/candidature-notify', { id: data.id }, session.access_token);
-      form.classList.add('hidden'); done.classList.remove('hidden');
+      btnEnvoi.disabled = false; form.classList.add('hidden'); done.classList.remove('hidden');
       done.innerHTML = '<div class="alert alert-ok">Candidature envoyée. Le bureau te répondra par email, et tu peux suivre son statut depuis ton espace.</div>';
+      charger();
     });
+    charger();
   })();
 </script>
