@@ -82,3 +82,6 @@ verify_jwt = false
 
 [functions.boite-mail]
 verify_jwt = false
+
+[functions.candidature-modifier]
+verify_jwt = false

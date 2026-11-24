@@ -104,12 +104,32 @@ import postes from '../data/postes.json';
     if (!supabaseConfigured) return;
     const session = await getSession(); if (!session) return;
     const sb = getSupabase();
-    const { data: existing } = await sb.from('candidatures').select('type, poste, statut, created_at').eq('user_id', session.user.id).order('created_at', { ascending: false }).limit(1);
+    const { data: existing } = await sb.from('candidatures').select('id, type, poste, statut, created_at, motivation, experience, disponibilites').eq('user_id', session.user.id).order('created_at', { ascending: false }).limit(1);
     gate.classList.add('hidden');
     if (existing && existing.length && existing[0].statut !== 'refusee') {
       const c = existing[0];
       done.classList.remove('hidden');
-      done.innerHTML = `<div class="alert alert-ok">Tu as déjà candidaté (${c.type === 'bureau' ? `bureau — ${c.poste || 'tout poste'}` : 'membre'}) le ${new Date(c.created_at).toLocaleDateString('fr-FR')}. Statut : <strong>${statuts[c.statut] || c.statut}</strong>. Suis-la depuis <a class="link" href="/compte">ton espace</a>.</div>`;
+      const modifiable = c.statut === 'nouvelle' || c.statut === 'en_cours';
+      done.innerHTML = `<div class="alert alert-ok">Tu as déjà candidaté (${c.type === 'bureau' ? `bureau — ${c.poste || 'tout poste'}` : 'membre'}) le ${new Date(c.created_at).toLocaleDateString('fr-FR')}. Statut : <strong>${statuts[c.statut] || c.statut}</strong>. Suis-la depuis <a class="link" href="/compte">ton espace</a>.</div>${modifiable ? '<button class="btn btn-primary" id="modifCand" type="button" style="margin-top:12px;">Modifier ma candidature</button>' : ''}`;
+      if (!modifiable) return;
+      document.getElementById('modifCand')!.addEventListener('click', () => {
+        done.classList.add('hidden'); form.classList.remove('hidden');
+        ['prenom', 'nom', 'classe', 'email'].forEach((n) => { const el = form.elements.namedItem(n) as HTMLInputElement; el.closest('.form-row')?.classList.add('hidden'); el.required = false; });
+        (form.elements.namedItem('motivation') as HTMLTextAreaElement).value = (c as any).motivation || '';
+        (form.elements.namedItem('experience') as HTMLTextAreaElement).value = (c as any).experience || '';
+        (form.elements.namedItem('disponibilites') as HTMLInputElement).value = (c as any).disponibilites || '';
+        const ps = form.elements.namedItem('poste') as HTMLSelectElement | null; if (ps && c.poste) ps.value = c.poste;
+        const btn0 = form.querySelector('button[type=submit], button:not([type])') as HTMLButtonElement | null; if (btn0) btn0.textContent = 'Enregistrer ma candidature modifiée';
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault(); e.stopImmediatePropagation(); if (!form.checkValidity()) { form.reportValidity(); return; }
+          const fd = new FormData(form); if (btn0) btn0.disabled = true; msg.innerHTML = '';
+          const r = await postJSON('/api/candidature-modifier', { id: (c as any).id, motivation: fd.get('motivation'), experience: fd.get('experience'), disponibilites: fd.get('disponibilites'), poste: fd.get('poste') }, session.access_token);
+          if (btn0) btn0.disabled = false;
+          if (!r.ok) { msg.innerHTML = `<div class="alert alert-err">${r.error || 'La modification a échoué.'}</div>`; return; }
+          form.classList.add('hidden'); done.classList.remove('hidden');
+          done.innerHTML = '<div class="alert alert-ok">Ta candidature a bien été modifiée. Le bureau en est informé et te répondra par email.</div>';
+        }, { capture: true });
+      });
       return;
     }
     form.classList.remove('hidden');

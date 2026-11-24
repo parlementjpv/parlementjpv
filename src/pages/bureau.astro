@@ -647,12 +647,20 @@ Message</pre></div>
       tb.innerHTML = open.map((c: any) => `<tr>
         <td>${d(c.created_at)}<br><span class="pill">${STAT[c.statut]}</span></td><td>${who(c)}</td><td>${posteOf(c)}</td><td class="motiv">${motivOf(c)}</td>
         <td><textarea class="note" data-id="${c.id}" rows="3" placeholder="ex. Rendez-vous mardi midi au CDI">${esc(c.note_bureau || '')}</textarea></td>
-        <td><div class="decide"><button class="btn btn-primary btn-sm dec" data-id="${c.id}" data-s="acceptee" type="button">Accepter</button><button class="btn btn-outline btn-sm dec" data-id="${c.id}" data-s="refusee" type="button">Refuser</button>${c.statut === 'nouvelle' ? `<button class="btn btn-outline btn-sm dec" data-id="${c.id}" data-s="en_cours" type="button">En cours</button>` : ''}</div></td></tr>`).join('') || '<tr><td colspan="6" class="muted">Aucune candidature à traiter.</td></tr>';
+        <td><div class="decide"><button class="btn btn-primary btn-sm dec" data-id="${c.id}" data-s="acceptee" type="button">Accepter</button><button class="btn btn-outline btn-sm dec" data-id="${c.id}" data-s="refusee" type="button">Refuser</button>${c.statut === 'nouvelle' ? `<button class="btn btn-outline btn-sm dec" data-id="${c.id}" data-s="en_cours" type="button">En cours</button>` : ''}<button class="btn btn-outline btn-sm ia" data-id="${c.id}" type="button" title="Envoie un email demandant de réécrire la candidature avec ses propres mots">Rédigée par IA ?</button></div></td></tr>`).join('') || '<tr><td colspan="6" class="muted">Aucune candidature à traiter.</td></tr>';
       tb.querySelectorAll<HTMLButtonElement>('.dec').forEach((b) => b.addEventListener('click', async () => {
         const c: any = open.find((x: any) => x.id === b.dataset.id); const s0 = b.dataset.s!;
         const note = (tb.querySelector(`.note[data-id="${b.dataset.id}"]`) as HTMLTextAreaElement).value;
         if (s0 !== 'en_cours' && !confirm(`${s0 === 'acceptee' ? 'Accepter' : 'Refuser'} la candidature de ${c.prenom} ${c.nom} ?\nUn email automatique lui sera envoyé${note.trim() ? ' avec ton message' : ''}.`)) return;
         b.disabled = true; if (await decide(b.dataset.id!, s0, note)) loadCands(); else b.disabled = false;
+      }));
+      tb.querySelectorAll<HTMLButtonElement>('.ia').forEach((b) => b.addEventListener('click', async () => {
+        const c: any = open.find((x: any) => x.id === b.dataset.id);
+        if (!confirm(`Envoyer à ${c.prenom} ${c.nom} l'email indiquant que sa candidature semble rédigée par une IA, et lui proposant de la modifier ?`)) return;
+        b.disabled = true;
+        const r = await postJSON<{ emailed: boolean; warning?: string }>('/api/candidature-decision', { action: 'ia', id: c.id }, session.access_token);
+        candMsg.innerHTML = !r.ok ? `<div class="alert alert-err">${esc(r.error)}</div>` : r.data.warning ? `<div class="alert alert-err">${esc(r.data.warning)}</div>` : `<div class="alert alert-ok">Email envoyé à ${esc(c.prenom)} : sa candidature est passée « en cours » et il ou elle peut maintenant la modifier.</div>`;
+        loadCands();
       }));
       tb.querySelectorAll<HTMLTextAreaElement>('.note').forEach((t) => t.addEventListener('change', async () => { await sb.from('candidatures').update({ note_bureau: t.value.trim() || null }).eq('id', t.dataset.id); }));
       const ab = document.querySelector('#archTable tbody')!;
