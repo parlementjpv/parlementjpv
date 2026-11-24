@@ -33,10 +33,16 @@ Deno.serve(async (req) => {
         .sort((x, y) => `${pm.get(x)!.nom} ${pm.get(x)!.prenom}`.localeCompare(`${pm.get(y)!.nom} ${pm.get(y)!.prenom}`, 'fr'));
       const recueil = await PDFDocument.create();
       recueil.setTitle(`Certificats de membre — Parlement JPV (${ids.length})`); recueil.setAuthor('Parlement JPV'); recueil.setCreator('parlementjpv.fr');
-      const certs: (Uint8Array | null)[] = [];
-      for (let i = 0; i < ids.length; i += 4) certs.push(...(await Promise.all(ids.slice(i, i + 4).map((id) => certificatPdf(id).then((c) => c?.pdf || null).catch(() => null)))));
+      // Un certificat à la fois : chaque PDF est ajouté au recueil puis libéré (mémoire limitée du serveur)
       let n = 0;
-      for (const c of certs) { if (!c) continue; const src = await PDFDocument.load(c); for (const pg of await recueil.copyPages(src, src.getPageIndices())) recueil.addPage(pg); n++; }
+      for (const id of ids) {
+        try {
+          const c = await certificatPdf(id); if (!c) continue;
+          const src = await PDFDocument.load(c.pdf);
+          for (const pg of await recueil.copyPages(src, src.getPageIndices())) recueil.addPage(pg);
+          n++;
+        } catch (e) { console.error('certificat', id, e); }
+      }
       if (!n) return json(req, 404, { error: 'Aucun certificat à générer.' });
       const out = await recueil.save();
       await journal(me.user.id, 'Téléchargements', `a téléchargé en PDF l'intégralité des certificats de membre (${n})`);

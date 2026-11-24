@@ -11,11 +11,14 @@ async function telecharger(sb: SupabaseClient, corps: Record<string, unknown>, b
   try {
     const { data } = await sb.auth.getSession();
     const r = await fetch(api('/api/telecharger'), { method: 'POST', headers: { Authorization: `Bearer ${data.session?.access_token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(corps) });
-    if (!r.ok || r.headers.get('content-type') !== 'application/pdf') { const e = await r.json().catch(() => ({})); throw new Error(e.error || 'Le PDF n\'a pas pu être généré.'); }
+    if (!r.ok || !(r.headers.get('content-type') || '').includes('application/pdf')) {
+      const e = await r.json().catch(() => ({}));
+      throw new Error(e.error || (r.status === 546 || e.code === 'WORKER_LIMIT' ? 'Le serveur a manqué de ressources pour ce document. Réessaie dans un instant.' : `Le PDF n'a pas pu être généré (erreur ${r.status}).`));
+    }
     const nom = /filename="([^"]+)"/.exec(r.headers.get('content-disposition') || '')?.[1] || 'document.pdf';
     const a = document.createElement('a'); a.href = URL.createObjectURL(await r.blob()); a.download = nom;
     document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 10000);
-  } catch (e) { alert((e as Error).message); }
+  } catch (e) { alert((e as Error).message === 'Load failed' || (e as Error).message === 'Failed to fetch' ? 'Connexion au serveur impossible : vérifie ta connexion internet et réessaie.' : (e as Error).message); }
   btn.disabled = false; btn.textContent = t0;
 }
 
