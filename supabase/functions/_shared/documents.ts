@@ -286,9 +286,11 @@ export async function genererDocument(db: ReturnType<typeof admin>, b: any, aute
       d.titreSection('Signatures');
       const signataires = (bur || []).filter((p) => p.poste).slice(0, 3);
       const lignesS = (signataires.length ? signataires : [{ prenom: '', nom: '', poste: 'Président·e du Parlement' }, { prenom: '', nom: '', poste: 'Secrétaire du bureau' }] as any[])
-        .map((p: any) => [{ t: `${p.prenom} ${p.nom}`.trim() || '……………………', gras: true }, p.poste, '\n\n\n']);
-      d.tableau(['Nom', 'Fonction', 'Signature'], [0.32, 0.3, 0.38], lignesS);
-      d.espace(6); d.texte('Signature du professeur référent : ……………………………………', '', 10);
+        .map((p: any) => [`${p.prenom} ${p.nom}`.trim() || '……………………………', p.poste]);
+      for (const [nom, poste] of [...lignesS, ['……………………………', 'Professeur·e référent·e']]) {
+        d.place(70); d.texte(`${nom} — ${poste}`, '', 10.5); d.espace(4);
+        d.texte('Signature :  ______________________________________', '', 10); d.espace(30);
+      }
       fichier = `pv-election-${slug(e.titre)}.pdf`; quoi = `le PV de l'élection « ${e.titre} »`;
     }
 
@@ -376,6 +378,7 @@ export async function genererDocument(db: ReturnType<typeof admin>, b: any, aute
           for (const t of tn || []) faits.push(`Tournoi « ${t.nom} »${t.champion && pm.get(t.champion) ? ` — champion·ne : ${(pm.get(t.champion) as any).prenom} ${(pm.get(t.champion) as any).nom}` : ''}.`);
           for (const x of (so || []).filter((x) => !x.annule_at)) faits.push(`Sortie « ${x.titre} » (${date(x.quand)}).`);
           if (!faits.length) d.texte(null, 'Rien à signaler pour le moment.'); else faits.forEach((f) => { d.place(20); d.texte(`- ${f}`, '', 10); });
+          d.espace(12);
           d.titreSection('Séances de l\'année');
           d.tableau(['Date', 'Séance', 'Type', 'Présents'], [0.16, 0.5, 0.18, 0.16], (ev || []).map((e) => [date(e.starts_at), { t: e.title + (e.annule_at ? ' (annulée)' : ''), gras: !e.annule_at }, e.type, e.annule_at ? '—' : String(parSeance.get(String(e.id)) ?? '—')]), 'Aucune séance pour le moment.');
           fichier = `rapport-activite-${annee}.pdf`; quoi = "le rapport d'activité";
