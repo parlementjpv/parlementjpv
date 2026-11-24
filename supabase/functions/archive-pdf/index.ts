@@ -1,6 +1,5 @@
 import { ZipWriter, Uint8ArrayReader, Uint8ArrayWriter } from 'npm:@zip.js/zip.js@2.7.52';
 import { admin, json, cors, readJson, sendMail, layout, FROM } from '../_shared/lib.ts';
-import { genererDocument } from '../_shared/documents.ts';
 
 // Archive automatique (toutes les deux semaines) : tous les documents PDF du bureau,
 // réunis dans un ZIP chiffré AES-256, envoyés à l'adresse du Parlement.
@@ -44,10 +43,14 @@ Deno.serve(async (req) => {
   const zip = new ZipWriter(new Uint8ArrayWriter(), { password: mdp, encryptionStrength: 3, zipCrypto: false });
   const liste: string[] = []; let echecs = 0;
   for (const [dossier, d] of demandes) {
-    const r = await genererDocument(db, d, 'l\'archive automatique');
-    if ('error' in r) { echecs++; continue; }
-    await zip.add(`${dossier}/${r.fichier}`, new Uint8ArrayReader(r.pdf));
-    liste.push(`${dossier} · ${r.fichier}`);
+    // Chaque PDF est fabriqué par un appel séparé (budget de calcul propre à chaque appel)
+    try {
+      const r = await fetch(`${Deno.env.get('SUPABASE_URL')}/functions/v1/telecharger`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-sauvegarde': secret }, body: JSON.stringify(d) });
+      if (!r.ok || !(r.headers.get('content-type') || '').includes('application/pdf')) { echecs++; console.error('pdf', d, r.status); continue; }
+      const fichier = decodeURIComponent(r.headers.get('x-fichier') || `${d.type}.pdf`);
+      await zip.add(`${dossier}/${fichier}`, new Uint8ArrayReader(new Uint8Array(await r.arrayBuffer())));
+      liste.push(`${dossier} · ${fichier}`);
+    } catch (e) { echecs++; console.error(e); }
   }
   const contenu: Uint8Array = await zip.close();
   const jour = new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'Europe/Paris' });

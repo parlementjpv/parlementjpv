@@ -5,6 +5,13 @@ import { genererDocument } from '../_shared/documents.ts';
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors(req) });
   if (req.method !== 'POST') return json(req, 405, { error: 'Méthode non autorisée' });
+  // Appel interne de l'archive automatique (clé serveur), sans utilisateur
+  const secret = Deno.env.get('BACKUP_SECRET');
+  if (secret && req.headers.get('x-sauvegarde') === secret) {
+    const r = await genererDocument(admin(), (await readJson(req)) || {}, "l'archive automatique");
+    if ('error' in r) return json(req, r.status, { error: r.error });
+    return new Response(r.pdf, { headers: { 'Content-Type': 'application/pdf', 'X-Fichier': encodeURIComponent(r.fichier) } });
+  }
   const me = await userFromRequest(req);
   if (!me) return json(req, 401, { error: 'Ta session a expiré : recharge la page.' });
   if (me.profile?.role !== 'admin') return json(req, 403, { error: 'Réservé aux administrateurs.' });
