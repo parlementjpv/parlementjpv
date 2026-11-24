@@ -57,6 +57,22 @@ async function envoyer(db: ReturnType<typeof admin>, demandes: [string, any][], 
   return { ok: true as const, documents: liste.length, echecs, taille: contenu.length, a: dest, heure: `${jour} à ${heure}` };
 }
 
+async function tousLesDocuments(db: ReturnType<typeof admin>): Promise<[string, any][]> {
+    const [{ data: el }, { data: sd }, { data: so }, { data: ev }] = await Promise.all([
+      db.from('elections').select('id').eq('publiee', true),
+      db.from('sondages').select('id'),
+      db.from('sorties').select('id').gte('quand', new Date(Date.now() - 60 * 86400000).toISOString()),
+      db.from('events').select('id').gte('starts_at', new Date(Date.now() - 60 * 86400000).toISOString()),
+    ]);
+    return [
+      ['01-Membres', { type: 'membres' }], ['02-Candidatures', { type: 'candidatures' }], ['03-Certificats', { type: 'certificats' }],
+      ...(el || []).map((e) => ['04-Elections', { type: 'election', id: e.id }] as [string, any]),
+      ...(ev || []).map((e) => ['05-Seances', { type: 'seance', id: e.id }] as [string, any]),
+      ...(sd || []).map((s) => ['06-Sondages', { type: 'sondage', id: s.id }] as [string, any]),
+      ...(so || []).map((s) => ['07-Sorties', { type: 'sortie', id: s.id }] as [string, any]),
+    ];
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors(req) });
   if (req.method !== 'POST') return json(req, 405, { error: 'Méthode non autorisée' });
@@ -68,19 +84,7 @@ Deno.serve(async (req) => {
   if (secret && req.headers.get('x-sauvegarde') === secret) {
     const semaine = Math.floor(Date.now() / (7 * 86400000));
     if (!b.forcer && semaine % 2 !== 0) return json(req, 200, { ok: true, saute: 'semaine impaire' });
-    const [{ data: el }, { data: sd }, { data: so }, { data: ev }] = await Promise.all([
-      db.from('elections').select('id').eq('publiee', true),
-      db.from('sondages').select('id'),
-      db.from('sorties').select('id').gte('quand', new Date(Date.now() - 60 * 86400000).toISOString()),
-      db.from('events').select('id').gte('starts_at', new Date(Date.now() - 60 * 86400000).toISOString()),
-    ]);
-    const demandes: [string, any][] = [
-      ['01-Membres', { type: 'membres' }], ['02-Candidatures', { type: 'candidatures' }], ['03-Certificats', { type: 'certificats' }],
-      ...(el || []).map((e) => ['04-Elections', { type: 'election', id: e.id }] as [string, any]),
-      ...(ev || []).map((e) => ['05-Seances', { type: 'seance', id: e.id }] as [string, any]),
-      ...(sd || []).map((s) => ['06-Sondages', { type: 'sondage', id: s.id }] as [string, any]),
-      ...(so || []).map((s) => ['07-Sorties', { type: 'sortie', id: s.id }] as [string, any]),
-    ];
+    const demandes = await tousLesDocuments(db);
     const r = await envoyer(db, demandes, { libelle: 'Archive automatique (tous les documents)', demandePar: "l'archive automatique", test: !!b.test, auto: true });
     return json(req, r.ok ? 200 : 500, r);
   }
@@ -90,6 +94,14 @@ Deno.serve(async (req) => {
   if (!me) return json(req, 401, { error: 'Ta session a expiré : recharge la page.' });
   const role = me.profile?.role;
   if (!['bureau', 'admin'].includes(role)) return json(req, 403, { error: 'Réservé au bureau.' });
+  if (b.complet) {
+    if (role !== 'admin') return json(req, 403, { error: 'Réservé aux administrateurs.' });
+    const demandePar = [me.profile?.prenom, me.profile?.nom].filter(Boolean).join(' ') || 'un administrateur';
+    const r = await envoyer(db, await tousLesDocuments(db), { libelle: 'Archive complète (tous les documents)', demandePar, test: false, auto: false });
+    if (!r.ok) return json(req, 500, { error: r.error });
+    await journal(me.user.id, 'Téléchargements', "a envoyé par email l'archive complète (ZIP chiffré)");
+    return json(req, 200, r);
+  }
   const TYPES = role === 'admin' ? ['certificats', 'certificat', 'candidatures', 'candidature', 'election', 'seance', 'membres', 'sondage', 'sortie'] : ['candidature'];
   const docs = (Array.isArray(b.docs) ? b.docs : []).slice(0, 10).filter((d: any) => d && TYPES.includes(d.type));
   if (!docs.length) return json(req, 403, { error: 'Document non autorisé.' });

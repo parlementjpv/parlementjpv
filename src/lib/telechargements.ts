@@ -7,11 +7,11 @@ const esc = (s: unknown) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '
 const jour = (d: string) => new Date(d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
 
 /** Envoie le ou les documents par email à l'adresse du Parlement, dans un ZIP chiffré (plus de téléchargement direct). */
-export async function envoyerParEmail(token: string, docs: Record<string, unknown>[], libelle: string, btn?: HTMLButtonElement | null) {
+export async function envoyerParEmail(token: string, docs: Record<string, unknown>[], libelle: string, btn?: HTMLButtonElement | null, complet = false) {
   if (!confirm(`Envoyer « ${libelle} » par email à l'adresse du Parlement ?\n\nLe fichier sera chiffré ; son mot de passe sera visible dans Téléchargements → Archives (administrateurs).`)) return false;
   const t0 = btn?.textContent; if (btn) { btn.disabled = true; btn.textContent = 'Envoi…'; }
   try {
-    const r = await fetch(api('/api/archive-pdf'), { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ docs, libelle }) });
+    const r = await fetch(api('/api/archive-pdf'), { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(complet ? { complet: true } : { docs, libelle }) });
     const d = await r.json().catch(() => ({}));
     if (!r.ok || !d.ok) throw new Error(d.error || (r.status === 546 ? 'Le serveur a manqué de ressources. Réessaie dans un instant.' : `Envoi impossible (erreur ${r.status}).`));
     alert(`Envoyé à ${d.a} (${d.documents} document${d.documents > 1 ? 's' : ''}, fichier chiffré).\n\nLe mot de passe est dans Téléchargements → Archives, à la ligne du ${d.heure}.`);
@@ -40,6 +40,8 @@ export function initTelechargements(sb: SupabaseClient) {
     $('tlSondages').innerHTML = (sd || []).map((s) => ligne(s.question, `créé le ${jour(s.created_at)}${s.fin ? ` · fin ${jour(s.fin)}` : ''}`, { type: 'sondage', id: s.id }, `Sondage — ${s.question}`)).join('') || '<p class="small muted">Aucun sondage.</p>';
     $('tlSorties').innerHTML = (so || []).map((s) => ligne(s.titre, `${jour(s.quand)}${s.annule_at ? ' · annulée' : ''}`, { type: 'sortie', id: s.id }, `Sortie — ${s.titre}`)).join('') || '<p class="small muted">Aucune sortie.</p>';
     await chargerArchives();
+    const bc = document.getElementById('tlComplet') as HTMLButtonElement | null;
+    if (bc) bc.onclick = async () => { const { data } = await sb.auth.getSession(); await envoyerParEmail(data.session?.access_token || '', [], 'Archive complète (tous les documents)', bc, true); };
     document.querySelectorAll<HTMLButtonElement>('#tab-telechargements .tl-b').forEach((b) => { b.onclick = async () => { const { data } = await sb.auth.getSession(); await envoyerParEmail(data.session?.access_token || '', [JSON.parse(b.dataset.c!)], b.dataset.l || 'Document du bureau', b); }; });
   };
   const chargerArchives = async () => {
