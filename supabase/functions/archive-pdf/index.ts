@@ -58,33 +58,7 @@ async function envoyer(db: ReturnType<typeof admin>, demandes: [string, any][], 
 }
 
 async function tousLesDocuments(db: ReturnType<typeof admin>): Promise<[string, any][]> {
-    const [{ data: el }, { data: sd }, { data: so }, { data: ev }] = await Promise.all([
-      db.from('elections').select('id').eq('publiee', true),
-      db.from('sondages').select('id'),
-      db.from('sorties').select('id').gte('quand', new Date(Date.now() - 60 * 86400000).toISOString()),
-      db.from('events').select('id').gte('starts_at', new Date(Date.now() - 60 * 86400000).toISOString()),
-    ]);
-    return [
-      ['01-Membres', { type: 'membres' }], ['02-Candidatures', { type: 'candidatures' }], ['03-Certificats', { type: 'certificats' }],
-      ...(el || []).map((e) => ['04-Elections', { type: 'election', id: e.id }] as [string, any]),
-      ...(ev || []).map((e) => ['05-Seances', { type: 'seance', id: e.id }] as [string, any]),
-      ...(sd || []).map((s) => ['06-Sondages', { type: 'sondage', id: s.id }] as [string, any]),
-      ...(so || []).map((s) => ['07-Sorties', { type: 'sortie', id: s.id }] as [string, any]),
-    ];
-}
-
-Deno.serve(async (req) => {
-  if (req.method === 'OPTIONS') return new Response('ok', { headers: cors(req) });
-  if (req.method !== 'POST') return json(req, 405, { error: 'Méthode non autorisée' });
-  const secret = Deno.env.get('BACKUP_SECRET');
-  const b = (await readJson(req)) || {};
-  const db = admin();
-
-  // 1) Archive automatique (pg_cron, clé serveur)
-  if (secret && req.headers.get('x-sauvegarde') === secret) {
-    const semaine = Math.floor(Date.now() / (7 * 86400000));
-    if (!b.forcer && semaine % 2 !== 0) return json(req, 200, { ok: true, saute: 'semaine impaire' });
-    const demandes = await tousLesDocuments(db);
+    const demandes = await listeComplete(db);
     const r = await envoyer(db, demandes, { libelle: 'Archive automatique (tous les documents)', demandePar: "l'archive automatique", test: !!b.test, auto: true });
     return json(req, r.ok ? 200 : 500, r);
   }
@@ -102,7 +76,15 @@ Deno.serve(async (req) => {
     await journal(me.user.id, 'Téléchargements', "a envoyé par email l'archive complète (ZIP chiffré)");
     return json(req, 200, r);
   }
-  const TYPES = role === 'admin' ? ['certificats', 'certificat', 'candidatures', 'candidature', 'election', 'seance', 'membres', 'sondage', 'sortie'] : ['candidature'];
+  if (b.complete) {
+    if (role !== 'admin') return json(req, 403, { error: 'Réservé aux administrateurs.' });
+    const demandePar = [me.profile?.prenom, me.profile?.nom].filter(Boolean).join(' ') || 'un administrateur';
+    const r = await envoyer(db, await listeComplete(db), { libelle: 'Archive complète (tous les documents)', demandePar, test: false, auto: false });
+    if (!r.ok) return json(req, 500, { error: r.error });
+    await journal(me.user.id, 'Téléchargements', "a envoyé par email l'archive complète (ZIP chiffré)");
+    return json(req, 200, r);
+  }
+  const TYPES = role === 'admin' ? ['certificats', 'certificat', 'candidatures', 'candidature', 'election', 'pv-election', 'seance', 'compte-rendu', 'membres', 'sondage', 'sortie', 'rapport-annuel', 'registre', 'assiduite', 'recueil'] : ['candidature'];
   const docs = (Array.isArray(b.docs) ? b.docs : []).slice(0, 10).filter((d: any) => d && TYPES.includes(d.type));
   if (!docs.length) return json(req, 403, { error: 'Document non autorisé.' });
   const libelle = String(b.libelle || 'Document du bureau').slice(0, 140);

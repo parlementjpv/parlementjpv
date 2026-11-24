@@ -4,7 +4,8 @@ import { certificatPdf } from './certificat.ts';
 import { PDFDocument } from 'npm:pdf-lib@1.17.1';
 
 // Génération des documents PDF du bureau (rubrique Téléchargements et archive automatique).
-// Types : certificats, candidatures, election, seance, membres, sondage, sortie.
+// Types : certificats, certificat, candidatures, candidature, election, pv-election, seance, compte-rendu, membres, sondage, sortie,
+// rapport-annuel, registre, assiduite, recueil.
 const STATC: Record<string, string> = { nouvelle: 'Nouvelle', en_cours: 'En cours', acceptee: 'Acceptée', refusee: 'Refusée' };
 const ELEVES = ['Seconde', 'Première', 'Terminale'];
 const classeDe = (p: any) => p?.niveau ? (ELEVES.includes(p.niveau) ? `${p.niveau}${p.classe_num ? ' ' + p.classe_num : ''}` : p.niveau === 'Personnel' ? 'Personnel du lycée' : p.niveau) : (p?.classe || '—');
@@ -214,6 +215,172 @@ export async function genererDocument(db: ReturnType<typeof admin>, b: any, aute
       d.tableau(['N°', 'Élève', 'Classe', 'Téléphone', 'Autorisation', 'Présent'], [0.07, 0.3, 0.15, 0.18, 0.16, 0.14], inscrits.map(ligne), 'Aucun inscrit.');
       if (attente.length) { d.titreSection(`Liste d'attente (${attente.length})`); d.tableau(['N°', 'Élève', 'Classe', 'Téléphone', 'Autorisation', ''], [0.07, 0.3, 0.15, 0.18, 0.16, 0.14], attente.map(ligne)); }
       fichier = `sortie-${slug(s.titre)}.pdf`; quoi = `la liste de la sortie « ${s.titre} »`;
+    }
+
+    else if (b.type === 'compte-rendu') {
+      const { data: ev } = await db.from('events').select('*').eq('id', b.id).maybeSingle();
+      if (!ev) return err(404, 'Séance introuvable.');
+      const k = String(ev.id);
+      const [{ data: ins }, { data: pres }, { data: posts }, { data: vo }] = await Promise.all([
+        db.from('event_signups').select('prenom, nom, classe, camp, reponse, user_id').eq('event_key', k),
+        db.from('presences').select('prenom, nom, classe, statut, camp, roles, arguments_retenus, user_id').eq('event_key', k),
+        db.from('camp_posts').select('camp, auteur_nom, titre, contenu, retenu, kind').eq('event_key', k).eq('kind', 'argument').eq('retenu', true).order('created_at'),
+        db.from('votes_orateur').select('orateur').eq('event_key', k),
+      ]);
+      const appel = (pres || []).length > 0;
+      const presents = appel ? (pres || []).filter((p) => p.statut === 'present') : [];
+      const absents = appel ? (pres || []).filter((p) => p.statut !== 'present') : [];
+      const camps: string[] = ev.camps?.length ? ev.camps : [...new Set((pres || []).map((p) => p.camp).filter(Boolean))] as string[];
+      const nomDe = new Map<string, string>(); for (const p of [...(ins || []), ...(pres || [])]) if (p.user_id) nomDe.set(p.user_id, `${p.prenom} ${p.nom}`);
+      const voix = new Map<string, number>(); for (const v of vo || []) voix.set(v.orateur, (voix.get(v.orateur) || 0) + 1);
+      const classement = [...voix.entries()].sort((a, b) => b[1] - a[1]);
+      const totalVo = (vo || []).length;
+      d = await DocPdf.creer(`Compte rendu — ${ev.title}`, `${ev.type} · ${date(ev.starts_at, true)} · ${ev.location}${ev.annule_at ? ' · SÉANCE ANNULÉE' : ''}`, true, auteur);
+      d.fiche([['Présents', appel ? String(presents.length) : "appel non fait"], ['Absents / excusés', appel ? String(absents.length) : '—'], ['Camps', camps.join(' / ') || '—'], ['Arguments retenus', String((posts || []).length)], ['Votes meilleur orateur', String(totalVo)]]);
+      d.titreSection('Motion débattue'); d.texte(ev.title, '', 12); if (ev.description) { d.espace(4); d.texte(ev.description, '', 9.5); } d.espace();
+      if (ev.annule_at) { d.titreSection('Séance annulée', C.rouge); d.texte(ev.annule_motif || 'Aucun motif indiqué.'); d.espace(); }
+      d.titreSection('Intervenants');
+      const interv = (appel ? presents : (ins || []).filter((s) => s.reponse === 'oui')).filter((p: any) => p.camp || (p.roles || []).length);
+      d.tableau(['Intervenant·e', 'Classe', 'Camp', 'Rôles'], [0.32, 0.16, 0.2, 0.32], interv.sort((a: any, b: any) => (a.camp || '').localeCompare(b.camp || '')).map((p: any) => [{ t: `${p.prenom} ${p.nom}`, gras: true }, p.classe || '—', p.camp || '—', (p.roles || []).join(', ') || '—']), 'Aucun intervenant enregistré.');
+      d.titreSection('Arguments retenus');
+      if (!(posts || []).length) d.texte(null, 'Aucun argument marqué comme retenu.');
+      for (const camp of camps) {
+        const a = (posts || []).filter((x) => x.camp === camp); if (!a.length) continue;
+        d.place(30); d.texte(`Camp « ${camp} »`, '', 11); d.espace(3);
+        a.forEach((x, i) => { d.place(30); d.texte(`${i + 1}. ${x.titre || x.contenu.slice(0, 90)}`, '', 10, 10); if (x.titre) d.texte(x.contenu, '', 9, 22); d.texte(`par ${x.auteur_nom}`, '', 8, 22); d.espace(5); });
+        d.espace(4);
+      }
+      d.titreSection('Résultat du vote — meilleur orateur');
+      if (!classement.length) d.texte(null, 'Aucun vote enregistré.');
+      classement.slice(0, 8).forEach(([id, n], i) => d.barre(nomDe.get(id) || 'Membre', n, totalVo, `${n} voix · ${pc(n, totalVo)}`, i === 0));
+      d.page();
+      d.titreSection(`Présents (${presents.length})`);
+      d.tableau(['Nom', 'Classe', 'Camp'], [0.45, 0.25, 0.3], presents.sort((a, b) => a.nom.localeCompare(b.nom, 'fr')).map((p) => [{ t: `${p.prenom} ${p.nom}`, gras: true }, p.classe || '—', p.camp || '—']), appel ? 'Aucun présent.' : "L'appel n'a pas été fait.");
+      d.titreSection(`Absents et excusés (${absents.length})`);
+      d.tableau(['Nom', 'Classe', 'Statut'], [0.45, 0.25, 0.3], absents.sort((a, b) => a.nom.localeCompare(b.nom, 'fr')).map((p) => [{ t: `${p.prenom} ${p.nom}`, gras: true }, p.classe || '—', { t: p.statut === 'excuse' ? 'Excusé·e' : 'Absent·e', couleur: p.statut === 'excuse' ? C.gris : C.rouge }]), 'Aucun absent.');
+      fichier = `compte-rendu-${slug(ev.title)}-${String(ev.starts_at).slice(0, 10)}.pdf`; quoi = `le compte rendu de « ${ev.title} »`;
+    }
+
+    else if (b.type === 'pv-election') {
+      const { data: e } = await db.from('elections').select('*').eq('id', b.id).maybeSingle();
+      if (!e) return err(404, 'Élection introuvable.');
+      if (!e.publiee) return err(400, 'Les résultats de cette élection ne sont pas encore publiés.');
+      const [{ data: cands }, { count: nbV }, { count: nbM }, { data: bur }] = await Promise.all([
+        db.from('election_candidats').select('nom, voix').eq('election_id', e.id).order('voix', { ascending: false }),
+        db.from('election_votants').select('*', { count: 'exact', head: true }).eq('election_id', e.id),
+        db.from('adhesions').select('*', { count: 'exact', head: true }).not('user_id', 'is', null),
+        db.from('profiles').select('prenom, nom, poste, role').in('role', ['admin', 'bureau']),
+      ]);
+      const exprimes = (cands || []).reduce((a, c) => a + c.voix, 0), blancs = e.blancs || 0, total = exprimes + blancs;
+      const max = Math.max(0, ...(cands || []).map((c) => c.voix)); const g = (cands || []).filter((c) => c.voix === max && max > 0);
+      d = await DocPdf.creer("Procès-verbal d'élection", `${e.titre}${e.poste ? ` — poste de ${e.poste}` : ''}`, false, auteur);
+      d.texte(`Le scrutin électronique organisé par le Parlement JPV (lycée Jean-Pierre Vernant, Sèvres) pour l'élection « ${e.titre} »${e.poste ? ` au poste de ${e.poste}` : ''} s'est tenu du ${date(e.ouverture, true)} au ${date(e.fermeture, true)}. Le vote était secret ; chaque membre ne pouvait voter qu'une fois.`, '', 10.5);
+      d.espace(8);
+      d.fiche([['Membres inscrits', String(nbM || 0)], ['Votants', String(nbV || 0)], ['Participation', nbM ? pc(nbV || 0, nbM) : '—'], ['Bulletins blancs', String(blancs)], ['Suffrages exprimés', String(exprimes)]]);
+      d.titreSection('Voix obtenues');
+      d.tableau(['Candidat·e', 'Voix', '% des votes'], [0.55, 0.2, 0.25], (cands || []).map((c) => [{ t: c.nom, gras: c.voix === max && max > 0 }, String(c.voix), pc(c.voix, total)]), 'Aucun candidat.');
+      d.titreSection('Proclamation');
+      d.texte(g.length === 1 ? `${g[0].nom} est déclaré·e élu·e${e.poste ? ` au poste de ${e.poste}` : ''} avec ${max} voix sur ${total}.` : g.length > 1 ? `Égalité entre ${g.map((x) => x.nom).join(' et ')} (${max} voix chacun·e) : le bureau statue selon le règlement.` : 'Aucun candidat élu.', '', 11);
+      d.espace(16);
+      d.texte(`Fait à Sèvres, le ${date(new Date().toISOString())}.`, '', 10); d.espace(12);
+      d.titreSection('Signatures');
+      const signataires = (bur || []).filter((p) => p.poste).slice(0, 3);
+      const lignesS = (signataires.length ? signataires : [{ prenom: '', nom: '', poste: 'Président·e du Parlement' }, { prenom: '', nom: '', poste: 'Secrétaire du bureau' }] as any[])
+        .map((p: any) => [{ t: `${p.prenom} ${p.nom}`.trim() || '……………………', gras: true }, p.poste, '\n\n\n']);
+      d.tableau(['Nom', 'Fonction', 'Signature'], [0.32, 0.3, 0.38], lignesS);
+      d.espace(6); d.texte('Signature du professeur référent : ……………………………………', '', 10);
+      fichier = `pv-election-${slug(e.titre)}.pdf`; quoi = `le PV de l'élection « ${e.titre} »`;
+    }
+
+    else if (['rapport-annuel', 'registre', 'assiduite', 'recueil'].includes(b.type)) {
+      const now = new Date(); const an = now.getMonth() >= 8 ? now.getFullYear() : now.getFullYear() - 1;
+      const debut = new Date(Date.UTC(an, 8, 1)).toISOString(); const annee = `${an}-${an + 1}`;
+
+      if (b.type === 'registre') {
+        const { data: j } = await db.from('journal').select('at, acteur_nom, categorie, resume').gte('at', debut).order('at', { ascending: true }).limit(3000);
+        d = await DocPdf.creer('Registre des décisions du bureau', `Année ${annee} · ${(j || []).length} entrées`, true, auteur);
+        d.texte("Extrait du journal de l'espace bureau : chaque action du bureau y est enregistrée automatiquement, datée et attribuée.", '', 9); d.espace(6);
+        const cats = new Map<string, any[]>(); for (const l of j || []) cats.set(l.categorie || 'Divers', [...(cats.get(l.categorie || 'Divers') || []), l]);
+        d.fiche([...cats.entries()].sort((a, b) => b[1].length - a[1].length).slice(0, 6).map(([c, l]) => [c, String(l.length)] as [string, string]));
+        d.titreSection('Registre chronologique');
+        d.tableau(['Date', 'Par', 'Rubrique', 'Décision / action'], [0.15, 0.18, 0.15, 0.52], (j || []).map((l) => [date(l.at, true), l.acteur_nom || '—', l.categorie || '—', l.resume]), 'Aucune entrée cette année.');
+        fichier = `registre-bureau-${annee}.pdf`; quoi = 'le registre des décisions du bureau';
+      }
+
+      else if (b.type === 'recueil') {
+        const [{ data: mo }, { data: mv }, { data: id }] = await Promise.all([
+          db.from('motions').select('id, texte, contexte, auteur_nom, statut, created_at').order('created_at', { ascending: false }),
+          db.from('motion_votes').select('motion_id'),
+          db.from('idees').select('texte, categorie, statut, reponse, created_at').order('created_at', { ascending: false }),
+        ]);
+        const nv = new Map<string, number>(); for (const v of mv || []) nv.set(v.motion_id, (nv.get(v.motion_id) || 0) + 1);
+        const st = (x: string) => ({ proposee: 'Proposée', retenue: 'Retenue', debattue: 'Débattue', refusee: 'Refusée', rejetee: 'Rejetée', nouvelle: 'Nouvelle', en_cours: 'En cours', faite: 'Réalisée', realisee: 'Réalisée', acceptee: 'Acceptée' } as Record<string, string>)[x] || x || '—';
+        d = await DocPdf.creer('Recueil des motions et des idées', `${(mo || []).length} motions · ${(id || []).length} idées · au ${date(now.toISOString())}`, false, auteur);
+        d.titreSection(`Motions proposées (${(mo || []).length})`);
+        d.tableau(['Motion', 'Proposée par', 'Soutiens', 'Statut', 'Date'], [0.46, 0.17, 0.1, 0.12, 0.15], (mo || []).sort((a, b) => (nv.get(b.id) || 0) - (nv.get(a.id) || 0)).map((m) => [{ t: m.texte, gras: true }, m.auteur_nom || '—', String(nv.get(m.id) || 0), st(m.statut), date(m.created_at)]), 'Aucune motion.');
+        d.titreSection(`Boîte à idées (${(id || []).length})`);
+        d.texte("Les idées sont anonymes.", '', 8.5); d.espace(4);
+        d.tableau(['Idée', 'Catégorie', 'Statut', 'Réponse du bureau'], [0.4, 0.14, 0.12, 0.34], (id || []).map((i) => [i.texte, i.categorie || '—', st(i.statut), i.reponse || '—']), 'Aucune idée.');
+        fichier = `recueil-motions-idees-${now.toISOString().slice(0, 10)}.pdf`; quoi = 'le recueil des motions et des idées';
+      }
+
+      else {
+        const [{ data: ev }, { data: adh }, { data: profs }, { data: pres }, { data: el }, { data: evo }, { data: so }, { data: sd }, { data: sdr }, { data: tn }] = await Promise.all([
+          db.from('events').select('id, title, type, starts_at, annule_at').eq('published', true).gte('starts_at', debut).lte('starts_at', now.toISOString()).order('starts_at'),
+          db.from('adhesions').select('user_id, created_at').not('user_id', 'is', null),
+          db.from('profiles').select('id, prenom, nom, niveau, classe_num, classe, banni'),
+          db.from('presences').select('event_key, user_id, statut'),
+          db.from('elections').select('id, titre, fermeture, publiee').gte('created_at', debut),
+          db.from('election_votants').select('election_id, user_id'),
+          db.from('sorties').select('id, titre, quand, annule_at').gte('quand', debut),
+          db.from('sondages').select('id').gte('created_at', debut),
+          db.from('sondage_reponses').select('sondage, user_id'),
+          db.from('tournois').select('nom, statut, champion').gte('created_at', debut),
+        ]);
+        const pm = new Map((profs || []).map((p) => [p.id, p]));
+        const vus = new Set<string>(); const membres = (adh || []).filter((a) => pm.has(a.user_id) && !vus.has(a.user_id) && vus.add(a.user_id));
+        const tenues = (ev || []).filter((e) => !e.annule_at);
+        const cles = new Set(tenues.map((e) => String(e.id)));
+        const presA = (pres || []).filter((p) => cles.has(p.event_key));
+        const electionsA = (el || []); const idsEl = new Set(electionsA.map((e) => e.id));
+        const votesEl = (evo || []).filter((v) => idsEl.has(v.election_id));
+
+        if (b.type === 'assiduite') {
+          const sp = new Map<string, { p: number; a: number; e: number }>();
+          for (const p of presA) if (p.user_id) { const o = sp.get(p.user_id) || { p: 0, a: 0, e: 0 }; p.statut === 'present' ? o.p++ : p.statut === 'excuse' ? o.e++ : o.a++; sp.set(p.user_id, o); }
+          const ve = new Map<string, number>(); for (const v of votesEl) ve.set(v.user_id, (ve.get(v.user_id) || 0) + 1);
+          const sondA = new Set((sd || []).map((x) => x.id)); const vs = new Map<string, number>(); for (const r of sdr || []) if (sondA.has(r.sondage)) vs.set(r.user_id, (vs.get(r.user_id) || 0) + 1);
+          const lignes = membres.map((a) => { const p: any = pm.get(a.user_id); const o = sp.get(a.user_id) || { p: 0, a: 0, e: 0 }; return { p, o, ve: ve.get(a.user_id) || 0, vs: vs.get(a.user_id) || 0 }; })
+            .sort((x, y) => y.o.p - x.o.p || `${x.p.nom}`.localeCompare(`${y.p.nom}`, 'fr'));
+          d = await DocPdf.creer('Assiduité des membres', `Année ${annee} · ${tenues.length} séance${tenues.length > 1 ? 's' : ''} · ${electionsA.length} élection${electionsA.length > 1 ? 's' : ''} · ${(sd || []).length} sondage${(sd || []).length > 1 ? 's' : ''}`, true, auteur);
+          d.texte("Présences relevées à l'appel des séances, participation aux élections et aux sondages depuis le 1er septembre. Le taux de présence porte sur les séances où le membre était inscrit à l'appel.", '', 9); d.espace(6);
+          d.tableau(['Membre', 'Classe', 'Présent', 'Absent', 'Excusé', 'Taux', 'Élections', 'Sondages'], [0.24, 0.12, 0.09, 0.09, 0.09, 0.1, 0.13, 0.14],
+            lignes.map(({ p, o, ve: e, vs: s2 }) => { const t = o.p + o.a + o.e; const taux = t ? Math.round((o.p / t) * 100) : null; return [{ t: `${p.prenom} ${p.nom}`, gras: true }, classeDe(p), String(o.p), { t: String(o.a), couleur: o.a >= 3 ? C.rouge : C.texte }, String(o.e), taux === null ? '—' : { t: `${taux} %`, couleur: taux < 50 ? C.rouge : taux >= 80 ? C.vert : C.texte }, `${e} / ${electionsA.length}`, `${s2} / ${(sd || []).length}`]; }), 'Aucun membre.');
+          fichier = `assiduite-membres-${annee}.pdf`; quoi = "l'assiduité des membres";
+        } else {
+          const nbP = presA.filter((p) => p.statut === 'present').length;
+          const seancesAvecAppel = new Set(presA.map((p) => p.event_key)).size;
+          const nouveaux = membres.filter((a) => a.created_at >= debut).length;
+          const partEl = electionsA.length && membres.length ? Math.round((votesEl.length / (electionsA.length * membres.length)) * 100) : null;
+          const parSeance = new Map<string, number>(); for (const p of presA) if (p.statut === 'present') parSeance.set(p.event_key, (parSeance.get(p.event_key) || 0) + 1);
+          const top = tenues.map((e) => ({ e, n: parSeance.get(String(e.id)) || 0 })).sort((a, b) => b.n - a.n)[0];
+          const niv = (n: string) => membres.filter((a) => (pm.get(a.user_id) as any)?.niveau === n).length;
+          d = await DocPdf.creer("Rapport d'activité", `Parlement JPV · année ${annee} · au ${date(now.toISOString())}`, false, auteur);
+          d.fiche([['Membres', String(membres.length)], ['Nouveaux membres', String(nouveaux)], ['Séances tenues', String(tenues.length)], ['Présence moyenne', seancesAvecAppel ? `${Math.round(nbP / seancesAvecAppel)} par séance` : '—'], ['Élections', String(electionsA.length)], ['Participation aux élections', partEl === null ? '—' : `${partEl} %`], ['Sondages', String((sd || []).length)], ['Sorties', String((so || []).filter((x) => !x.annule_at).length)]]);
+          d.titreSection('Composition');
+          const tm = membres.length; ['Seconde', 'Première', 'Terminale'].forEach((n) => d.barre(n, niv(n), tm, `${niv(n)} · ${pc(niv(n), tm)}`));
+          d.titreSection('Faits marquants');
+          const faits: string[] = [];
+          if (top && top.n) faits.push(`Séance la plus suivie : « ${top.e.title} » (${top.n} présents, ${date(top.e.starts_at)}).`);
+          for (const e of electionsA.filter((x) => x.publiee)) faits.push(`Élection « ${e.titre} » (clôture le ${date(e.fermeture)}).`);
+          for (const t of tn || []) faits.push(`Tournoi « ${t.nom} »${t.champion && pm.get(t.champion) ? ` — champion·ne : ${(pm.get(t.champion) as any).prenom} ${(pm.get(t.champion) as any).nom}` : ''}.`);
+          for (const x of (so || []).filter((x) => !x.annule_at)) faits.push(`Sortie « ${x.titre} » (${date(x.quand)}).`);
+          if (!faits.length) d.texte(null, 'Rien à signaler pour le moment.'); else faits.forEach((f) => { d.place(20); d.texte(`- ${f}`, '', 10); });
+          d.titreSection('Séances de l\'année');
+          d.tableau(['Date', 'Séance', 'Type', 'Présents'], [0.16, 0.5, 0.18, 0.16], (ev || []).map((e) => [date(e.starts_at), { t: e.title + (e.annule_at ? ' (annulée)' : ''), gras: !e.annule_at }, e.type, e.annule_at ? '—' : String(parSeance.get(String(e.id)) ?? '—')]), 'Aucune séance pour le moment.');
+          fichier = `rapport-activite-${annee}.pdf`; quoi = "le rapport d'activité";
+        }
+      }
     }
 
     else return err(400, 'Type de document inconnu.');

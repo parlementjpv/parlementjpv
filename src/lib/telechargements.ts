@@ -21,8 +21,9 @@ export async function envoyerParEmail(token: string, docs: Record<string, unknow
   finally { if (btn) { btn.disabled = false; btn.textContent = t0 || ''; } }
 }
 
-const ligne = (titre: string, sous: string, corps: Record<string, unknown>, libelle: string) =>
-  `<div class="tl-l"><div><strong>${esc(titre)}</strong><br><span class="small muted">${sous}</span></div><button type="button" class="btn btn-outline btn-sm tl-b" data-c='${esc(JSON.stringify(corps))}' data-l="${esc(libelle)}">Envoyer par email</button></div>`;
+const bouton = (corps: Record<string, unknown>, libelle: string, texte = 'Envoyer par email') => `<button type="button" class="btn btn-outline btn-sm tl-b" data-c='${esc(JSON.stringify(corps))}' data-l="${esc(libelle)}">${texte}</button>`;
+const ligne = (titre: string, sous: string, corps: Record<string, unknown>, libelle: string, extra = '') =>
+  `<div class="tl-l"><div><strong>${esc(titre)}</strong><br><span class="small muted">${sous}</span></div><div class="flex" style="gap:6px;flex-wrap:wrap;justify-content:flex-end;">${extra}${bouton(corps, libelle, extra ? 'Fiche' : 'Envoyer par email')}</div></div>`;
 
 export function initTelechargements(sb: SupabaseClient) {
   let charge = false;
@@ -33,9 +34,9 @@ export function initTelechargements(sb: SupabaseClient) {
       sb.from('sondages').select('id, question, created_at, fin, clos').order('created_at', { ascending: false }),
       sb.from('sorties').select('id, titre, quand, annule_at').order('quand', { ascending: false }),
     ]);
-    $('tlSeances').innerHTML = (ev || []).map((e) => ligne(e.title, `${esc(e.type)} · ${jour(e.starts_at)}${e.annule_at ? ' · annulée' : ''}`, { type: 'seance', id: e.id }, `Fiche de séance — ${e.title}`)).join('') || '<p class="small muted">Aucune séance.</p>';
+    $('tlSeances').innerHTML = (ev || []).map((e) => ligne(e.title, `${esc(e.type)} · ${jour(e.starts_at)}${e.annule_at ? ' · annulée' : ''}`, { type: 'seance', id: e.id }, `Fiche de séance — ${e.title}`, new Date(e.starts_at) <= new Date() ? bouton({ type: 'compte-rendu', id: e.id }, `Compte rendu — ${e.title}`, 'Compte rendu') : '')).join('') || '<p class="small muted">Aucune séance.</p>';
     const pub = (el || []).filter((e) => e.publiee);
-    $('tlElections').innerHTML = pub.map((e) => ligne(e.titre, `${e.poste ? esc(e.poste) + ' · ' : ''}clos le ${e.fermeture ? jour(e.fermeture) : '—'}`, { type: 'election', id: e.id }, `Résultats — ${e.titre}`)).join('')
+    $('tlElections').innerHTML = pub.map((e) => ligne(e.titre, `${e.poste ? esc(e.poste) + ' · ' : ''}clos le ${e.fermeture ? jour(e.fermeture) : '—'}`, { type: 'election', id: e.id }, `Résultats — ${e.titre}`, bouton({ type: 'pv-election', id: e.id }, `PV d'élection — ${e.titre}`, 'PV signé'))).join('')
       || `<p class="small muted">Aucun résultat publié pour l'instant.${(el || []).length ? ' Les élections apparaissent ici une fois leurs résultats publiés.' : ''}</p>`;
     $('tlSondages').innerHTML = (sd || []).map((s) => ligne(s.question, `créé le ${jour(s.created_at)}${s.fin ? ` · fin ${jour(s.fin)}` : ''}`, { type: 'sondage', id: s.id }, `Sondage — ${s.question}`)).join('') || '<p class="small muted">Aucun sondage.</p>';
     $('tlSorties').innerHTML = (so || []).map((s) => ligne(s.titre, `${jour(s.quand)}${s.annule_at ? ' · annulée' : ''}`, { type: 'sortie', id: s.id }, `Sortie — ${s.titre}`)).join('') || '<p class="small muted">Aucune sortie.</p>';
@@ -59,5 +60,17 @@ export function initTelechargements(sb: SupabaseClient) {
     }; });
   };
   document.querySelector('[data-tab="telechargements"]')?.addEventListener('click', () => { if (!charge) { charge = true; charger(); } });
+  document.getElementById('tlComplete')?.addEventListener('click', async (ev) => {
+    const b = ev.currentTarget as HTMLButtonElement; const { data } = await sb.auth.getSession();
+    if (!confirm("L'archive complète contient tous les documents (une trentaine de PDF) : l'envoi peut prendre 1 à 2 minutes. Continuer ?")) return;
+    const t0 = b.textContent; b.disabled = true; b.textContent = 'Préparation… (1-2 min)';
+    try {
+      const r = await fetch(api('/api/archive-pdf'), { method: 'POST', headers: { Authorization: `Bearer ${data.session?.access_token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ complete: true }) });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok || !d.ok) throw new Error(d.error || `Envoi impossible (erreur ${r.status}).`);
+      alert(`Archive complète envoyée à ${d.a} (${d.documents} documents${d.echecs ? `, ${d.echecs} en échec` : ''}).\n\nMot de passe : Archives, ligne du ${d.heure}.`);
+      document.dispatchEvent(new CustomEvent('archives:maj'));
+    } catch (e) { alert((e as Error).message); } finally { b.disabled = false; b.textContent = t0; }
+  });
   document.addEventListener('archives:maj', () => { if (charge) chargerArchives(); });
 }
