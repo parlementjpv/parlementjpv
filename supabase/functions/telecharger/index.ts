@@ -54,9 +54,10 @@ Deno.serve(async (req) => {
       const ids = (vot || []).map((v) => v.user_id);
       const { data: profs } = ids.length ? await db.from('profiles').select('id, prenom, nom, niveau, classe_num, classe').in('id', ids) : { data: [] as any[] };
       const exprimes = (cands || []).reduce((a, c) => a + c.voix, 0), total = exprimes + (e.blancs || 0);
+      const { count: nbMembres } = await db.from('adhesions').select('*', { count: 'exact', head: true }).not('user_id', 'is', null);
       const max = Math.max(0, ...(cands || []).map((c) => c.voix));
       d = await DocPdf.creer(`Résultats — ${e.titre}`, `Élection${e.poste ? ` au poste de ${e.poste}` : ''} · scrutin clos le ${date(e.fermeture, true)}`, true, auteur);
-      d.fiche([['Votants', String(ids.length)], ['Suffrages exprimés', String(exprimes)], ['Votes blancs', String(e.blancs || 0)], ['Participation', `${ids.length} membre${ids.length > 1 ? 's' : ''}`], ['Ouverture', date(e.ouverture, true)], ['Clôture', date(e.fermeture, true)]]);
+      d.fiche([['Votants', String(ids.length)], ['Suffrages exprimés', String(exprimes)], ['Votes blancs', String(e.blancs || 0)], ['Participation', nbMembres ? `${Math.round((ids.length / nbMembres) * 100)} % des ${nbMembres} membres` : '—'], ['Ouverture', date(e.ouverture, true)], ['Clôture', date(e.fermeture, true)]]);
       d.titreSection('Résultats');
       for (const c of cands || []) d.barre(c.nom, c.voix, total, `${c.voix} voix · ${pc(c.voix, total)}`, c.voix === max && max > 0);
       d.barre('Votes blancs', e.blancs || 0, total, `${e.blancs || 0} · ${pc(e.blancs || 0, total)}`);

@@ -53,7 +53,7 @@ export class DocPdf {
     this.pg.drawLine({ start: { x: M, y: H - 86 }, end: { x: W - M, y: H - 86 }, thickness: 1, color: C.ligne });
     this.y = H - 112;
     if (premiere) {
-      this.pg.drawText(this.p(this.bold, this.titre), { x: M, y: this.y, size: 22, font: this.bold, color: C.nuit }); this.y -= 22;
+      for (const l of this.couper(this.bold, this.titre, 21, W - 2 * M)) { this.pg.drawText(l, { x: M, y: this.y, size: 21, font: this.bold, color: C.nuit }); this.y -= 25; }
       if (this.sousTitre) for (const l of this.couper(this.reg, this.sousTitre, 11.5, W - 2 * M)) { this.pg.drawText(l, { x: M, y: this.y, size: 11.5, font: this.reg, color: C.rouge }); this.y -= 15; }
       this.y -= 14;
     } else {
