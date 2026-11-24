@@ -63,7 +63,30 @@ async function envoyer(db: ReturnType<typeof admin>, demandes: [string, any][], 
   return { ok: true as const, documents: liste.length, echecs, taille: contenu.length, a: dest, heure: `${jour} à ${heure}` };
 }
 
-Deno.serve(async (req) => {
+/** Tous les documents du bureau, rangés par dossier. */
+async function listeComplete(db: ReturnType<typeof admin>): Promise<[string, any][]> {
+  const il_y_a = new Date(Date.now() - 60 * 86400000).toISOString();
+  const [{ data: el }, { data: sd }, { data: so }, { data: ev }] = await Promise.all([
+    db.from('elections').select('id').eq('publiee', true),
+    db.from('sondages').select('id'),
+    db.from('sorties').select('id').gte('quand', il_y_a),
+    db.from('events').select('id, starts_at').gte('starts_at', il_y_a),
+  ]);
+  const passees = (ev || []).filter((e) => e.starts_at <= new Date().toISOString());
+  return [
+    ['01-Bilan', { type: 'rapport-annuel' }], ['01-Bilan', { type: 'registre' }], ['01-Bilan', { type: 'assiduite' }], ['01-Bilan', { type: 'recueil' }],
+    ['02-Membres', { type: 'membres' }], ['03-Candidatures', { type: 'candidatures' }], ['04-Certificats', { type: 'certificats' }],
+    ...(el || []).flatMap((e) => [['05-Elections', { type: 'election', id: e.id }], ['05-Elections', { type: 'pv-election', id: e.id }]] as [string, any][]),
+    ...(ev || []).map((e) => ['06-Seances', { type: 'seance', id: e.id }] as [string, any]),
+    ...passees.map((e) => ['07-Comptes-rendus', { type: 'compte-rendu', id: e.id }] as [string, any]),
+    ...(sd || []).map((s) => ['08-Sondages', { type: 'sondage', id: s.id }] as [string, any]),
+    ...(so || []).map((s) => ['09-Sorties', { type: 'sortie', id: s.id }] as [string, any]),
+  ];
+}
+
+Deno.serve(async (req) => { try { return await traiter(req); } catch (e) { console.error(e); return json(req, 500, { error: 'Erreur serveur : ' + String((e as Error)?.message || e).slice(0, 200) }); } });
+
+async function traiter(req: Request): Promise<Response> {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors(req) });
   if (req.method !== 'POST') return json(req, 405, { error: 'Méthode non autorisée' });
   const secret = Deno.env.get('BACKUP_SECRET');
@@ -104,4 +127,4 @@ Deno.serve(async (req) => {
   if (!r.ok) return json(req, 500, { error: r.error });
   await journal(me.user.id, 'Téléchargements', `a envoyé par email (ZIP chiffré) : ${libelle}`);
   return json(req, 200, r);
-});
+}
