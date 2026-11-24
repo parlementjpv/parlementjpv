@@ -14,6 +14,7 @@ export async function envoyerParEmail(token: string, docs: Record<string, unknow
     const r = await fetch(api('/api/archive-pdf'), { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(complet ? { complet: true } : { docs, libelle }) });
     const d = await r.json().catch(() => ({}));
     if (!r.ok || !d.ok) throw new Error(d.error || (r.status === 546 ? 'Le serveur a manqué de ressources. Réessaie dans un instant.' : `Envoi impossible (erreur ${r.status}).`));
+    if (d.enCours) { alert(`C'est parti : l'archive complète est en préparation et arrivera à ${d.a} d'ici 1 à 3 minutes.\n\nSon mot de passe apparaîtra ensuite dans Téléchargements → Archives (recharge la page).`); setTimeout(() => document.dispatchEvent(new CustomEvent('archives:maj')), 120000); return true; }
     alert(`Envoyé à ${d.a} (${d.documents} document${d.documents > 1 ? 's' : ''}, fichier chiffré).\n\nLe mot de passe est dans Téléchargements → Archives, à la ligne du ${d.heure}.`);
     document.dispatchEvent(new CustomEvent('archives:maj'));
     return true;

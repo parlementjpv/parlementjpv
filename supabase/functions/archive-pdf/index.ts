@@ -26,14 +26,20 @@ async function envoyer(db: ReturnType<typeof admin>, demandes: [string, any][], 
   const mdp = motDePasse();
   const zip = new ZipWriter(new Uint8ArrayWriter(), { password: mdp, encryptionStrength: 3, zipCrypto: false, level: 0 });
   const liste: string[] = []; let echecs = 0;
-  for (const [dossier, d] of demandes) {
+  // Fabrication en parallèle (4 à la fois), chaque PDF dans son propre appel ; ajout au ZIP dans l'ordre
+  const fab = async ([dossier, d]: [string, any]) => {
     try {
       const r = await fetch(`${Deno.env.get('SUPABASE_URL')}/functions/v1/telecharger`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-sauvegarde': secret, 'x-demandeur': encodeURIComponent(o.demandePar) }, body: JSON.stringify(d) });
-      if (!r.ok || !(r.headers.get('content-type') || '').includes('application/pdf')) { echecs++; console.error('pdf', d, r.status); continue; }
-      const fichier = decodeURIComponent(r.headers.get('x-fichier') || `${d.type}.pdf`);
-      await zip.add(dossier ? `${dossier}/${fichier}` : fichier, new Uint8ArrayReader(new Uint8Array(await r.arrayBuffer())));
-      liste.push(dossier ? `${dossier} · ${fichier}` : fichier);
-    } catch (e) { echecs++; console.error(e); }
+      if (!r.ok || !(r.headers.get('content-type') || '').includes('application/pdf')) { console.error('pdf', d, r.status); return null; }
+      return { nom: decodeURIComponent(r.headers.get('x-fichier') || `${d.type}.pdf`), dossier, octets: new Uint8Array(await r.arrayBuffer()) };
+    } catch (e) { console.error(e); return null; }
+  };
+  for (let i = 0; i < demandes.length; i += 4) {
+    for (const f of await Promise.all(demandes.slice(i, i + 4).map(fab))) {
+      if (!f) { echecs++; continue; }
+      await zip.add(f.dossier ? `${f.dossier}/${f.nom}` : f.nom, new Uint8ArrayReader(f.octets));
+      liste.push(f.dossier ? `${f.dossier} · ${f.nom}` : f.nom);
+    }
   }
   if (!liste.length) return { ok: false as const, error: "Aucun document n'a pu être généré." };
   const contenu: Uint8Array = await zip.close();
@@ -80,10 +86,14 @@ Deno.serve(async (req) => {
   if (b.complet || b.complete) {
     if (role !== 'admin') return json(req, 403, { error: 'Réservé aux administrateurs.' });
     const demandePar = [me.profile?.prenom, me.profile?.nom].filter(Boolean).join(' ') || 'un administrateur';
-    const r = await envoyer(db, await listeComplete(db), { libelle: 'Archive complète (tous les documents)', demandePar, test: false, auto: false });
-    if (!r.ok) return json(req, 500, { error: r.error });
-    await journal(me.user.id, 'Téléchargements', "a envoyé par email l'archive complète (ZIP chiffré)");
-    return json(req, 200, r);
+    // Long : préparé en arrière-plan, réponse immédiate
+    const tache = (async () => {
+      const r = await envoyer(db, await listeComplete(db), { libelle: 'Archive complète (tous les documents)', demandePar, test: false, auto: false });
+      await journal(me.user.id, 'Téléchargements', r.ok ? `a envoyé par email l'archive complète (ZIP chiffré, ${r.documents} documents)` : `archive complète en échec : ${r.error}`);
+    })();
+    // @ts-ignore EdgeRuntime est fourni par Supabase
+    EdgeRuntime.waitUntil(tache);
+    return json(req, 200, { ok: true, enCours: true, a: Deno.env.get('BACKUP_EMAIL') || Deno.env.get('SMTP_USER') });
   }
   const TYPES = role === 'admin' ? ['certificats', 'certificat', 'candidatures', 'candidature', 'election', 'pv-election', 'seance', 'compte-rendu', 'membres', 'sondage', 'sortie', 'rapport-annuel', 'registre', 'assiduite', 'recueil'] : ['candidature'];
   const docs = (Array.isArray(b.docs) ? b.docs : []).slice(0, 10).filter((d: any) => d && TYPES.includes(d.type));
