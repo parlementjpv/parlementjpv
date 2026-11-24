@@ -1,5 +1,7 @@
 import { admin, json, cors, userFromRequest, readJson, journal } from '../_shared/lib.ts';
 import { DocPdf, C, date, initiale, slug } from '../_shared/pdf.ts';
+import { certificatPdf } from '../_shared/certificat.ts';
+import { PDFDocument } from 'npm:pdf-lib@1.17.1';
 
 // Rubrique « Téléchargements » : documents PDF du bureau, réservés aux administrateurs.
 // Types : candidatures, election, seance, membres, sondage, sortie.
@@ -20,6 +22,27 @@ Deno.serve(async (req) => {
   let d: DocPdf, fichier = '', quoi = '';
 
   try {
+    if (b.type === 'certificats') {
+      // Tous les certificats de membre (un par page, paysage), réunis dans un seul PDF
+      const [{ data: adh }, { data: profs }] = await Promise.all([
+        db.from('adhesions').select('user_id').not('user_id', 'is', null),
+        db.from('profiles').select('id, nom, prenom, banni'),
+      ]);
+      const pm = new Map((profs || []).map((p) => [p.id, p]));
+      const ids = [...new Set((adh || []).map((a) => a.user_id))].filter((id) => pm.has(id) && !pm.get(id)!.banni)
+        .sort((x, y) => `${pm.get(x)!.nom} ${pm.get(x)!.prenom}`.localeCompare(`${pm.get(y)!.nom} ${pm.get(y)!.prenom}`, 'fr'));
+      const recueil = await PDFDocument.create();
+      recueil.setTitle(`Certificats de membre — Parlement JPV (${ids.length})`); recueil.setAuthor('Parlement JPV'); recueil.setCreator('parlementjpv.fr');
+      const certs: (Uint8Array | null)[] = [];
+      for (let i = 0; i < ids.length; i += 4) certs.push(...(await Promise.all(ids.slice(i, i + 4).map((id) => certificatPdf(id).then((c) => c?.pdf || null).catch(() => null)))));
+      let n = 0;
+      for (const c of certs) { if (!c) continue; const src = await PDFDocument.load(c); for (const pg of await recueil.copyPages(src, src.getPageIndices())) recueil.addPage(pg); n++; }
+      if (!n) return json(req, 404, { error: 'Aucun certificat à générer.' });
+      const out = await recueil.save();
+      await journal(me.user.id, 'Téléchargements', `a téléchargé en PDF l'intégralité des certificats de membre (${n})`);
+      return new Response(out, { headers: { ...cors(req), 'Content-Type': 'application/pdf', 'Content-Disposition': `attachment; filename="certificats-membres-parlement-jpv-${new Date().toISOString().slice(0, 10)}.pdf"`, 'Cache-Control': 'no-store', 'Access-Control-Expose-Headers': 'Content-Disposition' } });
+    }
+
     if (b.type === 'candidatures') {
       let q = db.from('candidatures').select('*').order('created_at', { ascending: false });
       if (b.filtre === 'ouvertes') q = q.in('statut', ['nouvelle', 'en_cours']);
