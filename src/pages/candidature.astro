@@ -148,7 +148,7 @@ import postes from '../data/postes.json';
       const { data } = await sb.from('candidatures').select('id, type, poste, statut, created_at, motivation, experience, disponibilites, note_bureau').eq('user_id', session.user.id).order('created_at', { ascending: false });
       cands = data || [];
       if (!cands.length) { mes.classList.add('hidden'); ouvrirNouvelle(); return; }
-      mes.classList.remove('hidden'); form.classList.add('hidden');
+      mes.classList.remove('hidden'); form.classList.add('hidden'); enEdition = null;
       mes.innerHTML = cands.map((c) => {
         const modif = c.statut === 'nouvelle' || c.statut === 'en_cours';
         return `<div class="mc"><div><strong>${esc(c.type === 'bureau' ? (c.poste && c.poste !== 'Peu importe' ? c.poste : 'Tout poste') : 'Membre')}</strong><br><span class="small muted">Déposée le ${new Date(c.created_at).toLocaleDateString('fr-FR')} · <strong>${statuts[c.statut] || c.statut}</strong></span>${c.note_bureau ? `<br><span class="small">Message du bureau : ${esc(c.note_bureau)}</span>` : ''}</div>${modif ? `<button class="btn btn-outline btn-sm mc-mod" data-id="${c.id}" type="button">Modifier</button>` : ''}</div>`;
@@ -165,8 +165,9 @@ import postes from '../data/postes.json';
         btnEnvoi.disabled = false;
         if (!r.ok) { msg.innerHTML = `<div class="alert alert-err">${esc(r.error || 'La modification a échoué.')}</div>`; return; }
         form.classList.add('hidden'); done.classList.remove('hidden');
+        await charger(); done.classList.remove('hidden');
         done.innerHTML = '<div class="alert alert-ok">Ta candidature a bien été modifiée. Le bureau en est informé.</div>';
-        return charger();
+        return;
       }
       const type = String(fd.get('type'));
       const row = { user_id: session.user.id, type, poste: type === 'bureau' ? fd.get('poste') : null, prenom: fd.get('prenom'), nom: fd.get('nom'), classe: fd.get('classe'), email: fd.get('email'), motivation: fd.get('motivation'), experience: fd.get('experience') || null, disponibilites: fd.get('disponibilites') || null };
@@ -174,8 +175,8 @@ import postes from '../data/postes.json';
       if (error) { msg.innerHTML = `<div class="alert alert-err">L'envoi a échoué : ${esc(error.message)}</div>`; btnEnvoi.disabled = false; return; }
       await postJSON('/api/candidature-notify', { id: data.id }, session.access_token);
       btnEnvoi.disabled = false; form.classList.add('hidden'); done.classList.remove('hidden');
+      await charger(); done.classList.remove('hidden');
       done.innerHTML = '<div class="alert alert-ok">Candidature envoyée. Le bureau te répondra par email, et tu peux suivre son statut depuis ton espace.</div>';
-      charger();
     });
     charger();
   })();
