@@ -49,8 +49,9 @@ export async function initTableauBord(sb: SupabaseClient, me: { id: string }, is
     remplir('tdbReunion', prochaine ? dans(prochaine.quand) : '—', prochaine ? `<strong>${esc(prochaine.titre)}</strong><br>${esc(jour(prochaine.quand))}${prochaine.lieu ? ` · ${esc(prochaine.lieu)}` : ''}` : (aClore ? '' : 'Aucune réunion prévue') + (aClore ? `<span class="tk-late">${aClore} réunion${aClore > 1 ? 's' : ''} à clôturer</span>` : ''), aClore > 0);
   })();
   const cand = (async () => {
-    const { count } = await sb.from('candidatures').select('*', { count: 'exact', head: true }).in('statut', ['nouvelle', 'en_cours']);
-    const { count: nouv } = await sb.from('candidatures').select('*', { count: 'exact', head: true }).eq('statut', 'nouvelle');
+    const { data, error } = await sb.from('candidatures').select('statut').in('statut', ['nouvelle', 'en_cours']);
+    if (error) return remplir('tdbCand', '?', 'Liste indisponible');
+    const count = (data || []).length, nouv = (data || []).filter((c) => c.statut === 'nouvelle').length;
     remplir('tdbCand', String(count ?? 0), nouv ? `dont ${nouv} nouvelle${nouv > 1 ? 's' : ''}, jamais ouverte${nouv > 1 ? 's' : ''}` : 'Rien de nouveau', !!nouv);
   })();
   const sond = (async () => {
