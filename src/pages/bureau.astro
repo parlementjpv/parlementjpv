@@ -7,6 +7,7 @@ import Base from '../layouts/Base.astro';
     <a class="btn btn-outline btn-sm" href="/compte">← Mon espace</a>
   </div></div>
   <section class="section" id="app" style="display:none;"><div class="container">
+    <div class="tdb" id="tdb" aria-label="En un coup d'œil"></div>
     <nav class="bu-menu" id="buMenu" aria-label="Menu du bureau">
       <section class="bu-group"><h2 class="bu-group-t">Séances</h2><div class="bu-tiles">
         <button class="bu-tile tab" data-tab="inscr" type="button"><span class="bu-tile-t">Événements</span><span class="bu-tile-d">Créer une séance, l'annoncer, voir qui vient, annuler</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
@@ -35,6 +36,7 @@ import Base from '../layouts/Base.astro';
         <button class="bu-tile tab" data-tab="msg" type="button"><strong class="bu-count" id="sMsg">–</strong><span class="bu-tile-t">Messages reçus</span><span class="bu-tile-d">Le formulaire de contact</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
       </div></section>
       <section class="bu-group"><h2 class="bu-group-t">Entre nous</h2><div class="bu-tiles">
+        <button class="bu-tile tab" data-tab="reunions" type="button"><strong class="bu-count" id="sReunion">–</strong><span class="bu-tile-t">Réunions du bureau</span><span class="bu-tile-d">Ordre du jour partagé, notes, décisions et tâches attribuées</span></button>
         <button class="bu-tile tab" data-tab="entre" type="button"><span class="bu-tile-t">Entre nous</span><span class="bu-tile-d">Tâches, discussion et notes du bureau</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
       </div></section>
       <section class="bu-group hidden" id="buAdminGroup"><h2 class="bu-group-t">Administration</h2><div class="bu-tiles">
@@ -206,6 +208,19 @@ Message</pre></div>
       </div>
     </div>
     <div class="panel hidden" id="tab-motions"><div class="card" style="overflow:auto;"><p class="small muted">Motions proposées par les membres, classées par nombre de votes. « Retenue » : choisie pour une prochaine séance ; « Débattue » : déjà traitée (compte dans le profil d'orateur de son auteur).</p><div id="moList"></div></div></div>
+    <div class="panel hidden" id="tab-reunions">
+      <div class="grid ru-grid">
+        <div style="display:grid;gap:18px;align-content:start;">
+          <form class="card form" id="ruForm"><h3>Nouvelle réunion</h3>
+            <div class="field"><input name="titre" required maxlength="200" placeholder="Ex. Réunion de préparation — décembre" /></div>
+            <div class="form-row"><div class="field"><label>Date et heure</label><input name="quand" type="datetime-local" required /></div><div class="field"><label>Lieu</label><input name="lieu" maxlength="200" placeholder="CDI, salle B12, visio…" /></div></div>
+            <div class="field"><textarea name="odj" maxlength="10000" style="min-height:70px;" placeholder="Ordre du jour (modifiable ensuite par tout le bureau)"></textarea></div>
+            <button class="btn btn-primary btn-sm" type="submit">Créer la réunion</button></form>
+          <div class="card" id="ruListe"><p class="small muted">Chargement…</p></div>
+        </div>
+        <div class="card" id="ruDetail"><p class="muted">Choisis une réunion ou crée-en une.</p></div>
+      </div>
+    </div>
     <div class="panel hidden" id="tab-entre">
       <p class="small muted">Réservé au bureau · <span id="enEquipe"></span></p>
       <div class="grid ev-admin">
@@ -429,6 +444,21 @@ Message</pre></div>
   .tb-gagne { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
   .nb-apercu { display: grid; gap: 2px; padding: 12px 14px; border: 2px solid var(--nuit); background: var(--pierre); font-size: 0.95rem; }
   .nb-app { font-size: 0.75rem; font-weight: 800; color: var(--rouge); }
+  .tdb { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-bottom: 28px; }
+  .tdb-c { display: grid; align-content: start; gap: 4px; text-align: left; padding: 16px 18px; border: 2px solid var(--nuit); background: var(--nuit); color: var(--blanc); font: inherit; cursor: pointer; transition: transform .15s ease; }
+  .tdb-c:hover { transform: translateY(-2px); }
+  .tdb-c:focus-visible { outline: 3px solid var(--rouge); outline-offset: 3px; }
+  .tdb-t { font-size: .85rem; font-weight: 700; opacity: .75; }
+  .tdb-v { font-size: 1.9rem; font-weight: 800; line-height: 1.05; }
+  .tdb-d { opacity: .9; line-height: 1.4; }
+  .tdb-c.tdb-alerte { border-color: var(--rouge); box-shadow: inset 8px 0 0 var(--rouge); }
+  .tdb-c .tk-late { color: #ffb3bb; font-weight: 700; }
+  .ru-grid { grid-template-columns: minmax(260px, 1fr) 2fr; gap: 24px; align-items: start; }
+  @media (max-width: 860px) { .ru-grid { grid-template-columns: 1fr; } }
+  .ru-l { display: grid; gap: 2px; width: 100%; text-align: left; padding: 10px 12px; margin-bottom: 6px; border: 2px solid var(--pierre); border-left: 6px solid var(--nuit); background: var(--blanc); font: inherit; color: inherit; cursor: pointer; }
+  .ru-l:hover, .ru-l.actif { background: var(--pierre); }
+  .ru-dec { margin: 8px 0 10px; padding-left: 22px; } .ru-dec li { margin-bottom: 6px; }
+  .ru-tk { padding: 6px 0; border-bottom: 1px solid var(--pierre); } .ru-tk.fait strong { text-decoration: line-through; opacity: .6; }
   .bu-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
   .bu-tile { position: relative; display: grid; align-content: start; gap: 6px; text-align: left; min-height: 150px; padding: 22px 22px 18px; border: 3px solid var(--nuit); border-left-width: 10px; background: var(--blanc); color: var(--nuit); font: inherit; cursor: pointer; transition: transform 0.15s ease, background 0.15s ease; }
   .bu-tile:hover { transform: translateY(-3px); background: var(--pierre); }
@@ -590,6 +620,8 @@ Message</pre></div>
   import { initEtat } from '../lib/etat';
   import { initBoite } from '../lib/boite';
   import { initTelechargements } from '../lib/telechargements';
+  import { initReunions } from '../lib/reunions';
+  import { initTableauBord } from '../lib/tableau-bord';
   import postesData from '../data/postes.json';
   const POSTES = (postesData as { titre: string }[]).map((p) => p.titre);
   (async () => {
@@ -606,6 +638,8 @@ Message</pre></div>
     const cMem = idx('membres'), cAdh = idx('adhesions'), cSg = idx('signups'), cCand = idx('candidatures');
     const contact = (c?: { email: string | null; telephone: string | null }) => !c ? '' : `${c.email ? `<a href="mailto:${esc(c.email)}">${esc(c.email)}</a>` : ''}${c.telephone ? `${c.email ? '<br>' : ''}<a href="tel:${esc(c.telephone)}">${esc(c.telephone)}</a>` : ''}`;
     initBureauPlus(sb, session, me as any).catch((e) => console.error(e));
+    try { initReunions(sb, { id: session.user.id }, isAdmin); } catch (e) { console.error(e); }
+    initTableauBord(sb, { id: session.user.id }, isAdmin).catch((e) => console.error(e));
     initTournoi(sb, session).catch((e) => console.error(e));
     try { initVie(sb, session); } catch (e) { console.error(e); }
     if (isAdmin) {
@@ -632,8 +666,8 @@ Message</pre></div>
     const ouvrir = (k: string | null, push = true) => {
       const tile = k ? document.querySelector<HTMLButtonElement>(`.bu-tile[data-tab="${k}"]`) : null;
       document.querySelectorAll('.panel').forEach((p) => p.classList.add('hidden'));
-      if (!tile) { menu.classList.remove('hidden'); bar.classList.add('hidden'); if (push) history.pushState(null, '', location.pathname); return; }
-      menu.classList.add('hidden'); bar.classList.remove('hidden');
+      if (!tile) { menu.classList.remove('hidden'); document.getElementById('tdb')?.classList.remove('hidden'); bar.classList.add('hidden'); if (push) history.pushState(null, '', location.pathname); return; }
+      menu.classList.add('hidden'); document.getElementById('tdb')?.classList.add('hidden'); bar.classList.remove('hidden');
       document.getElementById('buTitle')!.textContent = tile.querySelector('.bu-tile-t')!.textContent;
       document.getElementById(`tab-${k}`)!.classList.remove('hidden');
       if (push) history.pushState(null, '', `#${k}`);

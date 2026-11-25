@@ -119,7 +119,7 @@ async function traiter(req: Request): Promise<Response> {
     EdgeRuntime.waitUntil(tache);
     return json(req, 200, { ok: true, enCours: true, a: Deno.env.get('BACKUP_EMAIL') || Deno.env.get('SMTP_USER') });
   }
-  const TYPES = role === 'admin' ? ['certificats', 'certificat', 'candidatures', 'candidature', 'election', 'pv-election', 'seance', 'compte-rendu', 'membres', 'sondage', 'sortie', 'rapport-annuel', 'registre', 'assiduite', 'recueil'] : ['candidature'];
+  const TYPES = role === 'admin' ? ['certificats', 'certificat', 'candidatures', 'candidature', 'election', 'pv-election', 'seance', 'compte-rendu', 'membres', 'sondage', 'sortie', 'rapport-annuel', 'registre', 'assiduite', 'recueil', 'reunion'] : ['candidature', 'reunion'];
   const docs = (Array.isArray(b.docs) ? b.docs : []).slice(0, 10).filter((d: any) => d && TYPES.includes(d.type));
   if (!docs.length) return json(req, 403, { error: 'Document non autorisé.' });
   const libelle = String(b.libelle || 'Document du bureau').slice(0, 140);

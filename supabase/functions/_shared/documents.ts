@@ -386,6 +386,27 @@ export async function genererDocument(db: ReturnType<typeof admin>, b: any, aute
       }
     }
 
+    else if (b.type === 'reunion') {
+      const { data: r } = await db.from('bureau_reunions').select('*').eq('id', b.id).maybeSingle();
+      if (!r) return err(404, 'Réunion introuvable.');
+      const [{ data: dec }, { data: tks }, { data: prof }] = await Promise.all([
+        db.from('bureau_decisions').select('texte, created_at').eq('reunion_id', r.id).order('created_at'),
+        db.from('bureau_taches').select('titre, assigne_a, echeance, statut').eq('reunion_id', r.id).order('created_at'),
+        db.from('profiles').select('id, prenom, nom').in('role', ['bureau', 'admin']),
+      ]);
+      const nom = (id: string | null) => { const p = (prof || []).find((x) => x.id === id); return p ? `${p.prenom} ${p.nom}` : '—'; };
+      d = await DocPdf.creer(`Réunion du bureau — ${r.titre}`, `${date(r.quand, true)}${r.lieu ? ` · ${r.lieu}` : ''} · ${r.statut === 'terminee' ? 'compte rendu' : 'en préparation'}`, true, auteur);
+      d.fiche([['Décisions', String((dec || []).length)], ['Tâches', String((tks || []).length)], ['Statut', r.statut === 'terminee' ? 'Clôturée' : 'Prévue']]);
+      d.titreSection('Ordre du jour'); d.texte(r.ordre_du_jour || null, 'Aucun ordre du jour.', 10); d.espace();
+      d.titreSection('Notes'); d.texte(r.notes || null, 'Aucune note.', 9.5); d.espace();
+      d.titreSection('Décisions');
+      if (!(dec || []).length) d.texte(null, 'Aucune décision enregistrée.');
+      (dec || []).forEach((x, i) => { d.place(24); d.texte(`${i + 1}. ${x.texte}`, '', 10.5); d.espace(4); });
+      d.titreSection('Tâches attribuées');
+      d.tableau(['Tâche', 'Responsable', 'Échéance', 'Statut'], [0.44, 0.22, 0.16, 0.18], (tks || []).map((t) => [{ t: t.titre, gras: true }, nom(t.assigne_a), t.echeance ? date(t.echeance + 'T12:00:00Z') : '—', t.statut === 'fait' ? { t: 'Fait', couleur: C.vert } : t.statut === 'en_cours' ? 'En cours' : 'À faire']), 'Aucune tâche.');
+      fichier = `reunion-bureau-${slug(r.titre)}-${String(r.quand).slice(0, 10)}.pdf`; quoi = `le compte rendu de la réunion « ${r.titre} »`;
+    }
+
     else return err(400, 'Type de document inconnu.');
   } catch (e) { console.error(e); return err(500, 'Le PDF n\'a pas pu être généré.'); }
   return { pdf: await d!.finir(), fichier, quoi };

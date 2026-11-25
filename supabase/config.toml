@@ -94,3 +94,6 @@ verify_jwt = false
 
 [functions.archive-pdf]
 verify_jwt = false
+
+[functions.bureau-rappels]
+verify_jwt = false

@@ -34,14 +34,23 @@ Deno.serve(async (req) => {
       if (!lock?.length) continue;
     }
     const { data: inscrits } = await db.from('event_signups').select('prenom, email, user_id, camp, jeton').eq('event_key', ev.id).eq('reponse', 'oui');
+    const { data: args } = await db.from('camp_posts').select('camp, titre, contenu, auteur_nom, retenu').eq('event_key', ev.id).eq('kind', 'argument').order('retenu', { ascending: false }).order('created_at');
+    const blocCamp = (camp: string) => {
+      const a = (args || []).filter((x) => x.camp === camp).slice(0, 6);
+      return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:14px 0;"><tr><td style="border-left:4px solid #d62839;background:#fdf6f6;border-radius:6px;padding:14px 16px;">
+        <strong style="font-size:16px;">Tu es attendu·e dans le camp « ${esc(camp)} »</strong>
+        ${a.length ? `<p style="margin:8px 0 6px;font-size:14px;">Les arguments déjà préparés par ton camp :</p><ol style="margin:0;padding-left:20px;font-size:14px;">${a.map((x) => `<li style="margin-bottom:6px;"><strong>${esc(x.titre || x.contenu.slice(0, 80))}</strong>${x.titre ? `<br><span style="color:#4a5370;">${esc(x.contenu.slice(0, 220))}${x.contenu.length > 220 ? '…' : ''}</span>` : ''}${x.retenu ? ' <span style="color:#1d7a46;font-size:12px;">· retenu</span>' : ''}</li>`).join('')}</ol>${(args || []).filter((x) => x.camp === camp).length > 6 ? '<p style="font-size:13px;color:#5d6477;margin:6px 0 0;">… et d\'autres dans la salle du camp.</p>' : ''}`
+          : `<p style="margin:8px 0 0;font-size:14px;">Ton camp n'a encore posté aucun argument : c'est le moment d'en proposer un !</p>`}
+      </td></tr></table>`;
+    };
     const dest = (inscrits || []).filter((s) => !seulement || seulement.includes(s.email.toLowerCase()));
     const heure = new Date(ev.starts_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' }).replace(':', 'h');
     let emails = 0;
     for (const s of dest) {
       try {
-        await sendMail({ from: FROM, to: s.email, subject: `C'est demain : ${ev.title}`,
+        await sendMail({ from: FROM, to: s.email, subject: s.camp ? `C'est demain : ${ev.title} — tu es dans le camp ${s.camp}` : `C'est demain : ${ev.title}`,
           html: layout({ title: `${s.prenom}, on se voit demain à ${heure}`, body:
-            `<p>Petit rappel : tu as confirmé ta présence à cette séance.</p>${fiche(ev, s.camp)}
+            `<p>Petit rappel : tu as confirmé ta présence à cette séance.</p>${fiche(ev, s.camp)}${s.camp ? blocCamp(s.camp) : ''}
              ${s.camp && s.jeton ? `<p>Dernière ligne droite pour préparer tes arguments avec ton camp :</p>${button(`${SITE}/salle?t=${s.jeton}`, 'Ouvrir la salle de mon camp')}` : button(lienEvenement(ev), 'Voir la séance')}
              <p style="color:#555;font-size:14px;">Tu ne peux plus venir ? <a href="${lienEvenement(ev)}" style="color:#555;">Change ta réponse en « Je ne viens pas »</a> avant le début : ça ne compte pas comme une absence.</p>` }) });
         emails++;

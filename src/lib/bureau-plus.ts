@@ -275,8 +275,11 @@ async function initEntreNous(sb: SupabaseClient, me: { id: string; prenom: strin
   }
   tkForm.addEventListener('submit', async (e) => {
     e.preventDefault(); const fd = new FormData(tkForm);
-    const { error } = await sb.from('bureau_taches').insert({ titre: String(fd.get('titre')).trim(), details: String(fd.get('details') || '').trim() || null, assigne_a: String(fd.get('assigne') || '') || null, echeance: String(fd.get('echeance') || '') || null, created_by: me.id });
-    if (error) alert(error.message); else { tkForm.reset(); loadTk(); }
+    const { data: nt, error } = await sb.from('bureau_taches').insert({ titre: String(fd.get('titre')).trim(), details: String(fd.get('details') || '').trim() || null, assigne_a: String(fd.get('assigne') || '') || null, echeance: String(fd.get('echeance') || '') || null, created_by: me.id }).select('id').single();
+    if (error) alert(error.message); else {
+      tkForm.reset(); loadTk();
+      const t = (await sb.auth.getSession()).data.session?.access_token; if (t && nt) postJSON('/api/bureau-rappels', { action: 'tache', id: nt.id }, t);
+    }
   });
   tkBox.addEventListener('click', async (e) => {
     const b = (e.target as HTMLElement).closest('button') as HTMLButtonElement | null; if (!b) return;
@@ -284,6 +287,7 @@ async function initEntreNous(sb: SupabaseClient, me: { id: string; prenom: strin
     if (b.classList.contains('tk-del')) { if (confirm('Supprimer cette tâche ?')) { await sb.from('bureau_taches').delete().eq('id', b.dataset.id!); loadTk(); } }
   });
   loadTk();
+  document.addEventListener('taches:maj', () => loadTk());
 
   // Discussion
   const chat = $('enChat'), chatForm = $('enChatForm') as HTMLFormElement, chatIn = $('enChatIn') as HTMLInputElement;
