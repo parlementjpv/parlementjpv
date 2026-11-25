@@ -8,14 +8,21 @@ import Base from '../layouts/Base.astro';
   </div></div>
   <section class="section" id="app" style="display:none;"><div class="container">
     <div class="tdb" id="tdb" aria-label="En un coup d'œil"></div>
+    <div class="bu-cherche" id="buCherche"><input id="buQ" type="search" placeholder="Chercher une rubrique (ex. sondage, appel, PDF…)" aria-label="Chercher une rubrique" autocomplete="off" /></div>
     <nav class="bu-menu" id="buMenu" aria-label="Menu du bureau">
       <section class="bu-group"><h2 class="bu-group-t">Séances</h2><div class="bu-tiles">
         <button class="bu-tile tab" data-tab="inscr" type="button"><span class="bu-tile-t">Événements</span><span class="bu-tile-d">Créer une séance, l'annoncer, voir qui vient, annuler</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
         <button class="bu-tile tab" data-tab="appel" type="button"><span class="bu-tile-t">Appel</span><span class="bu-tile-d">Pointer les présents le jour de la séance</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
+        <button class="bu-tile tab" data-tab="motions" type="button"><span class="bu-tile-t">Motions</span><span class="bu-tile-d">Les sujets proposés par les membres</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
+        <button class="bu-tile tab" data-tab="tournoi" type="button"><strong class="bu-count" id="sTournoi">–</strong><span class="bu-tile-t">Tournoi d'éloquence</span><span class="bu-tile-d">Inscriptions, tirage au sort, duels et résultats</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
+      </div></section>
+      <section class="bu-group"><h2 class="bu-group-t">Le bureau</h2><div class="bu-tiles">
+        <button class="bu-tile tab" data-tab="reunions" type="button"><strong class="bu-count" id="sReunion">–</strong><span class="bu-tile-t">Réunions du bureau</span><span class="bu-tile-d">Ordre du jour partagé, notes, décisions et tâches attribuées</span></button>
+        <button class="bu-tile tab" data-tab="entre" type="button"><span class="bu-tile-t">Entre nous</span><span class="bu-tile-d">Tâches, discussion et notes du bureau</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
       </div></section>
       <section class="bu-group"><h2 class="bu-group-t">Membres</h2><div class="bu-tiles">
         <button class="bu-tile tab" data-tab="cand" type="button"><strong class="bu-count" id="sCand">–</strong><span class="bu-tile-t">Candidatures à traiter</span><span class="bu-tile-d">Accepter ou refuser, email automatique</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
-        <button class="bu-tile tab" data-tab="archives" type="button"><span class="bu-tile-t">Archives</span><span class="bu-tile-d">Les candidatures déjà traitées</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
+        <button class="bu-tile tab" data-tab="archives" type="button"><span class="bu-tile-t">Candidatures traitées</span><span class="bu-tile-d">Les candidatures déjà traitées</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
         <button class="bu-tile tab" data-tab="adh" type="button"><strong class="bu-count" id="sMembres">–</strong><span class="bu-tile-t">Adhésions</span><span class="bu-tile-d">La liste des membres de l'instance</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
         <button class="bu-tile tab" data-tab="membres" type="button"><span class="bu-tile-t">Membres & rôles</span><span class="bu-tile-d">Rôles, postes, suspensions</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
       </div></section>
@@ -24,8 +31,6 @@ import Base from '../layouts/Base.astro';
         <button class="bu-tile tab" data-tab="sondages" type="button"><strong class="bu-count" id="sSondages">–</strong><span class="bu-tile-t">Sondages</span><span class="bu-tile-d">Demander l'avis des membres en un clic</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
         <button class="bu-tile tab" data-tab="sorties" type="button"><strong class="bu-count" id="sSorties">–</strong><span class="bu-tile-t">Sorties et visites</span><span class="bu-tile-d">Places, liste d'attente, autorisations parentales</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
         <button class="bu-tile tab" data-tab="idees" type="button"><strong class="bu-count" id="sIdees">–</strong><span class="bu-tile-t">Boîte à idées</span><span class="bu-tile-d">Messages anonymes des membres</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
-        <button class="bu-tile tab" data-tab="tournoi" type="button"><strong class="bu-count" id="sTournoi">–</strong><span class="bu-tile-t">Tournoi d'éloquence</span><span class="bu-tile-d">Inscriptions, tirage au sort, duels et résultats</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
-        <button class="bu-tile tab" data-tab="motions" type="button"><span class="bu-tile-t">Motions</span><span class="bu-tile-d">Les sujets proposés par les membres</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
       </div></section>
       <section class="bu-group"><h2 class="bu-group-t">Communication</h2><div class="bu-tiles">
         <button class="bu-tile tab bu-tile-cle" data-tab="diffuser" type="button"><span class="bu-tile-t">Diffuser une annonce</span><span class="bu-tile-d">Email, newsletter, notification, WhatsApp : tout en même temps</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
@@ -35,10 +40,6 @@ import Base from '../layouts/Base.astro';
         <button class="bu-tile tab" data-tab="ecrire" type="button"><span class="bu-tile-t">Écrire aux membres</span><span class="bu-tile-d">Un email à des membres choisis</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
         <button class="bu-tile tab" data-tab="msg" type="button"><strong class="bu-count" id="sMsg">–</strong><span class="bu-tile-t">Messages reçus</span><span class="bu-tile-d">Le formulaire de contact</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
       </div></section>
-      <section class="bu-group"><h2 class="bu-group-t">Entre nous</h2><div class="bu-tiles">
-        <button class="bu-tile tab" data-tab="reunions" type="button"><strong class="bu-count" id="sReunion">–</strong><span class="bu-tile-t">Réunions du bureau</span><span class="bu-tile-d">Ordre du jour partagé, notes, décisions et tâches attribuées</span></button>
-        <button class="bu-tile tab" data-tab="entre" type="button"><span class="bu-tile-t">Entre nous</span><span class="bu-tile-d">Tâches, discussion et notes du bureau</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
-      </div></section>
       <section class="bu-group hidden" id="buAdminGroup"><h2 class="bu-group-t">Administration</h2><div class="bu-tiles">
         <button class="bu-tile tab" data-tab="telechargements" type="button"><span class="bu-tile-t">Téléchargements</span><span class="bu-tile-d">Tous les documents PDF : candidatures, votes, séances, membres…</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
         <button class="bu-tile tab" data-tab="boite" type="button"><span class="bu-tile-t">Boîte mail <span class="bm-badge" id="bmNonLus"></span></span><span class="bu-tile-d">Lire et répondre aux emails de contact@parlementjpv.fr</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
@@ -46,6 +47,7 @@ import Base from '../layouts/Base.astro';
         <button class="bu-tile tab" data-tab="journal" type="button"><span class="bu-tile-t">Journal du bureau</span><span class="bu-tile-d">Qui a fait quoi, et quand</span><span class="bu-go" aria-hidden="true">Ouvrir</span></button>
       </div></section>
     </nav>
+    <p class="small muted hidden" id="buRien">Aucune rubrique ne correspond.</p>
     <div class="bu-bar hidden" id="buBar"><button class="btn btn-outline btn-sm" id="buBack" type="button">← Menu du bureau</button><h2 id="buTitle"></h2></div>
     <div class="panel hidden" id="tab-cand"><div class="card" style="overflow:auto;"><p class="small muted">Écris d'abord un message (facultatif), puis accepte ou refuse : le candidat reçoit automatiquement un email avec ta réponse et ton message, et la candidature passe dans les archives.</p><div id="candMsg"></div><table class="table" id="candTable"><thead><tr><th>Date</th><th>Candidat·e</th><th>Poste</th><th>Motivation</th><th>Message au candidat</th><th>Décision</th></tr></thead><tbody></tbody></table></div></div>
     <div class="panel hidden" id="tab-archives"><div class="card" style="overflow:auto;"><p class="small muted">Candidatures traitées, conservées. « Rouvrir » la remet dans les candidatures à traiter (sans envoyer d'email).</p><table class="table" id="archTable"><thead><tr><th>Décision</th><th>Candidat·e</th><th>Poste</th><th>Motivation</th><th>Message envoyé</th><th></th></tr></thead><tbody></tbody></table></div></div>
@@ -444,6 +446,25 @@ Message</pre></div>
   .tb-gagne { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
   .nb-apercu { display: grid; gap: 2px; padding: 12px 14px; border: 2px solid var(--nuit); background: var(--pierre); font-size: 0.95rem; }
   .nb-app { font-size: 0.75rem; font-weight: 800; color: var(--rouge); }
+  /* Menu compact */
+  .bu-menu { gap: 22px !important; }
+  #buMenu .bu-tile { min-height: 0; padding: 14px 16px 12px; gap: 3px; border-width: 2px; border-left-width: 7px; }
+  #buMenu .bu-tile-t { font-size: 1.08rem; padding-right: 44px; }
+  #buMenu .bu-tile-d { font-size: .84rem; line-height: 1.35; }
+  #buMenu .bu-go { display: none; }
+  #buMenu .bu-count { font-size: 1.35rem; top: 10px; right: 12px; }
+  .bu-cherche { margin: 0 0 18px; } .bu-cherche input { width: 100%; max-width: 460px; padding: 10px 14px; border: 2px solid var(--nuit); font: inherit; }
+  .bu-bar { position: sticky; top: 64px; z-index: 20; background: var(--blanc); padding: 10px 0 8px; margin-bottom: 14px; border-bottom: 2px solid var(--pierre); display: grid !important; gap: 8px; }
+  .bu-bar.hidden { display: none !important; }
+  .bu-bar-l { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .bu-bar-l h2 { margin: 0; font-size: 1.3rem; flex: 1; min-width: 160px; }
+  #buJump { padding: 7px 10px; border: 2px solid var(--nuit); font: inherit; max-width: 240px; }
+  .bu-voisins { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
+  .bu-voisins button { flex: none; padding: 5px 12px; border: 2px solid var(--nuit); background: var(--blanc); font: inherit; font-size: .88rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .bu-voisins button.actif { background: var(--nuit); color: var(--blanc); }
+  .sd-part summary { cursor: pointer; font-weight: 600; } .sd-part-g { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 8px; }
+  .sd-part-g ul { margin: 4px 0 0; padding-left: 18px; color: var(--nuit); } .sd-oui { color: #1d7a46; } .sd-non { color: var(--rouge); }
+  @media (max-width: 640px) { .sd-part-g { grid-template-columns: 1fr; } .bu-bar { top: 56px; } #buJump { max-width: 100%; flex: 1; } }
   .tdb { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-bottom: 28px; }
   .tdb-c { display: grid; align-content: start; gap: 4px; text-align: left; padding: 16px 18px; border: 2px solid var(--nuit); background: var(--nuit); color: var(--blanc); font: inherit; cursor: pointer; transition: transform .15s ease; }
   .tdb-c:hover { transform: translateY(-2px); }
@@ -459,7 +480,7 @@ Message</pre></div>
   .ru-l:hover, .ru-l.actif { background: var(--pierre); }
   .ru-dec { margin: 8px 0 10px; padding-left: 22px; } .ru-dec li { margin-bottom: 6px; }
   .ru-tk { padding: 6px 0; border-bottom: 1px solid var(--pierre); } .ru-tk.fait strong { text-decoration: line-through; opacity: .6; }
-  .bu-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+  .bu-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; }
   .bu-tile { position: relative; display: grid; align-content: start; gap: 6px; text-align: left; min-height: 150px; padding: 22px 22px 18px; border: 3px solid var(--nuit); border-left-width: 10px; background: var(--blanc); color: var(--nuit); font: inherit; cursor: pointer; transition: transform 0.15s ease, background 0.15s ease; }
   .bu-tile:hover { transform: translateY(-3px); background: var(--pierre); }
   .bu-tile:focus-visible { outline: 3px solid var(--rouge); outline-offset: 3px; }
@@ -666,15 +687,33 @@ Message</pre></div>
     const ouvrir = (k: string | null, push = true) => {
       const tile = k ? document.querySelector<HTMLButtonElement>(`.bu-tile[data-tab="${k}"]`) : null;
       document.querySelectorAll('.panel').forEach((p) => p.classList.add('hidden'));
-      if (!tile) { menu.classList.remove('hidden'); document.getElementById('tdb')?.classList.remove('hidden'); bar.classList.add('hidden'); if (push) history.pushState(null, '', location.pathname); return; }
+      if (!tile) { menu.classList.remove('hidden'); document.getElementById('tdb')?.classList.remove('hidden'); document.getElementById('buCherche')?.classList.remove('hidden'); bar.classList.add('hidden'); if (push) history.pushState(null, '', location.pathname); return; }
       menu.classList.add('hidden'); document.getElementById('tdb')?.classList.add('hidden'); bar.classList.remove('hidden');
       document.getElementById('buTitle')!.textContent = tile.querySelector('.bu-tile-t')!.textContent;
       document.getElementById(`tab-${k}`)!.classList.remove('hidden');
+      document.getElementById('buCherche')?.classList.add('hidden'); document.getElementById('buRien')?.classList.add('hidden');
+      (document.getElementById('buJump') as HTMLSelectElement).value = k!;
+      const grp = tile.closest('.bu-group')!;
+      document.getElementById('buVoisins')!.innerHTML = [...grp.querySelectorAll<HTMLButtonElement>('.bu-tile')].map((t) => `<button type="button" data-tab="${t.dataset.tab}" class="${t.dataset.tab === k ? 'actif' : ''}">${t.querySelector('.bu-tile-t')!.childNodes[0].textContent!.trim()}</button>`).join('');
       if (push) history.pushState(null, '', `#${k}`);
       window.scrollTo({ top: menu.parentElement!.offsetTop - 80 });
     };
     document.querySelectorAll<HTMLButtonElement>('.bu-tile').forEach((t) => t.addEventListener('click', () => ouvrir(t.dataset.tab!)));
     document.getElementById('buBack')!.addEventListener('click', () => ouvrir(null));
+    // « Aller à… » : toutes les rubriques visibles, par groupe
+    const jump = document.getElementById('buJump') as HTMLSelectElement;
+    const remplirJump = () => { jump.innerHTML = [...document.querySelectorAll<HTMLElement>('#buMenu .bu-group:not(.hidden)')].map((g) => `<optgroup label="${g.querySelector('.bu-group-t')!.textContent}">${[...g.querySelectorAll<HTMLButtonElement>('.bu-tile')].map((t) => `<option value="${t.dataset.tab}">${t.querySelector('.bu-tile-t')!.childNodes[0].textContent!.trim()}</option>`).join('')}</optgroup>`).join(''); };
+    remplirJump(); setTimeout(remplirJump, 1500);
+    jump.addEventListener('change', () => ouvrir(jump.value));
+    document.getElementById('buVoisins')!.addEventListener('click', (e) => { const b = (e.target as HTMLElement).closest('button') as HTMLButtonElement | null; if (b) ouvrir(b.dataset.tab!); });
+    // Recherche dans le menu
+    const q = document.getElementById('buQ') as HTMLInputElement;
+    q.addEventListener('input', () => {
+      const t = q.value.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); let n = 0;
+      document.querySelectorAll<HTMLElement>('#buMenu .bu-group').forEach((g) => { let vis = 0; g.querySelectorAll<HTMLElement>('.bu-tile').forEach((tl) => { const ok = !t || tl.textContent!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(t); tl.classList.toggle('hidden', !ok); if (ok) vis++; }); g.style.display = vis ? '' : 'none'; n += vis; });
+      document.getElementById('buRien')!.classList.toggle('hidden', n > 0);
+    });
+    q.addEventListener('keydown', (e) => { if (e.key === 'Enter') { const first = document.querySelector<HTMLButtonElement>('#buMenu .bu-group:not(.hidden) .bu-tile:not(.hidden)'); first?.click(); } });
     window.addEventListener('popstate', () => ouvrir(location.hash.slice(1) || null, false));
     ouvrir(location.hash.slice(1) || null, false);
 

@@ -1,7 +1,8 @@
 import { admin, sendMail, json, esc, layout, button, SITE, FROM, cors, readJson, userFromRequest } from '../_shared/lib.ts';
 
 // Rappels internes du bureau.
-//  - Tous les jours (pg_cron, clé serveur) : tâche à rendre demain, tâche en retard (une seule relance), réunion du lendemain.
+//  - Tous les jours (pg_cron, clé serveur) : tâche à rendre demain, tâche en retard (une seule relance), réunion du lendemain,
+//    relance unique des membres n'ayant pas répondu à un sondage (48 h avant la date limite).
 //  - Depuis l'espace bureau : { action: 'tache', id } prévient la personne à qui on vient d'attribuer une tâche ;
 //    { action: 'convoquer', id } envoie la convocation et l'ordre du jour à tout le bureau.
 type Db = ReturnType<typeof admin>;
@@ -52,6 +53,31 @@ async function mailReunion(db: Db, r: any, genre: 'convocation' | 'rappel', seul
   return n;
 }
 
+/** Relance par email les membres qui n'ont pas répondu à un sondage encore ouvert. */
+async function relanceSondage(db: Db, s: any, seulement: string | null = null) {
+  const [{ data: adh }, { data: rep }] = await Promise.all([
+    db.from('adhesions').select('user_id').not('user_id', 'is', null),
+    db.from('sondage_reponses').select('user_id').eq('sondage', s.id),
+  ]);
+  const ont = new Set((rep || []).map((r) => r.user_id));
+  const ids = [...new Set((adh || []).map((a) => a.user_id))].filter((id) => !ont.has(id));
+  const fin = s.fin ? `${dateLongue(s.fin)} à ${heure(s.fin)}` : '';
+  let n = 0;
+  for (const id of ids) {
+    const { data: u } = await db.auth.admin.getUserById(id); const { data: p } = await db.from('profiles').select('prenom, banni').eq('id', id).maybeSingle();
+    const email = u?.user?.email; if (!email || !p || p.banni || (seulement && email.toLowerCase() !== seulement)) continue;
+    try {
+      await sendMail({ from: FROM, to: email, subject: `Il te reste ${fin ? `jusqu'au ${fin}` : 'peu de temps'} pour répondre au sondage`, html: layout({ title: `${p.prenom}, ton avis compte`, body:
+        `<p>Tu n'as pas encore répondu à ce sondage du Parlement :</p>
+         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:12px 0 16px;"><tr><td style="border-left:4px solid #d62839;background:#fdf6f6;border-radius:6px;padding:14px 16px;font-size:16px;"><strong>${esc(s.question)}</strong>${fin ? `<div style="margin-top:8px;font-size:14px;color:#d62839;"><strong>Réponse avant le ${esc(fin)}</strong></div>` : ''}</td></tr></table>
+         <p>Ça prend dix secondes et le bureau en a besoin pour s'organiser.</p>${button(`${SITE}/sondages`, 'Je réponds au sondage')}
+         <p style="font-size:13px;color:#5d6477;">Tu reçois ce rappel une seule fois. Si tu as répondu entre-temps, ne tiens pas compte de ce message.</p>` }) });
+      n++;
+    } catch (e) { console.error(e); }
+  }
+  return n;
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors(req) });
   const db = admin();
@@ -60,6 +86,7 @@ Deno.serve(async (req) => {
 
   if (secret && req.headers.get('x-sauvegarde') === secret) {
     const seulement = b.seulement ? String(b.seulement).toLowerCase() : null;
+    if (b.relanceTest) { const { data: s } = await db.from('sondages').select('*').eq('id', b.relanceTest).maybeSingle(); return json(req, 200, { ok: true, emails: s ? await relanceSondage(db, s, seulement) : 0 }); }
     if (b.convoquerTest) { const { data: r } = await db.from('bureau_reunions').select('*').eq('id', b.convoquerTest).maybeSingle(); return json(req, 200, { ok: true, emails: r ? await mailReunion(db, r, 'convocation', seulement) : 0 }); }
     const auj = jourParis(new Date()), demain = jourParis(new Date(Date.now() + 86400000));
     const bilan = { veille: 0, retard: 0, reunions: 0 };
@@ -72,7 +99,17 @@ Deno.serve(async (req) => {
       const { data: lock } = await db.from('bureau_reunions').update({ rappel_at: new Date().toISOString() }).eq('id', r.id).is('rappel_at', null).select('id');
       if (lock?.length) { await mailReunion(db, r, 'rappel', seulement); bilan.reunions++; }
     }
-    return json(req, 200, { ok: true, ...bilan });
+    // Sondages ouverts : une relance des retardataires 48 h avant la date limite (ou 3 jours après la publication s'il n'y en a pas)
+    const { data: sds } = await db.from('sondages').select('*').eq('clos', false).is('relance_at', null);
+    let relances = 0;
+    for (const s of sds || []) {
+      const t = Date.now();
+      const due = s.fin ? (new Date(s.fin).getTime() > t && new Date(s.fin).getTime() - t < 48 * 3600000) : (t - new Date(s.created_at).getTime() > 3 * 86400000);
+      if (!due) continue;
+      const { data: lock } = await db.from('sondages').update({ relance_at: new Date().toISOString() }).eq('id', s.id).is('relance_at', null).select('id');
+      if (lock?.length) relances += await relanceSondage(db, s, seulement);
+    }
+    return json(req, 200, { ok: true, ...bilan, relances });
   }
 
   const me = await userFromRequest(req);
@@ -84,6 +121,15 @@ Deno.serve(async (req) => {
     const { data: t } = await db.from('bureau_taches').select('*').eq('id', b.id).maybeSingle();
     if (!t || !t.assigne_a || t.assigne_a === me.user.id) return json(req, 200, { ok: true, envoye: false });
     try { return json(req, 200, { ok: true, envoye: await mailTache(db, t, 'nouvelle', par) }); } catch { return json(req, 200, { ok: true, envoye: false }); }
+  }
+  if (b.action === 'relance-sondage') {
+    const { data: s } = await db.from('sondages').select('*').eq('id', b.id).maybeSingle();
+    if (!s) return json(req, 404, { error: 'Sondage introuvable.' });
+    if (s.clos || (s.fin && new Date(s.fin) < new Date())) return json(req, 400, { error: 'Ce sondage est clos.' });
+    const n = await relanceSondage(db, s);
+    await db.from('sondages').update({ relance_at: new Date().toISOString() }).eq('id', s.id);
+    await db.from('journal').insert({ acteur: me.user.id, acteur_nom: par, categorie: 'Sondages', resume: `a relancé ${n} membre${n > 1 ? 's' : ''} pour le sondage « ${s.question} »` });
+    return json(req, 200, { ok: true, emails: n });
   }
   if (b.action === 'convoquer') {
     const { data: r } = await db.from('bureau_reunions').select('*').eq('id', b.id).maybeSingle();

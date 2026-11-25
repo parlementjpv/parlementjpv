@@ -36,7 +36,24 @@ export function initVie(sb: SupabaseClient, session: Session) {
     $('sSondages').textContent = String(ss.filter((s) => s.ouvert).length);
     $('sdList').innerHTML = ss.length ? ss.map((s) => `<div class="card vie-item"><div class="flex between" style="gap:10px;flex-wrap:wrap;"><strong>${esc(s.question)}</strong><span class="small muted">${s.ouvert ? 'Ouvert' : 'Clos'} · ${s.votants} réponse${s.votants > 1 ? 's' : ''}</span></div>
       <div class="vie-res">${s.options.map((o: string, i: number) => { const p = s.votants ? Math.round((100 * (s.compte[i] || 0)) / s.votants) : 0; return `<div class="vie-bar"><span style="--p:${p}%"></span><em>${esc(o)}</em><b>${s.compte[i] || 0} · ${p} %</b></div>`; }).join('')}</div>
-      <div class="flex" style="gap:6px;">${s.ouvert ? `<button class="btn btn-outline btn-sm sd-clore" data-id="${s.id}" type="button">Clore</button>` : ''}<button class="btn btn-outline btn-sm sd-del" data-id="${s.id}" type="button">Supprimer</button></div></div>`).join('') : '<p class="muted">Aucun sondage.</p>';
+      <details class="sd-part" data-id="${s.id}"><summary>Qui a répondu ?</summary><div class="sd-part-c small muted">Chargement…</div></details>
+      <div class="flex" style="gap:6px;flex-wrap:wrap;">${s.ouvert ? `<button class="btn btn-outline btn-sm sd-relance" data-id="${s.id}" type="button">${s.relance_at ? 'Relancer à nouveau' : 'Relancer ceux qui n\'ont pas répondu'}</button><button class="btn btn-outline btn-sm sd-clore" data-id="${s.id}" type="button">Clore</button>` : ''}<button class="btn btn-outline btn-sm sd-del" data-id="${s.id}" type="button">Supprimer</button></div></div>`).join('') : '<p class="muted">Aucun sondage.</p>';
+    $('sdList').querySelectorAll<HTMLDetailsElement>('.sd-part').forEach((d) => d.addEventListener('toggle', async () => {
+      if (!d.open || d.dataset.ok) return; d.dataset.ok = '1';
+      const { data, error } = await sb.rpc('sondage_participation', { p_id: d.dataset.id }); const l = (data as any[]) || [];
+      if (error) { d.querySelector('.sd-part-c')!.textContent = error.message; return; }
+      const oui = l.filter((x) => x.a_repondu), non = l.filter((x) => !x.a_repondu);
+      const nom = (x: any) => `${esc(x.prenom)} ${esc((x.nom || '').slice(0, 1))}.${x.classe ? ` <span class="muted">(${esc(x.classe)})</span>` : ''}`;
+      d.querySelector('.sd-part-c')!.innerHTML = `<div class="sd-part-g"><div><strong class="sd-oui">Ont répondu · ${oui.length}</strong><ul>${oui.map((x) => `<li>${nom(x)}</li>`).join('') || '<li>Personne</li>'}</ul></div>
+        <div><strong class="sd-non">N'ont pas répondu · ${non.length}</strong><ul>${non.map((x) => `<li>${nom(x)}</li>`).join('') || '<li>Tout le monde a répondu</li>'}</ul></div></div><p class="small muted" style="margin:6px 0 0;">Les choix restent secrets.</p>`;
+    }));
+    $('sdList').querySelectorAll<HTMLButtonElement>('.sd-relance').forEach((b) => b.addEventListener('click', async () => {
+      if (!confirm("Envoyer un email de rappel à tous les membres qui n'ont pas encore répondu ?")) return;
+      b.disabled = true; b.textContent = 'Envoi…';
+      const t = (await sb.auth.getSession()).data.session?.access_token || '';
+      const r = await postJSON<any>('/api/bureau-rappels', { action: 'relance-sondage', id: b.dataset.id }, t);
+      alert(r.ok ? `Rappel envoyé à ${r.data.emails} membre${r.data.emails > 1 ? 's' : ''}.` : r.error || 'Envoi impossible.'); chargerSondages();
+    }));
     $('sdList').querySelectorAll<HTMLButtonElement>('.sd-clore').forEach((b) => b.addEventListener('click', async () => { await sb.from('sondages').update({ clos: true }).eq('id', b.dataset.id); chargerSondages(); }));
     $('sdList').querySelectorAll<HTMLButtonElement>('.sd-del').forEach((b) => b.addEventListener('click', async () => { if (!confirm('Supprimer ce sondage et ses réponses ?')) return; await sb.from('sondages').delete().eq('id', b.dataset.id); chargerSondages(); }));
   }

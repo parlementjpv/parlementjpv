@@ -2037,7 +2037,7 @@ create policy "sondages: bureau gère" on public.sondages for all to authenticat
 create or replace function public.sondages_liste()
 returns json language sql stable security definer set search_path = public as $$
   select coalesce(json_agg(json_build_object(
-    'id', s.id, 'question', s.question, 'options', s.options, 'multiple', s.multiple, 'fin', s.fin, 'created_at', s.created_at,
+    'id', s.id, 'question', s.question, 'options', s.options, 'multiple', s.multiple, 'fin', s.fin, 'created_at', s.created_at, 'relance_at', case when public.is_bureau() then s.relance_at end,
     'ouvert', not s.clos and (s.fin is null or s.fin > now()),
     'votants', (select count(*) from public.sondage_reponses r where r.sondage = s.id),
     'compte', (select coalesce(json_agg(n order by i), '[]') from (select i, (select count(*) from public.sondage_reponses r where r.sondage = s.id and i = any(r.choix)) n from generate_series(0, cardinality(s.options) - 1) i) x),
@@ -2340,3 +2340,16 @@ drop trigger if exists decision_journal on public.bureau_decisions;
 create trigger decision_journal after insert on public.bureau_decisions for each row execute function public.reunion_journal();
 -- Rappels du bureau (tâches à échéance, en retard, réunion du lendemain) : tous les jours à 7h13 UTC
 -- select cron.schedule('bureau-rappels', '13 7 * * *', $$select net.http_post(url := '<SUPABASE_URL>/functions/v1/bureau-rappels', headers := '{"x-sauvegarde": "<BACKUP_SECRET>", "Content-Type": "application/json"}'::jsonb, body := '{}'::jsonb, timeout_milliseconds := 60000)$$);
+-- 031 — Sondages : qui a répondu / qui n'a pas répondu (bureau), relance automatique des retardataires
+alter table public.sondages add column if not exists relance_at timestamptz;
+create or replace function public.sondage_participation(p_id uuid)
+returns json language sql stable security definer set search_path = public as $$
+  select coalesce(json_agg(json_build_object('id', p.id, 'prenom', p.prenom, 'nom', p.nom, 'classe', coalesce(p.classe, ''), 'a_repondu', r.user_id is not null, 'quand', r.created_at)
+    order by (r.user_id is not null), p.nom, p.prenom), '[]')
+  from (select distinct user_id from public.adhesions where user_id is not null) a
+  join public.profiles p on p.id = a.user_id and not coalesce(p.banni, false)
+  left join public.sondage_reponses r on r.sondage = p_id and r.user_id = p.id
+  where public.is_bureau();
+$$;
+revoke all on function public.sondage_participation(uuid) from public, anon;
+grant execute on function public.sondage_participation(uuid) to authenticated;

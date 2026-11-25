@@ -197,6 +197,19 @@ export async function genererDocument(db: ReturnType<typeof admin>, b: any, aute
       d.titreSection('Résultats');
       s.options.forEach((o: string, i: number) => d.barre(o, compte[i], n, `${compte[i]} · ${pc(compte[i], n)}`, compte[i] === max && max > 0));
       if (s.multiple) d.texte('Plusieurs choix possibles : les pourcentages sont calculés sur le nombre de répondants.', '', 8.5);
+      const [{ data: adhS }, { data: profS }, { data: repU }] = await Promise.all([
+        db.from('adhesions').select('user_id').not('user_id', 'is', null),
+        db.from('profiles').select('id, prenom, nom, niveau, classe_num, classe, banni'),
+        db.from('sondage_reponses').select('user_id, created_at').eq('sondage', s.id),
+      ]);
+      const ids = new Set((adhS || []).map((a) => a.user_id)); const ont = new Map((repU || []).map((r) => [r.user_id, r.created_at]));
+      const mem = (profS || []).filter((p) => ids.has(p.id) && !p.banni).sort((a, b) => `${a.nom}`.localeCompare(`${b.nom}`, 'fr'));
+      const oui = mem.filter((p) => ont.has(p.id)), non = mem.filter((p) => !ont.has(p.id));
+      d.espace(6); d.texte(`Participation : ${oui.length} membre${oui.length > 1 ? 's' : ''} sur ${mem.length} (${pc(oui.length, mem.length)}). Les choix restent secrets : la liste indique seulement qui a répondu.${s.relance_at ? ` Relance envoyée le ${date(s.relance_at, true)}.` : ''}`, '', 9.5);
+      d.titreSection(`Ont répondu (${oui.length})`);
+      d.tableau(['Membre', 'Classe', 'Réponse le'], [0.45, 0.25, 0.3], oui.map((p) => [{ t: `${p.prenom} ${initiale(p.nom)}`, gras: true }, classeDe(p), date(ont.get(p.id)!, true)]), 'Personne pour le moment.');
+      d.titreSection(`N'ont pas répondu (${non.length})`, C.rouge);
+      d.tableau(['Membre', 'Classe'], [0.6, 0.4], non.map((p) => [{ t: `${p.prenom} ${initiale(p.nom)}`, gras: true }, classeDe(p)]), 'Tout le monde a répondu.');
       fichier = `sondage-${slug(s.question)}.pdf`; quoi = `les résultats du sondage « ${s.question} »`;
     }
 
