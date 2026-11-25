@@ -34,11 +34,11 @@ async function mailTache(db: Db, t: any, genre: 'nouvelle' | 'veille' | 'retard'
   return true;
 }
 
-async function mailReunion(db: Db, r: any, genre: 'convocation' | 'rappel') {
+async function mailReunion(db: Db, r: any, genre: 'convocation' | 'rappel', seulement: string | null = null) {
   const { data: bur } = await db.from('profiles').select('id').in('role', ['bureau', 'admin']).eq('banni', false);
   let n = 0;
   for (const p of bur || []) {
-    const d = await emailDe(db, p.id); if (!d) continue;
+    const d = await emailDe(db, p.id); if (!d || (seulement && d.email.toLowerCase() !== seulement)) continue;
     try {
       await sendMail({ from: FROM, to: d.email, subject: `${genre === 'rappel' ? 'Demain : ' : 'Convocation : '}${r.titre} — ${dateLongue(r.quand)} à ${heure(r.quand)}`,
         html: layout({ title: genre === 'rappel' ? `${d.prenom}, réunion du bureau demain` : `${d.prenom}, tu es convoqué·e à la réunion du bureau`, body:
@@ -59,6 +59,8 @@ Deno.serve(async (req) => {
   const secret = Deno.env.get('BACKUP_SECRET');
 
   if (secret && req.headers.get('x-sauvegarde') === secret) {
+    const seulement = b.seulement ? String(b.seulement).toLowerCase() : null;
+    if (b.convoquerTest) { const { data: r } = await db.from('bureau_reunions').select('*').eq('id', b.convoquerTest).maybeSingle(); return json(req, 200, { ok: true, emails: r ? await mailReunion(db, r, 'convocation', seulement) : 0 }); }
     const auj = jourParis(new Date()), demain = jourParis(new Date(Date.now() + 86400000));
     const bilan = { veille: 0, retard: 0, reunions: 0 };
     const { data: tv } = await db.from('bureau_taches').select('*').neq('statut', 'fait').eq('echeance', demain).is('rappel_veille_at', null).not('assigne_a', 'is', null);
@@ -68,7 +70,7 @@ Deno.serve(async (req) => {
     const { data: rs } = await db.from('bureau_reunions').select('*').eq('statut', 'prevue').is('rappel_at', null).gte('quand', new Date().toISOString()).lte('quand', new Date(Date.now() + 2 * 86400000).toISOString());
     for (const r of (rs || []).filter((r) => jourParis(new Date(r.quand)) === demain)) {
       const { data: lock } = await db.from('bureau_reunions').update({ rappel_at: new Date().toISOString() }).eq('id', r.id).is('rappel_at', null).select('id');
-      if (lock?.length) { await mailReunion(db, r, 'rappel'); bilan.reunions++; }
+      if (lock?.length) { await mailReunion(db, r, 'rappel', seulement); bilan.reunions++; }
     }
     return json(req, 200, { ok: true, ...bilan });
   }
