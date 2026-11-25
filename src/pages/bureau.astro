@@ -48,7 +48,7 @@ import Base from '../layouts/Base.astro';
       </div></section>
     </nav>
     <p class="small muted hidden" id="buRien">Aucune rubrique ne correspond.</p>
-    <div class="bu-bar hidden" id="buBar"><button class="btn btn-outline btn-sm" id="buBack" type="button">← Menu du bureau</button><h2 id="buTitle"></h2></div>
+    <div class="bu-bar hidden" id="buBar"><div class="bu-bar-l"><button class="btn btn-outline btn-sm" id="buBack" type="button">← Menu</button><h2 id="buTitle"></h2><select id="buJump" aria-label="Aller à une autre rubrique"></select></div><div class="bu-voisins" id="buVoisins"></div></div>
     <div class="panel hidden" id="tab-cand"><div class="card" style="overflow:auto;"><p class="small muted">Écris d'abord un message (facultatif), puis accepte ou refuse : le candidat reçoit automatiquement un email avec ta réponse et ton message, et la candidature passe dans les archives.</p><div id="candMsg"></div><table class="table" id="candTable"><thead><tr><th>Date</th><th>Candidat·e</th><th>Poste</th><th>Motivation</th><th>Message au candidat</th><th>Décision</th></tr></thead><tbody></tbody></table></div></div>
     <div class="panel hidden" id="tab-archives"><div class="card" style="overflow:auto;"><p class="small muted">Candidatures traitées, conservées. « Rouvrir » la remet dans les candidatures à traiter (sans envoyer d'email).</p><table class="table" id="archTable"><thead><tr><th>Décision</th><th>Candidat·e</th><th>Poste</th><th>Motivation</th><th>Message envoyé</th><th></th></tr></thead><tbody></tbody></table></div></div>
 
